@@ -1,4 +1,5 @@
 package Server.Model;
+<<<<<<< HEAD
 
 /**
  * This class defines the tile spot
@@ -41,5 +42,18 @@ public class LivingRoomTileSpot extends TileSpot{
 
     public int getDotsNumber() {
         return dotsNumber;
+=======
+public class TileSpot {
+    private TileType tile;
+
+    protected boolean isEmpty(){
+        return tile==null;
+    }
+
+    protected void setTile(TileType type){}
+
+    protected TileType getTileType(){
+        return tile;
+>>>>>>> 506116bef9474b02907e9c90e996f3f85afebd67
     }
 }

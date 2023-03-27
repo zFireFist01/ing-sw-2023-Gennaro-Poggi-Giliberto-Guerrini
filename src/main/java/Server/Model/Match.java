@@ -1,4 +1,4 @@
-package Client;
+package Server.Model;
 
 import Server.Model.LivingRoom;
 
