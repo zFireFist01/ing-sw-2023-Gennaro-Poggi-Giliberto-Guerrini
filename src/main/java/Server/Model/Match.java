@@ -20,7 +20,7 @@ public class Match {
     private final LivingRoom livingRoom;
     private final CommonGoalCardsDeck commonGoalDeck;
     private final PersonalGoalCardsDeck personalGoalDeck;
-    private map<Player, int> scores;
+    private Map<Player, Integer> scores;
     private Time matchDuration;
 
     public Match(int numberOfPlayers, Player matchOpener) {
