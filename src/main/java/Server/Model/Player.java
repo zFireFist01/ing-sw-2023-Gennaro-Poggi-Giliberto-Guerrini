@@ -6,15 +6,6 @@ import sun.jvm.hotspot.utilities.Observer;
 
 /**
  * This class defines the player in game
- * @param playerID an int that identifies the player
- * @param pointsTiles
- * @param bookshelf every player has is own bookshelf
- * @param personalGoal every player has is own personal goal card
- * @param playerNickName every player has is own nickname
- * @param playerNetInterface
- * @param playerUserInterface
- * @param observers
- * @param playerStatus contains the status of the player
  */
 public class Player {
     private final int playerID;
@@ -22,8 +13,8 @@ public class Player {
     private final Bookshelf bookshelf;
     private PersonalGoalCard personalGoalCard;
     private final String playerNickName;
-    private final ClientNetInterface playerNetInterface;
-    private final ClientUserInterface playerUserInterface;
+    //private final ClientNetInterface playerNetInterface;
+    //private final ClientUserInterface playerUserInterface;
     private List<Observer> observers;
     private PlayerStatus playerStatus;
 
@@ -31,8 +22,8 @@ public class Player {
         this.playerID = playerID;
         this.bookshelf = bookshelf;
         this.playerNickName = playerNickName;
-        this.playerNetInterface = playerNetInterface;
-        this.playerUserInterface = playerUserInterface;
+        //this.playerNetInterface = playerNetInterface;
+        //this.playerUserInterface = playerUserInterface;
     }
 
 
