@@ -3,10 +3,11 @@ package Server.Model;
 import Server.Model.LivingRoom;
 
 import java.sql.Time;
+import java.util.Map;
 
 /**
  * match class in order to store information about the match
- *
+ * @author Valentino Guerrini
  */
 public class Match {
     private Player[] players;
