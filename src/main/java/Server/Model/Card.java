@@ -1,11 +1,6 @@
 package Server.Model;
 
-public abstract class Card {
-    private String description;
+public interface Card {
+    public String toString();
 
-    public String getDescription() {
-        return description;
-    }
 }
-
-
