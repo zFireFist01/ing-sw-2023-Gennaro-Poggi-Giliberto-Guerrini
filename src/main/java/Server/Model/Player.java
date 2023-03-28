@@ -4,12 +4,14 @@ package Server.Model;
 import com.sun.org.apache.xpath.internal.objects.XString;
 import sun.jvm.hotspot.utilities.Observer;
 
+import java.util.ArrayList;
+
 /**
  * This class defines the player in game
  */
 public class Player {
     private final int playerID;
-    private PointsTile[] pointsTiles;
+    private ArrayList<PointsTile> pointsTiles;
     private final Bookshelf bookshelf;
     private PersonalGoalCard personalGoalCard;
     private final String playerNickName;
@@ -18,7 +20,7 @@ public class Player {
     private List<Observer> observers;
     private PlayerStatus playerStatus;
 
-    public Player(int playerID, Bookshelf bookshelf, String playerNickName, ClientNetInterface playerNetInterface, ClientUserInterface playerUserInterface) {
+    public Player(int playerID, Bookshelf bookshelf, String playerNickName, ClientNetInterface playerNetInterface, ClientUserInterface playerUserInterface){
         this.playerID = playerID;
         this.bookshelf = bookshelf;
         this.playerNickName = playerNickName;
@@ -27,10 +29,9 @@ public class Player {
     }
 
 
-    public PointsTile[] getPointsTiles() {
+    public ArrayList<PointsTile> getPointsTiles() {
         return pointsTiles;
     }
-
     public Bookshelf getBookshelf() {
         return bookshelf;
     }
@@ -48,6 +49,7 @@ public class Player {
     }
 
     public void notify(){
+
     }
 
     public void assignPointTile(){

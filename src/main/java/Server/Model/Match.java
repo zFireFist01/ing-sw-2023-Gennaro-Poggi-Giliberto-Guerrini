@@ -3,6 +3,8 @@ package Server.Model;
 import Server.Model.LivingRoom;
 
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -10,7 +12,7 @@ import java.util.Map;
  * @author Valentino Guerrini
  */
 public class Match {
-    private Player[] players;
+    private ArrayList<Player> players;
     private final int numberOfPlayers;
     private CommnoGoalCard[] commonGoals;
     private MatchStatus matchStatus;
@@ -34,7 +36,10 @@ public class Match {
 
     public void setup(){}
 
-    public void checkCommonGoals(Player){}
+    public void checkCommonGoals(Player player){
+
+
+    }
 
     private void extractFirstPlayer(){}
 
@@ -55,7 +60,7 @@ public class Match {
 
     //METODI GETTER
 
-    public Player[] getPlayers() {
+    public ArrayList<Player> getPlayers() {
         return players;
     }
 
@@ -79,7 +84,7 @@ public class Match {
         return livingRoom;
     }
 
-    public map<Player, int> getScores() {
+    public Map<Player, Integer> getScores() {
         return scores;
     }
 
