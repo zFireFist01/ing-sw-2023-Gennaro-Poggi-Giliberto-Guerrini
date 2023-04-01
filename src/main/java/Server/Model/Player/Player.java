@@ -1,0 +1,59 @@
+package Server.Model.Player;
+
+
+import Server.Model.GameItems.Bookshelf;
+import Server.Model.Cards.PersonalGoalCard;
+import Server.Model.GameItems.PointsTile;
+import sun.jvm.hotspot.utilities.Observer;
+
+import java.util.ArrayList;
+
+/**
+ * This class defines the player in game
+ */
+public class Player {
+    private final int playerID;
+    private ArrayList<PointsTile> pointsTiles;
+    private final Bookshelf bookshelf;
+    private PersonalGoalCard personalGoalCard;
+    private final String playerNickName;
+    //private final ClientNetInterface playerNetInterface;
+    //private final ClientUserInterface playerUserInterface;
+    private List<Observer> observers;
+    private PlayerStatus playerStatus;
+
+    public Player(int playerID, Bookshelf bookshelf, String playerNickName){
+        this.playerID = playerID;
+        this.bookshelf = bookshelf;
+        this.playerNickName = playerNickName;
+        //this.playerNetInterface = playerNetInterface;
+        //this.playerUserInterface = playerUserInterface;
+    }
+
+
+    public ArrayList<PointsTile> getPointsTiles() {
+        return pointsTiles;
+    }
+    public Bookshelf getBookshelf() {
+        return bookshelf;
+    }
+
+    public PersonalGoalCard getPersonalGoalCard() {
+        return personalGoalCard;
+    }
+
+    public void setPersonalGoalCard(PersonalGoalCard personalGoalCard) {
+        this.personalGoalCard = personalGoalCard;
+    }
+
+    public PlayerStatus getPlayerStatus() {
+        return playerStatus;
+    }
+
+    public void notify(){
+
+    }
+
+    public void assignPointTile(){
+    }
+}

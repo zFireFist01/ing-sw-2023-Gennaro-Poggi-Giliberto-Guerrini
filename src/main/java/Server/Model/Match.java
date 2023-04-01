@@ -1,20 +1,23 @@
 package Server.Model;
 
-import Server.Model.LivingRoom;
+import Server.Model.Decks.CommonGoalCardsDeck;
+import Server.Model.Decks.PersonalGoalCardsDeck;
+import Server.Model.GameItems.LivingRoom;
+import Server.Model.MatchStatus.MatchStatus;
+import Server.Model.Player.Player;
+import Server.Model.Cards.CommonGoalCard;
 
 import java.sql.Time;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
  * match class in order to store information about the match
- * @author Valentino Guerrini
  */
 public class Match {
     private ArrayList<Player> players;
     private final int numberOfPlayers;
-    private CommnoGoalCard[] commonGoals;
+    private CommonGoalCard[] commonGoals;
     private MatchStatus matchStatus;
     private final Player matchOpener;
     private Player firstPlayer;
@@ -64,7 +67,7 @@ public class Match {
         return players;
     }
 
-    public CommnoGoalCard[] getCommonGoals() {
+    public CommonGoalCard[] getCommonGoals() {
         return commonGoals;
     }
 
