@@ -18,6 +18,8 @@ public class TileSpot {
         return tile==null;
     }
 
+    protected void setEmpty(){ this.tile = null;}
+
     protected void setTile(TileType tile){ this.tile = tile;}
 
     protected TileType getTileType(){
