@@ -103,7 +103,7 @@ public class LivingRoom {
     /**
      * @return A copy of the matrix that describes the livingroom of match m, in the current state
      */
-    protected LivingRoomTileSpot[][] getTileMatrix(){
+    public LivingRoomTileSpot[][] getTileMatrix(){
         //Sharing a copy of the Livingroom, not the actual matrix
         LivingRoomTileSpot[][] copy = new LivingRoomTileSpot[LIVINGROOOMWIDTH][LIVINGROOMHEIGHT];
         for(int i = 0; i < LIVINGROOMHEIGHT; i++ ){
@@ -117,7 +117,7 @@ public class LivingRoom {
     /**
      * Refills the Livingroom
      */
-    protected void refreshLivingRoom(){
+    public void refreshLivingRoom(){
         Random r = new Random();
         int choice = -1;
         for(int i = 0; i<LIVINGROOMHEIGHT;i++){
@@ -127,27 +127,33 @@ public class LivingRoom {
                     switch (choice){
                         case 0:
                             tileMatrix[i][j].setTile(TileType.BOOKS_1);
-                            tileSack.put(TileType.BOOKS_1, tileSack.get(TileType.BOOKS_1).intValue()-1);
+                            tileSack.put(TileType.BOOKS_1,
+                                    (tileSack.get(TileType.BOOKS_1).intValue()-1 >= 0 ? tileSack.get(TileType.BOOKS_1).intValue()-1: 0));
                             break;
                         case 1:
                             tileMatrix[i][j].setTile(TileType.CATS_1);
-                            tileSack.put(TileType.CATS_1, tileSack.get(TileType.CATS_1).intValue()-1);
+                            tileSack.put(TileType.CATS_1,
+                                    (tileSack.get(TileType.CATS_1).intValue()-1 >= 0 ? tileSack.get(TileType.CATS_1).intValue()-1: 0));
                             break;
                         case 2:
                             tileMatrix[i][j].setTile(TileType.GAMES_1);
-                            tileSack.put(TileType.GAMES_1, tileSack.get(TileType.GAMES_1).intValue()-1);
+                            tileSack.put(TileType.GAMES_1,
+                                    (tileSack.get(TileType.GAMES_1).intValue()-1 >= 0 ? tileSack.get(TileType.GAMES_1).intValue()-1: 0));
                             break;
                         case 3:
                             tileMatrix[i][j].setTile(TileType.FRAMES_1);
-                            tileSack.put(TileType.FRAMES_1, tileSack.get(TileType.FRAMES_1).intValue()-1);
+                            tileSack.put(TileType.FRAMES_1,
+                                    (tileSack.get(TileType.FRAMES_1).intValue()-1 >= 0 ? tileSack.get(TileType.FRAMES_1).intValue()-1: 0));
                             break;
                         case 4:
                             tileMatrix[i][j].setTile(TileType.PLANTS_1);
-                            tileSack.put(TileType.PLANTS_1, tileSack.get(TileType.PLANTS_1).intValue()-1);
+                            tileSack.put(TileType.PLANTS_1,
+                                    (tileSack.get(TileType.PLANTS_1).intValue()-1 >= 0 ? tileSack.get(TileType.PLANTS_1).intValue()-1: 0));
                             break;
                         case 5:
                             tileMatrix[i][j].setTile(TileType.TROPHIES_1);
-                            tileSack.put(TileType.TROPHIES_1, tileSack.get(TileType.TROPHIES_1).intValue()-1);
+                            tileSack.put(TileType.TROPHIES_1,
+                                    (tileSack.get(TileType.TROPHIES_1).intValue()-1 >= 0 ? tileSack.get(TileType.TROPHIES_1).intValue()-1: 0));
                             break;
                         default:
                             throw new RuntimeException("Random choice didn't go as planned in tileMatrix["+i+"]["+j+"]");
@@ -163,7 +169,7 @@ public class LivingRoom {
      * @return a map where the key is the TileType and the value is the number of tiles of that kind that
      * are still available
      */
-    protected Map<TileType, Integer> getTileSack(){
+    public Map<TileType, Integer> getTileSack(){
         //Sharing a copy of the sack, not the actual map
         Map<TileType, Integer> copy = new HashMap<>(tileSack);
         return copy;
@@ -176,7 +182,7 @@ public class LivingRoom {
      * @return the TileType of the picked tile
      * @throws UnsupportedOperationException when the tile isn't real or isn't pickable according to the game's rule
      */
-    protected TileType takeTile(int i, int j) throws UnsupportedOperationException{
+    public TileType takeTile(int i, int j) throws UnsupportedOperationException{
         //TODO: think if this method should be a void
         if(!tileMatrix[i][j].isReal()){
             throw new UnsupportedOperationException("The tile you want to pick isn't real!");

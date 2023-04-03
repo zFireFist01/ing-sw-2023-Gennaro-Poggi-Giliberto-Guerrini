@@ -33,7 +33,7 @@ public class LivingRoomTileSpot extends TileSpot {
      * @return true if and only if this spot is available for the match, where the livingroom of the match
      *          is obviously the livingroom this spot belongs to
      */
-    protected boolean isReal(){
+    public boolean isReal(){
         return dotsNumber >= 0 && dotsNumber <= match.getNumberOfPlayers();
     }
 
@@ -41,7 +41,7 @@ public class LivingRoomTileSpot extends TileSpot {
      *
      * @return the number of dots of this spot (See game description for further info)
      */
-    protected int getDotsNumber(){
+    public int getDotsNumber(){
         return dotsNumber;
     }
 
