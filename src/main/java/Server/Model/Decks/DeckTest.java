@@ -1,4 +1,4 @@
-package Server.Model;
+package Server.Model.Decks;
 import Server.Model.Cards.Card;
 import Server.Model.Cards.CommonGoalCards.CommonGoalCard1;
 import Server.Model.Decks.Deck;

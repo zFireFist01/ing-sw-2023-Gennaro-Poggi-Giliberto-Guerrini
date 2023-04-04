@@ -127,11 +127,11 @@ public enum PersonalGoalCard implements Card {
      * @param playerBookshelf
      * @return Player's score
      */
-    public int check(BookshelfTileSpot playerBookshelf){
+    public int check(BookshelfTileSpot[][] playerBookshelf){
         int score = 0;
         for (int i = 0; i < tileMatrix.length; i++) {
             for (int j = 0; j < tileMatrix[i].length; j++) {
-                if (tileMatrix[i][j].getTileType() == playerBookshelf.getTileType()){
+                if (tileMatrix[i][j].getTileType() == playerBookshelf[i][j].getTileType() && tileMatrix[i][j].getTileType() != null){
                     score++;
                 }
             }
