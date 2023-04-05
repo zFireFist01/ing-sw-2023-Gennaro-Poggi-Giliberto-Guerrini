@@ -3,25 +3,62 @@ package Server.Model.Cards.CommonGoalCards;
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.GameItems.Bookshelf;
 import Server.Model.GameItems.BookshelfTileSpot;
+import Server.Model.GameItems.TileType;
+
+/**
+ * This class represents the second common goal card
+ * @author due2
+ */
 
 public class CommonGoalCard2 extends CommonGoalCard {
-
-    private BookshelfTileSpot[][] b;
-
+    /**
+     * This method checks if the common goal card is completed
+     * @param bookshelf the bookshelf of the player
+     * @return true if the common goal card is completed, false otherwise
+     */
     @Override
     public boolean check(Bookshelf bookshelf) {
+        BookshelfTileSpot[][] shelf = bookshelf.getTileMatrix();
+        int count = 0;
+        boolean flag;
+        int[] verifier = new int[6];
 
-        b = bookshelf.getTileMatrix();
+        //verifies if there are at least two rows with one tile of each type
 
-        if ((b[0][0].isEmpty()) || (b[0][4].isEmpty()) || (b[5][0].isEmpty()) || (b[5][4].isEmpty())) {
-            return false;
-        } else if ((b[5][0].getTileType().equals(b[5][4].getTileType())) &&
-                (b[0][0].getTileType().equals(b[0][4].getTileType())) &&
-                (b[0][0].getTileType().equals(b[5][0].getTileType()))) {
-            return true;
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 6; j++) {
+                if (shelf[j][i].getTileType() == TileType.PLANTS) {
+                    verifier[0] += 1;
+                } else if (shelf[j][i].getTileType() == TileType.FRAMES) {
+                    verifier[1] += 1;
+                } else if (shelf[j][i].getTileType() == TileType.BOOKS) {
+                    verifier[2] += 1;
+                } else if (shelf[j][i].getTileType() == TileType.CATS) {
+                    verifier[3] += 1;
+                } else if (shelf[j][i].getTileType() == TileType.GAMES) {
+                    verifier[4] += 1;
+                } else if (shelf[j][i].getTileType() == TileType.TROPHIES) {
+                    verifier[5] += 1;
+                }
+            }
+            flag = true;
+            for (int k = 0; k < 6; k++) {
+                if (verifier[k] != 1) {
+                    flag = false;
+                }
+            }
+            if (flag) {
+                count++;
+            }
+            for (int k = 0; k < 6; k++) {
+                verifier[k] = 0;
+            }
         }
-
-        return false;
+        if (count >=2) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
