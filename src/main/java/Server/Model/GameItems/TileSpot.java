@@ -27,5 +27,10 @@ public class TileSpot {
     public TileType getTileType(){
         return tile;
     }
+
+    @Override
+    public String toString() {
+        return (this.tile == null ? "-" : this.tile.toString());
+    }
 }
 
