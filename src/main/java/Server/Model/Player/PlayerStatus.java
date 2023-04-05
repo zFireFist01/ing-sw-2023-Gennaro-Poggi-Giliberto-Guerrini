@@ -1,10 +1,9 @@
 package Server.Model.Player;
 
-import java.sql.Time;
-
 
 /**
  * PlayerStatus defines the status of a player that joined the actual match
+ * @author Paolo Gennaro
  */
 public abstract class PlayerStatus {
 }
