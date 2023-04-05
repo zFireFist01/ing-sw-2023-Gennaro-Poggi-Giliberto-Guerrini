@@ -50,6 +50,9 @@ public class CommonGoalCard2 extends CommonGoalCard {
             if (flag) {
                 count++;
             }
+            for (int k = 0; k < 6; k++) {
+                verifier[k] = 0;
+            }
         }
         if (count >=2) {
             return true;

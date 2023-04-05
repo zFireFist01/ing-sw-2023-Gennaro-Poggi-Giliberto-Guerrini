@@ -42,7 +42,7 @@ public class CommonGoalCard3 extends CommonGoalCard {
         }
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 5; j++) {
-                if (verifier[i][j] == verifier[i+1][j] && verifier[i][j] == verifier[i+2][j] && verifier[i][j] == verifier[i+3][j]) {
+                if (verifier[i][j] == verifier[i+1][j] && verifier[i][j] == verifier[i+2][j] && verifier[i][j] == verifier[i+3][j] && verifier[i][j] != 0) {
                     count++;
                     verifier[i][j] = 0;
                     verifier[i+1][j] = 0;

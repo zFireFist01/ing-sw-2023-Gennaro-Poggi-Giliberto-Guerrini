@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * Deck class to store the order of the class
- * @author Valentino Guerrini
+ * @author Due2
  */
 
 public abstract class Deck {
