@@ -20,6 +20,8 @@ public class TileSpot {
 
     public void setEmpty(){ this.tile = null;}
 
+    public void setTile(){this.tile = null;}
+
     public void setTile(TileType tile){ this.tile = tile;}
 
     public TileType getTileType(){

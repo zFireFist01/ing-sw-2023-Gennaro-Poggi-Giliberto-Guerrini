@@ -126,34 +126,34 @@ public class LivingRoom {
                     choice = r.nextInt(6); // The tile types are 6, thus we need a drawing pool which is [0,6) = [0,5]
                     switch (choice){
                         case 0:
-                            tileMatrix[i][j].setTile(TileType.BOOKS_1);
-                            tileSack.put(TileType.BOOKS_1,
-                                    (tileSack.get(TileType.BOOKS_1).intValue()-1 >= 0 ? tileSack.get(TileType.BOOKS_1).intValue()-1: 0));
+                            tileMatrix[i][j].setTile(TileType.BOOKS);
+                            tileSack.put(TileType.BOOKS,
+                                    (tileSack.get(TileType.BOOKS).intValue()-1 >= 0 ? tileSack.get(TileType.BOOKS).intValue()-1: 0));
                             break;
                         case 1:
-                            tileMatrix[i][j].setTile(TileType.CATS_1);
-                            tileSack.put(TileType.CATS_1,
-                                    (tileSack.get(TileType.CATS_1).intValue()-1 >= 0 ? tileSack.get(TileType.CATS_1).intValue()-1: 0));
+                            tileMatrix[i][j].setTile(TileType.CATS);
+                            tileSack.put(TileType.CATS,
+                                    (tileSack.get(TileType.CATS).intValue()-1 >= 0 ? tileSack.get(TileType.CATS).intValue()-1: 0));
                             break;
                         case 2:
-                            tileMatrix[i][j].setTile(TileType.GAMES_1);
-                            tileSack.put(TileType.GAMES_1,
-                                    (tileSack.get(TileType.GAMES_1).intValue()-1 >= 0 ? tileSack.get(TileType.GAMES_1).intValue()-1: 0));
+                            tileMatrix[i][j].setTile(TileType.GAMES);
+                            tileSack.put(TileType.GAMES,
+                                    (tileSack.get(TileType.GAMES).intValue()-1 >= 0 ? tileSack.get(TileType.GAMES).intValue()-1: 0));
                             break;
                         case 3:
-                            tileMatrix[i][j].setTile(TileType.FRAMES_1);
-                            tileSack.put(TileType.FRAMES_1,
-                                    (tileSack.get(TileType.FRAMES_1).intValue()-1 >= 0 ? tileSack.get(TileType.FRAMES_1).intValue()-1: 0));
+                            tileMatrix[i][j].setTile(TileType.FRAMES);
+                            tileSack.put(TileType.FRAMES,
+                                    (tileSack.get(TileType.FRAMES).intValue()-1 >= 0 ? tileSack.get(TileType.FRAMES).intValue()-1: 0));
                             break;
                         case 4:
-                            tileMatrix[i][j].setTile(TileType.PLANTS_1);
-                            tileSack.put(TileType.PLANTS_1,
-                                    (tileSack.get(TileType.PLANTS_1).intValue()-1 >= 0 ? tileSack.get(TileType.PLANTS_1).intValue()-1: 0));
+                            tileMatrix[i][j].setTile(TileType.PLANTS);
+                            tileSack.put(TileType.PLANTS,
+                                    (tileSack.get(TileType.PLANTS).intValue()-1 >= 0 ? tileSack.get(TileType.PLANTS).intValue()-1: 0));
                             break;
                         case 5:
-                            tileMatrix[i][j].setTile(TileType.TROPHIES_1);
-                            tileSack.put(TileType.TROPHIES_1,
-                                    (tileSack.get(TileType.TROPHIES_1).intValue()-1 >= 0 ? tileSack.get(TileType.TROPHIES_1).intValue()-1: 0));
+                            tileMatrix[i][j].setTile(TileType.TROPHIES);
+                            tileSack.put(TileType.TROPHIES,
+                                    (tileSack.get(TileType.TROPHIES).intValue()-1 >= 0 ? tileSack.get(TileType.TROPHIES).intValue()-1: 0));
                             break;
                         default:
                             throw new RuntimeException("Random choice didn't go as planned in tileMatrix["+i+"]["+j+"]");
