@@ -7,6 +7,7 @@ import java.sql.Time;
 
 /**
  * This class defines messages that players can send to each other
+ * @author Paolo Gennaro
  */
 public class Message {
     private final Player sender;
@@ -14,7 +15,8 @@ public class Message {
     private final Time timeSent;
     private final Player receiver;
 
-    public Message(Player sender, String content, Time timeSent, Player receiver) {
+    public Message(Player sender, String content, Time timeSent, Player receiver) throws UnsupportedOperationException{
+        if(sender.equals(receiver)) throw new UnsupportedOperationException("You can't text yourself!");
         this.sender = sender;
         this.content = content;
         this.timeSent = timeSent;

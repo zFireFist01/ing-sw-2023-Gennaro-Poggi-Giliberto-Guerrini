@@ -1,8 +1,11 @@
 package Server.Model.Player;
 
 import Server.Model.GameItems.Bookshelf;
+import Server.Model.GameItems.PointsTile;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Random;
 
 import static org.junit.Assert.*;
 
@@ -11,40 +14,21 @@ public class PlayerTest {
 
     @Before
     public void setUp() throws Exception {
-        Bookshelf bookshelf = new Bookshelf();
         String nickName = "nickName";
         int playerID = 4;
-        this.tester = new Player(playerID, bookshelf, nickName);
+        this.tester = new Player(playerID, nickName);
     }
 
-    //maybe there is no need for this test
-    @Test
-    public void bookshelfNotNull(){
-        assertNull(this.tester.getBookshelf());
-    }
 
-    //maybe there is no need for this test
     @Test
-    public void personalGoalCardNotNull(){
-        assertNull(this.tester.getPersonalGoalCard());
+    public void assignPointTile_GotTheMatchEndTile_UnsupportedOperationException(){
+        this.tester.assignPointTile(PointsTile.MATCH_ENDED);
+        assertThrows(UnsupportedOperationException.class, ()->this.tester.assignPointTile(PointsTile.randomPointsTile()));
     }
 
     @Test
-    public void pointsTilesStartsEmpty(){
-        assertTrue(this.tester.getPointsTiles().isEmpty());
-    }
-
-    @Test
-    public void atMostThreePointsTile(){
-        assertTrue(this.tester.getPointsTiles().size() <= 3);
-    }
-
-    @Test
-    public void noDuplicatePointsTile(){
-        for(int i = 0; i<this.tester.getPointsTiles().size(); i++){
-            for(int j = 0; j<this.tester.getPointsTiles().size() && i!=j; j++){
-                assertEquals(this.tester.getPointsTiles().get(i), this.tester.getPointsTiles().get(j));
-            }
-        }
+    public void assignPointTile_AlreadyATileOfThisCommonGoal_UnsupportedOperationException(){
+        this.tester.assignPointTile(PointsTile.TWO_1);
+        assertThrows(UnsupportedOperationException.class, ()->this.tester.assignPointTile(PointsTile.EIGHT_1));
     }
 }
