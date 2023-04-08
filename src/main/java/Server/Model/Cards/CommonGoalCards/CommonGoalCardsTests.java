@@ -10,7 +10,7 @@ import org.junit.jupiter.api.*;
  * This class represents the tests of the common goal cards
  * @author due2
  */
-public class    CommonGoalCardsTests {
+public class CommonGoalCardsTests {
     CommonGoalCard TestCard;
     Bookshelf TestBookshelf;
     /**

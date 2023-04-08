@@ -23,10 +23,10 @@ public class BookshelfTest {
 
     @After
     public void tearDown(){}
-    
+
     @Test
     public void insertTile_expectedIndexOutOfBuondException_Test(){
-        int col1 = 0;
+        int col1 = -1;
         int col2 = 5;
         assertThrows(IndexOutOfBoundsException.class, ()->uut.insertTile(col1, TileType.randomTileType()));
         assertThrows(IndexOutOfBoundsException.class, ()->uut.insertTile(col2, TileType.randomTileType()));

@@ -7,8 +7,8 @@ import java.util.*;
  */
 public class Bookshelf {
     private BookshelfTileSpot[][] tileMatrix;
-    private final static int BOOKSHELFWIDTH = 6;
-    private final static int BOOKSHELFHEIGHT = 5;
+    private final static int BOOKSHELFHEIGHT = 6;
+    private final static int BOOKSHELFWIDTH = 5;
 
     private Map<Integer, Integer> lastIndexes = null; //map<column_index, last_row_index
     public Bookshelf() {
@@ -58,5 +58,13 @@ public class Bookshelf {
             lastIndexes.put(column,--temp);
             tileMatrix[lastIndexes.get(column)][column].setTile(tileType);
         }
+    }
+
+    public int getBookshelfWidth(){
+        return BOOKSHELFWIDTH;
+    }
+
+    public int getBookshelfHeight(){
+        return BOOKSHELFHEIGHT;
     }
 }

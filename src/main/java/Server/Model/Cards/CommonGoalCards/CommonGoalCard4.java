@@ -3,6 +3,7 @@ package Server.Model.Cards.CommonGoalCards;
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.GameItems.Bookshelf;
 import Server.Model.GameItems.BookshelfTileSpot;
+import Server.Model.GameItems.TileType;
 /**
  * This class represents the fourth common goal card
  * @author due2

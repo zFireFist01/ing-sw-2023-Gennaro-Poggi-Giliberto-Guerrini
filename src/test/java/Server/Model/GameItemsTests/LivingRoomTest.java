@@ -1,6 +1,7 @@
 package Server.Model.GameItemsTests;
 
 import Server.Model.GameItems.*;
+import Server.Model.Match;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
@@ -12,10 +13,10 @@ import static org.junit.Assert.*;
 
 public class LivingRoomTest {
     LivingRoom uut = null;
-    MatchNeededMethods m = null;
+    Match m = null;
     @Before
     public void setup(int numberOfPlayers){
-        m = new MatchNeededMethods(numberOfPlayers);
+        m = new Match(numberOfPlayers, null);
     }
 
     @After
