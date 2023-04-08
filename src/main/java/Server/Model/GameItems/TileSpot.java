@@ -14,14 +14,23 @@ public class TileSpot {
         this.tile = tile;
     }
 
-    protected boolean isEmpty(){
+    public boolean isEmpty(){
         return tile==null;
     }
 
-    protected void setTile(TileType tile){ this.tile = tile;}
+    public void setEmpty(){ this.tile = null;}
 
-    protected TileType getTileType(){
+    public void setTile(){this.tile = null;}
+
+    public void setTile(TileType tile){ this.tile = tile;}
+
+    public TileType getTileType(){
         return tile;
+    }
+
+    @Override
+    public String toString() {
+        return (this.tile == null ? "-" : this.tile.toString());
     }
 }
 
