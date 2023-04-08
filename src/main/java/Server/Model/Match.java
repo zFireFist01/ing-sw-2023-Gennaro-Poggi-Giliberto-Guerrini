@@ -32,7 +32,7 @@ public class Match {
     public Match(int numberOfPlayers, Player matchOpener) {
         this.numberOfPlayers = numberOfPlayers;
         this.matchOpener = matchOpener;
-        this.livingRoom = new LivingRoom();
+        this.livingRoom = new LivingRoom(this);
         this.commonGoalDeck = new CommonGoalCardsDeck();
         this.personalGoalDeck = new PersonalGoalCardsDeck();
     }
