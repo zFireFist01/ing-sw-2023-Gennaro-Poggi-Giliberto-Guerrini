@@ -1,5 +1,7 @@
 package Server.Model.GameItems;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 
 /**
@@ -48,8 +50,11 @@ public class Bookshelf {
 
      */
 
-    public void insertTile(int column, TileType tileType) throws UnsupportedOperationException, IndexOutOfBoundsException{
-        if(column < 0 || column > 4){
+    public void insertTile(int column, TileType tileType) throws UnsupportedOperationException,
+            IndexOutOfBoundsException, NullPointerException{
+        if(tileType == null){
+            throw new NullPointerException("The tile's type cannot be null!");
+        }else if(column < 0 || column > 4){
             throw new IndexOutOfBoundsException("Column is out of range!");
         } else if(lastIndexes.get(column) <= 0){
             throw new UnsupportedOperationException("This column is already full!");
