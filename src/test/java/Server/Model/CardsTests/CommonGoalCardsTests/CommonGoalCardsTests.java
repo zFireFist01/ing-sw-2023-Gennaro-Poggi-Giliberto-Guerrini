@@ -1,20 +1,19 @@
 package Server.Model.CardsTests.CommonGoalCardsTests;
 
 import Server.Model.Cards.CommonGoalCard;
-import Server.Model.Cards.CommonGoalCards.CommonGoalCard1;
-import Server.Model.Cards.CommonGoalCards.CommonGoalCard2;
-import Server.Model.Cards.CommonGoalCards.CommonGoalCard7;
-import Server.Model.Cards.CommonGoalCards.CommonGoalCard8;
+import Server.Model.Cards.CommonGoalCards.*;
 import Server.Model.GameItems.Bookshelf;
 import Server.Model.GameItems.BookshelfTileSpot;
 import Server.Model.GameItems.TileType;
+
+import Utils.MathUtils.*;
 //import org.junit.jupiter.api.*;
 import jdk.jshell.execution.Util;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
 
-import java.util.Random;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -461,6 +460,11 @@ public class CommonGoalCardsTests {
         assertFalse(testCard.check(testBookshelf));
     }
 
+    /**
+     * This method tests the 8th common goal card in an environment where the check function
+     * should return true
+     * @author patrickpoggi
+     */
     @Test
     public void CommonGoalCard8_expectedTrue_Test(){
         testCard = new CommonGoalCard8();
@@ -499,9 +503,439 @@ public class CommonGoalCardsTests {
 
     }
 
+    /**
+     * This method tests the 8th common goal card in an environment where the check function
+     * should return false
+     * @author patrickpoggi
+     */
     @Test
     public void CommonGoalCard8_expectedFalse_Test(){
+        testCard = new CommonGoalCard8();
+        testBookshelf = new Bookshelf();
+        TileType tt = TileType.randomTileType();
 
+        //Checking the empty bookshelf
+        assertFalse(testCard.check(testBookshelf));
+
+        //BookshelfTileSpot[][] threeOkOneNotMatrix = new BookshelfTileSpot[6][5]; //(0,0) is not ok
+        //Only (0,0) is different from the others 3 corners
+        for(int i=0;i<testBookshelf.getBookshelfWidth();i++){                   //las row
+            if(i==0 || i == testBookshelf.getBookshelfWidth()-1){
+                testBookshelf.insertTile(i, tt);
+            }else{
+                testBookshelf.insertTile(i,TileType.randomTileType());
+            }
+        }
+        for(int i=0;i< testBookshelf.getBookshelfWidth();i++){                  //2nd to last row
+            testBookshelf.insertTile(i,TileType.randomTileType());
+        }
+        for(int i=0;i< testBookshelf.getBookshelfWidth();i++){                  //3rd to last row
+            testBookshelf.insertTile(i,TileType.randomTileType());
+        }
+        for(int i=0;i< testBookshelf.getBookshelfWidth();i++){                  //4th to last row
+            testBookshelf.insertTile(i,TileType.randomTileType());
+        }
+        for(int i=0;i< testBookshelf.getBookshelfWidth();i++){                  //2nd row
+            testBookshelf.insertTile(i,TileType.randomTileType());
+        }
+        for(int i=0;i< testBookshelf.getBookshelfWidth();i++){                  //1st row
+            TileType wrongtt;
+            do{
+                wrongtt = TileType.randomTileType();
+            }while(wrongtt == tt);
+            if(i==0){
+                testBookshelf.insertTile(i, wrongtt);
+            }else if(i== testBookshelf.getBookshelfWidth()-1){
+                testBookshelf.insertTile(i,tt);
+            }else{
+                testBookshelf.insertTile(i,TileType.randomTileType());
+            }
+        }
+
+        assertFalse(testCard.check(testBookshelf));
+
+        //Only (0,testBookshelf.getWidth()-1) is different from the others 3 corners
+        for(int i=0;i<testBookshelf.getBookshelfWidth();i++){                   //las row
+            if(i==0 || i == testBookshelf.getBookshelfWidth()-1){
+                testBookshelf.insertTile(i, tt);
+            }else{
+                testBookshelf.insertTile(i,TileType.randomTileType());
+            }
+        }
+        for(int i=0;i< testBookshelf.getBookshelfWidth();i++){                  //2nd to last row
+            testBookshelf.insertTile(i,TileType.randomTileType());
+        }
+        for(int i=0;i< testBookshelf.getBookshelfWidth();i++){                  //3rd to last row
+            testBookshelf.insertTile(i,TileType.randomTileType());
+        }
+        for(int i=0;i< testBookshelf.getBookshelfWidth();i++){                  //4th to last row
+            testBookshelf.insertTile(i,TileType.randomTileType());
+        }
+        for(int i=0;i< testBookshelf.getBookshelfWidth();i++){                  //2nd row
+            testBookshelf.insertTile(i,TileType.randomTileType());
+        }
+        for(int i=0;i< testBookshelf.getBookshelfWidth();i++){                  //1st row
+            TileType wrongtt;
+            do{
+                wrongtt = TileType.randomTileType();
+            }while(wrongtt == tt);
+            if(i==testBookshelf.getBookshelfWidth()-1){
+                testBookshelf.insertTile(i, wrongtt);
+            }else if(i== 0){
+                testBookshelf.insertTile(i,tt);
+            }else{
+                testBookshelf.insertTile(i,TileType.randomTileType());
+            }
+        }
+        assertFalse(testCard.check(testBookshelf));
+
+        //Only (testBookShelf.getHeight()-1,0) is different from the others 3 corners
+        for(int i=0;i<testBookshelf.getBookshelfWidth();i++){                   //las row
+            TileType wrongtt;
+            do{
+                wrongtt = TileType.randomTileType();
+            }while(wrongtt == tt);
+            if(i==0){
+                testBookshelf.insertTile(i, wrongtt);
+            }else if(i== testBookshelf.getBookshelfWidth()-1){
+                testBookshelf.insertTile(i,tt);
+            }else{
+                testBookshelf.insertTile(i,TileType.randomTileType());
+            }
+        }
+        for(int i=0;i< testBookshelf.getBookshelfWidth();i++){                  //2nd to last row
+            testBookshelf.insertTile(i,TileType.randomTileType());
+        }
+        for(int i=0;i< testBookshelf.getBookshelfWidth();i++){                  //3rd to last row
+            testBookshelf.insertTile(i,TileType.randomTileType());
+        }
+        for(int i=0;i< testBookshelf.getBookshelfWidth();i++){                  //4th to last row
+            testBookshelf.insertTile(i,TileType.randomTileType());
+        }
+        for(int i=0;i< testBookshelf.getBookshelfWidth();i++){                  //2nd row
+            testBookshelf.insertTile(i,TileType.randomTileType());
+        }
+        for(int i=0;i< testBookshelf.getBookshelfWidth();i++){                  //1st row
+            if(i==0 || i == testBookshelf.getBookshelfWidth()-1){
+                testBookshelf.insertTile(i, tt);
+            }else{
+                testBookshelf.insertTile(i,TileType.randomTileType());
+            }
+        }
+        assertFalse(testCard.check(testBookshelf));
+
+        //Only (testBookShelf.getHeight()-1,testBookShelf.getHeight()-1) is different from the others 3 corners
+        for(int i=0;i<testBookshelf.getBookshelfWidth();i++){                   //las row
+            TileType wrongtt;
+            do{
+                wrongtt = TileType.randomTileType();
+            }while(wrongtt == tt);
+            if(i==testBookshelf.getBookshelfHeight()-1){
+                testBookshelf.insertTile(i, wrongtt);
+            }else if(i== 0){
+                testBookshelf.insertTile(i,tt);
+            }else{
+                testBookshelf.insertTile(i,TileType.randomTileType());
+            }
+        }
+        for(int i=0;i< testBookshelf.getBookshelfWidth();i++){                  //2nd to last row
+            testBookshelf.insertTile(i,TileType.randomTileType());
+        }
+        for(int i=0;i< testBookshelf.getBookshelfWidth();i++){                  //3rd to last row
+            testBookshelf.insertTile(i,TileType.randomTileType());
+        }
+        for(int i=0;i< testBookshelf.getBookshelfWidth();i++){                  //4th to last row
+            testBookshelf.insertTile(i,TileType.randomTileType());
+        }
+        for(int i=0;i< testBookshelf.getBookshelfWidth();i++){                  //2nd row
+            testBookshelf.insertTile(i,TileType.randomTileType());
+        }
+        for(int i=0;i< testBookshelf.getBookshelfWidth();i++){                  //1st row
+            if(i==0 || i == testBookshelf.getBookshelfWidth()-1){
+                testBookshelf.insertTile(i, tt);
+            }else{
+                testBookshelf.insertTile(i,TileType.randomTileType());
+            }
+        }
+        assertFalse(testCard.check(testBookshelf));
+
+        //Every possible combination of the 4 squares not being of the same type will be false for one of these reasons,
+        //so there's no need to check them.
     }
 
+    /**
+     * This method tests the 9th common goal card in an environment where the check function
+     * should return true
+     * @author patrickpoggi
+     */
+    @Test
+    public void CommonGoalCard9_expectedTrue_Test(){
+        testCard = new CommonGoalCard9();
+        testBookshelf = new Bookshelf();
+        Set<Couple> positions = new HashSet<>();
+        //Set<Couple> donePositions = new HashSet<>();
+        Random r = new Random();
+        for(TileType tt : TileType.values()){
+            //Select random positions where this type should go
+            for(int i=0;i<8;i++){
+                positions.add(new Couple(r.nextInt(6), r.nextInt(5)));
+            }
+            for(int i=testBookshelf.getBookshelfHeight();i>=0;i--){
+                for(int j=0;j<testBookshelf.getBookshelfWidth();j++){
+                    if(positions.contains(new Couple(i,j))){
+                        //donePositions.add(new Couple(i,j));
+                        testBookshelf.insertTile(j,tt);
+                        positions.remove(new Couple(i,j));
+                    }else{
+                        TileType othertt;
+                        do{
+                            othertt = TileType.randomTileType();
+                        }while(othertt == tt);
+                        testBookshelf.insertTile(j,othertt);    //This way I'm ensuring that there are only those 8
+                                                                // positions with the type tt
+                    }
+                }
+            }
+            assertTrue(testCard.check(testBookshelf));
+        }
+    }
+
+    /**
+     * This method tests the 9th common goal card in an environment where the check function
+     * should return false
+     * @author patrickpoggi
+     */
+    @Test
+    public void CommonGoalCard9_expectedFalse_Test(){
+        testCard = new CommonGoalCard9();
+        testBookshelf = new Bookshelf();
+
+        //Check the empty bookshelf
+        assertFalse(testCard.check(testBookshelf));
+
+        //Corner cases: I want the bookshelf to have 7 (case 1) and 0 (case 2) tiles of a given type
+        Set<Couple> positions = new HashSet<>();
+        //Set<Couple> donePositions = new HashSet<>();
+        Random r = new Random();
+
+        //Case 1:
+        for(TileType tt : TileType.values()){
+            //Select random positions where this type should go
+            for(int i=0;i<7;i++){
+                positions.add(new Couple(r.nextInt(6), r.nextInt(5)));
+            }
+            for(int i=testBookshelf.getBookshelfHeight();i>=0;i--){
+                for(int j=0;j<testBookshelf.getBookshelfWidth();j++){
+                    if(positions.contains(new Couple(i,j))){
+                        //donePositions.add(new Couple(i,j));
+                        testBookshelf.insertTile(j,tt);
+                        positions.remove(new Couple(i,j));
+                    }else{
+                        TileType othertt;
+                        do{
+                            othertt = TileType.randomTileType();
+                        }while(othertt == tt);
+                        testBookshelf.insertTile(j,othertt);    //This way I'm ensuring that there are only those 8
+                        // positions with the type tt
+                    }
+                }
+            }
+            assertFalse(testCard.check(testBookshelf));
+        }
+
+        //Case 2:
+        for(TileType tt : TileType.values()){
+            for(int i=testBookshelf.getBookshelfHeight();i>=0;i--){
+                for(int j=0;j<testBookshelf.getBookshelfWidth();j++){
+                    TileType othertt;
+                    do{
+                        othertt = TileType.randomTileType();
+                    }while(othertt == tt);
+                    testBookshelf.insertTile(j,othertt);    //This way I'm ensuring that there are only those 8
+                    // positions with the type tt
+                }
+            }
+            assertFalse(testCard.check(testBookshelf));
+        }
+    }
+
+    /**
+     * This method tests the 10th common goal card in an environment where the check function
+     * should return true
+     * @author patrickpoggi
+     */
+    @Test
+    public void CommonGoalCard10_expectedTrue_Test(){
+        testCard = new CommonGoalCard10();
+        testBookshelf = new Bookshelf();
+        Random r = new Random();
+
+        for(TileType tt : TileType.values()){
+            for(int k=0;k<5;k++){                       //Doing 5 tries for every type
+                Couple startingPos = new Couple(r.nextInt(4), r.nextInt(3));
+                for(int i= testBookshelf.getBookshelfHeight();i>=0;i--){
+                    for(int j=0;j< testBookshelf.getBookshelfWidth();j++){
+                        if(     (i == startingPos.getA() && j == startingPos.getB()) ||
+                                (i == startingPos.getA() && j == (startingPos.getB()+2)) ||
+                                ((i == startingPos.getA()+1) && (j == startingPos.getB()+1)) ||
+                                (i == (startingPos.getA()+2) && j == startingPos.getB()) ||
+                                (i == startingPos.getA()+2 && j == (startingPos.getB()+2))
+                        ){
+                            testBookshelf.insertTile(j,tt);
+                        }else{
+                            TileType othertt;
+                            do{
+                                othertt = TileType.randomTileType();
+                            }while(othertt == tt);
+                        }
+                    }
+                }
+                assertTrue(testCard.check(testBookshelf));
+            }
+        }
+    }
+
+    /**
+     * This method tests the 10th common goal card in an environment where the check function
+     * should return false
+     * @author patrickpoggi
+     */
+    @Test
+    public void CommonGoalCard10_expectedFalse_Test(){
+        testCard = new CommonGoalCard10();
+        testBookshelf = new Bookshelf();
+        Random r = new Random();
+
+        //check the empty bookshelf
+        assertFalse(testCard.check(testBookshelf));
+
+        //IDEA: Build five different bookshelves: in each one we put just one tile wrong for the X formation
+
+        //Bookshelf 1: the tile in the starting position is wrong
+        for(TileType tt : TileType.values()){
+            for(int k=0;k<5;k++){                       //Doing 5 tries for every type
+                Couple startingPos = new Couple(r.nextInt(4), r.nextInt(3));
+                for(int i= testBookshelf.getBookshelfHeight();i>=0;i--){
+                    for(int j=0;j< testBookshelf.getBookshelfWidth();j++){
+                        if(
+                                (i == startingPos.getA() && j == (startingPos.getB()+2)) ||
+                                ((i == startingPos.getA()+1) && (j == startingPos.getB()+1)) ||
+                                (i == (startingPos.getA()+2) && j == startingPos.getB()) ||
+                                (i == startingPos.getA()+2 && j == (startingPos.getB()+2))
+                        ){
+                            testBookshelf.insertTile(j,tt);
+                        }else{
+                            TileType othertt;
+                            do{
+                                othertt = TileType.randomTileType();
+                            }while(othertt == tt);
+                        }
+                    }
+                }
+                assertFalse(testCard.check(testBookshelf));
+            }
+        }
+
+        //Bookshelf 2: the tile in the upper-right corner is wrong
+        for(TileType tt : TileType.values()){
+            for(int k=0;k<5;k++){                       //Doing 5 tries for every type
+                Couple startingPos = new Couple(r.nextInt(4), r.nextInt(3));
+                for(int i= testBookshelf.getBookshelfHeight();i>=0;i--){
+                    for(int j=0;j< testBookshelf.getBookshelfWidth();j++){
+                        if(     (i == startingPos.getA() && j == startingPos.getB()) ||
+
+                                ((i == startingPos.getA()+1) && (j == startingPos.getB()+1)) ||
+                                (i == (startingPos.getA()+2) && j == startingPos.getB()) ||
+                                (i == startingPos.getA()+2 && j == (startingPos.getB()+2))
+                        ){
+                            testBookshelf.insertTile(j,tt);
+                        }else{
+                            TileType othertt;
+                            do{
+                                othertt = TileType.randomTileType();
+                            }while(othertt == tt);
+                        }
+                    }
+                }
+                assertFalse(testCard.check(testBookshelf));
+            }
+        }
+
+        //Bookshelf 3: the tile in the middle of the X is wrong
+        for(TileType tt : TileType.values()){
+            for(int k=0;k<5;k++){                       //Doing 5 tries for every type
+                Couple startingPos = new Couple(r.nextInt(4), r.nextInt(3));
+                for(int i= testBookshelf.getBookshelfHeight();i>=0;i--){
+                    for(int j=0;j< testBookshelf.getBookshelfWidth();j++){
+                        if(     (i == startingPos.getA() && j == startingPos.getB()) ||
+                                (i == startingPos.getA() && j == (startingPos.getB()+2)) ||
+
+                                (i == (startingPos.getA()+2) && j == startingPos.getB()) ||
+                                (i == startingPos.getA()+2 && j == (startingPos.getB()+2))
+                        ){
+                            testBookshelf.insertTile(j,tt);
+                        }else{
+                            TileType othertt;
+                            do{
+                                othertt = TileType.randomTileType();
+                            }while(othertt == tt);
+                        }
+                    }
+                }
+                assertFalse(testCard.check(testBookshelf));
+            }
+        }
+
+        //Bookshelf 4: the tile in the lower-left corner is wrong
+        for(TileType tt : TileType.values()){
+            for(int k=0;k<5;k++){                       //Doing 5 tries for every type
+                Couple startingPos = new Couple(r.nextInt(4), r.nextInt(3));
+                for(int i= testBookshelf.getBookshelfHeight();i>=0;i--){
+                    for(int j=0;j< testBookshelf.getBookshelfWidth();j++){
+                        if(     (i == startingPos.getA() && j == startingPos.getB()) ||
+                                (i == startingPos.getA() && j == (startingPos.getB()+2)) ||
+                                ((i == startingPos.getA()+1) && (j == startingPos.getB()+1)) ||
+
+                                (i == startingPos.getA()+2 && j == (startingPos.getB()+2))
+                        ){
+                            testBookshelf.insertTile(j,tt);
+                        }else{
+                            TileType othertt;
+                            do{
+                                othertt = TileType.randomTileType();
+                            }while(othertt == tt);
+                        }
+                    }
+                }
+                assertFalse(testCard.check(testBookshelf));
+            }
+        }
+
+        //Bookshelf 5: the tile in the lower-right corner is wrong:
+        for(TileType tt : TileType.values()){
+            for(int k=0;k<5;k++){                       //Doing 5 tries for every type
+                Couple startingPos = new Couple(r.nextInt(4), r.nextInt(3));
+                for(int i= testBookshelf.getBookshelfHeight();i>=0;i--){
+                    for(int j=0;j< testBookshelf.getBookshelfWidth();j++){
+                        if(     (i == startingPos.getA() && j == startingPos.getB()) ||
+                                (i == startingPos.getA() && j == (startingPos.getB()+2)) ||
+                                ((i == startingPos.getA()+1) && (j == startingPos.getB()+1)) ||
+                                (i == (startingPos.getA()+2) && j == startingPos.getB())
+
+                        ){
+                            testBookshelf.insertTile(j,tt);
+                        }else{
+                            TileType othertt;
+                            do{
+                                othertt = TileType.randomTileType();
+                            }while(othertt == tt);
+                        }
+                    }
+                }
+                assertFalse(testCard.check(testBookshelf));
+            }
+        }
+
+        //Every possible false situation is a combination of one or more of these
+    }
 }

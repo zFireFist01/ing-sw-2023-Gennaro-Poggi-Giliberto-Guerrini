@@ -1,11 +1,13 @@
 package Server.Model.GameItems;
 
 import Server.Model.Match;
+import static Utils.MathUtils.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+
 
 /**
  * @Class Livingroom
@@ -197,44 +199,9 @@ public class LivingRoom {
         }
     }
 
+
     /**
      * Helper method
-     * @param mat is the given matrix, the one we want to rotate by 90°. It is assumed to be a square matrix
-     * This method modifies the matrix mat so that at the end of its execution it's rotated rightwards of 90°
-     */
-    private void rotateMatrix(@NotNull LivingRoomTileSpot[][] mat){
-        for(int i=0; i< mat[i].length;i++){
-            for(int j=0; j< mat[j].length; j++){
-                LivingRoomTileSpot temp = new LivingRoomTileSpot(mat[i][j]);
-                mat[i][j] = mat[j][i];
-                mat[j][i] = temp;
-            }
-        }
-        for(int i=0; i<mat[i].length;i++){
-            LivingRoomTileSpot temp = new LivingRoomTileSpot(mat[i][0]);
-            mat[i][0] = mat[i][mat[i].length];
-            mat[i][mat[i].length] = temp;
-        }
-    }
-
-    /**
-     * Helper method.
-     * Both matrixes are assumed to be square
-     * @param matSource is the matrix we want to copy
-     * @param matDest is the matrix where we want to copy
-     * @param si is the line-index of matDest where the copy will start
-     * @param sj is the column-index where the copy will start
-     */
-    private void copy(LivingRoomTileSpot[][] matSource, LivingRoomTileSpot[][] matDest, int si, int sj){
-        for(int i=si;i<matSource[0].length;i++){
-            for(int j = sj; j< matSource[0].length;j++){
-                matDest[i][j] = new LivingRoomTileSpot(matSource[i-si][j-sj]);
-            }
-        }
-    }
-
-    /**
-     *
      * @param i row of the tile we want to check
      * @param j column of the tile we want tp check
      * @return true if and only if the tile we're checking has at least one free edge
