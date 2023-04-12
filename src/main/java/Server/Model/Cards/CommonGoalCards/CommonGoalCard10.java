@@ -6,18 +6,11 @@ import Server.Model.GameItems.BookshelfTileSpot;
 import Server.Model.GameItems.TileType;
 
 public class CommonGoalCard10 extends CommonGoalCard {
-    /*
-     bsmat[i][j].getTileType() == bsmat[i+1][j+1].getTileType()
-                        && bsmat[i][j].getTileType() == bsmat[i][j+2].getTileType()
-                        && bsmat[i][j].getTileType() == bsmat[i+2][j].getTileType()
-                        && bsmat[i][j].getTileType() == bsmat[i+2][j+2].getTileType()
-     */
 
     @Override
     public boolean check(Bookshelf bookshelf) {
         //5 tiles pf the same kind forming an X in the bookshelf
         BookshelfTileSpot[][] bsmat = bookshelf.getTileMatrix();
-        boolean[][] mask = new boolean[bookshelf.getBookshelfWidth()][bookshelf.getBookshelfHeight()];
 
         for(int i=0; i<bookshelf.getBookshelfHeight()-2;i++){
             for(int j=0; j< bookshelf.getBookshelfWidth()-2;j++){

@@ -45,6 +45,11 @@ public class BookshelfTest {
     }
 
     @Test
+    public void insertTile_expectedNullPointerException_Test(){
+        assertThrows(NullPointerException.class, () -> uut.insertTile(r.nextInt(5), null));
+    }
+
+    @Test
     public void insertTileTest(){
         BookshelfTileSpot[][] bs = uut.getTileMatrix();
         int col;

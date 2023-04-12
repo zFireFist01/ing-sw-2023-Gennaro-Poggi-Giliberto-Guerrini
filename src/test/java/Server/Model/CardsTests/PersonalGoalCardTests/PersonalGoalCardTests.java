@@ -1,8 +1,14 @@
-package Server.Model.Cards;
+package Server.Model.CardsTests.PersonalGoalCardTests;
 
+import Server.Model.Cards.PersonalGoalCard;
 import Server.Model.GameItems.BookshelfTileSpot;
 import Server.Model.GameItems.TileType;
-import org.junit.jupiter.api.*;
+import org.junit.Test;
+import org.junit.Before;
+import org.junit.After;
+
+
+import static org.junit.Assert.*;
 
 public class PersonalGoalCardTests {
     @Test
@@ -26,19 +32,19 @@ public class PersonalGoalCardTests {
         matrix[3][1].setTile();
         matrix[5][2].setTile();
         matrix[0][0].setTile();
-        Assertions.assertTrue(p.check(matrix)==0);
+        assertTrue(p.check(matrix)==0);
         matrix[0][0].setTile(TileType.PLANTS);
-        Assertions.assertTrue(p.check(matrix)==1);
+        assertTrue(p.check(matrix)==1);
         matrix[0][2].setTile(TileType.FRAMES);
-        Assertions.assertTrue(p.check(matrix)==2);
+        assertTrue(p.check(matrix)==2);
         matrix[1][4].setTile(TileType.CATS);
-        Assertions.assertTrue(p.check(matrix)==4);
+        assertTrue(p.check(matrix)==4);
         matrix[2][3].setTile(TileType.BOOKS);
-        Assertions.assertTrue(p.check(matrix)==6);
+        assertTrue(p.check(matrix)==6);
         matrix[3][1].setTile(TileType.GAMES);
-        Assertions.assertTrue(p.check(matrix)==9);
+        assertTrue(p.check(matrix)==9);
         matrix[5][2].setTile(TileType.TROPHIES);
-        Assertions.assertTrue(p.check(matrix)==12);
+        assertTrue(p.check(matrix)==12);
 
         //test check method for PersonalGoalCard.TYPE2
 
@@ -58,19 +64,19 @@ public class PersonalGoalCardTests {
         matrix[4][3].setTile();
         matrix[5][4].setTile();
         matrix[1][1].setTile();
-        Assertions.assertTrue(p.check(matrix)==0);
+        assertTrue(p.check(matrix)==0);
         matrix[1][1].setTile(TileType.PLANTS);
-        Assertions.assertTrue(p.check(matrix)==1);
+        assertTrue(p.check(matrix)==1);
         matrix[2][0].setTile(TileType.CATS);
-        Assertions.assertTrue(p.check(matrix)==2);
+        assertTrue(p.check(matrix)==2);
         matrix[2][2].setTile(TileType.GAMES);
-        Assertions.assertTrue(p.check(matrix)==4);
+        assertTrue(p.check(matrix)==4);
         matrix[3][4].setTile(TileType.BOOKS);
-        Assertions.assertTrue(p.check(matrix)==6);
+        assertTrue(p.check(matrix)==6);
         matrix[4][3].setTile(TileType.TROPHIES);
-        Assertions.assertTrue(p.check(matrix)==9);
+        assertTrue(p.check(matrix)==9);
         matrix[5][4].setTile(TileType.FRAMES);
-        Assertions.assertTrue(p.check(matrix)==12);
+        assertTrue(p.check(matrix)==12);
 
         //test check method for PersonalGoalCard.TYPE3
         p = PersonalGoalCard.TYPE3;
@@ -89,19 +95,19 @@ public class PersonalGoalCardTests {
         matrix[3][4].setTile();
         matrix[5][0].setTile();
         matrix[1][0].setTile();
-        Assertions.assertTrue(p.check(matrix)==0);
+        assertTrue(p.check(matrix)==0);
         matrix[1][0].setTile(TileType.FRAMES);
-        Assertions.assertTrue(p.check(matrix)==1);
+        assertTrue(p.check(matrix)==1);
         matrix[1][3].setTile(TileType.GAMES);
-        Assertions.assertTrue(p.check(matrix)==2);
+        assertTrue(p.check(matrix)==2);
         matrix[2][2].setTile(TileType.PLANTS);
-        Assertions.assertTrue(p.check(matrix)==4);
+        assertTrue(p.check(matrix)==4);
         matrix[3][1].setTile(TileType.CATS);
-        Assertions.assertTrue(p.check(matrix)==6);
+        assertTrue(p.check(matrix)==6);
         matrix[3][4].setTile(TileType.TROPHIES);
-        Assertions.assertTrue(p.check(matrix)==9);
+        assertTrue(p.check(matrix)==9);
         matrix[5][0].setTile(TileType.BOOKS);
-        Assertions.assertTrue(p.check(matrix)==12);
+        assertTrue(p.check(matrix)==12);
 
         //test check method for PersonalGoalCard.TYPE4
         p = PersonalGoalCard.TYPE4;
@@ -120,19 +126,19 @@ public class PersonalGoalCardTests {
         matrix[4][1].setTile();
         matrix[4][2].setTile();
         matrix[0][4].setTile();
-        Assertions.assertTrue(p.check(matrix)==0);
+        assertTrue(p.check(matrix)==0);
         matrix[0][4].setTile(TileType.GAMES);
-        Assertions.assertTrue(p.check(matrix)==1);
+        assertTrue(p.check(matrix)==1);
         matrix[2][0].setTile(TileType.TROPHIES);
-        Assertions.assertTrue(p.check(matrix)==2);
+        assertTrue(p.check(matrix)==2);
         matrix[2][2].setTile(TileType.FRAMES);
-        Assertions.assertTrue(p.check(matrix)==4);
+        assertTrue(p.check(matrix)==4);
         matrix[3][3].setTile(TileType.PLANTS);
-        Assertions.assertTrue(p.check(matrix)==6);
+        assertTrue(p.check(matrix)==6);
         matrix[4][1].setTile(TileType.BOOKS);
-        Assertions.assertTrue(p.check(matrix)==9);
+        assertTrue(p.check(matrix)==9);
         matrix[4][2].setTile(TileType.CATS);
-        Assertions.assertTrue(p.check(matrix)==12);
+        assertTrue(p.check(matrix)==12);
 
         //test check method for PersonalGoalCard.TYPE5
         p = PersonalGoalCard.TYPE5;
@@ -151,19 +157,19 @@ public class PersonalGoalCardTests {
         matrix[4][4].setTile();
         matrix[5][0].setTile();
         matrix[5][3].setTile();
-        Assertions.assertTrue(p.check(matrix)==0);
+        assertTrue(p.check(matrix)==0);
         matrix[1][1].setTile(TileType.TROPHIES);
-        Assertions.assertTrue(p.check(matrix)==1);
+        assertTrue(p.check(matrix)==1);
         matrix[3][1].setTile(TileType.FRAMES);
-        Assertions.assertTrue(p.check(matrix)==2);
+        assertTrue(p.check(matrix)==2);
         matrix[3][2].setTile(TileType.BOOKS);
-        Assertions.assertTrue(p.check(matrix)==4);
+        assertTrue(p.check(matrix)==4);
         matrix[4][4].setTile(TileType.PLANTS);
-        Assertions.assertTrue(p.check(matrix)==6);
+        assertTrue(p.check(matrix)==6);
         matrix[5][0].setTile(TileType.GAMES);
-        Assertions.assertTrue(p.check(matrix)==9);
+        assertTrue(p.check(matrix)==9);
         matrix[5][3].setTile(TileType.CATS);
-        Assertions.assertTrue(p.check(matrix)==12);
+        assertTrue(p.check(matrix)==12);
 
         //test check method for PersonalGoalCard.TYPE6
         p = PersonalGoalCard.TYPE6;
@@ -182,19 +188,19 @@ public class PersonalGoalCardTests {
         matrix[4][1].setTile();
         matrix[4][3].setTile();
         matrix[5][0].setTile();
-        Assertions.assertTrue(p.check(matrix)==0);
+        assertTrue(p.check(matrix)==0);
         matrix[0][2].setTile(TileType.TROPHIES);
-        Assertions.assertTrue(p.check(matrix)==1);
+        assertTrue(p.check(matrix)==1);
         matrix[0][4].setTile(TileType.CATS);
-        Assertions.assertTrue(p.check(matrix)==2);
+        assertTrue(p.check(matrix)==2);
         matrix[2][3].setTile(TileType.BOOKS);
-        Assertions.assertTrue(p.check(matrix)==4);
+        assertTrue(p.check(matrix)==4);
         matrix[4][1].setTile(TileType.GAMES);
-        Assertions.assertTrue(p.check(matrix)==6);
+        assertTrue(p.check(matrix)==6);
         matrix[4][3].setTile(TileType.FRAMES);
-        Assertions.assertTrue(p.check(matrix)==9);
+        assertTrue(p.check(matrix)==9);
         matrix[5][0].setTile(TileType.PLANTS);
-        Assertions.assertTrue(p.check(matrix)==12);
+        assertTrue(p.check(matrix)==12);
 
         //test check method for PersonalGoalCard.TYPE7
         p = PersonalGoalCard.TYPE7;
@@ -213,19 +219,19 @@ public class PersonalGoalCardTests {
         matrix[3][0].setTile();
         matrix[4][4].setTile();
         matrix[5][2].setTile();
-        Assertions.assertTrue(p.check(matrix)==0);
+        assertTrue(p.check(matrix)==0);
         matrix[0][0].setTile(TileType.CATS);
-        Assertions.assertTrue(p.check(matrix)==1);
+        assertTrue(p.check(matrix)==1);
         matrix[1][3].setTile(TileType.FRAMES);
-        Assertions.assertTrue(p.check(matrix)==2);
+        assertTrue(p.check(matrix)==2);
         matrix[2][1].setTile(TileType.PLANTS);
-        Assertions.assertTrue(p.check(matrix)==4);
+        assertTrue(p.check(matrix)==4);
         matrix[3][0].setTile(TileType.TROPHIES);
-        Assertions.assertTrue(p.check(matrix)==6);
+        assertTrue(p.check(matrix)==6);
         matrix[4][4].setTile(TileType.GAMES);
-        Assertions.assertTrue(p.check(matrix)==9);
+        assertTrue(p.check(matrix)==9);
         matrix[5][2].setTile(TileType.BOOKS);
-        Assertions.assertTrue(p.check(matrix)==12);
+        assertTrue(p.check(matrix)==12);
 
         //test check method for PersonalGoalCard.TYPE8
         p = PersonalGoalCard.TYPE8;
@@ -245,19 +251,19 @@ public class PersonalGoalCardTests {
         matrix[3][0].setTile();
         matrix[4][3].setTile();
         matrix[5][3].setTile();
-        Assertions.assertTrue(p.check(matrix)==0);
+        assertTrue(p.check(matrix)==0);
         matrix[0][4].setTile(TileType.FRAMES);
-        Assertions.assertTrue(p.check(matrix)==1);
+        assertTrue(p.check(matrix)==1);
         matrix[1][1].setTile(TileType.CATS);
-        Assertions.assertTrue(p.check(matrix)==2);
+        assertTrue(p.check(matrix)==2);
         matrix[2][2].setTile(TileType.TROPHIES);
-        Assertions.assertTrue(p.check(matrix)==4);
+        assertTrue(p.check(matrix)==4);
         matrix[3][0].setTile(TileType.PLANTS);
-        Assertions.assertTrue(p.check(matrix)==6);
+        assertTrue(p.check(matrix)==6);
         matrix[4][3].setTile(TileType.BOOKS);
-        Assertions.assertTrue(p.check(matrix)==9);
+        assertTrue(p.check(matrix)==9);
         matrix[5][3].setTile(TileType.GAMES);
-        Assertions.assertTrue(p.check(matrix)==12);
+        assertTrue(p.check(matrix)==12);
 
         //test check method for PersonalGoalCard.TYPE9
 
@@ -277,19 +283,19 @@ public class PersonalGoalCardTests {
         matrix[4][1].setTile();
         matrix[4][4].setTile();
         matrix[5][0].setTile();
-        Assertions.assertTrue(p.check(matrix)==0);
+        assertTrue(p.check(matrix)==0);
         matrix[0][2].setTile(TileType.GAMES);
-        Assertions.assertTrue(p.check(matrix)==1);
+        assertTrue(p.check(matrix)==1);
         matrix[2][2].setTile(TileType.CATS);
-        Assertions.assertTrue(p.check(matrix)==2);
+        assertTrue(p.check(matrix)==2);
         matrix[3][4].setTile(TileType.BOOKS);
-        Assertions.assertTrue(p.check(matrix)==4);
+        assertTrue(p.check(matrix)==4);
         matrix[4][1].setTile(TileType.TROPHIES);
-        Assertions.assertTrue(p.check(matrix)==6);
+        assertTrue(p.check(matrix)==6);
         matrix[4][4].setTile(TileType.PLANTS);
-        Assertions.assertTrue(p.check(matrix)==9);
+        assertTrue(p.check(matrix)==9);
         matrix[5][0].setTile(TileType.FRAMES);
-        Assertions.assertTrue(p.check(matrix)==12);
+        assertTrue(p.check(matrix)==12);
 
         //test check method for PersonalGoalCard.TYPE10
 
@@ -309,19 +315,19 @@ public class PersonalGoalCardTests {
         matrix[3][3].setTile();
         matrix[4][1].setTile();
         matrix[5][3].setTile();
-        Assertions.assertTrue(p.check(matrix)==0);
+        assertTrue(p.check(matrix)==0);
         matrix[0][4].setTile(TileType.TROPHIES);
-        Assertions.assertTrue(p.check(matrix)==1);
+        assertTrue(p.check(matrix)==1);
         matrix[1][1].setTile(TileType.GAMES);
-        Assertions.assertTrue(p.check(matrix)==2);
+        assertTrue(p.check(matrix)==2);
         matrix[2][0].setTile(TileType.BOOKS);
-        Assertions.assertTrue(p.check(matrix)==4);
+        assertTrue(p.check(matrix)==4);
         matrix[3][3].setTile(TileType.CATS);
-        Assertions.assertTrue(p.check(matrix)==6);
+        assertTrue(p.check(matrix)==6);
         matrix[4][1].setTile(TileType.FRAMES);
-        Assertions.assertTrue(p.check(matrix)==9);
+        assertTrue(p.check(matrix)==9);
         matrix[5][3].setTile(TileType.PLANTS);
-        Assertions.assertTrue(p.check(matrix)==12);
+        assertTrue(p.check(matrix)==12);
 
         //test check method for PersonalGoalCard.TYPE11
 
@@ -341,19 +347,19 @@ public class PersonalGoalCardTests {
         matrix[3][2].setTile();
         matrix[4][4].setTile();
         matrix[5][3].setTile();
-        Assertions.assertTrue(p.check(matrix)==0);
+        assertTrue(p.check(matrix)==0);
         matrix[0][2].setTile(TileType.PLANTS);
-        Assertions.assertTrue(p.check(matrix)==1);
+        assertTrue(p.check(matrix)==1);
         matrix[1][1].setTile(TileType.BOOKS);
-        Assertions.assertTrue(p.check(matrix)==2);
+        assertTrue(p.check(matrix)==2);
         matrix[2][0].setTile(TileType.GAMES);
-        Assertions.assertTrue(p.check(matrix)==4);
+        assertTrue(p.check(matrix)==4);
         matrix[3][2].setTile(TileType.FRAMES);
-        Assertions.assertTrue(p.check(matrix)==6);
+        assertTrue(p.check(matrix)==6);
         matrix[4][4].setTile(TileType.CATS);
-        Assertions.assertTrue(p.check(matrix)==9);
+        assertTrue(p.check(matrix)==9);
         matrix[5][3].setTile(TileType.TROPHIES);
-        Assertions.assertTrue(p.check(matrix)==12);
+        assertTrue(p.check(matrix)==12);
 
         //test check method for PersonalGoalCard.TYPE12
 
@@ -373,19 +379,19 @@ public class PersonalGoalCardTests {
         matrix[3][3].setTile();
         matrix[4][4].setTile();
         matrix[5][0].setTile();
-        Assertions.assertTrue(p.check(matrix)==0);
+        assertTrue(p.check(matrix)==0);
         matrix[0][2].setTile(TileType.BOOKS);
-        Assertions.assertTrue(p.check(matrix)==1);
+        assertTrue(p.check(matrix)==1);
         matrix[1][1].setTile(TileType.PLANTS);
-        Assertions.assertTrue(p.check(matrix)==2);
+        assertTrue(p.check(matrix)==2);
         matrix[2][2].setTile(TileType.FRAMES);
-        Assertions.assertTrue(p.check(matrix)==4);
+        assertTrue(p.check(matrix)==4);
         matrix[3][3].setTile(TileType.TROPHIES);
-        Assertions.assertTrue(p.check(matrix)==6);
+        assertTrue(p.check(matrix)==6);
         matrix[4][4].setTile(TileType.GAMES);
-        Assertions.assertTrue(p.check(matrix)==9);
+        assertTrue(p.check(matrix)==9);
         matrix[5][0].setTile(TileType.CATS);
-        Assertions.assertTrue(p.check(matrix)==12);
+        assertTrue(p.check(matrix)==12);
 
 
 
