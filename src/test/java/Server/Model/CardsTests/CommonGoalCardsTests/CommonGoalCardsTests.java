@@ -715,6 +715,123 @@ public class CommonGoalCardsTests {
 
     }
 
+    /**
+     * This method tests the 6th common goal card in an environment where the check function
+     * should return false
+     * @author due2
+     */
+    @Test
+    public void CommonGoalCard6_expectedFalse_Test() {
+        testCard = new CommonGoalCard6(4, false);
+        testBookshelf = new Bookshelf();
+        BookshelfTileSpot[] row = new BookshelfTileSpot[5];
+        int[] rnd = new int[5];
+        int rnd1,rnd2;
+        BookshelfTileSpot currentTile = new BookshelfTileSpot(TileType.randomTileType());
+
+        //test with empty bookshelf
+        assertFalse(testCard.check(testBookshelf));
+
+        //prepare row with 5 tiles of different types
+        for(int i=0;i<6;i++){
+            rnd[i]=i;
+        }
+        //shuffle rnd
+        for(int i=0;i<5;i++){
+            rnd1 = (int)(Math.random()*5);
+
+            int temp = rnd[rnd1];
+            rnd[rnd1]=rnd[i];
+            rnd[i]=temp;
+        }
+        for(int i=0;i<5;i++){
+            row[i]=new BookshelfTileSpot(TileType.values()[rnd[i]]);
+        }
+
+        //create a bookshelf with only one row of different tiletypes
+        rnd1=(int)(Math.random()*5);
+        for(int i=0;i<6;i++){
+            rnd2=(int)(Math.random()*5);
+            for(int j=0;j<5;j++){
+                if(i==rnd1)
+                    testBookshelf.insertTile(j,row[j].getTileType());
+                else {
+                    testBookshelf.insertTile(j, currentTile.getTileType());
+                    if(j!=rnd2){
+                        currentTile.setTile(TileType.randomTileType());
+                    }
+
+                }
+
+            }
+        }
+        assertFalse(testCard.check(testBookshelf));
+
+    }
+
+    /**
+     * This method tests the 6th common goal card in an environment where the check function
+     * should return true
+     * @author due2
+     */
+    @Test
+public void CommonGoalCard6_expectedTrue_Test() {
+        testCard = new CommonGoalCard6(4, false);
+        testBookshelf = new Bookshelf();
+        BookshelfTileSpot[] row1 = new BookshelfTileSpot[5];
+        BookshelfTileSpot[] row2 = new BookshelfTileSpot[5];
+        int[] arnd1 = new int[5], arnd2 = new int[5];
+        int rnd1,rnd2;
+        BookshelfTileSpot currentTile = new BookshelfTileSpot(TileType.randomTileType());
+
+        //prepare row with 5 tiles of different types
+        for(int i=0;i<6;i++){
+            arnd1[i]=i;
+            arnd2[i]=i;
+        }
+        //shuffle rnd
+        for(int i=0;i<5;i++){
+            rnd1 = (int)(Math.random()*5);
+            rnd2 = (int)(Math.random()*5);
+
+            int temp1 = arnd1[rnd1];
+            arnd1[rnd1]=arnd1[i];
+            arnd1[i]=temp1;
+
+            int temp2 = arnd2[rnd2];
+            arnd2[rnd2]=arnd2[i];
+            arnd2[i]=temp2;
+        }
+        for(int i=0;i<5;i++){
+            row1[i]=new BookshelfTileSpot(TileType.values()[arnd1[i]]);
+            row2[i]=new BookshelfTileSpot(TileType.values()[arnd2[i]]);
+        }
+
+        //create a bookshelf with at least two rows of different tiletypes
+        rnd1=(int)(Math.random()*5);
+        do {
+            rnd2 = (int) (Math.random() * 5);
+        }while(rnd2==rnd1);
+
+        for(int i=0;i<6;i++){
+            for(int j=0;j<5;j++){
+                if(i==rnd1)
+                    testBookshelf.insertTile(j,row1[j].getTileType());
+                else if(i==rnd2)
+                    testBookshelf.insertTile(j,row2[j].getTileType());
+                else {
+                    testBookshelf.insertTile(j, currentTile.getTileType());
+                    currentTile.setTile(TileType.randomTileType());
+
+                }
+
+            }
+        }
+        assertTrue(testCard.check(testBookshelf));
+
+    }
+
+
 
 
     /**
