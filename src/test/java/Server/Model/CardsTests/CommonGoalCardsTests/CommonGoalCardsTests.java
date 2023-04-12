@@ -292,6 +292,429 @@ public class CommonGoalCardsTests {
 
 
     }
+    /**
+     * This method tests the 3rd common goal card in an environment where the check function
+     * should return false
+     * @author due2
+     */
+    @Test
+    public void CommonGoalCard3_expectedFalse_Test(){
+        testCard = new CommonGoalCard3(4, false);
+        testBookshelf = new Bookshelf();
+        int[] j_index = {0,0,0};
+        int[] i_index = {0,0,0};
+        boolean flag1 = false;
+        boolean flag2 = false;
+        int count,times;
+        BookshelfTileSpot testTile = new BookshelfTileSpot();
+        BookshelfTileSpot[] precedentTile = new BookshelfTileSpot[5];
+        BookshelfTileSpot[] currentTile = {new BookshelfTileSpot(),new BookshelfTileSpot(),new BookshelfTileSpot(),new BookshelfTileSpot(),new BookshelfTileSpot()};
+
+
+        //test with an empty bookshelf
+        assertFalse(testCard.check(testBookshelf));
+
+        //test with a non empty bookshelf without a coloumn of four tiles of same type
+
+        for(int i=0;i<5;i++){
+            currentTile[i]=new BookshelfTileSpot(TileType.randomTileType());
+        }
+
+        for(int i=0;i<5;i++){
+
+            for(int j=0;j<5;j++){
+                if(i==3){
+                    testTile.setTile(TileType.randomTileType());
+                    while(testTile.getTileType()==precedentTile[j].getTileType()){
+                        testTile.setTile(TileType.randomTileType());
+                    }
+                    testBookshelf.insertTile(j, testTile.getTileType());
+                    testBookshelf.insertTile(j, precedentTile[j].getTileType());
+                }else {
+                    testBookshelf.insertTile(j, currentTile[j].getTileType());
+                    precedentTile[j].setTile(currentTile[j].getTileType());
+                    currentTile[j].setTile(TileType.randomTileType());
+                }
+            }
+        }
+        assertFalse(testCard.check(testBookshelf));
+
+        //test with a bookshelf with at least one coloumn of four tiles of same type bune never more than three
+        testBookshelf = new Bookshelf();
+
+        times=(int)(Math.random()*2)+1; //number of times to change the coloumn
+        testTile.setTile(TileType.randomTileType());
+
+        for(int i=0; i<times ;i++){
+            i_index[i]=(int)(Math.random()*2);
+        }
+
+        for(int i=0 ; i<times;i++) {
+            switch (i) {
+                case 1:
+                    j_index[0] = (int) (Math.random() * 3);
+                    j_index[1] = j_index[0];
+                    j_index[2] = j_index[0];
+                case 2:
+                    while (j_index[1] == j_index[0])
+                        j_index[1] = (int) (Math.random() * 3);
+                    j_index[2] = j_index[1];
+                case 3:
+                    while (j_index[2] == j_index[1] || j_index[2] == j_index[0])
+                        j_index[2] = (int) (Math.random() * 3);
+            }
+        }
+        count=0;
+
+
+        for(int i=0;i<5;i++){
+            currentTile[i]=new BookshelfTileSpot(TileType.randomTileType());
+        }
+
+        for(int i=0;i<6;i++){
+            for(int j=0;j<5;j++) {
+
+                for(int k=0;k<times;k++){
+                    if(i==i_index[k] && j==j_index[k]){
+                        flag1=true;
+                        break;
+                    }
+                }
+                for(int k=0;k<times;k++){
+                    if((i<i_index[k] || i>i_index[k]+3 )&& j==j_index[k]){
+                        flag2=true;
+                        break;
+                    }
+                }
+
+                if(count<3 && flag1) {
+                    testTile.setTile(TileType.randomTileType());
+                    testBookshelf.insertTile(j, testTile.getTileType());
+                    testBookshelf.insertTile(j, testTile.getTileType());
+                    testBookshelf.insertTile(j, testTile.getTileType());
+                    testBookshelf.insertTile(j, testTile.getTileType());
+                    flag1=false;
+                    count++;
+                }else if(flag2 ){
+                    testBookshelf.insertTile(j, currentTile[j].getTileType());
+                    precedentTile[j].setTile(currentTile[j].getTileType());
+                    do {
+                        currentTile[j].setTile(TileType.randomTileType());
+                    }while(currentTile[j].getTileType()==precedentTile[j].getTileType());
+                    flag2=false;
+                }
+            }
+        }
+        assertFalse(testCard.check(testBookshelf));
+
+    }
+
+    /**
+     * This method tests the 3rd common goal card in an environment where the check function
+     * should return true
+     * @author due2
+     */
+    @Test
+    public void CommonGoalCard3_expectedTrue_Test(){
+        testCard = new CommonGoalCard3(4, false);
+        testBookshelf = new Bookshelf();
+        int[] j_index = {0,0,0,0};
+        int[] i_index = {0,0,0,0};
+        int count;
+        BookshelfTileSpot testTile = new BookshelfTileSpot();
+        BookshelfTileSpot[] precedentTile = new BookshelfTileSpot[5];
+        BookshelfTileSpot[] currentTile = {new BookshelfTileSpot(),new BookshelfTileSpot(),new BookshelfTileSpot(),new BookshelfTileSpot(),new BookshelfTileSpot()};
+
+        testTile.setTile(TileType.randomTileType());
+
+        for(int i=0; i<4 ;i++){
+            i_index[i]=(int)(Math.random()*2);
+        }
+
+        for(int i=0;i<4;i++) {
+            switch (i) {
+                case 1:
+                    j_index[0] = (int) (Math.random() * 3);
+                    j_index[1] = j_index[0];
+                    j_index[2] = j_index[0];
+                case 2:
+                    while (j_index[1] == j_index[0])
+                        j_index[1] = (int) (Math.random() * 3);
+                    j_index[2] = j_index[1];
+                case 3:
+                    while (j_index[2] == j_index[1] || j_index[2] == j_index[0])
+                        j_index[2] = (int) (Math.random() * 3);
+                case 4:
+                    while (j_index[3] == j_index[2] || j_index[3] == j_index[1] || j_index[3] == j_index[0])
+                        j_index[3] = (int) (Math.random() * 3);
+            }
+        }
+        count=0;
+
+
+        for(int i=0;i<5;i++){
+            currentTile[i]=new BookshelfTileSpot(TileType.randomTileType());
+        }
+
+        for(int i=0;i<6;i++){
+            for(int j=0;j<5;j++) {
+                if(count<4 && ((i==i_index[0] && j==j_index[0])||(i==i_index[1] && j==j_index[1])||(i==i_index[2] && j==j_index[2])||(i==i_index[3] && j==j_index[3]))) {
+                    testTile.setTile(TileType.randomTileType());
+                    testBookshelf.insertTile(j, testTile.getTileType());
+                    testBookshelf.insertTile(j, testTile.getTileType());
+                    testBookshelf.insertTile(j, testTile.getTileType());
+                    testBookshelf.insertTile(j, testTile.getTileType());
+                    count++;
+                }else if(((i<i_index[0] ||i>i_index[0]+3)&& j==j_index[0]) || ((i<i_index[1] ||i>i_index[1]+3)&& j==j_index[1]) || ((i<i_index[2] ||i>i_index[2]+3)&& j==j_index[2]) || ((i<i_index[3] ||i>i_index[3]+3)&& j==j_index[3])||j!=j_index[0]&&j!=j_index[1]&&j!=j_index[2]&&j!=j_index[3]){
+                    testBookshelf.insertTile(j, currentTile[j].getTileType());
+                    precedentTile[j].setTile(currentTile[j].getTileType());
+                    do {
+                        currentTile[j].setTile(TileType.randomTileType());
+                    }while(currentTile[j].getTileType()==precedentTile[j].getTileType());
+                }
+            }
+        }
+        assertTrue(testCard.check(testBookshelf));
+
+    }
+
+    /**
+     * This method tests the 4th common goal card in an environment where the check function
+     * should return false
+     * @author due2
+     */
+    @Test
+    public void CommonGoalCard4_expectedFalse_Test(){
+        testCard = new CommonGoalCard3(4, false);
+        testBookshelf = new Bookshelf();
+        BookshelfTileSpot[] precedentTile = new BookshelfTileSpot[5];
+        BookshelfTileSpot[] currentTile = new BookshelfTileSpot[5];
+        int count=0,rnd1,index=7,rnd2;
+
+        //test with an empty bookshelf
+        assertFalse(testCard.check(testBookshelf));
+
+        //test with less than 6 2x1 columns of same tiles and no 3x1 columns of same tiles
+        for(int i=0;i<5;i++){
+            currentTile[i]=new BookshelfTileSpot(TileType.randomTileType());
+        }
+        for(int i=0;i<6;i++){
+            for(int j=0;j<5;j++) {
+                testBookshelf.insertTile(j, currentTile[j].getTileType());
+                precedentTile[j].setTile(currentTile[j].getTileType());
+                do {
+                    currentTile[j].setTile(TileType.randomTileType());
+                }while(currentTile[j].getTileType()==precedentTile[j].getTileType());
+
+            }
+            rnd1=(int)(Math.random()*6);
+            if(count<5 && rnd1%3==0){
+                do {
+                    rnd2 = (int) (Math.random() * 6);
+                }while(rnd2==index);
+                index=rnd2;
+                currentTile[index].setTile(precedentTile[index].getTileType());
+            }
+        }
+        assertFalse(testCard.check(testBookshelf));
+
+
+    }
+
+    /**
+     * This method tests the 4th common goal card in an environment where the check function
+     * should return true
+     * @author due2
+     */
+    @Test
+    public void CommonGoalCard4_expectedTrue_Test(){
+        testCard = new CommonGoalCard3(4, false);
+        testBookshelf = new Bookshelf();
+        BookshelfTileSpot[] precedentTile = new BookshelfTileSpot[5];
+        BookshelfTileSpot[] currentTile = new BookshelfTileSpot[5];
+        int count=0,index=7,rnd2;
+
+        for(int i=0;i<5;i++){
+            currentTile[i]=new BookshelfTileSpot(TileType.randomTileType());
+        }
+        for(int i=0;i<6;i++){
+            for(int j=0;j<5;j++) {
+                testBookshelf.insertTile(j, currentTile[j].getTileType());
+                precedentTile[j].setTile(currentTile[j].getTileType());
+                do {
+                    currentTile[j].setTile(TileType.randomTileType());
+                }while(currentTile[j].getTileType()==precedentTile[j].getTileType());
+
+            }
+
+            if(count<6){
+                do {
+                    rnd2 = (int) (Math.random() * 6);
+                }while(rnd2==index);
+                index=rnd2;
+                currentTile[index].setTile(precedentTile[index].getTileType());
+            }
+        }
+        assertTrue(testCard.check(testBookshelf));
+    }
+
+
+    /**
+     * This method tests the 5th common goal card in an environment where the check function
+     * should return false
+     * @author due2
+     */
+    @Test
+    public void CommonGoalCard5_expectedFalse_Test(){
+        testCard = new CommonGoalCard3(4, false);
+        testBookshelf = new Bookshelf();
+
+
+        BookshelfTileSpot[] column1 = new BookshelfTileSpot[6];
+        BookshelfTileSpot[] column2 = new BookshelfTileSpot[6];
+        BookshelfTileSpot[] currentTile = new BookshelfTileSpot[5];
+        int rnd1,rnd2;
+        boolean flag=false;
+
+
+        //test with an empty bookshelf
+        assertFalse(testCard.check(testBookshelf));
+
+        //test with less than 3 columns of at least 3 same tiles
+
+
+
+        for(int i=0;i<5;i++){
+            currentTile[i]=new BookshelfTileSpot(TileType.randomTileType());
+        }
+
+        //verify that currentTile[] contains at least 4 different tiles
+        for(int i=0;i<5;i++){
+            for(int j=i+1;j<5;j++){
+                if(currentTile[i].getTileType()==currentTile[j].getTileType()){
+                    do {
+                        currentTile[j].setTile(TileType.randomTileType());
+                    }while(currentTile[j].getTileType()==currentTile[i].getTileType());
+                }
+            }
+        }
+
+        //prepare coloumns
+        rnd1=(int)(Math.random()*1);
+
+        rnd2=(int)(Math.random()*3 +1);
+        for(int j=0;j<rnd2;j++){
+            column1[j]=new BookshelfTileSpot(TileType.randomTileType());
+        }
+        for(int j=rnd2;j<6;j++){
+            column1[j]=new BookshelfTileSpot(column1[0].getTileType());
+        }
+
+        if(rnd1==1){
+            rnd2=(int)(Math.random()*3 +1);
+            for(int j=0;j<rnd2;j++){
+                column2[j]=new BookshelfTileSpot(TileType.randomTileType());
+            }
+            for(int j=rnd2;j<6;j++){
+                column2[j]=new BookshelfTileSpot(column2[0].getTileType());
+            }
+            flag=true;
+        }
+        rnd1=(int)(Math.random()*5);
+        do {
+            rnd2 = (int) (Math.random() * 5);
+        }while(rnd2==rnd1);
+
+        for(int i=0;i<6;i++){
+            for(int j=0;j<5;j++){
+                if(j==rnd1){
+                    testBookshelf.insertTile(j,column1[i].getTileType());
+                }
+                else if(flag && j==rnd2){
+                    testBookshelf.insertTile(j,column2[i].getTileType());
+                }
+                else{
+                    testBookshelf.insertTile(j,currentTile[i].getTileType());
+                }
+
+            }
+        }
+        assertFalse(testCard.check(testBookshelf));
+
+
+    }
+    /**
+     * This method tests the 5th common goal card in an environment where the check function
+     * should return true
+     * @author due2
+     */
+    @Test
+    public void CommonGoalCard5_expectedTrue_Test() {
+        testCard = new CommonGoalCard3(4, false);
+        testBookshelf = new Bookshelf();
+        BookshelfTileSpot[] column1 = new BookshelfTileSpot[6];
+        BookshelfTileSpot[] column2 = new BookshelfTileSpot[6];
+        BookshelfTileSpot[] column3 = new BookshelfTileSpot[6];
+
+        int rnd1, rnd2, rnd3;
+
+
+
+
+        rnd1=(int)(Math.random()*3 +1);
+        for(int j=0;j<rnd1;j++){
+            column1[j]=new BookshelfTileSpot(TileType.randomTileType());
+        }
+        for(int j=rnd1;j<6;j++){
+            column1[j]=new BookshelfTileSpot(column1[0].getTileType());
+        }
+
+
+        rnd2=(int)(Math.random()*3 +1);
+        for(int j=0;j<rnd2;j++){
+            column2[j]=new BookshelfTileSpot(TileType.randomTileType());
+        }
+        for(int j=rnd2;j<6;j++){
+            column2[j]=new BookshelfTileSpot(column2[0].getTileType());
+        }
+
+        rnd3=(int)(Math.random()*3 +1);
+        for(int j=0;j<rnd3;j++){
+            column3[j]=new BookshelfTileSpot(TileType.randomTileType());
+        }
+        for(int j=rnd3;j<6;j++){
+            column3[j]=new BookshelfTileSpot(column2[0].getTileType());
+        }
+
+        rnd1=(int)(Math.random()*5);
+        do {
+            rnd2 = (int) (Math.random() * 5);
+        }while(rnd2==rnd1);
+        do {
+            rnd3 = (int) (Math.random() * 5);
+        }while(rnd3==rnd1 || rnd3==rnd2);
+
+        for(int i=0;i<6;i++){
+            for(int j=0;j<5;j++){
+                if(j==rnd1){
+                    testBookshelf.insertTile(j,column1[i].getTileType());
+                }
+                else if(j==rnd2){
+                    testBookshelf.insertTile(j,column2[i].getTileType());
+                }
+                else if(j==rnd3){
+                    testBookshelf.insertTile(j,column3[i].getTileType());
+                }
+                else{
+                    testBookshelf.insertTile(j,TileType.randomTileType());
+                }
+
+            }
+        }
+        assertTrue(testCard.check(testBookshelf));
+
+    }
+
 
 
     /**
