@@ -13,6 +13,15 @@ import Server.Model.GameItems.TileType;
 public class CommonGoalCard1 extends CommonGoalCard {
 
     /**
+     * constructor of the class CommonGoalCard1 that calls the constructor of the superclass
+     * @param playersNum the number of players in the game
+     * @param secondIstance true if it is the second card, false otherwise in order to know if the card has to be created with the second instance of the points tiles
+     */
+    public CommonGoalCard1(int playersNum, boolean secondIstance) {
+        super(playersNum, secondIstance);
+    }
+
+    /**
      * This method checks if the common goal card is completed
      * @param bookshelf the bookshelf of the player
      * @return true if the common goal card is completed, false otherwise

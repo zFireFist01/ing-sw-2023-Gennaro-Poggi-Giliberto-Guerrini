@@ -12,29 +12,40 @@ import java.util.List;
 
 public abstract class Deck {
     static final int size=12;
-    private List<Card> cards;
+
+    protected final int playersNum;
+    protected final int[] order = new int[size];
+
+    /**
+     * constructor of the class Deck
+     * @param playersNum the number of players in the game
+     */
+    public Deck(int playersNum){
+        for(int i=1;i<=size;i++){
+            order[i-1]=i;
+        }
+        shuffle();
+        this.playersNum=playersNum;
+    }
 
     public Card drawOne(){
-        throw new RuntimeException("not implemented method");
-    }
-    public void shuffle() throws UnsupportedOperationException{
-
-
-
+        return null;// this method will be implemented in the subclasses
     }
 
     /**
-     * switch the card in position i with the card in position j and viceversa
-     * @param i index of the first card
-     * @param j index of the second card
+     * This method shuffles the order[] array
      */
-    public void cardsSwitch(int i,int j){
-        Card tmp;
-        tmp= cards.get(i);
-        cards.set(i,cards.get(j));
-        cards.set(j,tmp);
-
+    public void shuffle(){
+        for(int i=0;i<size;i++){
+            int random = (int) (Math.random() * size);
+            int temp = order[i];
+            order[i] = order[random];
+            order[random] = temp;
+        }
     }
+
+
+
 
 
 }

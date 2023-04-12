@@ -22,15 +22,19 @@ import static org.junit.Assert.*;
  * @author due2, patrickpoggi
  */
 public class CommonGoalCardsTests {
+
+
     CommonGoalCard testCard;
     Bookshelf testBookshelf;
+
     /**
-     * This method tests the first common goal card
+     * This method tests the 1st common goal card in an environment where the check function
+     * should return false
      * @author due2
      */
     @Test
-    public void CommonGoalCard1Test(){
-        testCard = new CommonGoalCard1();
+    public void CommonGoalCard1_expectedFalse_Test() {
+        testCard = new CommonGoalCard1(4, false);
         testBookshelf = new Bookshelf();
         boolean flag = false;
         int index;
@@ -44,10 +48,10 @@ public class CommonGoalCardsTests {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 currentTile.setTile(TileType.randomTileType());
-                while(i>0 && precedentTile.equals(currentTile)){
+                while (i > 0 && precedentTile.equals(currentTile)) {
                     currentTile.setTile(TileType.randomTileType());
                 }
-                testBookshelf.insertTile(j,currentTile.getTileType());
+                testBookshelf.insertTile(j, currentTile.getTileType());
                 precedentTile = currentTile;
             }
         }
@@ -56,16 +60,16 @@ public class CommonGoalCardsTests {
         //test with a bookshelf with only 1 2x2 submatrix of the same tile type
         testBookshelf = new Bookshelf();
 
-        for (int i = 5; i >=0; i--) {
+        for (int i = 5; i >= 0; i--) {
             for (int j = 0; j < 5; j++) {
                 currentTile.setTile(TileType.randomTileType());
-                while(i<5 && precedentTile.equals(currentTile)){
+                while (i < 5 && precedentTile.equals(currentTile)) {
                     currentTile.setTile(TileType.randomTileType());
                 }
-                testBookshelf.insertTile(j,currentTile.getTileType());
+                testBookshelf.insertTile(j, currentTile.getTileType());
                 precedentTile = currentTile;
             }
-            if((!flag && i>=1 && Math.random()>=0.5)||!flag && i==1){
+            if ((!flag && i >= 1 && Math.random() >= 0.5) || !flag && i == 1) {
                 flag = true;
                 index = (int) (Math.random() * 3);
                 matchingTile.setTile(TileType.randomTileType());
@@ -90,10 +94,24 @@ public class CommonGoalCardsTests {
 
         }
         assertFalse(testCard.check(testBookshelf));
+    }
+    /**
+     * This method tests the 1st common goal card in an environment where the check function
+     * should return true
+     * @author due2
+     **/
+    @Test
+    public void CommonGoalCard1_expectedTrue_Test(){
+        testCard = new CommonGoalCard1(4, false);
+        testBookshelf = new Bookshelf();
+        boolean flag = false;
+        int index;
+        BookshelfTileSpot precedentTile = null;
+        BookshelfTileSpot currentTile = new BookshelfTileSpot();
+        BookshelfTileSpot matchingTile = new BookshelfTileSpot();
 
         //test with a bookshelf with 2 2x2 submatrix of the same tile type
-        testBookshelf = new Bookshelf();
-        flag = false;
+
         index=-1;
         for (int i = 5; i >=0; i--) {
             for (int j = 0; j < 5; j++) {
@@ -172,15 +190,16 @@ public class CommonGoalCardsTests {
     }
 
     /**
-     * This method tests the second common goal card
+     * This method tests the 2nd common goal card in an environment where the check function
+     * should return false
      * @author due2
      */
     @Test
-    public void CommonGoalCard2Test() {
-        testCard = new CommonGoalCard2();
+    public void CommonGoalCard2_expectedFalse_Test() {
+        testCard = new CommonGoalCard2(4, false);
         testBookshelf = new Bookshelf();
-        boolean[] flag = {false,false,false,false,false,false};
-        int index1,index2;
+        boolean[] flag = {false, false, false, false, false, false};
+        int index1, index2;
         BookshelfTileSpot[] precedentTile = new BookshelfTileSpot[6];
         BookshelfTileSpot currentTile = new BookshelfTileSpot();
 
@@ -192,12 +211,12 @@ public class CommonGoalCardsTests {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 5; j++) {
                 currentTile.setTile(TileType.randomTileType());
-                if(!flag[j] && i==5){
-                    testBookshelf.insertTile(j,precedentTile[j].getTileType());
-                    flag[j]=true;
-                }else{
-                    if(precedentTile[j].equals(currentTile))
-                        flag[j]=true;
+                if (!flag[j] && i == 5) {
+                    testBookshelf.insertTile(j, precedentTile[j].getTileType());
+                    flag[j] = true;
+                } else {
+                    if (precedentTile[j].equals(currentTile))
+                        flag[j] = true;
                     precedentTile[j] = currentTile;
                     testBookshelf.insertTile(j, currentTile.getTileType());
                 }
@@ -206,31 +225,46 @@ public class CommonGoalCardsTests {
         assertFalse(testCard.check(testBookshelf));
         //test with a bookshelf with only one row of different tile types
         testBookshelf = new Bookshelf();
-        flag = new boolean[]{false,false,false,false,false,false};
-        index1=(int)(Math.random()*4);
+        flag = new boolean[]{false, false, false, false, false, false};
+        index1 = (int) (Math.random() * 4);
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 5; j++) {
                 currentTile.setTile(TileType.randomTileType());
-                if(!flag[j] && i==5 && j!=index1){
-                    testBookshelf.insertTile(j,precedentTile[j].getTileType());
-                    flag[j]=true;
-                }else{
-                    if(precedentTile[j].equals(currentTile) && j!=index1)
-                        flag[j]=true;
+                if (!flag[j] && i == 5 && j != index1) {
+                    testBookshelf.insertTile(j, precedentTile[j].getTileType());
+                    flag[j] = true;
+                } else {
+                    if (precedentTile[j].equals(currentTile) && j != index1)
+                        flag[j] = true;
                     precedentTile[j] = currentTile;
-                    if(j!=index1) {
+                    if (j != index1) {
                         testBookshelf.insertTile(j, currentTile.getTileType());
-                    }else{
+                    } else {
                         testBookshelf.insertTile(j, TileType.values()[i]);
                     }
                 }
             }
         }
         assertFalse(testCard.check(testBookshelf));
+    }
+    /**
+     * This method tests the 2nd common goal card in an environment where the check function
+     * should return true
+     * @author due2
+     */
+    @Test
+    public void CommonGoalCard2_expectedTrue_Test(){
+        testCard = new CommonGoalCard2(4, false);
+        testBookshelf = new Bookshelf();
+        boolean[] flag = new boolean[]{false,false,false,false,false,false};
+        int index1, index2;
+        BookshelfTileSpot[] precedentTile = new BookshelfTileSpot[6];
+        BookshelfTileSpot currentTile = new BookshelfTileSpot();
+
 
         //test with a bookshelf with two rows of different tile types
-        testBookshelf = new Bookshelf();
-        flag = new boolean[]{false,false,false,false,false,false};
+
+
         index1=(int)(Math.random()*4);
         index2=(int)(Math.random()*4);
         while(index1==index2)
@@ -258,6 +292,7 @@ public class CommonGoalCardsTests {
 
 
     }
+
 
     /**
      * This method tests the 7th common goal card in an environment where the check function
