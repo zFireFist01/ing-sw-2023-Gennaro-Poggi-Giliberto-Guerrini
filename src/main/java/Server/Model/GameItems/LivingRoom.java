@@ -11,7 +11,7 @@ public class LivingRoom {
         return tileMatrix;
     };
 
-    protected void refreshLivingRoom(TileType type){
+    public void refreshLivingRoom(){
 
     };
 

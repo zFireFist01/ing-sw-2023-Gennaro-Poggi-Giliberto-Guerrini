@@ -1,10 +1,17 @@
 package Server.Model.MatchStatus;
 
-import Server.Model.MatchStatus.MatchStatus;
 
 public class Closing extends MatchStatus {
+
+    private String closedBecause;
+
+
     @Override
-    protected MatchStatus evolve() throws UnsupportedOperationException {
+    public MatchStatus evolve() throws UnsupportedOperationException {
         return null;
+    }
+
+    public String getReasonClosing(){
+        return closedBecause;
     }
 }

@@ -14,13 +14,13 @@ public class TileSpot {
         this.tile = tile;
     }
 
-    protected boolean isEmpty(){
+    public boolean isEmpty(){
         return tile==null;
     }
 
     protected void setTile(TileType tile){ this.tile = tile;}
 
-    protected TileType getTileType(){
+    public TileType getTileType(){
         return tile;
     }
 }
