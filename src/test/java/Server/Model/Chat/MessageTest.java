@@ -22,7 +22,7 @@ public class MessageTest {
     public void messageConstructor_NoSelfTexting_UnsupportedOperationException() {
         String senderName = "Sender";
         int senderID = 3;
-        Player sender = new Player(senderID, senderName );
+        Player sender = new Player(senderID, senderName);
         Time timeSent = new Time(60);
         String content = "Test for message";
         assertThrows(UnsupportedOperationException.class, ()->this.tester = new Message(sender, content, timeSent, sender));

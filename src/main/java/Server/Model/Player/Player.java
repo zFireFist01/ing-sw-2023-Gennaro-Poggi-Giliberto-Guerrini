@@ -5,7 +5,6 @@ import Server.Model.GameItems.Bookshelf;
 import Server.Model.Cards.PersonalGoalCard;
 import Server.Model.GameItems.PointsTile;
 import java.util.ArrayList;
-import java.util.Dictionary;
 
 /**
  * This class defines the player in game
@@ -13,7 +12,7 @@ import java.util.Dictionary;
  */
 public class Player {
     private final int playerID;
-    private Bookshelf bookshelf;
+    private final Bookshelf bookshelf;
     private final String playerNickName;
     private PersonalGoalCard personalGoalCard;
     private PlayerStatus playerStatus;
@@ -37,7 +36,7 @@ public class Player {
     }
 
     public ArrayList<PointsTile> getPointsTiles() {
-        return pointsTiles;
+        return new ArrayList<PointsTile>(this.pointsTiles);
     }
 
     public Bookshelf getBookshelf() {

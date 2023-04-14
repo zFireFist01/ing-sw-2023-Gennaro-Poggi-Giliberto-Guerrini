@@ -10,14 +10,17 @@ import java.util.List;
  * @author Paolo Gennaro
  */
 public class PlayersChat {
-    private List<Message> messages;
+    private final List<Message> messages;
+
+    public PlayersChat() {
+        this.messages = new ArrayList<Message>();
+    }
 
     /**
      * We store the message every message sent in an ArrayList
      * @param message is the message we want to add in the ArrayList
      */
     public void addMessage(Message message){
-        this.messages = new ArrayList<Message>();
         this.messages.add(message);
     }
 
