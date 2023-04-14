@@ -24,6 +24,12 @@
       <scope>test</scope>
     </dependency>
       <dependency>
+          <groupId>org.jetbrains</groupId>
+          <artifactId>annotations</artifactId>
+          <version>20.1.0</version>
+	  <scope>compile</scope>
+      </dependency>
+      <dependency>
           <groupId>junit</groupId>
           <artifactId>junit</artifactId>
           <version>RELEASE</version>
@@ -72,10 +78,22 @@
           <scope>compile</scope>
       </dependency>
       <dependency>
-          <groupId>org.testing</groupId>
-          <artifactId>testing</artifactId>
+          <groupId>org.testng</groupId>
+          <artifactId>testng</artifactId>
           <version>RELEASE</version>
           <scope>compile</scope>
+      </dependency>
+      <dependency>
+          <groupId>org.jetbrains</groupId>
+          <artifactId>annotations</artifactId>
+          <version>15.0</version>
+          <scope>compile</scope>
+      </dependency>
+      <dependency>
+          <groupId>org.junit.jupiter</groupId>
+          <artifactId>junit-jupiter</artifactId>
+          <version>RELEASE</version>
+          <scope>test</scope>
       </dependency>
   </dependencies>
 

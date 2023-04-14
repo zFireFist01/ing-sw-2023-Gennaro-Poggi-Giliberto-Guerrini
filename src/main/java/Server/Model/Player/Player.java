@@ -5,7 +5,6 @@ import Server.Model.GameItems.Bookshelf;
 import Server.Model.Cards.PersonalGoalCard;
 import Server.Model.GameItems.PointsTile;
 import java.util.ArrayList;
-import java.util.Dictionary;
 
 /**
  * This class defines the player in game
@@ -18,17 +17,26 @@ public class Player {
     private PersonalGoalCard personalGoalCard;
     private PlayerStatus playerStatus;
     private final ArrayList<PointsTile> pointsTiles;
+    private Player nextPlayer;
 
-    public Player(int playerID, Bookshelf bookshelf, String playerNickName){
+    public Player(int playerID, String playerNickName){
         this.playerID = playerID;
-        this.bookshelf = bookshelf;
+        this.bookshelf = new Bookshelf();
         this.playerNickName = playerNickName;
         this.pointsTiles = new ArrayList<PointsTile>();
         this.playerStatus = new Connected();
     }
 
+    public Player getNextPlayer() {
+        return nextPlayer;
+    }
+
+    public void setNextPlayer(Player nextPlayer) {
+        this.nextPlayer = nextPlayer;
+    }
+
     public ArrayList<PointsTile> getPointsTiles() {
-        return pointsTiles;
+        return new ArrayList<PointsTile>(this.pointsTiles);
     }
 
     public Bookshelf getBookshelf() {
@@ -44,10 +52,10 @@ public class Player {
     }
 
     /**
-     * The Setter for the PersonalGoalCard
+     * We assign the Player his PersonalGoalCard
      * @param personalGoalCard is the PersonalGoalCard we assign to the player
      */
-    public void setPersonalGoalCard(PersonalGoalCard personalGoalCard) {
+    public void assignPersonalGoalCard(PersonalGoalCard personalGoalCard) {
         this.personalGoalCard = personalGoalCard;
     }
 
@@ -60,15 +68,13 @@ public class Player {
     }
 
     /**
-     * This method is to set the Status of the player either if it's connected or disconnected
-     * @param playerStatus is the Status we are going to assign to the player
+     * This method is to toggle the Status of the player either if it's connected or disconnected
      */
-    public void setPlayerStatus(PlayerStatus playerStatus) {
-        if (playerStatus instanceof Connected) {
-            this.playerStatus = new Connected();
-        } else {
+    public void togglePlayerStatus() {
+        if (this.playerStatus instanceof Connected) {
             this.playerStatus = new Disconnected();
-
+        } else {
+            this.playerStatus = new Connected();
         }
     }
 
@@ -100,8 +106,10 @@ public class Player {
      * This method is for assign points to a specific player and store the value
      * @param tile is the PointsTile we will store in to the ArrayList
      */
-    public void assignPointTile(PointsTile tile){
+    public void assignPointTile(PointsTile tile) throws UnsupportedOperationException{
+        if(tile.toString().contains("1") && this.pointsTiles.stream().map(Enum::toString).anyMatch(t->t.contains("1"))) throw new UnsupportedOperationException("You can't have 2 tiles of the same CommonGoalCard!");
+        if(tile.toString().contains("2") && this.pointsTiles.stream().map(Enum::toString).anyMatch(t->t.contains("2"))) throw new UnsupportedOperationException("You can't have 2 tiles of the same CommonGoalCard!");
+        if (this.pointsTiles.contains(PointsTile.MATCH_ENDED)) throw new UnsupportedOperationException("You can't add more tiles after you took the tile for completing the bookshelf first!");
         this.pointsTiles.add(tile);
     }
-
 }

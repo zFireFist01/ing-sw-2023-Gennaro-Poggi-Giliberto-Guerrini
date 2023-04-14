@@ -3,13 +3,22 @@ package Server.Model.Cards.CommonGoalCards;
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.GameItems.Bookshelf;
 import Server.Model.GameItems.BookshelfTileSpot;
-
+import Server.Model.GameItems.TileType;
 /**
  * This class represents the third common goal card
  * @author due2
  */
 
 public class CommonGoalCard3 extends CommonGoalCard {
+
+    /**
+     * constructor of the class CommonGoalCard3 that calls the constructor of the superclass
+     * @param playersNum the number of players in the game
+     * @param secondIstance true if it is the second card, false otherwise in order to know if the card has to be created with the second instance of the points tiles
+     */
+    public CommonGoalCard3(int playersNum, boolean secondIstance) {
+        super(playersNum, secondIstance);
+    }
 
     /**
      * This method checks if the common goal card is completed(if there are at least four 1x4 columns with the same tile type)

@@ -18,10 +18,20 @@ public class TileSpot {
         return tile==null;
     }
 
-    protected void setTile(TileType tile){ this.tile = tile;}
+    public void setEmpty(){ this.tile = null;}
+
+
+    public void setTile(){this.tile = null;}
+
+    public void setTile(TileType tile){ this.tile = tile;}
 
     public TileType getTileType(){
         return tile;
+    }
+
+    @Override
+    public String toString() {
+        return (this.tile == null ? "-" : this.tile.toString());
     }
 }
 

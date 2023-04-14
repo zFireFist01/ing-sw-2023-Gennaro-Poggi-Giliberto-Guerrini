@@ -1,13 +1,15 @@
-package Server.Model.Decks;
+package Server.Model.DecksTests;
 import Server.Model.Cards.Card;
 import Server.Model.Cards.CommonGoalCards.CommonGoalCard1;
 import Server.Model.Decks.Deck;
 import Server.Model.Decks.PersonalGoalCardsDeck;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.Before;
+import org.junit.After;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
 public class DeckTest {
     @Test
