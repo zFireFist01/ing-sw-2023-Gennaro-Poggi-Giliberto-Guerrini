@@ -26,8 +26,8 @@ public class CommonGoalCard6 extends CommonGoalCard {
      */
     @Override
     public boolean check(Bookshelf bookshelf) {
-        int count = 0;
-        boolean flag[]= {false, false, false, false, false};
+        int count = 0, count2 = 0;
+        boolean flag[]= {false, false, false, false, false, false};
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 5; j++) {
                 if (bookshelf.getTileMatrix()[i][j].getTileType() == TileType.PLANTS) {
@@ -40,19 +40,23 @@ public class CommonGoalCard6 extends CommonGoalCard {
                     flag[3] = true;
                 } else if (bookshelf.getTileMatrix()[i][j].getTileType() == TileType.GAMES) {
                     flag[4] = true;
+                } else if (bookshelf.getTileMatrix()[i][j].getTileType() == TileType.TROPHIES) {
+                    flag[5] = true;
                 }
             }
-            for (int k = 0; k < 5; k++) {
-                if (!flag[k]) {
-                    break;
-                }else if(k==4){
-                    count++;
-                }
+            for (int k = 0; k < 6; k++) {
+                if (!flag[k])
+                    count2++;
+
+            }
+            if (count2 == 1) {
+                count++;
+                count2=0;
             }
             if (count == 2) {
                 return true;
             }
-            flag= new boolean[]{false, false, false, false, false};
+            flag= new boolean[]{false, false, false, false, false,false};
 
         }
         return false;
