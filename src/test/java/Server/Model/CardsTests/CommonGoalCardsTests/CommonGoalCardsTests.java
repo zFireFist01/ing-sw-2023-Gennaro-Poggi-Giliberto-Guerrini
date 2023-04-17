@@ -476,6 +476,28 @@ public class CommonGoalCardsTests {
         }
         assertTrue(testCard.check(testBookshelf));
 
+        //tests with 4 group of 4 tiles of the same type
+
+        testBookshelf = new Bookshelf();
+        int [][] Tiles={
+                {0,1,1,2,5},
+                {2,1,1,3,5},
+                {2,2,2,3,4},
+                {0,4,5,3,4},
+                {5,2,1,3,5},
+                {1,1,1,1,0}};
+
+        for(int i=0;i<6;i++){
+            for(int j=0;j<5;j++){
+                testBookshelf.insertTile(j, TileType.values()[Tiles[i][j]]);
+            }
+        }
+        assertTrue(testCard.check(testBookshelf));
+
+
+        
+
+
     }
 
     /**
