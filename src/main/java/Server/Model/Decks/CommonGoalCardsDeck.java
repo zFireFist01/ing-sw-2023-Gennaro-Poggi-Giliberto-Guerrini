@@ -22,13 +22,13 @@ public class CommonGoalCardsDeck extends Deck {
     @Override
     public Card drawOne() {
 
-        int index;
-        if(order[0]!=0){
-            index = order[0];
-            order[0]=0;
-        }else{
-            index = order[1];
-            order[1]=0;
+        int index=0;
+        for(int i=0;i<size;i++){
+            if(order[i]!=0){
+                index = order[i];
+                order[i]=0;
+                break;
+            }
         }
         if(index==1) {
             return new CommonGoalCard1(playersNum, secondIstance);

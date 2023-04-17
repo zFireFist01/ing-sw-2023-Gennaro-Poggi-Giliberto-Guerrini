@@ -52,9 +52,10 @@ public class CommonGoalCard3 extends CommonGoalCard {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 5; j++) {
                 if(verifier[i][j] != 0) {
-                    if(countAdjacentTiles(verifier, i, j, verifier[i][j]) >= 3) {
-                        count++;
-                    }
+                    int tmp =countAdjacentTiles(verifier, i, j, verifier[i][j])+1;
+
+                    count+=(int)(tmp/4);
+
                 }
             }
         }
@@ -81,7 +82,9 @@ public class CommonGoalCard3 extends CommonGoalCard {
         if (i < 5 && j<4 && shelf[i][j+1]==tileType && shelf[i + 1][j] == tileType) {
             shelf[i + 1][j] = 0;
             shelf[i][j+1] = 0;
+
             return 2 + countAdjacentTiles(shelf, i + 1, j, tileType)+countAdjacentTiles(shelf, i , j+1, tileType);
+
         } else if (i < 5 && shelf[i + 1][j] == tileType) {
             shelf[i + 1][j] = 0;
             return 1 + countAdjacentTiles(shelf, i + 1, j, tileType);
@@ -93,6 +96,14 @@ public class CommonGoalCard3 extends CommonGoalCard {
 
         }
 
+    }
+    /**
+     * This method returns the ID of the common goal card
+     * @return the ID of the common goal card
+     */
+    @Override
+    public int getCardID() {
+        return 3;
     }
 }
 

@@ -150,6 +150,37 @@ public enum PersonalGoalCard implements Card {
         }
 
     }
-
-
+    /**
+     * Returns the card ID
+     * @return cardID
+     */
+    @Override
+    public int getCardID() {
+        if(this.equals(TYPE1))
+            return 1;
+        else if(this.equals(TYPE2))
+            return 2;
+        else if(this.equals(TYPE3))
+            return 3;
+        else if(this.equals(TYPE4))
+            return 4;
+        else if(this.equals(TYPE5))
+            return 5;
+        else if(this.equals(TYPE6))
+            return 6;
+        else if(this.equals(TYPE7))
+            return 7;
+        else if(this.equals(TYPE8))
+            return 8;
+        else if(this.equals(TYPE9))
+            return 9;
+        else if(this.equals(TYPE10))
+            return 10;
+        else if(this.equals(TYPE11))
+            return 11;
+        else if(this.equals(TYPE12))
+            return 12;
+        else
+            return 0;
+    }
 }
