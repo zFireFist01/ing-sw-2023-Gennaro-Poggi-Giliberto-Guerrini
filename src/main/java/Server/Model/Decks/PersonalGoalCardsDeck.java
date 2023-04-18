@@ -55,7 +55,7 @@ public class PersonalGoalCardsDeck extends Deck {
             case 12:
                 return PersonalGoalCard.TYPE12;
         }
-        shuffle();
+        return null;
 
     }
 

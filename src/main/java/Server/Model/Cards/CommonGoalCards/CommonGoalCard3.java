@@ -21,7 +21,7 @@ public class CommonGoalCard3 extends CommonGoalCard {
     }
 
     /**
-     * This method checks if the common goal card is completed(if there are at least four 1x4 columns with the same tile type)
+     * This method checks if the common goal card is completed(if there are at least four adjacent tiles with the same tile type)
      * @param bookshelf the bookshelf of the player
      * @return true if the common goal card is completed, false otherwise
      */
@@ -49,14 +49,13 @@ public class CommonGoalCard3 extends CommonGoalCard {
                 }
             }
         }
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 5; j++) {
-                if (verifier[i][j] == verifier[i+1][j] && verifier[i][j] == verifier[i+2][j] && verifier[i][j] == verifier[i+3][j] && verifier[i][j] != 0) {
-                    count++;
-                    verifier[i][j] = 0;
-                    verifier[i+1][j] = 0;
-                    verifier[i+2][j] = 0;
-                    verifier[i+3][j] = 0;
+                if(verifier[i][j] != 0) {
+                    int tmp =countAdjacentTiles(verifier, i, j, verifier[i][j])+1;
+
+                    count+=(int)(tmp/4);
+
                 }
             }
         }
@@ -67,4 +66,45 @@ public class CommonGoalCard3 extends CommonGoalCard {
         }
 
     }
+
+    /**
+     * this method counts the number of adjacent tiles with the same tile type
+     * @requires tileType !=0
+     * @param shelf
+     * @param i
+     * @param j
+     * @param tileType
+     * @return
+     */
+
+    private int countAdjacentTiles(int[][] shelf, int i, int j, int tileType) {
+        int count = 0;
+        if (i < 5 && j<4 && shelf[i][j+1]==tileType && shelf[i + 1][j] == tileType) {
+            shelf[i + 1][j] = 0;
+            shelf[i][j+1] = 0;
+
+            return 2 + countAdjacentTiles(shelf, i + 1, j, tileType)+countAdjacentTiles(shelf, i , j+1, tileType);
+
+        } else if (i < 5 && shelf[i + 1][j] == tileType) {
+            shelf[i + 1][j] = 0;
+            return 1 + countAdjacentTiles(shelf, i + 1, j, tileType);
+        } else if (j < 4 && shelf[i][j + 1] == tileType) {
+            shelf[i][j + 1] = 0;
+            return 1 + countAdjacentTiles(shelf, i, j + 1, tileType);
+        } else {
+            return 0;
+
+        }
+
+    }
+    /**
+     * This method returns the ID of the common goal card
+     * @return the ID of the common goal card
+     */
+    @Override
+    public int getCardID() {
+        return 3;
+    }
 }
+
+

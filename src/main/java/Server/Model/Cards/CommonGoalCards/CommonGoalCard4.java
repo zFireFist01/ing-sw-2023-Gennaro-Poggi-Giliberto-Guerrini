@@ -21,7 +21,7 @@ public class CommonGoalCard4 extends CommonGoalCard {
     }
 
     /**
-     * This method checks if the common goal card is completed if there are at least six 2x1 rows with the same tile type
+     * This method checks if the common goal card is completed if there are at least six 2x1 or 1x2 tiles with the same tile type
      * @param bookshelf the bookshelf of the player
      * @return true if the common goal card is completed, false otherwise
      */
@@ -58,12 +58,30 @@ public class CommonGoalCard4 extends CommonGoalCard {
                 }
             }
         }
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (verifier[i][j] == verifier[i][j+1] && verifier[i][j] != 0) {
+                    count++;
+                    verifier[i][j] = 0;
+                    verifier[i][j+1] = 0;
+                }
+            }
+        }
+
         if (count >= 6) {
             return true;
         } else {
             return false;
         }
 
+    }
+    /**
+     * This method returns the ID of the common goal card
+     * @return the ID of the common goal card
+     */
+    @Override
+    public int getCardID() {
+        return 4;
     }
 
 }

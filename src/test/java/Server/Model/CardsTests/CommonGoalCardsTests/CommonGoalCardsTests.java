@@ -4,6 +4,7 @@ import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Cards.CommonGoalCards.*;
 import Server.Model.GameItems.Bookshelf;
 import Server.Model.GameItems.BookshelfTileSpot;
+import Server.Model.GameItems.PointsTile;
 import Server.Model.GameItems.TileType;
 
 import Utils.MathUtils.*;
@@ -23,6 +24,143 @@ import static org.junit.Assert.*;
  */
 public class CommonGoalCardsTests {
 
+    /**
+     * This method tests the pickPountTile method in the commonGoalCard abstract class
+     * @author due2
+     */
+    @Test
+    public void pickPointsTile_work_Test(){
+        CommonGoalCard testcard_2player = new CommonGoalCard1(2,false);
+        CommonGoalCard testcard_3player = new CommonGoalCard1(3,false);
+        CommonGoalCard testcard_4player = new CommonGoalCard1(4,false);
+
+        //test with 2 players
+
+        assertEquals(testcard_2player.pickPointsTile(), PointsTile.EIGHT_1);
+        assertEquals(testcard_2player.pickPointsTile(), PointsTile.FOUR_1);
+
+        testcard_2player = new CommonGoalCard1(2,true);
+
+        assertEquals(testcard_2player.pickPointsTile(), PointsTile.EIGHT_2);
+        assertEquals(testcard_2player.pickPointsTile(), PointsTile.FOUR_2);
+
+        //test with 3 players
+
+        assertEquals(testcard_3player.pickPointsTile(), PointsTile.EIGHT_1);
+        assertEquals(testcard_3player.pickPointsTile(), PointsTile.SIX_1);
+        assertEquals(testcard_3player.pickPointsTile(), PointsTile.FOUR_1);
+
+        testcard_3player = new CommonGoalCard1(3,true);
+
+        assertEquals(testcard_3player.pickPointsTile(), PointsTile.EIGHT_2);
+        assertEquals(testcard_3player.pickPointsTile(), PointsTile.SIX_2);
+        assertEquals(testcard_3player.pickPointsTile(), PointsTile.FOUR_2);
+
+        //test with 4 players
+
+        assertEquals(testcard_4player.pickPointsTile(), PointsTile.EIGHT_1);
+        assertEquals(testcard_4player.pickPointsTile(), PointsTile.SIX_1);
+        assertEquals(testcard_4player.pickPointsTile(), PointsTile.FOUR_1);
+        assertEquals(testcard_4player.pickPointsTile(), PointsTile.TWO_1);
+
+        testcard_4player = new CommonGoalCard1(4,true);
+
+        assertEquals(testcard_4player.pickPointsTile(), PointsTile.EIGHT_2);
+        assertEquals(testcard_4player.pickPointsTile(), PointsTile.SIX_2);
+        assertEquals(testcard_4player.pickPointsTile(), PointsTile.FOUR_2);
+        assertEquals(testcard_4player.pickPointsTile(), PointsTile.TWO_2);
+
+        //test pickpointstile throws exception when no more points tiles are available
+
+        CommonGoalCard finalTestcard_2player = testcard_2player;
+        assertThrows(UnsupportedOperationException.class, () -> {
+            finalTestcard_2player.pickPointsTile();
+        });
+
+        CommonGoalCard finalTestcard_3player = testcard_3player;
+        assertThrows(UnsupportedOperationException.class, () -> {
+            finalTestcard_3player.pickPointsTile();
+        });
+
+        CommonGoalCard finalTestcard_4player = testcard_4player;
+        assertThrows(UnsupportedOperationException.class, () -> {
+            finalTestcard_4player.pickPointsTile();
+        });
+
+    }
+    /**
+     * This method tests the getPointsTiles method in the commonGoalCard abstract class
+     * @author due2
+     */
+    @Test
+    public void GetPointsTiles_return_Test(){
+        CommonGoalCard testcard_2player = new CommonGoalCard1(2,false);
+        CommonGoalCard testcard_3player = new CommonGoalCard1(3,false);
+        CommonGoalCard testcard_4player = new CommonGoalCard1(4,false);
+
+        //test with 2 players
+
+        assertEquals(testcard_2player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.EIGHT_1, PointsTile.FOUR_1)));
+        testcard_2player.pickPointsTile();
+        assertEquals(testcard_2player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.FOUR_1)));
+        testcard_2player.pickPointsTile();
+        assertEquals(testcard_2player.getPointsTiles(), new ArrayList<>());
+
+        testcard_2player = new CommonGoalCard1(2,true);
+
+        assertEquals(testcard_2player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.EIGHT_2, PointsTile.FOUR_2)));
+        testcard_2player.pickPointsTile();
+        assertEquals(testcard_2player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.FOUR_2)));
+        testcard_2player.pickPointsTile();
+        assertEquals(testcard_2player.getPointsTiles(), new ArrayList<>());
+
+        //test with 3 players
+
+        assertEquals(testcard_3player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.EIGHT_1, PointsTile.SIX_1, PointsTile.FOUR_1)));
+        testcard_3player.pickPointsTile();
+        assertEquals(testcard_3player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.SIX_1, PointsTile.FOUR_1)));
+        testcard_3player.pickPointsTile();
+        assertEquals(testcard_3player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.FOUR_1)));
+        testcard_3player.pickPointsTile();
+        assertEquals(testcard_3player.getPointsTiles(), new ArrayList<>());
+
+        testcard_3player = new CommonGoalCard1(3,true);
+
+        assertEquals(testcard_3player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.EIGHT_2, PointsTile.SIX_2, PointsTile.FOUR_2)));
+        testcard_3player.pickPointsTile();
+        assertEquals(testcard_3player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.SIX_2, PointsTile.FOUR_2)));
+        testcard_3player.pickPointsTile();
+        assertEquals(testcard_3player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.FOUR_2)));
+        testcard_3player.pickPointsTile();
+        assertEquals(testcard_3player.getPointsTiles(), new ArrayList<>());
+
+        //test with 4 players
+
+        assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.EIGHT_1, PointsTile.SIX_1, PointsTile.FOUR_1, PointsTile.TWO_1)));
+        testcard_4player.pickPointsTile();
+        assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.SIX_1, PointsTile.FOUR_1, PointsTile.TWO_1)));
+        testcard_4player.pickPointsTile();
+        assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.FOUR_1, PointsTile.TWO_1)));
+        testcard_4player.pickPointsTile();
+        assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.TWO_1)));
+        testcard_4player.pickPointsTile();
+        assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>());
+
+
+
+        testcard_4player = new CommonGoalCard1(4,true);
+
+        assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.EIGHT_2, PointsTile.SIX_2, PointsTile.FOUR_2, PointsTile.TWO_2)));
+        testcard_4player.pickPointsTile();
+        assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.SIX_2, PointsTile.FOUR_2, PointsTile.TWO_2)));
+        testcard_4player.pickPointsTile();
+        assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.FOUR_2, PointsTile.TWO_2)));
+        testcard_4player.pickPointsTile();
+        assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.TWO_2)));
+        testcard_4player.pickPointsTile();
+        assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>());
+
+    }
 
     CommonGoalCard testCard;
     Bookshelf testBookshelf;
@@ -475,6 +613,28 @@ public class CommonGoalCardsTests {
             }
         }
         assertTrue(testCard.check(testBookshelf));
+
+        //tests with 4 group of 4 tiles of the same type
+
+        testBookshelf = new Bookshelf();
+        int [][] Tiles={
+                {0,1,1,2,5},
+                {2,1,1,3,5},
+                {2,2,2,3,4},
+                {0,4,5,3,4},
+                {5,2,1,3,5},
+                {1,1,1,1,0}};
+
+        for(int i=0;i<6;i++){
+            for(int j=0;j<5;j++){
+                testBookshelf.insertTile(j, TileType.values()[Tiles[i][j]]);
+            }
+        }
+        assertTrue(testCard.check(testBookshelf));
+
+
+
+
 
     }
 
@@ -1514,3 +1674,6 @@ public void CommonGoalCard6_expectedTrue_Test() {
         //Every possible false situation is a combination of one or more of these
     }
 }
+
+
+

@@ -47,4 +47,12 @@ public class CommonGoalCard7 extends CommonGoalCard {
         }
         return rowsFitting >= 4;
     }
+    /**
+     * This method returns the ID of the common goal card
+     * @return the ID of the common goal card
+     */
+    @Override
+    public int getCardID() {
+        return 7;
+    }
 }

@@ -14,6 +14,7 @@ import java.util.List;
 
 public abstract class CommonGoalCard implements Card {
 
+
    private List<PointsTile> pointsTiles = new ArrayList<>();
 
    /**
@@ -58,12 +59,18 @@ public abstract class CommonGoalCard implements Card {
 
     /**
      * This method returns the laste points tile of the common goal card
+     *
      * @return the points tiles of the common goal card
+     * @throws UnsupportedOperationException if the common goal card doesn't have points tiles
      */
-    public PointsTile pickPointsTile() {
-        PointsTile tmp = pointsTiles.get(pointsTiles.size() - 1);
-        pointsTiles.remove(pointsTiles.size() - 1);
-        return tmp;
+    public PointsTile pickPointsTile() throws UnsupportedOperationException {
+        if(pointsTiles.isEmpty()){
+            throw new UnsupportedOperationException("this cards doesn't have points tiles!");
+        }else {
+            PointsTile tmp = pointsTiles.get(pointsTiles.size() - 1);
+            pointsTiles.remove(pointsTiles.size() - 1);
+            return tmp;
+        }
     }
 
     /**
@@ -75,6 +82,16 @@ public abstract class CommonGoalCard implements Card {
         //return a copy of the list
         return new ArrayList<>(pointsTiles);
     }
+
+    /**
+     * This method returns the id of the card
+     * @return the id of the card
+     */
+    public int getCardID(){
+        return 0;
+    }
+
+
 
     /**
      * This method checks if the common goal card is completed, since is abstract it must be implemented in the subclasses
