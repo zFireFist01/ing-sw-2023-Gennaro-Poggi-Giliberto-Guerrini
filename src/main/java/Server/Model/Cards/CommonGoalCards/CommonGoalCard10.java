@@ -7,6 +7,10 @@ import Server.Model.GameItems.TileType;
 
 public class CommonGoalCard10 extends CommonGoalCard {
 
+    public CommonGoalCard10(int playersNum, boolean secondIstance) {
+        super(playersNum, secondIstance);
+    }
+
     @Override
     public boolean check(Bookshelf bookshelf) {
         //5 tiles pf the same kind forming an X in the bookshelf

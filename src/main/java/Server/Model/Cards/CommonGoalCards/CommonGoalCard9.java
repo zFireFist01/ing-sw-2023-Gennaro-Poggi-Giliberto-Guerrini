@@ -10,6 +10,10 @@ import java.util.Map;
 
 public class CommonGoalCard9 extends CommonGoalCard {
 
+    public CommonGoalCard9(int playersNum, boolean secondIstance) {
+        super(playersNum, secondIstance);
+    }
+
     @Override
     public boolean check(Bookshelf bookshelf) {
         Map<TileType, Integer> count = new HashMap<>();

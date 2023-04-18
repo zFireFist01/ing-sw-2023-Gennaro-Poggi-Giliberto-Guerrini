@@ -6,6 +6,10 @@ import Server.Model.GameItems.BookshelfTileSpot;
 
 public class CommonGoalCard8 extends CommonGoalCard {
 
+    public CommonGoalCard8(int playersNum, boolean secondIstance) {
+        super(playersNum, secondIstance);
+    }
+
     @Override
     public boolean check(Bookshelf bookshelf) {
         BookshelfTileSpot[][] bsmat = bookshelf.getTileMatrix();

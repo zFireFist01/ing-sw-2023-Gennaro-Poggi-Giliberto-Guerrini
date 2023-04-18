@@ -11,6 +11,9 @@ import java.util.Set;
 
 public class CommonGoalCard7 extends CommonGoalCard {
 
+    public CommonGoalCard7(int playersNum, boolean secondIstance) {
+        super(playersNum, secondIstance);
+    }
     @Override
     public boolean check(Bookshelf bookshelf) {
         //4 rows of 5 tiles of 1, 2 or 3 different tipes
