@@ -1,5 +1,8 @@
 package Server.Model.MatchStatus;
-
+/**
+ * this class represents the Waiting for players status
+ * @author martagiliberto
+ */
 public class WaitingForPlayers extends MatchStatus {
     private int numberMissingPlayers;
 

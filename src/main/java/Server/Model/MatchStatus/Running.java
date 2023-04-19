@@ -1,10 +1,14 @@
 package Server.Model.MatchStatus;
 
+/**
+ * this class represents the Running status
+ * @author martagiliberto
+ */
 public class Running extends MatchStatus {
 
     /**
      * this method evolves the match status from running to closing
-     * @return
+     * @return match
      * @throws UnsupportedOperationException
      */
     @Override

@@ -1,5 +1,8 @@
 package Server.Model.MatchStatus;
-
+/**
+ * this class represents the Closing status
+ * @author martagiliberto
+ */
 
 public class Closing extends MatchStatus {
 
