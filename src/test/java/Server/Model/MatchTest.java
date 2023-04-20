@@ -1,11 +1,9 @@
 package Server.Model;
 
-import Server.Model.Cards.PersonalGoalCard;
 import Server.Model.GameItems.Bookshelf;
 import Server.Model.GameItems.TileType;
 import Server.Model.MatchStatus.Running;
 import Server.Model.Player.Player;
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -17,11 +15,6 @@ import static org.junit.Assert.*;
 
 public class MatchTest {
 
-    @Before
-    public void setup() {
-        Match match = new Match(2, new Player(1, "pluto23"));
-        match.addContestant(new Player(2, "pippo24"));
-    }
 
     //addContestant tests
     /**
@@ -70,7 +63,7 @@ public class MatchTest {
         Player player= new Player(1, "pluto23");
         Match match = new Match(2, player);
 
-        Bookshelf bookshelf= new Bookshelf();
+        Bookshelf bookshelf;
         bookshelf=player.getBookshelf();
 
         for(int j=0; j<5; j++){
@@ -158,19 +151,6 @@ public class MatchTest {
 
         assertTrue(match.checkAdjacentTiles(player)==19);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

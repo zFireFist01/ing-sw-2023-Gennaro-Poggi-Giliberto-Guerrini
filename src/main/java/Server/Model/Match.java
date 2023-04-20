@@ -112,8 +112,8 @@ public class Match {
      */
     public void addContestant(Player newPlayer) throws UnsupportedOperationException{
         for(int i=0; i<players.size(); i++) {
-            if (newPlayer.getPlayerID() != players.get(i).getPlayerID() &&
-                    newPlayer.getPlayerNickName() != players.get(i).getPlayerNickName()) {
+            if ((newPlayer.getPlayerID() != players.get(i).getPlayerID()) &&
+                    !(newPlayer.getPlayerNickName().equals(players.get(i).getPlayerNickName()))) {
                 players.add(newPlayer);
                 scores.put(newPlayer, 0);
                 try {
