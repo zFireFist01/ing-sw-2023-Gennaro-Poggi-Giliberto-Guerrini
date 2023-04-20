@@ -19,7 +19,7 @@ import java.util.Random;
 
 /**
  * match class in order to store information about the match
- * @author marta23gili
+ * @author martagiliberto
  */
 public class Match {
     private ArrayList<Player> players;
@@ -38,28 +38,36 @@ public class Match {
     private Map<Player, Integer> scores;
     private Time matchDuration;
 
+    private int count=0;
+
     public Match(int numberOfPlayers, Player matchOpener) {
         this.numberOfPlayers = numberOfPlayers;
         this.matchOpener = matchOpener;
         this.livingRoom = new LivingRoom(this);
-        this.commonGoalDeck = new CommonGoalCardsDeck();
-        this.personalGoalDeck = new PersonalGoalCardsDeck();
+        this.commonGoalDeck = new CommonGoalCardsDeck(numberOfPlayers);
+        this.personalGoalDeck = new PersonalGoalCardsDeck(numberOfPlayers);
         this.players= new ArrayList<Player>();
         this.players.add(matchOpener);
         this.commonGoals=new CommonGoalCard[2];
         this.matchStatus= new WaitingForPlayers();
         this.scores= new HashMap<Player, Integer>() ;
-        this.width= getBookshelfWidth();
-        this.height=getBookshelfHeight();
+        this.width= matchOpener.getBookshelf().getBookshelfWidth();
+        this.height=matchOpener.getBookshelf().getBookshelfHeight();
     }
 
     /**
      * this method initializes the match
      */
     public void setup(){
+
         for(int i=0; i<numberOfPlayers; i++){
-            players.get(i).setNextPlayer();
-            players.get(i).setPersonalGoalCard(PersonalGoalCardsDeck.drawone());
+            if(i<numberOfPlayers-1){
+            players.get(i).setNextPlayer(players.get(i+1));
+            players.get(i).assignPersonalGoalCard((PersonalGoalCard) personalGoalDeck.drawOne());
+            }else{
+                players.get(i).setNextPlayer(players.get(0));
+                players.get(i).assignPersonalGoalCard((PersonalGoalCard) personalGoalDeck.drawOne());
+            }
         }
         livingRoom.refreshLivingRoom();
         extractCommonGoals();
@@ -72,11 +80,11 @@ public class Match {
      */
     public void checkCommonGoals(Player player){
         if(commonGoals[0].check(player.getBookshelf())) {
-            player.assignPointTile(commonGoals[0].getPointsTile());
+            player.assignPointTile(commonGoals[0].pickPointsTile());
         }
 
         if(commonGoals[1].check(player.getBookshelf())) {
-            player.assignPointTile(commonGoals[1].getPointsTile());
+            player.assignPointTile(commonGoals[1].pickPointsTile());
         }
     }
 
@@ -85,42 +93,49 @@ public class Match {
      */
     private void extractFirstPlayer(){
         Random random = new Random();
-        int indexOfFirstPlayer = random.nextInt(numberOfPlayers);
+        int indexOfFirstPlayer = random.nextInt(numberOfPlayers-1);
         this.firstPlayer= players.get(indexOfFirstPlayer);
     }
 
     /**
      * this method extracts the common goals cards of the mach from the deck
      */
-    private void extractCommonGoals(){
-        commonGoals[0]=CommonGoalCardsDeck.drawOne();
-        commonGoals[1]=CommonGoalCardsDeck.drawOne();
+    public void extractCommonGoals(){
+        commonGoalDeck.shuffle();
+        commonGoals[0]=(CommonGoalCard) commonGoalDeck.drawOne();
+        commonGoals[1]=(CommonGoalCard) commonGoalDeck.drawOne();
     }
 
     /**
      * this method adds a new player to the match
-     * @param newPlayer
+     * @param newPlayer who wants to play
      */
-    public void addContestant(Player newPlayer){
-        players.add(newPlayer);
-        scores.put(newPlayer, 0);
-
-        try{
-           matchStatus= matchStatus.evolve();
-           setup();
-        }catch(UnsupportedOperationException e){
-            System.err.println(e.getMessage());
+    public void addContestant(Player newPlayer) throws UnsupportedOperationException{
+        for(int i=0; i<players.size(); i++) {
+            if ((newPlayer.getPlayerID() != players.get(i).getPlayerID()) &&
+                    !(newPlayer.getPlayerNickName().equals(players.get(i).getPlayerNickName()))) {
+                players.add(newPlayer);
+                scores.put(newPlayer, 0);
+                try {
+                    matchStatus = matchStatus.evolve();
+                    setup();
+                } catch (UnsupportedOperationException e) {
+                    System.err.println(e.getMessage());
+                }
+            }else{ throw new UnsupportedOperationException("Id or nickname already existing!");
+            }
         }
     }
 
     /**
      * this method checks if a player has ended the match
-     * @param player
+     * @param player who has just ended his move
      * @return false if bookshelf is empty and true if it is full
      */
-    private boolean checkIfBookShelfisFull(Player player){
+    public boolean checkIfBookshelfIsFull(Player player){
         BookshelfTileSpot[][] bookshelf;
         bookshelf=player.getBookshelf().getTileMatrix();
+
         for(int i=0; i<width; i++){
             for(int j=0; j<height; j++){
                 if(bookshelf[i][j].isEmpty())
@@ -131,29 +146,90 @@ public class Match {
         return true;
     }
 
-    private boolean checkIfAreAdjacentTiles(BookshelfTileSpot bookshelf[][]){
+
+    /**
+     * this recursive method is used to count how many tiles with the same tile type are adjacent
+     * @param i index of line
+     * @param j index of column
+     * @param matrix that represents the bookshelf but with int in the place of tile types
+     * @param tileType int that represents the tile type, that I want to check now
+     */
+    private void howManyAdjacentTiles(int i, int j, int[][] matrix, int tileType ){
+        this.count++;
+
+        if(tileType==matrix[i][j+1]){
+            matrix[i][j]=0;
+            howManyAdjacentTiles(i, j+1, matrix, tileType);
+        }
+
+        if(tileType==matrix[i+1][j]){
+            matrix[i][j]=0;
+            howManyAdjacentTiles(i+1, j, matrix, tileType);
+        }
+
+        if(tileType==matrix[i-1][j]){
+            matrix[i][j]=0;
+            howManyAdjacentTiles(i-1, j, matrix, tileType);
+        }
+
+        if(tileType==matrix[i][j-1]){
+            matrix[i][j]=0;
+            howManyAdjacentTiles(i,j-1, matrix, tileType);
+        }
+
+        matrix[i][j]=0;
 
     }
 
-
-
     /**
      * this method returns the points made by a player for adjacent tiles
-     * @param player
+     * @param player whose bookshelf I want to check
      * @return points of adjacent tiles, made by a player
      */
-    private Integer checkAdjacentTiles(Player player) {
+    public Integer checkAdjacentTiles(Player player) {
         BookshelfTileSpot[][] bookshelf = player.getBookshelf().getTileMatrix();
         int[][] checked = new int[height][width];
-        TileType tmp;
-        int count;
         boolean ok;
-        int numOfGroups=1;
         Integer scores=0;
 
-        for(int i=0; i<height; i++){
-            for(int j=0; j<width; j++){
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (bookshelf[i][j].getTileType() == TileType.PLANTS) {
+                    checked[i][j] = 1;
+                } else if (bookshelf[i][j].getTileType() == TileType.FRAMES) {
+                    checked[i][j] = 2;
+                } else if (bookshelf[i][j].getTileType() == TileType.BOOKS) {
+                    checked[i][j] = 3;
+                } else if (bookshelf[i][j].getTileType() == TileType.CATS) {
+                    checked[i][j] = 4;
+                } else if (bookshelf[i][j].getTileType() == TileType.GAMES) {
+                    checked[i][j] = 5;
+                } else if (bookshelf[i][j].getTileType() == TileType.TROPHIES) {
+                    checked[i][j] = 6;
+                }else{
+                    checked[i][j]=0;
+                }
+            }
+        }
 
+        for(int i=0; i<height;i++){
+            for(int j=0; j<width; j++){
+                count=0;
+                if(checked[i][j]!=0){
+                    this.count=0;
+                    howManyAdjacentTiles(i, j, checked, checked[i][j]);
+
+                    if(count==3){
+                        scores+=2;
+                    }else if(count==4){
+                        scores+=3;
+                    }else if(count==5){
+                        scores+=5;
+                    }else if(count>=6){
+                        scores+=8;
+                    }
+                }
+            }
         }
 
         return scores;
@@ -167,7 +243,6 @@ public class Match {
 
         Integer maxScores=0;
         Integer hisScores;
-        PersonalGoalCard hisPersonalGoalCard;
         ArrayList<PointsTile> hisPointsTiles;
         Player tmp;
         for(int i=0; i<numberOfPlayers; i++) {
@@ -195,13 +270,10 @@ public class Match {
             }
 
             //aggiungo i punti di personal goal card
-            hisPersonalGoalCard=tmp.getPersonalGoalCard();
-            hisScores+=hisPersonalGoalCard.check(tmp.getBookshelf().getTileMatrix());
+            hisScores+=tmp.getPersonalGoalCard().check(tmp.getBookshelf().getTileMatrix());
 
             //aggiungo i punti per le tessere adiacenti
             hisScores+=checkAdjacentTiles(tmp);
-
-
 
             scores.put(tmp, hisScores);
 
@@ -233,10 +305,11 @@ public class Match {
     //METODI GETTER
 
     public ArrayList<Player> getPlayers() {
-        return players;
+        return new ArrayList<>(players);
     }
 
     public CommonGoalCard[] getCommonGoals() {
+
         return commonGoals;
     }
 
