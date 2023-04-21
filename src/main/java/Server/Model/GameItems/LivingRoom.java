@@ -200,22 +200,25 @@ public class LivingRoom {
         }
     }
 
+    /**
+     * This methods allows the controller to send an "order" of picking more than one tile with only one call
+     * @param couples is an array of couples (Integer, Integer) that each represent the position of one selected tile
+     * @return an array of TileType(s) where the i-th element corresponds to the type of the i-th tile picked
+     * @throws UnsupportedOperationException whenever at least one of the tiles is not pick-able according to game rules
+     */
     public TileType[] takeTiles(Couple<Integer, Integer>[] couples) throws UnsupportedOperationException{
         TileType[] resultTypes = new TileType[3];
         int len = couples.length;
         boolean inRow = true;
         boolean inCol = true;
         int i=0;
-        for(Couple c : couples){
-            try{
-                resultTypes[i] = takeTile(c.getA(), c.getB());
-                i++;
-            }catch(UnsupportedOperationException e){
-                System.err.println("Error occurred when picking tile in position "+c.toString()+": "+ e.getMessage());
-                break;       //I want to break if at least one tile is not pick-able
+        //I have to check if all the desired tiles have at least one free edge BEFORE picking the first one of them
+        for(Couple c: couples){
+            if(!oneFreeEdge(c.getA(),c.getB())){
+                throw new UnsupportedOperationException("The tile doesn't have at least one free edge");
             }
         }
-
+        //Checking if they are aligned...
         for(int j=0; j<len-1;j++){
             if(inRow && (couples[j].getA() != couples[j+1].getA())){
                 inRow = false;
@@ -229,10 +232,21 @@ public class LivingRoom {
         if(!(inRow || inCol)){
             throw new UnsupportedOperationException("The tiles you selected are not aligned!");
         }else{
-            return resultTypes;
+            i=0;
+            for(Couple c : couples){
+                try{
+                    resultTypes[i] = takeTile(c.getA(), c.getB());
+                    i++;
+                }catch(UnsupportedOperationException e){
+                    System.err.println("Error occurred when picking tile in position "+c.toString()+": "+ e.getMessage());
+                    break;      //I want to break if at least one tile is not pick-able
+                }               //NOTE that I don't have to revert the "taking" beacuse the method takeTile checks
+                                //before applying changes
+            }
         }
-    }
 
+        return resultTypes;
+    }
 
     /**
      * Helper method
