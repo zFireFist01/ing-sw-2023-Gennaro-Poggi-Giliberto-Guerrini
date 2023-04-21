@@ -9,10 +9,7 @@ import Server.Model.GameItems.TileType;
 
 import Utils.MathUtils.*;
 //import org.junit.jupiter.api.*;
-import jdk.jshell.execution.Util;
 import org.junit.Test;
-import org.junit.Before;
-import org.junit.After;
 
 import java.util.*;
 
@@ -1407,20 +1404,20 @@ public void CommonGoalCard6_expectedTrue_Test() {
     public void CommonGoalCard9_expectedTrue_Test(){
         testCard = new CommonGoalCard9(4, false);
         testBookshelf = new Bookshelf();
-        Set<Couple> positions = new HashSet<>();
+        Set<Couple<Integer, Integer>> positions = new HashSet<>();
         //Set<Couple> donePositions = new HashSet<>();
         Random r = new Random();
         for(TileType tt : TileType.values()){
             //Select random positions where this type should go
             for(int i=0;i<8;i++){
-                positions.add(new Couple(r.nextInt(6), r.nextInt(5)));
+                positions.add(new Couple<Integer, Integer>(r.nextInt(6), r.nextInt(5)));
             }
             for(int i=testBookshelf.getBookshelfHeight();i>=0;i--){
                 for(int j=0;j<testBookshelf.getBookshelfWidth();j++){
-                    if(positions.contains(new Couple(i,j))){
+                    if(positions.contains(new Couple<Integer, Integer>(i,j))){
                         //donePositions.add(new Couple(i,j));
                         testBookshelf.insertTile(j,tt);
-                        positions.remove(new Couple(i,j));
+                        positions.remove(new Couple<Integer, Integer>(i,j));
                     }else{
                         TileType othertt;
                         do{
@@ -1449,7 +1446,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
         assertFalse(testCard.check(testBookshelf));
 
         //Corner cases: I want the bookshelf to have 7 (case 1) and 0 (case 2) tiles of a given type
-        Set<Couple> positions = new HashSet<>();
+        Set<Couple<Integer, Integer>> positions = new HashSet<>();
         //Set<Couple> donePositions = new HashSet<>();
         Random r = new Random();
 
@@ -1457,14 +1454,14 @@ public void CommonGoalCard6_expectedTrue_Test() {
         for(TileType tt : TileType.values()){
             //Select random positions where this type should go
             for(int i=0;i<7;i++){
-                positions.add(new Couple(r.nextInt(6), r.nextInt(5)));
+                positions.add(new Couple<Integer, Integer>(r.nextInt(6), r.nextInt(5)));
             }
             for(int i=testBookshelf.getBookshelfHeight();i>=0;i--){
                 for(int j=0;j<testBookshelf.getBookshelfWidth();j++){
-                    if(positions.contains(new Couple(i,j))){
+                    if(positions.contains(new Couple<Integer, Integer>(i,j))){
                         //donePositions.add(new Couple(i,j));
                         testBookshelf.insertTile(j,tt);
-                        positions.remove(new Couple(i,j));
+                        positions.remove(new Couple<Integer, Integer>(i,j));
                     }else{
                         TileType othertt;
                         do{
@@ -1507,7 +1504,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
 
         for(TileType tt : TileType.values()){
             for(int k=0;k<5;k++){                       //Doing 5 tries for every type
-                Couple startingPos = new Couple(r.nextInt(4), r.nextInt(3));
+                Couple<Integer, Integer> startingPos = new Couple<Integer, Integer>(r.nextInt(4), r.nextInt(3));
                 for(int i= testBookshelf.getBookshelfHeight();i>=0;i--){
                     for(int j=0;j< testBookshelf.getBookshelfWidth();j++){
                         if(     (i == startingPos.getA() && j == startingPos.getB()) ||
@@ -1549,7 +1546,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
         //Bookshelf 1: the tile in the starting position is wrong
         for(TileType tt : TileType.values()){
             for(int k=0;k<5;k++){                       //Doing 5 tries for every type
-                Couple startingPos = new Couple(r.nextInt(4), r.nextInt(3));
+                Couple<Integer, Integer> startingPos = new Couple<Integer, Integer>(r.nextInt(4), r.nextInt(3));
                 for(int i= testBookshelf.getBookshelfHeight();i>=0;i--){
                     for(int j=0;j< testBookshelf.getBookshelfWidth();j++){
                         if(
@@ -1574,7 +1571,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
         //Bookshelf 2: the tile in the upper-right corner is wrong
         for(TileType tt : TileType.values()){
             for(int k=0;k<5;k++){                       //Doing 5 tries for every type
-                Couple startingPos = new Couple(r.nextInt(4), r.nextInt(3));
+                Couple<Integer, Integer> startingPos = new Couple<Integer, Integer>(r.nextInt(4), r.nextInt(3));
                 for(int i= testBookshelf.getBookshelfHeight();i>=0;i--){
                     for(int j=0;j< testBookshelf.getBookshelfWidth();j++){
                         if(     (i == startingPos.getA() && j == startingPos.getB()) ||
@@ -1599,7 +1596,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
         //Bookshelf 3: the tile in the middle of the X is wrong
         for(TileType tt : TileType.values()){
             for(int k=0;k<5;k++){                       //Doing 5 tries for every type
-                Couple startingPos = new Couple(r.nextInt(4), r.nextInt(3));
+                Couple<Integer, Integer> startingPos = new Couple<Integer, Integer>(r.nextInt(4), r.nextInt(3));
                 for(int i= testBookshelf.getBookshelfHeight();i>=0;i--){
                     for(int j=0;j< testBookshelf.getBookshelfWidth();j++){
                         if(     (i == startingPos.getA() && j == startingPos.getB()) ||
@@ -1624,7 +1621,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
         //Bookshelf 4: the tile in the lower-left corner is wrong
         for(TileType tt : TileType.values()){
             for(int k=0;k<5;k++){                       //Doing 5 tries for every type
-                Couple startingPos = new Couple(r.nextInt(4), r.nextInt(3));
+                Couple<Integer, Integer> startingPos = new Couple<Integer, Integer>(r.nextInt(4), r.nextInt(3));
                 for(int i= testBookshelf.getBookshelfHeight();i>=0;i--){
                     for(int j=0;j< testBookshelf.getBookshelfWidth();j++){
                         if(     (i == startingPos.getA() && j == startingPos.getB()) ||
@@ -1649,7 +1646,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
         //Bookshelf 5: the tile in the lower-right corner is wrong:
         for(TileType tt : TileType.values()){
             for(int k=0;k<5;k++){                       //Doing 5 tries for every type
-                Couple startingPos = new Couple(r.nextInt(4), r.nextInt(3));
+                Couple<Integer, Integer> startingPos = new Couple<Integer, Integer>(r.nextInt(4), r.nextInt(3));
                 for(int i= testBookshelf.getBookshelfHeight();i>=0;i--){
                     for(int j=0;j< testBookshelf.getBookshelfWidth();j++){
                         if(     (i == startingPos.getA() && j == startingPos.getB()) ||

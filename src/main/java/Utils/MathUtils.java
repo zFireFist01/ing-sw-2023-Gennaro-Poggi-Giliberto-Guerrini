@@ -3,8 +3,6 @@ package Utils;
 import Server.Model.GameItems.LivingRoomTileSpot;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 public class MathUtils {
     /**
      * Helper method
@@ -42,7 +40,7 @@ public class MathUtils {
         }
     }
 
-    public static class Couple{
+    public static class Couple<I extends Number, I1 extends Number> {
         Integer a,b;
         public Couple(Integer i, Integer j){
             this.a = i;
@@ -61,8 +59,15 @@ public class MathUtils {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            return a.intValue()==((Couple) o).getA() && b.intValue() == ((Couple) o).getB();
+            return a.intValue()==((Couple<Number, Number>) o).getA() && b.intValue() == ((Couple<Number, Number>) o).getB();
         }
 
+        @Override
+        public String toString() {
+            return "Couple{" +
+                    "a=" + a +
+                    ", b=" + b +
+                    '}';
+        }
     }
 }

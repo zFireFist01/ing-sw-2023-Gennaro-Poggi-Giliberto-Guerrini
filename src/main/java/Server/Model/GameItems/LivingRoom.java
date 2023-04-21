@@ -2,8 +2,8 @@ package Server.Model.GameItems;
 
 import Server.Model.Match;
 import static Utils.MathUtils.*;
-import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -197,6 +197,39 @@ public class LivingRoom {
             return tt;
         }else{
             throw new UnsupportedOperationException("The tile doesn't have at least one free edge");
+        }
+    }
+
+    public TileType[] takeTiles(Couple<Integer, Integer>[] couples) throws UnsupportedOperationException{
+        TileType[] resultTypes = new TileType[3];
+        int len = couples.length;
+        boolean inRow = true;
+        boolean inCol = true;
+        int i=0;
+        for(Couple c : couples){
+            try{
+                resultTypes[i] = takeTile(c.getA(), c.getB());
+                i++;
+            }catch(UnsupportedOperationException e){
+                System.err.println("Error occurred when picking tile in position "+c.toString()+": "+ e.getMessage());
+                break;       //I want to break if at least one tile is not pick-able
+            }
+        }
+
+        for(int j=0; j<len-1;j++){
+            if(inRow && (couples[j].getA() != couples[j+1].getA())){
+                inRow = false;
+                break;
+            }
+            if(inCol && (couples[j].getB() != couples[j].getB())){
+                inCol = false;
+                break;
+            }
+        }
+        if(!(inRow || inCol)){
+            throw new UnsupportedOperationException("The tiles you selected are not aligned!");
+        }else{
+            return resultTypes;
         }
     }
 
