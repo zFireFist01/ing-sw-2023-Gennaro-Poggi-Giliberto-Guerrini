@@ -1001,7 +1001,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
      */
     @Test
     public void CommonGoalCard7_expectedTrue_Test(){
-        testCard = new CommonGoalCard7();
+        testCard = new CommonGoalCard7(4, false);
         testBookshelf = new Bookshelf();
         Random r = new Random();
         TileType rtt = TileType.randomTileType();
@@ -1070,7 +1070,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
      */
     @Test
     public void CommonGoalCard7_expectedFalse_Test(){
-        testCard = new CommonGoalCard7();
+        testCard = new CommonGoalCard7(4, false);
         testBookshelf = new Bookshelf();
         TileType rtt = TileType.randomTileType();
         Random r = new Random();
@@ -1202,7 +1202,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
      */
     @Test
     public void CommonGoalCard8_expectedTrue_Test(){
-        testCard = new CommonGoalCard8();
+        testCard = new CommonGoalCard8(4, false);
         testBookshelf = new Bookshelf();
 
         TileType rtt = TileType.randomTileType();
@@ -1245,7 +1245,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
      */
     @Test
     public void CommonGoalCard8_expectedFalse_Test(){
-        testCard = new CommonGoalCard8();
+        testCard = new CommonGoalCard8(4, false);
         testBookshelf = new Bookshelf();
         TileType tt = TileType.randomTileType();
 
@@ -1405,7 +1405,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
      */
     @Test
     public void CommonGoalCard9_expectedTrue_Test(){
-        testCard = new CommonGoalCard9();
+        testCard = new CommonGoalCard9(4, false);
         testBookshelf = new Bookshelf();
         Set<Couple> positions = new HashSet<>();
         //Set<Couple> donePositions = new HashSet<>();
@@ -1442,7 +1442,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
      */
     @Test
     public void CommonGoalCard9_expectedFalse_Test(){
-        testCard = new CommonGoalCard9();
+        testCard = new CommonGoalCard9(4, false);
         testBookshelf = new Bookshelf();
 
         //Check the empty bookshelf
@@ -1501,7 +1501,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
      */
     @Test
     public void CommonGoalCard10_expectedTrue_Test(){
-        testCard = new CommonGoalCard10();
+        testCard = new CommonGoalCard10(4, false);
         testBookshelf = new Bookshelf();
         Random r = new Random();
 
@@ -1537,7 +1537,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
      */
     @Test
     public void CommonGoalCard10_expectedFalse_Test(){
-        testCard = new CommonGoalCard10();
+        testCard = new CommonGoalCard10(4, false);
         testBookshelf = new Bookshelf();
         Random r = new Random();
 
