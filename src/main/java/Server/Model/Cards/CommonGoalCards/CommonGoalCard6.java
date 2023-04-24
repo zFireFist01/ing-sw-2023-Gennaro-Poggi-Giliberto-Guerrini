@@ -51,11 +51,12 @@ public class CommonGoalCard6 extends CommonGoalCard {
             }
             if (count2 == 1) {
                 count++;
-                count2=0;
+
             }
             if (count == 2) {
                 return true;
             }
+            count2=0;
             flag= new boolean[]{false, false, false, false, false,false};
 
         }

@@ -82,14 +82,35 @@ public class CommonGoalCard3 extends CommonGoalCard {
         if (i < 5 && j<4 && shelf[i][j+1]==tileType && shelf[i + 1][j] == tileType) {
             shelf[i + 1][j] = 0;
             shelf[i][j+1] = 0;
+            if(i>0 && j>0 && shelf[i-1][j] == tileType && shelf[i][j-1] == tileType){
+                shelf[i - 1][j] = 0;
+                shelf[i][j-1] = 0;
+                return 4 + countAdjacentTiles(shelf, i + 1, j, tileType)+countAdjacentTiles(shelf, i , j+1, tileType)+ countAdjacentTiles(shelf, i -1, j, tileType)+countAdjacentTiles(shelf, i , j-1, tileType);
+            }else if(i>0 && shelf[i-1][j] == tileType){
+                shelf[i - 1][j] = 0;
+                return 3 + countAdjacentTiles(shelf, i + 1, j, tileType)+countAdjacentTiles(shelf, i , j+1, tileType)+ countAdjacentTiles(shelf, i -1, j, tileType);
+            }else if(j>0 && shelf[i][j-1] == tileType){
+                shelf[i][j-1] = 0;
+                return 3 + countAdjacentTiles(shelf, i + 1, j, tileType)+countAdjacentTiles(shelf, i , j+1, tileType)+countAdjacentTiles(shelf, i , j-1, tileType);
+            }
 
             return 2 + countAdjacentTiles(shelf, i + 1, j, tileType)+countAdjacentTiles(shelf, i , j+1, tileType);
 
         } else if (i < 5 && shelf[i + 1][j] == tileType) {
             shelf[i + 1][j] = 0;
+            if(i>0 && shelf[i-1][j] == tileType) {
+                shelf[i-1][j]=0;
+                return 2 + countAdjacentTiles(shelf, i + 1, j, tileType) + countAdjacentTiles(shelf, i - 1, j, tileType);
+            }
+
             return 1 + countAdjacentTiles(shelf, i + 1, j, tileType);
         } else if (j < 4 && shelf[i][j + 1] == tileType) {
             shelf[i][j + 1] = 0;
+            if(j>0 && shelf[i][j-1] == tileType) {
+                shelf[i][j-1]=0;
+                return 2 + countAdjacentTiles(shelf, i, j + 1, tileType) + countAdjacentTiles(shelf, i, j - 1, tileType);
+            }
+
             return 1 + countAdjacentTiles(shelf, i, j + 1, tileType);
         } else {
             return 0;

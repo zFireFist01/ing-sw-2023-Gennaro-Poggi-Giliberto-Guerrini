@@ -47,8 +47,8 @@ public class CommonGoalCard5 extends CommonGoalCard {
                 }
             }
             flag= true;
-            for (int i = 0; i < 5 && flag; i++) {
-                for(int j=0;j<6;j++){
+            for (int i = 0; i < 5 ; i++) {
+                for(int j=0;j<6 && flag;j++){
                     if(verifier[j][i]==0){
                         flag=false;
                     }else if(verifier[j][i]==1){
@@ -62,6 +62,8 @@ public class CommonGoalCard5 extends CommonGoalCard {
                     count++;
                 }
                 countdifference=0;
+                flag=true;
+
             }
 
         }

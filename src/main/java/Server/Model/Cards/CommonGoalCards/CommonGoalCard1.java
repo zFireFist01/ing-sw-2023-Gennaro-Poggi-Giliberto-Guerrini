@@ -32,7 +32,7 @@ public class CommonGoalCard1 extends CommonGoalCard {
         int count = 0;
         int[][] verifier = new int[6][5];
         //verify if the 6x5 matrix contains two 2x2 submatrix of the same tyle type
-        for (TileType type : TileType.values()){
+        for (TileType type : TileType.values()) {
             for (int i = 0; i < 6; i++) {
                 for (int j = 0; j < 5; j++) {
                     if (shelf[i][j].getTileType() == type)
@@ -42,7 +42,7 @@ public class CommonGoalCard1 extends CommonGoalCard {
 
                 }
             }
-            for (int i = 0; i < 5 && count<2; i++) {
+            for (int i = 0; i < 5 && count < 2; i++) {
                 for (int j = 0; j < 4; j++) {
                     if (verifier[i][j] == 1 && verifier[i][j + 1] == 1 && verifier[i + 1][j] == 1 && verifier[i + 1][j + 1] == 1) {
                         count++;
@@ -53,12 +53,12 @@ public class CommonGoalCard1 extends CommonGoalCard {
                     }
                 }
             }
-            if (count == 2) {
-                return true;
-            }else {
-                count = 0;
-            }
         }
+        if (count == 2) {
+            return true;
+        }
+
+
 
 
         return false;

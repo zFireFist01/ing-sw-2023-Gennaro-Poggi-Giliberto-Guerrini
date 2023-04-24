@@ -16,4 +16,6 @@ public enum TileType{
     public static TileType randomTileType() {
         return values()[(int) (Math.random() * values().length)];
     }
+
+
 }

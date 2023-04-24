@@ -9,4 +9,9 @@ public class BookshelfTileSpot extends TileSpot {
         super(tile);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
 }

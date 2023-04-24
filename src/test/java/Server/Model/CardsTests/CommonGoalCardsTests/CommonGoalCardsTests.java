@@ -97,7 +97,7 @@ public class CommonGoalCardsTests {
 
         //test with 2 players
 
-        assertEquals(testcard_2player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.EIGHT_1, PointsTile.FOUR_1)));
+        assertEquals(testcard_2player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.FOUR_1,PointsTile.EIGHT_1)));
         testcard_2player.pickPointsTile();
         assertEquals(testcard_2player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.FOUR_1)));
         testcard_2player.pickPointsTile();
@@ -105,7 +105,7 @@ public class CommonGoalCardsTests {
 
         testcard_2player = new CommonGoalCard1(2,true);
 
-        assertEquals(testcard_2player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.EIGHT_2, PointsTile.FOUR_2)));
+        assertEquals(testcard_2player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.FOUR_2,PointsTile.EIGHT_2)));
         testcard_2player.pickPointsTile();
         assertEquals(testcard_2player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.FOUR_2)));
         testcard_2player.pickPointsTile();
@@ -113,9 +113,9 @@ public class CommonGoalCardsTests {
 
         //test with 3 players
 
-        assertEquals(testcard_3player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.EIGHT_1, PointsTile.SIX_1, PointsTile.FOUR_1)));
+        assertEquals(testcard_3player.getPointsTiles(), new ArrayList<>(Arrays.asList( PointsTile.FOUR_1, PointsTile.SIX_1,PointsTile.EIGHT_1)));
         testcard_3player.pickPointsTile();
-        assertEquals(testcard_3player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.SIX_1, PointsTile.FOUR_1)));
+        assertEquals(testcard_3player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.FOUR_1,PointsTile.SIX_1)));
         testcard_3player.pickPointsTile();
         assertEquals(testcard_3player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.FOUR_1)));
         testcard_3player.pickPointsTile();
@@ -123,9 +123,9 @@ public class CommonGoalCardsTests {
 
         testcard_3player = new CommonGoalCard1(3,true);
 
-        assertEquals(testcard_3player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.EIGHT_2, PointsTile.SIX_2, PointsTile.FOUR_2)));
+        assertEquals(testcard_3player.getPointsTiles(), new ArrayList<>(Arrays.asList( PointsTile.FOUR_2, PointsTile.SIX_2,PointsTile.EIGHT_2)));
         testcard_3player.pickPointsTile();
-        assertEquals(testcard_3player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.SIX_2, PointsTile.FOUR_2)));
+        assertEquals(testcard_3player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.FOUR_2,PointsTile.SIX_2)));
         testcard_3player.pickPointsTile();
         assertEquals(testcard_3player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.FOUR_2)));
         testcard_3player.pickPointsTile();
@@ -133,11 +133,11 @@ public class CommonGoalCardsTests {
 
         //test with 4 players
 
-        assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.EIGHT_1, PointsTile.SIX_1, PointsTile.FOUR_1, PointsTile.TWO_1)));
+        assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.TWO_1, PointsTile.FOUR_1,PointsTile.SIX_1 , PointsTile.EIGHT_1)));
         testcard_4player.pickPointsTile();
-        assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.SIX_1, PointsTile.FOUR_1, PointsTile.TWO_1)));
+        assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.TWO_1,PointsTile.FOUR_1,PointsTile.SIX_1)));
         testcard_4player.pickPointsTile();
-        assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.FOUR_1, PointsTile.TWO_1)));
+        assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.TWO_1,PointsTile.FOUR_1)));
         testcard_4player.pickPointsTile();
         assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.TWO_1)));
         testcard_4player.pickPointsTile();
@@ -145,17 +145,19 @@ public class CommonGoalCardsTests {
 
 
 
+
         testcard_4player = new CommonGoalCard1(4,true);
 
-        assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.EIGHT_2, PointsTile.SIX_2, PointsTile.FOUR_2, PointsTile.TWO_2)));
+        assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.TWO_2, PointsTile.FOUR_2,PointsTile.SIX_2 , PointsTile.EIGHT_2)));
         testcard_4player.pickPointsTile();
-        assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.SIX_2, PointsTile.FOUR_2, PointsTile.TWO_2)));
+        assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.TWO_2,PointsTile.FOUR_2,PointsTile.SIX_2)));
         testcard_4player.pickPointsTile();
-        assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.FOUR_2, PointsTile.TWO_2)));
+        assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.TWO_2,PointsTile.FOUR_2)));
         testcard_4player.pickPointsTile();
         assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.TWO_2)));
         testcard_4player.pickPointsTile();
         assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>());
+
 
     }
 
@@ -187,7 +189,11 @@ public class CommonGoalCardsTests {
                     currentTile.setTile(TileType.randomTileType());
                 }
                 testBookshelf.insertTile(j, currentTile.getTileType());
-                precedentTile = currentTile;
+                if(i!=0)
+                    precedentTile.setTile(currentTile.getTileType());
+                else
+                    precedentTile = new BookshelfTileSpot(currentTile.getTileType());
+
             }
         }
         assertFalse(testCard.check(testBookshelf));
@@ -202,7 +208,10 @@ public class CommonGoalCardsTests {
                     currentTile.setTile(TileType.randomTileType());
                 }
                 testBookshelf.insertTile(j, currentTile.getTileType());
-                precedentTile = currentTile;
+                if(i!=0)
+                    precedentTile.setTile(currentTile.getTileType());
+                else
+                    precedentTile = new BookshelfTileSpot(currentTile.getTileType());
             }
             if ((!flag && i >= 1 && Math.random() >= 0.5) || !flag && i == 1) {
                 flag = true;
@@ -212,14 +221,20 @@ public class CommonGoalCardsTests {
                     for (int j = 0; j < 5; j++) {
                         if (j == index || j == index + 1) {
                             testBookshelf.insertTile(j, matchingTile.getTileType());
-                            precedentTile = matchingTile;
+                            if(i!=0)
+                                precedentTile.setTile(matchingTile.getTileType());
+                            else
+                                precedentTile = new BookshelfTileSpot(matchingTile.getTileType());
                         } else {
                             currentTile.setTile(TileType.randomTileType());
                             while (precedentTile.equals(currentTile)) {
                                 currentTile.setTile(TileType.randomTileType());
                             }
                             testBookshelf.insertTile(j, currentTile.getTileType());
-                            precedentTile = currentTile;
+                            if(i!=0)
+                                precedentTile.setTile(currentTile.getTileType());
+                            else
+                                precedentTile = new BookshelfTileSpot(currentTile.getTileType());
                         }
 
                     }
@@ -251,13 +266,16 @@ public class CommonGoalCardsTests {
         for (int i = 5; i >=0; i--) {
             for (int j = 0; j < 5; j++) {
                 currentTile.setTile(TileType.randomTileType());
-                while(precedentTile.equals(currentTile)){
+                while(i!=5 && precedentTile.equals(currentTile)){
                     currentTile.setTile(TileType.randomTileType());
                 }
                 testBookshelf.insertTile(j,currentTile.getTileType());
-                precedentTile = currentTile;
+                if(i!=5)
+                    precedentTile.setTile(currentTile.getTileType());
+                else
+                    precedentTile = new BookshelfTileSpot(currentTile.getTileType());
             }
-            if((!flag && i>=1 && Math.random()>=0.5)||!flag && i==1||index==-1 && i==3){
+            if((!flag && i>=2 && Math.random()>=0.5)||!flag && i==2||index==-1 && i==5){
                 if(index!=-1)
                     flag = true;
                 index = (int) (Math.random() * 3);
@@ -266,14 +284,20 @@ public class CommonGoalCardsTests {
                     for (int j = 0; j < 5; j++) {
                         if (j == index || j == index + 1) {
                             testBookshelf.insertTile(j, matchingTile.getTileType());
-                            precedentTile = matchingTile;
+                            if(i!=0)
+                                precedentTile.setTile(matchingTile.getTileType());
+                            else
+                                precedentTile = new BookshelfTileSpot(matchingTile.getTileType());
                         } else {
                             currentTile.setTile(TileType.randomTileType());
                             while (precedentTile.equals(currentTile)) {
                                 currentTile.setTile(TileType.randomTileType());
                             }
                             testBookshelf.insertTile(j, currentTile.getTileType());
-                            precedentTile = currentTile;
+                            if(i!=0)
+                                precedentTile.setTile(currentTile.getTileType());
+                            else
+                                precedentTile = new BookshelfTileSpot(currentTile.getTileType());
                         }
 
                     }
@@ -291,13 +315,16 @@ public class CommonGoalCardsTests {
         for (int i = 5; i >=0; i--) {
             for (int j = 0; j < 5; j++) {
                 currentTile.setTile(TileType.randomTileType());
-                while(precedentTile.equals(currentTile)){
+                while(i!=5 && precedentTile.equals(currentTile)){
                     currentTile.setTile(TileType.randomTileType());
                 }
                 testBookshelf.insertTile(j,currentTile.getTileType());
-                precedentTile = currentTile;
+                if(i!=5)
+                    precedentTile.setTile(currentTile.getTileType());
+                else
+                    precedentTile = new BookshelfTileSpot(currentTile.getTileType());
             }
-            if((i>=1 && Math.random()>=0.5)||!flag && i==1||index==-1 && i==3){
+            if((i>=2 && Math.random()>=0.5)||!flag && i==2||index==-1 && i==5){
                 if(index!=-1)
                     flag = true;
                 index = (int) (Math.random() * 3);
@@ -306,14 +333,20 @@ public class CommonGoalCardsTests {
                     for (int j = 0; j < 5; j++) {
                         if (j == index || j == index + 1) {
                             testBookshelf.insertTile(j, matchingTile.getTileType());
-                            precedentTile = matchingTile;
+                            if(i!=0)
+                                precedentTile.setTile(matchingTile.getTileType());
+                            else
+                                precedentTile = new BookshelfTileSpot(matchingTile.getTileType());
                         } else {
                             currentTile.setTile(TileType.randomTileType());
                             while (precedentTile.equals(currentTile)) {
                                 currentTile.setTile(TileType.randomTileType());
                             }
                             testBookshelf.insertTile(j, currentTile.getTileType());
-                            precedentTile = currentTile;
+                            if(i!=0)
+                                precedentTile.setTile(currentTile.getTileType());
+                            else
+                                precedentTile = new BookshelfTileSpot(currentTile.getTileType());
                         }
 
                     }
@@ -350,7 +383,7 @@ public class CommonGoalCardsTests {
                     testBookshelf.insertTile(j, precedentTile[j].getTileType());
                     flag[j] = true;
                 } else {
-                    if (precedentTile[j].equals(currentTile))
+                    if (i>0 && precedentTile[j].equals(currentTile))
                         flag[j] = true;
                     precedentTile[j] = currentTile;
                     testBookshelf.insertTile(j, currentTile.getTileType());
@@ -411,7 +444,7 @@ public class CommonGoalCardsTests {
                     testBookshelf.insertTile(j,precedentTile[j].getTileType());
                     flag[j]=true;
                 }else{
-                    if(precedentTile[j].equals(currentTile) && j!=index1 && j!=index2)
+                    if(i>0 && precedentTile[j].equals(currentTile) && j!=index1 && j!=index2)
                         flag[j]=true;
                     precedentTile[j] = currentTile;
                     if(j!=index1 && j!=index2) {
@@ -467,7 +500,10 @@ public class CommonGoalCardsTests {
                     testBookshelf.insertTile(j, precedentTile[j].getTileType());
                 }else {
                     testBookshelf.insertTile(j, currentTile[j].getTileType());
-                    precedentTile[j].setTile(currentTile[j].getTileType());
+                    if(precedentTile[j]!=null)
+                        precedentTile[j].setTile(currentTile[j].getTileType());
+                    else
+                        precedentTile[j]=new BookshelfTileSpot(currentTile[j].getTileType());
                     currentTile[j].setTile(TileType.randomTileType());
                 }
             }
@@ -566,24 +602,22 @@ public class CommonGoalCardsTests {
             i_index[i]=(int)(Math.random()*2);
         }
 
-        for(int i=0;i<4;i++) {
-            switch (i) {
-                case 1:
-                    j_index[0] = (int) (Math.random() * 3);
+
+
+                    j_index[0] = (int) (Math.random() * 4);
                     j_index[1] = j_index[0];
                     j_index[2] = j_index[0];
-                case 2:
+
                     while (j_index[1] == j_index[0])
-                        j_index[1] = (int) (Math.random() * 3);
+                        j_index[1] = (int) (Math.random() * 4);
                     j_index[2] = j_index[1];
-                case 3:
+
                     while (j_index[2] == j_index[1] || j_index[2] == j_index[0])
-                        j_index[2] = (int) (Math.random() * 3);
-                case 4:
+                        j_index[2] = (int) (Math.random() * 4);
+
                     while (j_index[3] == j_index[2] || j_index[3] == j_index[1] || j_index[3] == j_index[0])
-                        j_index[3] = (int) (Math.random() * 3);
-            }
-        }
+                        j_index[3] = (int) (Math.random() * 4);
+
         count=0;
 
 
@@ -602,10 +636,13 @@ public class CommonGoalCardsTests {
                     count++;
                 }else if(((i<i_index[0] ||i>i_index[0]+3)&& j==j_index[0]) || ((i<i_index[1] ||i>i_index[1]+3)&& j==j_index[1]) || ((i<i_index[2] ||i>i_index[2]+3)&& j==j_index[2]) || ((i<i_index[3] ||i>i_index[3]+3)&& j==j_index[3])||j!=j_index[0]&&j!=j_index[1]&&j!=j_index[2]&&j!=j_index[3]){
                     testBookshelf.insertTile(j, currentTile[j].getTileType());
-                    precedentTile[j].setTile(currentTile[j].getTileType());
+                    if(precedentTile[j]==null)
+                        precedentTile[j]=new BookshelfTileSpot(currentTile[j].getTileType());
+                    else
+                        precedentTile[j].setTile(currentTile[j].getTileType());
                     do {
                         currentTile[j].setTile(TileType.randomTileType());
-                    }while(currentTile[j].getTileType()==precedentTile[j].getTileType());
+                    }while(currentTile[j].getTileType().equals(precedentTile[j].getTileType()));
                 }
             }
         }
@@ -658,7 +695,10 @@ public class CommonGoalCardsTests {
         for(int i=0;i<6;i++){
             for(int j=0;j<5;j++) {
                 testBookshelf.insertTile(j, currentTile[j].getTileType());
-                precedentTile[j].setTile(currentTile[j].getTileType());
+                if(precedentTile[j]==null)
+                    precedentTile[j]=new BookshelfTileSpot(currentTile[j].getTileType());
+                else
+                    precedentTile[j].setTile(currentTile[j].getTileType());
                 do {
                     currentTile[j].setTile(TileType.randomTileType());
                 }while(currentTile[j].getTileType()==precedentTile[j].getTileType());
@@ -685,11 +725,11 @@ public class CommonGoalCardsTests {
      */
     @Test
     public void CommonGoalCard4_expectedTrue_Test(){
-        testCard = new CommonGoalCard3(4, false);
+        testCard = new CommonGoalCard4(4, false);
         testBookshelf = new Bookshelf();
         BookshelfTileSpot[] precedentTile = new BookshelfTileSpot[5];
         BookshelfTileSpot[] currentTile = new BookshelfTileSpot[5];
-        int count=0,index=7,rnd2;
+        int count=0,index=7,rnd2,rnd1;
 
         for(int i=0;i<5;i++){
             currentTile[i]=new BookshelfTileSpot(TileType.randomTileType());
@@ -697,7 +737,10 @@ public class CommonGoalCardsTests {
         for(int i=0;i<6;i++){
             for(int j=0;j<5;j++) {
                 testBookshelf.insertTile(j, currentTile[j].getTileType());
-                precedentTile[j].setTile(currentTile[j].getTileType());
+                if(precedentTile[j]==null)
+                    precedentTile[j]=new BookshelfTileSpot(currentTile[j].getTileType());
+                else
+                    precedentTile[j].setTile(currentTile[j].getTileType());
                 do {
                     currentTile[j].setTile(TileType.randomTileType());
                 }while(currentTile[j].getTileType()==precedentTile[j].getTileType());
@@ -706,10 +749,16 @@ public class CommonGoalCardsTests {
 
             if(count<6){
                 do {
-                    rnd2 = (int) (Math.random() * 6);
-                }while(rnd2==index);
+                    rnd2 = (int) (Math.random() * 5);
+                    rnd1=rnd2+1;
+                }while(rnd2==index || rnd1==index);
+                if(count ==3){
+                    currentTile[rnd1].setTile(precedentTile[rnd1].getTileType());
+                }
                 index=rnd2;
                 currentTile[index].setTile(precedentTile[index].getTileType());
+
+                count++;
             }
         }
         assertTrue(testCard.check(testBookshelf));
@@ -723,13 +772,14 @@ public class CommonGoalCardsTests {
      */
     @Test
     public void CommonGoalCard5_expectedFalse_Test(){
-        testCard = new CommonGoalCard3(4, false);
+        testCard = new CommonGoalCard5(4, false);
         testBookshelf = new Bookshelf();
 
 
         BookshelfTileSpot[] column1 = new BookshelfTileSpot[6];
         BookshelfTileSpot[] column2 = new BookshelfTileSpot[6];
-        BookshelfTileSpot[] currentTile = new BookshelfTileSpot[5];
+        BookshelfTileSpot[] currentTile = new BookshelfTileSpot[6];
+        int tmp[] = new int[6];
         int rnd1,rnd2;
         boolean flag=false;
 
@@ -741,23 +791,24 @@ public class CommonGoalCardsTests {
 
 
 
-        for(int i=0;i<5;i++){
-            currentTile[i]=new BookshelfTileSpot(TileType.randomTileType());
+
+        for(int i =0; i<6;i++){
+            tmp[i]=i;
+        }
+        for(int i=0;i<6;i++){
+            int random = (int) (Math.random() * 6);
+            int temp = tmp[i];
+            tmp[i] = tmp[random];
+            tmp[random] = temp;
+        }
+        for(int i=0;i<6;i++){
+            currentTile[i]=new BookshelfTileSpot(TileType.values()[tmp[i]]);
         }
 
-        //verify that currentTile[] contains at least 4 different tiles
-        for(int i=0;i<5;i++){
-            for(int j=i+1;j<5;j++){
-                if(currentTile[i].getTileType()==currentTile[j].getTileType()){
-                    do {
-                        currentTile[j].setTile(TileType.randomTileType());
-                    }while(currentTile[j].getTileType()==currentTile[i].getTileType());
-                }
-            }
-        }
+
 
         //prepare coloumns
-        rnd1=(int)(Math.random()*1);
+        rnd1=(int)(Math.random()*2);
 
         rnd2=(int)(Math.random()*3 +1);
         for(int j=0;j<rnd2;j++){
@@ -807,7 +858,7 @@ public class CommonGoalCardsTests {
      */
     @Test
     public void CommonGoalCard5_expectedTrue_Test() {
-        testCard = new CommonGoalCard3(4, false);
+        testCard = new CommonGoalCard5(4, false);
         testBookshelf = new Bookshelf();
         BookshelfTileSpot[] column1 = new BookshelfTileSpot[6];
         BookshelfTileSpot[] column2 = new BookshelfTileSpot[6];
@@ -890,7 +941,7 @@ public class CommonGoalCardsTests {
         assertFalse(testCard.check(testBookshelf));
 
         //prepare row with 5 tiles of different types
-        for(int i=0;i<6;i++){
+        for(int i=0;i<5;i++){
             rnd[i]=i;
         }
         //shuffle rnd
@@ -942,7 +993,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
         BookshelfTileSpot currentTile = new BookshelfTileSpot(TileType.randomTileType());
 
         //prepare row with 5 tiles of different types
-        for(int i=0;i<6;i++){
+        for(int i=0;i<5;i++){
             arnd1[i]=i;
             arnd2[i]=i;
         }
@@ -965,9 +1016,9 @@ public void CommonGoalCard6_expectedTrue_Test() {
         }
 
         //create a bookshelf with at least two rows of different tiletypes
-        rnd1=(int)(Math.random()*5);
+        rnd1=(int)(Math.random()*6);
         do {
-            rnd2 = (int) (Math.random() * 5);
+            rnd2 = (int) (Math.random() * 6);
         }while(rnd2==rnd1);
 
         for(int i=0;i<6;i++){

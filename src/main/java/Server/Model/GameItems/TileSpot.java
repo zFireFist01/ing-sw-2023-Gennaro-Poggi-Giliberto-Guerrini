@@ -1,5 +1,7 @@
 package Server.Model.GameItems;
 
+import java.util.Objects;
+
 /**
  * This class defines the tile spot
  */
@@ -33,5 +35,15 @@ public class TileSpot {
     public String toString() {
         return (this.tile == null ? "-" : this.tile.toString());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TileSpot tileSpot = (TileSpot) o;
+        return tile.compareTo(tileSpot.tile)==0;
+    }
+
+
 }
 

@@ -4,7 +4,9 @@ import Server.Model.Cards.CommonGoalCard;
 import Server.Model.GameItems.Bookshelf;
 
 public class CommonGoalCard11 extends CommonGoalCard {
-
+    public CommonGoalCard11(int playersNum, boolean secondIstance) {
+        super(playersNum, secondIstance);
+    }
     @Override
     public boolean check(Bookshelf bookshelf) {
 

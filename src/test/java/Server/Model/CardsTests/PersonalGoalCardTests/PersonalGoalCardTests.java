@@ -12,13 +12,13 @@ import static org.junit.Assert.*;
 
 public class PersonalGoalCardTests {
     @Test
-    void checkTest(){
+    public void checkTest(){
         int i,j;
         //test check method for PersonalGoalCard.TYPE1
         PersonalGoalCard p = PersonalGoalCard.TYPE1;
-        BookshelfTileSpot[][] matrix = new BookshelfTileSpot[5][6];
-        for(i = 0; i < 5; i++){
-            for(j = 0; j < 6; j++){
+        BookshelfTileSpot[][] matrix = new BookshelfTileSpot[6][5];
+        for(i = 0; i < 6; i++){
+            for(j = 0; j < 5; j++){
                 //if a random int is divisible by 2, matrix[i][j]=new BookshelfTileSpot(TileType.randomTileType); else matrix[i][j]=new BookshelfTileSpot();
                 if((int)(Math.random()*10)%2==0)
                     matrix[i][j] = new BookshelfTileSpot(TileType.randomTileType());
@@ -49,8 +49,8 @@ public class PersonalGoalCardTests {
         //test check method for PersonalGoalCard.TYPE2
 
         p = PersonalGoalCard.TYPE2;
-        for(i = 0; i < 5; i++){
-            for(j = 0; j < 6; j++){
+        for(i = 0; i < 6; i++){
+            for(j = 0; j < 5; j++){
                 //if a random int is divisible by 2, matrix[i][j]=new BookshelfTileSpot(TileType.randomTileType); else matrix[i][j]=new BookshelfTileSpot();
                 if((int)(Math.random()*10)%2==0)
                     matrix[i][j] = new BookshelfTileSpot(TileType.randomTileType());
@@ -80,8 +80,8 @@ public class PersonalGoalCardTests {
 
         //test check method for PersonalGoalCard.TYPE3
         p = PersonalGoalCard.TYPE3;
-        for(i = 0; i < 5; i++){
-            for(j = 0; j < 6; j++){
+        for(i = 0; i < 6; i++){
+            for(j = 0; j < 5; j++){
                 //if a random int is divisible by 2, matrix[i][j]=new BookshelfTileSpot(TileType.randomTileType); else matrix[i][j]=new BookshelfTileSpot();
                 if((int)(Math.random()*10)%2==0)
                     matrix[i][j] = new BookshelfTileSpot(TileType.randomTileType());
@@ -111,8 +111,8 @@ public class PersonalGoalCardTests {
 
         //test check method for PersonalGoalCard.TYPE4
         p = PersonalGoalCard.TYPE4;
-        for(i = 0; i < 5; i++){
-            for(j = 0; j < 6; j++){
+        for(i = 0; i < 6; i++){
+            for(j = 0; j < 5; j++){
                 //if a random int is divisible by 2, matrix[i][j]=new BookshelfTileSpot(TileType.randomTileType); else matrix[i][j]=new BookshelfTileSpot();
                 if((int)(Math.random()*10)%2==0)
                     matrix[i][j] = new BookshelfTileSpot(TileType.randomTileType());
@@ -142,8 +142,8 @@ public class PersonalGoalCardTests {
 
         //test check method for PersonalGoalCard.TYPE5
         p = PersonalGoalCard.TYPE5;
-        for(i = 0; i < 5; i++){
-            for(j = 0; j < 6; j++){
+        for(i = 0; i < 6; i++){
+            for(j = 0; j < 5; j++){
                 //if a random int is divisible by 2, matrix[i][j]=new BookshelfTileSpot(TileType.randomTileType); else matrix[i][j]=new BookshelfTileSpot();
                 if((int)(Math.random()*10)%2==0)
                     matrix[i][j] = new BookshelfTileSpot(TileType.randomTileType());
@@ -173,8 +173,8 @@ public class PersonalGoalCardTests {
 
         //test check method for PersonalGoalCard.TYPE6
         p = PersonalGoalCard.TYPE6;
-        for(i = 0; i < 5; i++){
-            for(j = 0; j < 6; j++){
+        for(i = 0; i < 6; i++){
+            for(j = 0; j < 5; j++){
                 //if a random int is divisible by 2, matrix[i][j]=new BookshelfTileSpot(TileType.randomTileType); else matrix[i][j]=new BookshelfTileSpot();
                 if((int)(Math.random()*10)%2==0)
                     matrix[i][j] = new BookshelfTileSpot(TileType.randomTileType());
@@ -204,8 +204,8 @@ public class PersonalGoalCardTests {
 
         //test check method for PersonalGoalCard.TYPE7
         p = PersonalGoalCard.TYPE7;
-        for(i = 0; i < 5; i++){
-            for(j = 0; j < 6; j++){
+        for(i = 0; i < 6; i++){
+            for(j = 0; j < 5; j++){
                 //if a random int is divisible by 2, matrix[i][j]=new BookshelfTileSpot(TileType.randomTileType); else matrix[i][j]=new BookshelfTileSpot();
                 if((int)(Math.random()*10)%2==0)
                     matrix[i][j] = new BookshelfTileSpot(TileType.randomTileType());
@@ -235,8 +235,8 @@ public class PersonalGoalCardTests {
 
         //test check method for PersonalGoalCard.TYPE8
         p = PersonalGoalCard.TYPE8;
-        for(i = 0; i < 5; i++){
-            for(j = 0; j < 6; j++){
+        for(i = 0; i < 6; i++){
+            for(j = 0; j < 5; j++){
                 //if a random int is divisible by 2, matrix[i][j]=new BookshelfTileSpot(TileType.randomTileType); else matrix[i][j]=new BookshelfTileSpot();
                 if((int)(Math.random()*10)%2==0)
                     matrix[i][j] = new BookshelfTileSpot(TileType.randomTileType());
@@ -268,8 +268,8 @@ public class PersonalGoalCardTests {
         //test check method for PersonalGoalCard.TYPE9
 
         p = PersonalGoalCard.TYPE9;
-        for(i = 0; i < 5; i++){
-            for(j = 0; j < 6; j++){
+        for(i = 0; i < 6; i++){
+            for(j = 0; j < 5; j++){
                 //if a random int is divisible by 2, matrix[i][j]=new BookshelfTileSpot(TileType.randomTileType); else matrix[i][j]=new BookshelfTileSpot();
                 if((int)(Math.random()*10)%2==0)
                     matrix[i][j] = new BookshelfTileSpot(TileType.randomTileType());
@@ -300,8 +300,8 @@ public class PersonalGoalCardTests {
         //test check method for PersonalGoalCard.TYPE10
 
         p = PersonalGoalCard.TYPE10;
-        for(i = 0; i < 5; i++){
-            for(j = 0; j < 6; j++){
+        for(i = 0; i < 6; i++){
+            for(j = 0; j < 5; j++){
                 //if a random int is divisible by 2, matrix[i][j]=new BookshelfTileSpot(TileType.randomTileType); else matrix[i][j]=new BookshelfTileSpot();
                 if((int)(Math.random()*10)%2==0)
                     matrix[i][j] = new BookshelfTileSpot(TileType.randomTileType());
@@ -332,8 +332,8 @@ public class PersonalGoalCardTests {
         //test check method for PersonalGoalCard.TYPE11
 
         p = PersonalGoalCard.TYPE11;
-        for(i = 0; i < 5; i++){
-            for(j = 0; j < 6; j++){
+        for(i = 0; i < 6; i++){
+            for(j = 0; j < 5; j++){
                 //if a random int is divisible by 2, matrix[i][j]=new BookshelfTileSpot(TileType.randomTileType); else matrix[i][j]=new BookshelfTileSpot();
                 if((int)(Math.random()*10)%2==0)
                     matrix[i][j] = new BookshelfTileSpot(TileType.randomTileType());
@@ -364,8 +364,8 @@ public class PersonalGoalCardTests {
         //test check method for PersonalGoalCard.TYPE12
 
         p = PersonalGoalCard.TYPE12;
-        for(i = 0; i < 5; i++){
-            for(j = 0; j < 6; j++){
+        for(i = 0; i < 6; i++){
+            for(j = 0; j < 5; j++){
                 //if a random int is divisible by 2, matrix[i][j]=new BookshelfTileSpot(TileType.randomTileType); else matrix[i][j]=new BookshelfTileSpot();
                 if((int)(Math.random()*10)%2==0)
                     matrix[i][j] = new BookshelfTileSpot(TileType.randomTileType());

@@ -30,7 +30,7 @@ public class Bookshelf {
     }
 
     public BookshelfTileSpot[][] getTileMatrix() {
-        BookshelfTileSpot[][] copy = new BookshelfTileSpot[BOOKSHELFWIDTH][BOOKSHELFHEIGHT];
+        BookshelfTileSpot[][] copy = new BookshelfTileSpot[BOOKSHELFHEIGHT][BOOKSHELFWIDTH];
         for(int i = 0; i< BOOKSHELFHEIGHT;i++){
             for(int j=0;j<BOOKSHELFWIDTH;j++){
                 copy[i][j] = new BookshelfTileSpot(tileMatrix[i][j].getTileType());
