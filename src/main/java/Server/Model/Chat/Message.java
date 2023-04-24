@@ -13,7 +13,7 @@ public class Message {
     private final Player sender;
     private final String content;
     private final Time timeSent;
-    private final Player receiver;
+    private Player receiver;
 
     public Message(Player sender, String content, Time timeSent, Player receiver) throws UnsupportedOperationException{
         if(sender.equals(receiver)) throw new UnsupportedOperationException("You can't text yourself!");
@@ -21,6 +21,14 @@ public class Message {
         this.content = content;
         this.timeSent = timeSent;
         this.receiver = receiver;
+    }
+
+
+    public Message(Player sender, String content, Time timeSent){
+        this.sender = sender;
+        this.content = content;
+        this.timeSent = timeSent;
+        this.receiver = null;
     }
 
     /**

@@ -30,6 +30,10 @@ public class CommonGoalCardsDeck extends Deck {
                 break;
             }
         }
+
+        secondIstance=true;
+        shuffle();
+
         if(index==1) {
             return new CommonGoalCard1(playersNum, secondIstance);
         }else if(index==2) {
@@ -55,8 +59,7 @@ public class CommonGoalCardsDeck extends Deck {
         }else{
             return new CommonGoalCard12(playersNum, secondIstance);
         }
-        secondIstance=true;
-        shuffle();
+
 
     }
 }

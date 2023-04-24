@@ -9,12 +9,13 @@ import java.sql.Time;
 import static org.junit.Assert.*;
 
 public class PlayersChatTest {
-    PlayersChat tester = new PlayersChat();
+    PlayersChat tester;
 
 
 
     @Test
     public void getMessages() {
+        tester = new PlayersChat();
         String otherName = "Other";
         int otherID = 1;
         Player other = new Player(otherID, otherName);
@@ -27,9 +28,9 @@ public class PlayersChatTest {
         Time timeSent = new Time(60);
         String content = "Test for message";
         Message message1 = new Message(sender, content, timeSent, receiver);
-        Message message2 = new Message(sender, content, timeSent, null);
+        Message message2 = new Message(sender, content, timeSent);
         Message message3 = new Message(receiver, content, timeSent, sender);
-        Message message4 = new Message(receiver, content, timeSent, null);
+        Message message4 = new Message(receiver, content, timeSent);
         Message message5 = new Message(sender, content, timeSent, other);
         this.tester.addMessage(message1);
         this.tester.addMessage(message2);
