@@ -27,24 +27,40 @@ public class Player {
         this.playerStatus = new Connected();
     }
 
+    /**
+     * The Getter for the next player
+     * @return is the next player assigned to the player
+     */
     public Player getNextPlayer() {
         return nextPlayer;
     }
 
+    /**
+     * We set the next player
+     * @param nextPlayer is the player that is going to play after
+     */
     public void setNextPlayer(Player nextPlayer) {
         this.nextPlayer = nextPlayer;
     }
 
+    /**
+     * The getter of the Point Tile array which contains the Point Tiles of the player
+     * @return a copy of the pointsTiles arraylist
+     */
     public ArrayList<PointsTile> getPointsTiles() {
         return new ArrayList<PointsTile>(this.pointsTiles);
     }
 
+    /**
+     * The Getter for the Bookshelf of the player
+     * @return is the Bookshelf assigned to the player
+     */
     public Bookshelf getBookshelf() {
         return bookshelf;
     }
 
     /**
-     * The Getter for the PersonalGoalCard
+     * The Getter for the PersonalGoalCard of the player
      * @return is the PersonalGoalCard assigned to the player
      */
     public PersonalGoalCard getPersonalGoalCard() {

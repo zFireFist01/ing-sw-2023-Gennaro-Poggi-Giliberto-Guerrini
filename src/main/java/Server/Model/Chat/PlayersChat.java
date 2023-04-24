@@ -30,7 +30,8 @@ public class PlayersChat {
      * @return the list of messages
      */
     public List<Message> getMessages(Player player) {
-        List<Message> copyMessages = new ArrayList<Message>(this.messages.stream().filter(t->t.getReceiver().equals(player)).toList());
+        List<Message> copyMessages = new ArrayList<Message>();
+        copyMessages.addAll(this.messages.stream().filter(t->(t.getReceiver() != null && t.getReceiver().equals(player))).toList());
         copyMessages.addAll(this.messages.stream().filter(t->t.getSender().equals(player)).toList());
         copyMessages.addAll(this.messages.stream().filter(t-> t.getReceiver() == null).toList());
         return copyMessages;

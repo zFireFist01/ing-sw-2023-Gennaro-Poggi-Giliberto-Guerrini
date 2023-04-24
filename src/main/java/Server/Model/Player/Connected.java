@@ -13,6 +13,10 @@ public class Connected extends PlayerStatus {
     private long turnDuration;
     private Timer durationTimer;
 
+
+    /**
+     * This method creates a timer for the turn of the player
+     */
     public void startTurn() {
         //imposta il tempo di inizio ad adesso
         turnStartTime = new Date();
@@ -27,6 +31,10 @@ public class Connected extends PlayerStatus {
         }, 1000, 1000);
     }
 
+    /**
+     * This method return the duration of the timer and delete the Timer
+     * @return the time duration of the turn
+     */
     public long endTurn() {
 
         durationTimer.cancel();
@@ -35,6 +43,9 @@ public class Connected extends PlayerStatus {
         return turnDuration;
     }
 
+    /**
+     * This method is used to print the duration of the timer in the time this method is called
+     */
     private void updateDuration() {
         // posso sapere la durata in real time
         Date turnEndTime = new Date();

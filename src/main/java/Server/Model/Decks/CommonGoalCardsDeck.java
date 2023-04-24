@@ -34,7 +34,6 @@ public class CommonGoalCardsDeck extends Deck {
         secondIstance=true;
         shuffle();
 
-
         if(index==1) {
             return new CommonGoalCard1(playersNum, secondIstance);
         }else if(index==2) {
