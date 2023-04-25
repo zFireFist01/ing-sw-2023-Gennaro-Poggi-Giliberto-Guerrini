@@ -2,6 +2,7 @@ package Server.Model;
 
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Cards.PersonalGoalCard;
+import Server.Model.Chat.PlayersChat;
 import Server.Model.Decks.CommonGoalCardsDeck;
 import Server.Model.Decks.PersonalGoalCardsDeck;
 import Server.Model.GameItems.*;
@@ -23,6 +24,8 @@ import java.util.Random;
  */
 public class Match {
     private ArrayList<Player> players;
+    private PlayersChat gameChat;
+    private ArrayList<Integer> selectedTiles;
     private int width;
     private int height;
     private final int numberOfPlayers;
@@ -41,6 +44,7 @@ public class Match {
     private int count=0;
 
     public Match(int numberOfPlayers, Player matchOpener) {
+        this.gameChat = new PlayersChat();
         this.numberOfPlayers = numberOfPlayers;
         this.matchOpener = matchOpener;
         this.livingRoom = new LivingRoom(this);
@@ -53,6 +57,30 @@ public class Match {
         this.scores= new HashMap<Player, Integer>() ;
         this.width= matchOpener.getBookshelf().getBookshelfWidth();
         this.height=matchOpener.getBookshelf().getBookshelfHeight();
+    }
+
+    public PlayersChat getGameChat() {
+        return gameChat;
+    }
+
+    public void setSelectedTiles(int[] selectedTiles) {
+
+        //copy the int array into the arraylist
+        this.selectedTiles = new ArrayList<Integer>();
+        for (int i = 0; i < selectedTiles.length; i++) {
+            this.selectedTiles.add(selectedTiles[i]);
+        }
+    }
+    public void clearSelectedTiles() {
+        this.selectedTiles = null;
+    }
+
+    public int[] getSelectedTiles() {
+        int [] selectedTiles = new int[this.selectedTiles.size()];
+        for (int i = 0; i < this.selectedTiles.size(); i++) {
+            selectedTiles[i] = this.selectedTiles.get(i);
+        }
+        return selectedTiles;
     }
 
     /**

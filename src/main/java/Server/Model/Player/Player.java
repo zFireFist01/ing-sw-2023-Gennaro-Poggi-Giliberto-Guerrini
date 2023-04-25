@@ -4,6 +4,9 @@ package Server.Model.Player;
 import Server.Model.GameItems.Bookshelf;
 import Server.Model.Cards.PersonalGoalCard;
 import Server.Model.GameItems.PointsTile;
+import Server.Model.GameItems.TileSpot;
+import Server.Model.GameItems.TileType;
+
 import java.util.ArrayList;
 
 /**
@@ -18,6 +21,7 @@ public class Player {
     private PlayerStatus playerStatus;
     private final ArrayList<PointsTile> pointsTiles;
     private Player nextPlayer;
+    private TileType[] takenTiles;
 
     public Player(int playerID, String playerNickName){
         this.playerID = playerID;
@@ -25,6 +29,13 @@ public class Player {
         this.playerNickName = playerNickName;
         this.pointsTiles = new ArrayList<PointsTile>();
         this.playerStatus = new Connected();
+    }
+
+    public void setTakenTiles(TileType[] takenTiles) {
+        this.takenTiles = takenTiles;
+    }
+    public void clearTakenTiles() {
+        this.takenTiles = null;
     }
 
     /**
