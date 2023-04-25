@@ -64,6 +64,50 @@ public class CommonGoalCard1 extends CommonGoalCard {
         return false;
     }
 
+    public char[][] getCLIRepresentation(){
+        char[][] res  = new char[13][15];
+        res[0][0] = '|';
+        res[0][14] = '|';
+        res[12][0] = '|';
+        res[12][14] = '|';
+        for(int i=0;i<13;i++){
+            res[i][1] = ' ';
+            res[i][13] = ' ';
+        }
+        for(int i=0;i<13;i++){
+            for(int j=2;j<13;j++){
+                if(i%2 == 0){
+                    if(j%2 == 0){
+                        res[i][j] = '+';
+                    }else{
+                        res[i][j] = '-';
+                    }
+                }else{
+                    if(j%2 == 0){
+                        res[i][j] = '|';
+                    }else{
+                        res[i][j] = ' ';
+                    }
+                }
+            }
+        }
+        res[1][11] = '=';
+        res[1][9] = '=';
+        res[3][11] = '=';
+        res[3][9] = '=';
+
+        res[9][3] = '=';
+        res[9][5] = '=';
+        res[11][3] = '=';
+        res[11][5] = '=';
+
+        return res;
+    }
+
+    public String getDescription(){
+        return "Two groups each containing 4 tiles of the same type in a 2x2 square. The tiles of one square can be different from those of the other square.";
+    }
+
     /**
      * This method returns the ID of the common goal card
      * @return the ID of the common goal card
