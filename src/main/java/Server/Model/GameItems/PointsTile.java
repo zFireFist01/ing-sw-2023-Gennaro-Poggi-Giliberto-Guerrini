@@ -9,6 +9,10 @@ public enum PointsTile {
         return values()[(int) (Math.random() * values().length)];
     }
 
+    /**
+     * This method is used fromn the CLI to obtain a printable represention of this object
+     * @return the char matrix that represents a "drawing" of this object
+     */
     public char[][] getCLIRepresentation(){
         char[][] res = new char[4][9];
         res[0][0] = '+';
@@ -40,6 +44,8 @@ public enum PointsTile {
             res[1][4] = '6';
         }else if(this == EIGHT_1 || this == EIGHT_2){
             res[1][4] = '8';
+        }else{
+            res[1][4] = '?';
         }
 
         return res;

@@ -1,5 +1,6 @@
 package Server.Model.Cards;
 
+import Server.Model.GameItems.Bookshelf;
 import Server.Model.GameItems.BookshelfTileSpot;
 import Server.Model.GameItems.TileType;
 
@@ -182,5 +183,66 @@ public enum PersonalGoalCard implements Card {
             return 12;
         else
             return 0;
+    }
+
+    /**
+     * This method is used fromn the CLI to obtain a printable represention of this object
+     * @return the char matrix that represents a "drawing" of this object
+     */
+    public char[][] getCLIRepresentation(){
+        char[][] res  = new char[13][15];
+        res[0][0] = '|';
+        res[0][14] = '|';
+        res[12][0] = '|';
+        res[12][14] = '|';
+        for(int i=0;i<13;i++){
+            res[i][1] = ' ';
+            res[i][13] = ' ';
+        }
+        for(int i=0;i<13;i++){
+            for(int j=2;j<13;j++){
+                if(i%2 == 0){
+                    if(j%2 == 0){
+                        res[i][j] = '+';
+                    }else{
+                        res[i][j] = '-';
+                    }
+                }else{
+                    if(j%2 == 0){
+                        res[i][j] = '|';
+                    }else{
+                        res[i][j] = ' ';
+                    }
+                }
+            }
+        }
+        switch(this){
+            case TYPE4 -> {
+                res[1][11] = TileType.GAMES.getCLIRepresentation()[0][0];
+                res[5][3] = TileType.TROPHIES.getCLIRepresentation()[0][0];
+                res[5][5] = TileType.FRAMES.getCLIRepresentation()[0][0];
+                res[7][9] = TileType.PLANTS.getCLIRepresentation()[0][0];
+                res[9][5] = TileType.BOOKS.getCLIRepresentation()[0][0];
+                res[9][7] = TileType.CATS.getCLIRepresentation()[0][0];
+            }
+            case TYPE5 -> {
+                res[3][5] = TileType.TROPHIES.getCLIRepresentation()[0][0];
+                res[7][5] = TileType.FRAMES.getCLIRepresentation()[0][0];
+                res[7][7] = TileType.BOOKS.getCLIRepresentation()[0][0];
+                res[9][11] = TileType.PLANTS.getCLIRepresentation()[0][0];
+                res[11][3] = TileType.GAMES.getCLIRepresentation()[0][0];
+                res[11][9] = TileType.GAMES.getCLIRepresentation()[0][0];
+            }
+            case TYPE6 -> {
+                res[1][7] = TileType.TROPHIES.getCLIRepresentation()[0][0];
+                res[1][11] = TileType.CATS.getCLIRepresentation()[0][0];
+                res[5][9] = TileType.BOOKS.getCLIRepresentation()[0][0];
+                res[9][5] = TileType.GAMES.getCLIRepresentation()[0][0];
+                res[9][9] = TileType.FRAMES.getCLIRepresentation()[0][0];
+                res[11][3] = TileType.PLANTS.getCLIRepresentation()[0][0];
+            }
+        }
+
+        return res;
     }
 }

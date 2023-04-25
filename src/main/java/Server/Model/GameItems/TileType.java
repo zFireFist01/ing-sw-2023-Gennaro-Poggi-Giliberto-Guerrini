@@ -17,5 +17,21 @@ public enum TileType{
         return values()[(int) (Math.random() * values().length)];
     }
 
-
+    /**
+     * This method is used fromn the CLI to obtain a printable represention of this object
+     * @return the char matrix that represents a "drawing" of this object
+     */
+    public char[][] getCLIRepresentation(){
+        char[][] res = new char[1][1];
+        switch (this){
+            case CATS -> res[0][0] = 'C';
+            case BOOKS -> res[0][0] = 'B';
+            case GAMES -> res[0][0] = 'G';
+            case FRAMES -> res[0][0] = 'F';
+            case TROPHIES -> res[0][0] = 'T';
+            case PLANTS -> res[0][0] = 'P';
+            default -> res[0][0] = '?';
+        }
+        return res;
+    }
 }
