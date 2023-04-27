@@ -11,5 +11,7 @@ public abstract class MatchStatus {
      * @return MatchStatus
      * @throws UnsupportedOperationException
      */
-    abstract public MatchStatus evolve() throws UnsupportedOperationException;
+     public abstract MatchStatus evolve() throws UnsupportedOperationException;
+
+    public abstract void devolve() throws UnsupportedOperationException;
 }

@@ -21,4 +21,9 @@ public class WaitingForPlayers extends MatchStatus {
                     "players missing");
         }
     }
+
+    @Override
+    public void devolve() throws UnsupportedOperationException{
+        numberMissingPlayers++;
+    }
 }

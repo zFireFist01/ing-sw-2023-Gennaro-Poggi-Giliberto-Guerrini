@@ -107,7 +107,7 @@ public class CommonGoalCard4 extends CommonGoalCard {
     }
 
     public String[] getCommonGoalDescription(){
-        String[] description = new String[7];
+        String[] description = new String[8];
 
         description[0] = "Six groups each containing ";
         description[1] = "at least 2 tiles of the    ";
@@ -116,7 +116,7 @@ public class CommonGoalCard4 extends CommonGoalCard {
         description[4] = "The tiles of one group can ";
         description[5] = "be different from those of ";
         description[6] = "the other square.          ";
-
+        description[7] = "                           ";
         return description;
     }
 
