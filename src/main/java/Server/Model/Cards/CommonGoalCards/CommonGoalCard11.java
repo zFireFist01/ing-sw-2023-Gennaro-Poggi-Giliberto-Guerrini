@@ -9,6 +9,12 @@ public class CommonGoalCard11 extends CommonGoalCard {
     public CommonGoalCard11(int playersNum, boolean secondIstance) {
         super(playersNum, secondIstance);
     }
+
+    /**
+     *
+     * @param bookshelf the bookshelf of the player
+     * @return true if and only if the player has achieved the 11th common goal (5 tiles of the same type in a diagonal)
+     */
     @Override
     public boolean check(Bookshelf bookshelf) {
         BookshelfTileSpot[][] bs = bookshelf.getTileMatrix();
