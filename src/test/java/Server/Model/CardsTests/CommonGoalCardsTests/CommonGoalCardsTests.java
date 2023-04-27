@@ -1721,6 +1721,364 @@ public void CommonGoalCard6_expectedTrue_Test() {
 
         //Every possible false situation is a combination of one or more of these
     }
+
+    /**
+     * This method tests the 11th common goal card in an environment where the check function should return true
+     * @author patrickpoggi
+     */
+    @Test
+    public void CommonGoalCard11_ExpectedTrue_test(){
+        testCard = new CommonGoalCard11(4, false);
+        testBookshelf = new Bookshelf();
+
+        BookshelfTileSpot[][] tbsmat = testBookshelf.getTileMatrix();
+        for(TileType tt : TileType.values()){
+            tbsmat[0][0].setTile(tt);
+            tbsmat[1][1].setTile(tt);
+            tbsmat[2][2].setTile(tt);
+            tbsmat[3][3].setTile(tt);
+            tbsmat[4][4].setTile(tt);
+        }
+        assertTrue(testCard.check(testBookshelf));
+
+        testBookshelf = new Bookshelf();
+        tbsmat = testBookshelf.getTileMatrix();
+        for(TileType tt : TileType.values()){
+            tbsmat[1][0].setTile(tt);
+            tbsmat[2][1].setTile(tt);
+            tbsmat[3][2].setTile(tt);
+            tbsmat[4][3].setTile(tt);
+            tbsmat[5][4].setTile(tt);
+        }
+        assertTrue(testCard.check(testBookshelf));
+
+        testBookshelf = new Bookshelf();
+        tbsmat = testBookshelf.getTileMatrix();
+        for(TileType tt : TileType.values()){
+            tbsmat[0][4].setTile(tt);
+            tbsmat[1][3].setTile(tt);
+            tbsmat[2][2].setTile(tt);
+            tbsmat[3][1].setTile(tt);
+            tbsmat[4][0].setTile(tt);
+        }
+        assertTrue(testCard.check(testBookshelf));
+
+        testBookshelf = new Bookshelf();
+        tbsmat = testBookshelf.getTileMatrix();
+        for(TileType tt : TileType.values()){
+            tbsmat[1][4].setTile(tt);
+            tbsmat[2][3].setTile(tt);
+            tbsmat[3][2].setTile(tt);
+            tbsmat[4][1].setTile(tt);
+            tbsmat[5][0].setTile(tt);
+        }
+        assertTrue(testCard.check(testBookshelf));
+    }
+
+    /**
+     * This method tests the 11th common goal card in an environment where the check function should return false
+     * @author patrickpoggi
+     */
+    @Test
+    public void CommonGoalCard11_expectedFalse_Test(){
+        testCard = new CommonGoalCard11(4, false);
+        testBookshelf = new Bookshelf();
+        BookshelfTileSpot[][] tbsmat = testBookshelf.getTileMatrix();
+
+        for(TileType tt: TileType.values()){
+            TileType tt2;
+            do{
+                tt2 = TileType.randomTileType();
+            }while(tt2 == tt);
+            //First diagonal -- different types
+            tbsmat[0][0].setTile(tt);
+            tbsmat[1][1].setTile(tt2);
+            tbsmat[2][2].setTile(tt2);
+            tbsmat[3][3].setTile(tt2);
+            tbsmat[4][4].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[0][0].setTile(tt2);
+            tbsmat[1][1].setTile(tt);
+            tbsmat[2][2].setTile(tt2);
+            tbsmat[3][3].setTile(tt2);
+            tbsmat[4][4].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[0][0].setTile(tt2);
+            tbsmat[1][1].setTile(tt2);
+            tbsmat[2][2].setTile(tt);
+            tbsmat[3][3].setTile(tt2);
+            tbsmat[4][4].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[0][0].setTile(tt2);
+            tbsmat[1][1].setTile(tt2);
+            tbsmat[2][2].setTile(tt2);
+            tbsmat[3][3].setTile(tt);
+            tbsmat[4][4].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[0][0].setTile(tt2);
+            tbsmat[1][1].setTile(tt2);
+            tbsmat[2][2].setTile(tt2);
+            tbsmat[3][3].setTile(tt2);
+            tbsmat[4][4].setTile(tt);
+            assertFalse(testCard.check(testBookshelf));
+
+            //First diagonal -- one is empty
+            tbsmat[0][0].setEmpty();
+            tbsmat[1][1].setTile(tt2);
+            tbsmat[2][2].setTile(tt2);
+            tbsmat[3][3].setTile(tt2);
+            tbsmat[4][4].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[0][0].setTile(tt2);
+            tbsmat[1][1].setEmpty();
+            tbsmat[2][2].setTile(tt2);
+            tbsmat[3][3].setTile(tt2);
+            tbsmat[4][4].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[0][0].setTile(tt2);
+            tbsmat[1][1].setTile(tt2);
+            tbsmat[2][2].setEmpty();
+            tbsmat[3][3].setTile(tt2);
+            tbsmat[4][4].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[0][0].setTile(tt2);
+            tbsmat[1][1].setTile(tt2);
+            tbsmat[2][2].setTile(tt2);
+            tbsmat[3][3].setEmpty();
+            tbsmat[4][4].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[0][0].setTile(tt2);
+            tbsmat[1][1].setTile(tt2);
+            tbsmat[2][2].setTile(tt2);
+            tbsmat[3][3].setTile(tt2);
+            tbsmat[4][4].setEmpty();
+            assertFalse(testCard.check(testBookshelf));
+
+            //Second diagonal -- different types
+            tbsmat[1][0].setTile(tt);
+            tbsmat[2][1].setTile(tt2);
+            tbsmat[3][2].setTile(tt2);
+            tbsmat[4][3].setTile(tt2);
+            tbsmat[5][4].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[1][0].setTile(tt2);
+            tbsmat[2][1].setTile(tt);
+            tbsmat[3][2].setTile(tt2);
+            tbsmat[4][3].setTile(tt2);
+            tbsmat[5][4].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[1][0].setTile(tt2);
+            tbsmat[2][1].setTile(tt2);
+            tbsmat[3][2].setTile(tt);
+            tbsmat[4][3].setTile(tt2);
+            tbsmat[5][4].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[1][0].setTile(tt2);
+            tbsmat[2][1].setTile(tt2);
+            tbsmat[3][2].setTile(tt2);
+            tbsmat[4][3].setTile(tt);
+            tbsmat[5][4].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[1][0].setTile(tt2);
+            tbsmat[2][1].setTile(tt2);
+            tbsmat[3][2].setTile(tt2);
+            tbsmat[4][3].setTile(tt2);
+            tbsmat[5][4].setTile(tt);
+            assertFalse(testCard.check(testBookshelf));
+
+            //Second diagonal -- one is empty
+            tbsmat[1][0].setEmpty();
+            tbsmat[2][1].setTile(tt2);
+            tbsmat[3][2].setTile(tt2);
+            tbsmat[4][3].setTile(tt2);
+            tbsmat[5][4].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[1][0].setTile(tt2);
+            tbsmat[2][1].setEmpty();
+            tbsmat[3][2].setTile(tt2);
+            tbsmat[4][3].setTile(tt2);
+            tbsmat[5][4].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[1][0].setTile(tt2);
+            tbsmat[2][1].setTile(tt2);
+            tbsmat[3][2].setEmpty();
+            tbsmat[4][3].setTile(tt2);
+            tbsmat[5][4].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[1][0].setTile(tt2);
+            tbsmat[2][1].setTile(tt2);
+            tbsmat[3][2].setTile(tt2);
+            tbsmat[4][3].setEmpty();
+            tbsmat[5][4].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[1][0].setTile(tt2);
+            tbsmat[2][1].setTile(tt2);
+            tbsmat[3][2].setTile(tt2);
+            tbsmat[4][3].setTile(tt2);
+            tbsmat[5][4].setEmpty();
+            assertFalse(testCard.check(testBookshelf));
+
+            //Third diagonal -- different types
+            tbsmat[0][4].setTile(tt);
+            tbsmat[1][3].setTile(tt2);
+            tbsmat[2][2].setTile(tt2);
+            tbsmat[3][1].setTile(tt2);
+            tbsmat[4][0].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[0][4].setTile(tt2);
+            tbsmat[1][3].setTile(tt);
+            tbsmat[2][2].setTile(tt2);
+            tbsmat[3][1].setTile(tt2);
+            tbsmat[4][0].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[0][4].setTile(tt2);
+            tbsmat[1][3].setTile(tt2);
+            tbsmat[2][2].setTile(tt);
+            tbsmat[3][1].setTile(tt2);
+            tbsmat[4][0].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[0][4].setTile(tt2);
+            tbsmat[1][3].setTile(tt2);
+            tbsmat[2][2].setTile(tt2);
+            tbsmat[3][1].setTile(tt);
+            tbsmat[4][0].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[0][4].setTile(tt2);
+            tbsmat[1][3].setTile(tt2);
+            tbsmat[2][2].setTile(tt2);
+            tbsmat[3][1].setTile(tt2);
+            tbsmat[4][0].setTile(tt);
+            assertFalse(testCard.check(testBookshelf));
+
+            //Third diagonal -- one is empty
+            tbsmat[0][4].setEmpty();
+            tbsmat[1][3].setTile(tt2);
+            tbsmat[2][2].setTile(tt2);
+            tbsmat[3][1].setTile(tt2);
+            tbsmat[4][0].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[0][4].setTile(tt2);
+            tbsmat[1][3].setEmpty();
+            tbsmat[2][2].setTile(tt2);
+            tbsmat[3][1].setTile(tt2);
+            tbsmat[4][0].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[0][4].setTile(tt2);
+            tbsmat[1][3].setTile(tt2);
+            tbsmat[2][2].setEmpty();
+            tbsmat[3][1].setTile(tt2);
+            tbsmat[4][0].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[0][4].setTile(tt2);
+            tbsmat[1][3].setTile(tt2);
+            tbsmat[2][2].setTile(tt2);
+            tbsmat[3][1].setEmpty();
+            tbsmat[4][0].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[0][4].setTile(tt2);
+            tbsmat[1][3].setTile(tt2);
+            tbsmat[2][2].setTile(tt2);
+            tbsmat[3][1].setTile(tt2);
+            tbsmat[4][0].setEmpty();
+            assertFalse(testCard.check(testBookshelf));
+
+            //Fourth diagonal -- different types
+            tbsmat[1][4].setTile(tt);
+            tbsmat[2][3].setTile(tt2);
+            tbsmat[3][2].setTile(tt2);
+            tbsmat[4][1].setTile(tt2);
+            tbsmat[5][0].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[1][4].setTile(tt2);
+            tbsmat[2][3].setTile(tt);
+            tbsmat[3][2].setTile(tt2);
+            tbsmat[4][1].setTile(tt2);
+            tbsmat[5][0].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[1][4].setTile(tt2);
+            tbsmat[2][3].setTile(tt2);
+            tbsmat[3][2].setTile(tt);
+            tbsmat[4][1].setTile(tt2);
+            tbsmat[5][0].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[1][4].setTile(tt2);
+            tbsmat[2][3].setTile(tt2);
+            tbsmat[3][2].setTile(tt2);
+            tbsmat[4][1].setTile(tt);
+            tbsmat[5][0].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[1][4].setTile(tt2);
+            tbsmat[2][3].setTile(tt2);
+            tbsmat[3][2].setTile(tt2);
+            tbsmat[4][1].setTile(tt2);
+            tbsmat[5][0].setTile(tt);
+            assertFalse(testCard.check(testBookshelf));
+
+            //Fourth diagonal -- one is empty
+            tbsmat[1][4].setEmpty();
+            tbsmat[2][3].setTile(tt2);
+            tbsmat[3][2].setTile(tt2);
+            tbsmat[4][1].setTile(tt2);
+            tbsmat[5][0].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[1][4].setTile(tt2);
+            tbsmat[2][3].setEmpty();
+            tbsmat[3][2].setTile(tt2);
+            tbsmat[4][1].setTile(tt2);
+            tbsmat[5][0].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[1][4].setTile(tt2);
+            tbsmat[2][3].setTile(tt2);
+            tbsmat[3][2].setEmpty();
+            tbsmat[4][1].setTile(tt2);
+            tbsmat[5][0].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[1][4].setTile(tt2);
+            tbsmat[2][3].setTile(tt2);
+            tbsmat[3][2].setTile(tt2);
+            tbsmat[4][1].setEmpty();
+            tbsmat[5][0].setTile(tt2);
+            assertFalse(testCard.check(testBookshelf));
+
+            tbsmat[1][4].setTile(tt2);
+            tbsmat[2][3].setTile(tt2);
+            tbsmat[3][2].setTile(tt2);
+            tbsmat[4][1].setTile(tt2);
+            tbsmat[5][0].setEmpty();
+            assertFalse(testCard.check(testBookshelf));
+        }
+    }
 }
 
 
