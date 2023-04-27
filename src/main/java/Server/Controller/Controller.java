@@ -84,8 +84,6 @@ public class Controller implements VCEventListener {
         selectedTiles[tmp.length]=coordinates[0];
         selectedTiles[tmp.length+1]=coordinates[1];
         match.setSelectedTiles(selectedTiles);
-
-
     }
 
     private SelectViewEvent onCheckoutTilesEvent(){
@@ -136,8 +134,8 @@ public class Controller implements VCEventListener {
                 }
             }
         }
-
     }
+
     @Override
     public void onVCEvent(VCEvent event) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         String methodName = event.getMethodName();
