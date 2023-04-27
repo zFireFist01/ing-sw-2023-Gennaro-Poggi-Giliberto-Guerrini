@@ -73,6 +73,9 @@ public abstract class CommonGoalCard implements Card {
         }
     }
 
+    public abstract char[][] getCLIRepresentation();
+    public abstract String getDescription();
+
     /**
      * This method returns the points tiles of the common goal card
      * @return the points tiles of the common goal card
