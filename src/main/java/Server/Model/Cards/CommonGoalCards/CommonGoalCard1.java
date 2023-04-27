@@ -104,8 +104,18 @@ public class CommonGoalCard1 extends CommonGoalCard {
         return res;
     }
 
-    public String getDescription(){
-        return "Two groups each containing 4 tiles of the same type in a 2x2 square. The tiles of one square can be different from those of the other square.";
+    public String[] getCommonGoalDescription(){
+        String[] description = new String[7];
+
+        description[0] = "Two groups each containing ";
+        description[1] = "at least 4 tiles of the    ";
+        description[2] = "same type in a 2x2 square. ";
+        description[3] = "The tiles of one square can";
+        description[4] = "be different from those of ";
+        description[5] = "the other square.          ";
+        description[6] = "                           ";
+
+        return description;
     }
 
     /**

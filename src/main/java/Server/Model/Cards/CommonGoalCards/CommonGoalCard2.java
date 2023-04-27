@@ -116,8 +116,19 @@ public class CommonGoalCard2 extends CommonGoalCard {
         return res;
     }
 
-    public String getDescription(){
-        return "Two columns each formed by 6 different types of tiles.";
+    public String[] getCommonGoalDescription(){
+        String[] description = new String[7];
+
+
+        description[0] = "                           ";
+        description[1] = "                           ";
+        description[2] = "Two columns each formed by ";
+        description[3] = "6 different types of tiles.";
+        description[4] = "                           ";
+        description[5] = "                           ";
+        description[6] = "                           ";
+
+        return description;
     }
 
     /**

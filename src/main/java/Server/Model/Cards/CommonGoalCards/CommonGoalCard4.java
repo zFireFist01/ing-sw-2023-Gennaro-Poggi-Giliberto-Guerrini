@@ -75,6 +75,52 @@ public class CommonGoalCard4 extends CommonGoalCard {
         }
 
     }
+
+    public char[][] getCLIRepresentation(){
+        char[][] res = new char[13][15];
+
+        for(int i = 0; i<13; i++){
+            for(int j = 0; j<15; j++){
+                if(j == 0 || j == 14){
+                    res[i][j] = '|';
+                }
+            }
+        }
+
+        res[4][5] = '+';
+        res[4][6] = '-';
+        res[4][7] = '+';
+        res[5][5] = '+';
+        res[5][6] = 'X';
+        res[5][7] = '+';
+        res[6][5] = '+';
+        res[6][6] = '-';
+        res[6][7] = '+';
+        res[7][5] = '+';
+        res[7][6] = 'X';
+        res[7][7] = '+';
+        res[8][5] = '+';
+        res[8][6] = '-';
+        res[8][7] = '+';
+
+        return res;
+    }
+
+    public String[] getCommonGoalDescription(){
+        String[] description = new String[7];
+
+        description[0] = "Six groups each containing ";
+        description[1] = "at least 2 tiles of the    ";
+        description[2] = "same type (not necessarily ";
+        description[3] = "in the depicted shape).    ";
+        description[4] = "The tiles of one group can ";
+        description[5] = "be different from those of ";
+        description[6] = "the other square.          ";
+
+        return description;
+    }
+
+
     /**
      * This method returns the ID of the common goal card
      * @return the ID of the common goal card
@@ -85,3 +131,5 @@ public class CommonGoalCard4 extends CommonGoalCard {
     }
 
 }
+
+

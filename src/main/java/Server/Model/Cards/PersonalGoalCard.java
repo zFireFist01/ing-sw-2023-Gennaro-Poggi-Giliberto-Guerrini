@@ -267,6 +267,30 @@ public enum PersonalGoalCard implements Card {
                 res[9][9] = TileType.FRAMES.getCLIRepresentation()[0][0];
                 res[11][3] = TileType.PLANTS.getCLIRepresentation()[0][0];
             }
+            case TYPE7 -> {
+                res[1][3] = TileType.CATS.getCLIRepresentation()[0][0];
+                res[3][9] = TileType.FRAMES.getCLIRepresentation()[0][0];
+                res[5][5] = TileType.PLANTS.getCLIRepresentation()[0][0];
+                res[7][3] = TileType.TROPHIES.getCLIRepresentation()[0][0];
+                res[9][7] = TileType.GAMES.getCLIRepresentation()[0][0];
+                res[11][11] = TileType.BOOKS.getCLIRepresentation()[0][0];
+            }
+            case TYPE8 -> {
+                res[1][11] = TileType.FRAMES.getCLIRepresentation()[0][0];
+                res[3][5] = TileType.CATS.getCLIRepresentation()[0][0];
+                res[5][7] = TileType.TROPHIES.getCLIRepresentation()[0][0];
+                res[7][3] = TileType.PLANTS.getCLIRepresentation()[0][0];
+                res[9][9] = TileType.BOOKS.getCLIRepresentation()[0][0];
+                res[11][9] = TileType.GAMES.getCLIRepresentation()[0][0];
+            }
+            case TYPE9 -> {
+                res[1][7] = TileType.GAMES.getCLIRepresentation()[0][0];
+                res[5][7] = TileType.CATS.getCLIRepresentation()[0][0];
+                res[7][11] = TileType.BOOKS.getCLIRepresentation()[0][0];
+                res[9][5] = TileType.TROPHIES.getCLIRepresentation()[0][0];
+                res[9][11] = TileType.PLANTS.getCLIRepresentation()[0][0];
+                res[11][3] = TileType.FRAMES.getCLIRepresentation()[0][0];
+            }
         }
 
         return res;
