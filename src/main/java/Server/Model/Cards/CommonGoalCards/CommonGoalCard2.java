@@ -116,6 +116,7 @@ public class CommonGoalCard2 extends CommonGoalCard {
         return res;
     }
 
+    @Override
     public String[] getCommonGoalDescription(){
         String[] description = new String[8];
 
@@ -131,6 +132,7 @@ public class CommonGoalCard2 extends CommonGoalCard {
         return description;
     }
 
+    @Override
     public String getDescription(){
         return "Two columns each formed by 6 different types of tiles.";
     }

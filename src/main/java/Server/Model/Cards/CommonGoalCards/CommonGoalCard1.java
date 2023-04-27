@@ -64,6 +64,7 @@ public class CommonGoalCard1 extends CommonGoalCard {
         return false;
     }
 
+    @Override
     public char[][] getCLIRepresentation(){
         char[][] res  = new char[13][15];
         res[0][0] = '|';
@@ -104,6 +105,7 @@ public class CommonGoalCard1 extends CommonGoalCard {
         return res;
     }
 
+    @Override
     public String[] getCommonGoalDescription(){
         String[] description = new String[8];
 
@@ -118,6 +120,7 @@ public class CommonGoalCard1 extends CommonGoalCard {
         return description;
     }
 
+    @Override
     public String getDescription(){
         return "Two groups each containing at least 4 tiles of the same type in a 2x2 square. The tiles of one square can be different from those of the other square";
     }

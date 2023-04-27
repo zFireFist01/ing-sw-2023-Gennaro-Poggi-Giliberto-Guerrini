@@ -76,6 +76,7 @@ public class CommonGoalCard4 extends CommonGoalCard {
 
     }
 
+    @Override
     public char[][] getCLIRepresentation(){
         char[][] res = new char[13][15];
 
@@ -106,6 +107,7 @@ public class CommonGoalCard4 extends CommonGoalCard {
         return res;
     }
 
+    @Override
     public String[] getCommonGoalDescription(){
         String[] description = new String[8];
 
