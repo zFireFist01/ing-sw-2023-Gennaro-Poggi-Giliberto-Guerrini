@@ -71,7 +71,7 @@ public class Controller implements VCEventListener {
     }
 
     private SelectViewEvent onSelectColumnEvent(int column){
-        // TODO implement here
+        
     }
 
     private void onClickOnTileEvent(int[] coordinates){
