@@ -34,6 +34,10 @@ public class Player {
     public void setTakenTiles(TileType[] takenTiles) {
         this.takenTiles = takenTiles;
     }
+
+    public TileType[] getTakenTiles(){
+        return this.takenTiles;
+    }
     public void clearTakenTiles() {
         this.takenTiles = null;
     }
