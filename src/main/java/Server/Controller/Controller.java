@@ -4,6 +4,7 @@ import Server.Events.SelectViewEvents.*;
 import Server.Listeners.VCEventListener;
 import Server.Model.Chat.Message;
 import Server.Model.GameItems.LivingRoom;
+import Server.Model.GameItems.LivingRoomTileSpot;
 import Server.Model.GameItems.TileType;
 import Server.Model.Match;
 import Server.Events.VCEvents.VCEvent;
@@ -13,6 +14,7 @@ import Utils.MathUtils.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -74,15 +76,65 @@ public class Controller implements VCEventListener {
         // TODO implement here
     }
 
+    /**
+     * Method to manage the selected tile event, the selected tiles are added to the match if there is space for them
+     * @param coordinates
+     * @author Valentino Guerrini
+     */
+
     private void onClickOnTileEvent(int[] coordinates){
         int[] tmp,selectedTiles;
+        boolean flag=false;
+        int playernumber = match.getNumberOfPlayers();
         tmp=match.getSelectedTiles();
-        selectedTiles = new int[tmp.length+2];
-        for(int i=0;i<tmp.length;i++){
-            selectedTiles[i]=tmp[i];
+
+        LivingRoomTileSpot[][] livingRoomTileSpots = match.getLivingRoom().getTileMatrix();
+
+        //verifies if the tile in that position is selectable
+
+        if(livingRoomTileSpots[coordinates[0]][coordinates[1]].getDotsNumber()==-1){
+            return;
+        }else if(playernumber==2 && livingRoomTileSpots[coordinates[0]][coordinates[1]].getDotsNumber()>=3) {
+            return;
+        }else if(playernumber==3 && livingRoomTileSpots[coordinates[0]][coordinates[1]].getDotsNumber()>=4) {
+            return;
         }
-        selectedTiles[tmp.length]=coordinates[0];
-        selectedTiles[tmp.length+1]=coordinates[1];
+
+        //check if the tile is already selected in if it is the coordinates are setted to -1
+
+
+        for(int i=0;i<tmp.length;i+=2){
+            if(tmp[i]== coordinates[0] && tmp[i+1]==coordinates[1]){
+                tmp[i]=-1;
+                tmp[i+1]=-1;
+                flag=true;
+            }
+        }
+        //if the tile is already selected it is removed from the selected tiles array else it is added
+
+
+        if(flag){
+            selectedTiles=new int[tmp.length-2];
+            int j=0;
+            for(int i=0;i<tmp.length;i++){
+                if(tmp[i]!=-1){
+                    selectedTiles[j]=tmp[i];
+                    j++;
+                }
+            }
+        }else if(tmp.length <6){
+            selectedTiles=new int[tmp.length+2];
+            for(int i=0;i<tmp.length;i++){
+                selectedTiles[i]=tmp[i];
+            }
+            selectedTiles[tmp.length]=coordinates[0];
+            selectedTiles[tmp.length+1]=coordinates[1];
+        }else{
+            selectedTiles=new int[tmp.length];
+            for(int i=0;i<tmp.length;i++){
+                selectedTiles[i]=tmp[i];
+            }
+        }
         match.setSelectedTiles(selectedTiles);
 
 
