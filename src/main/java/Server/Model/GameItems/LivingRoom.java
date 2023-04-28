@@ -1,12 +1,12 @@
 package Server.Model.GameItems;
 
 import Server.Model.Match;
-import static Utils.MathUtils.*;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+
+import static Utils.MathUtils.*;
 
 
 /**
@@ -270,6 +270,54 @@ public class LivingRoom {
             }
         }
         return false;
+    }
+
+    /**
+     * this method returns CLIRepresentation of the LivingRoom
+     * @return a matrix of char that represents the LivingRoom
+     * @author martagiliberto
+     */
+    public char[][] getCLIRepresentation(){
+        char[][] res= new char[20][39];
+
+        res[1][0]='i';
+        res[3][0]='h';
+        res[5][0]='g';
+        res[7][0]='f';
+        res[9][0]='e';
+        res[11][0]='d';
+        res[13][0]='c';
+        res[15][0]='b';
+        res[17][0]='a';
+
+        res[19][4]='0';
+        res[19][8]='1';
+        res[19][12]='2';
+        res[19][16]='3';
+        res[19][20]='4';
+        res[19][24]='5';
+        res[19][28]='6';
+        res[19][32]='7';
+        res[19][36]='8';
+
+        for(int i=0; i<19; i++){
+            for(int j=2; j<39; j++){
+                if(i%2==0){
+                    if(j==2||j==6||j==10||j==14||j==18||j==22||j==26||j==30||j==34||j==38){
+                        res[i][j]='+';
+                    }else{
+                        res[i][j]='-';
+                    }
+
+                }else{
+                    if(j==2||j==6||j==10||j==14||j==18||j==22||j==26||j==30||j==34||j==38) {
+                        res[i][j] = '|';
+                    }
+                }
+            }
+        }
+
+        return res;
     }
 
 }

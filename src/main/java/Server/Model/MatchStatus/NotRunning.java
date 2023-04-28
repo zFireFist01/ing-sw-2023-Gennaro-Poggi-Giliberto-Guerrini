@@ -7,8 +7,5 @@ public class NotRunning extends MatchStatus{
         return new WaitingForPlayers();
     }
 
-
-    public void devolve(){
-
-    }
+    public void devolve(){}
 }

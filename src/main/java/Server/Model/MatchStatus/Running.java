@@ -16,8 +16,6 @@ public class Running extends MatchStatus {
         return new Closing();
     }
 
-    public void devolve(){
-
-    }
+    public void devolve(){}
 
 }

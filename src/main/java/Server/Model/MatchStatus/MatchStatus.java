@@ -8,10 +8,14 @@ public abstract class MatchStatus {
 
     /**
      * this method evolve the status of the match to a new status
-     * @return MatchStatus
-     * @throws UnsupportedOperationException
+     * @return the new MatchStatus of the match
+     * @throws UnsupportedOperationException if MatchStatus can't evolve
+     * @author martagiliberto
      */
      public abstract MatchStatus evolve() throws UnsupportedOperationException;
 
-    public abstract void devolve() throws UnsupportedOperationException;
+    /**
+     * @author martagiliberto
+     */
+    public abstract void devolve();
 }
