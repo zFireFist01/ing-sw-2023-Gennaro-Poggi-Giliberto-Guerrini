@@ -1,6 +1,5 @@
 package Server.Model.Cards;
 
-import Server.Model.GameItems.Bookshelf;
 import Server.Model.GameItems.BookshelfTileSpot;
 import Server.Model.GameItems.TileType;
 
@@ -290,6 +289,30 @@ public enum PersonalGoalCard implements Card {
                 res[9][5] = TileType.TROPHIES.getCLIRepresentation()[0][0];
                 res[9][11] = TileType.PLANTS.getCLIRepresentation()[0][0];
                 res[11][3] = TileType.FRAMES.getCLIRepresentation()[0][0];
+            }
+            case TYPE10 -> {
+                res[5][3] = TileType.BOOKS.getCLIRepresentation()[0][0];
+                res[9][5] = TileType.FRAMES.getCLIRepresentation()[0][0];
+                res[3][5] = TileType.GAMES.getCLIRepresentation()[0][0];
+                res[11][9] = TileType.PLANTS.getCLIRepresentation()[0][0];
+                res[7][9] = TileType.CATS.getCLIRepresentation()[0][0];
+                res[1][11] = TileType.TROPHIES.getCLIRepresentation()[0][0];
+            }
+            case TYPE11 -> {
+                res[5][3] = TileType.GAMES.getCLIRepresentation()[0][0];
+                res[3][5] = TileType.BOOKS.getCLIRepresentation()[0][0];
+                res[7][7] = TileType.FRAMES.getCLIRepresentation()[0][0];
+                res[1][7] = TileType.PLANTS.getCLIRepresentation()[0][0];
+                res[11][9] = TileType.TROPHIES.getCLIRepresentation()[0][0];
+                res[9][11] = TileType.CATS.getCLIRepresentation()[0][0];
+            }
+            case TYPE12 -> {
+                res[11][3] = TileType.CATS.getCLIRepresentation()[0][0];
+                res[3][5] = TileType.PLANTS.getCLIRepresentation()[0][0];
+                res[5][7] = TileType.FRAMES.getCLIRepresentation()[0][0];
+                res[1][7] = TileType.BOOKS.getCLIRepresentation()[0][0];
+                res[7][9] = TileType.TROPHIES.getCLIRepresentation()[0][0];
+                res[9][11] = TileType.BOOKS.getCLIRepresentation()[0][0];
             }
         }
 

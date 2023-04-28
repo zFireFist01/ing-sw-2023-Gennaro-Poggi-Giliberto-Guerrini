@@ -75,6 +75,11 @@ public class CommonGoalCard12 extends CommonGoalCard {
         return 12;
     }
 
+    /**
+     * this method returns the CLI representation of CommonGoalCard12
+     * @return a matrix of char that represents the CommonGoalCard12
+     * @author martagiliberto
+     */
     @Override
     public char[][] getCLIRepresentation(){
         char[][] res = new char[13][15];
@@ -105,11 +110,20 @@ public class CommonGoalCard12 extends CommonGoalCard {
         return res;
     }
 
+    /**
+     * @return a string that describes CommonGoalCard12
+     * @author martagiliberto
+     */
     @Override
     public String getDescription(){
         return "Five columns of increasing or decreasing height. Starting from the first column on the left or on the right, each next column must be made of exactly one more tile.Tiles can be of any type.";
     }
 
+    /**
+     * this method returns a CLI representation of CommonGoalCard12's description
+     * @return the String[] "matrix" of the representation
+     * @author martagiliberto
+     */
     @Override
     public String[] getCommonGoalDescription(){
         String[] description = new String[8];

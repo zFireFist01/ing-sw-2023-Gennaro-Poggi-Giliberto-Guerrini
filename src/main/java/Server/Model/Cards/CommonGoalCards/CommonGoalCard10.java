@@ -41,4 +41,77 @@ public class CommonGoalCard10 extends CommonGoalCard {
     public int getCardID() {
         return 10;
     }
+
+    /**
+     * this method return the CLI representation of CommonGoalCard10
+     * @return a matrix of char that represents the CommonGoalCard10
+     * @author martagiliberto
+     */
+    @Override
+    public char[][] getCLIRepresentation() {
+        char[][] res = new char[13][15];
+        for(int i=0; i<13; i++){
+            res[i][0]=  '|';
+            res[i][14]= '|';
+        }
+
+        res[3][6]='+';
+        res[3][8]='+';
+        res[5][4]='+';
+        res[5][6]='+';
+        res[5][8]='+';
+        res[5][10]='+';
+        res[7][4]='+';
+        res[7][6]='+';
+        res[7][8]='+';
+        res[7][10]='+';
+        res[9][6]='+';
+        res[9][8]='+';
+
+        res[3][7]='-';
+        res[5][5]='-';
+        res[5][7]='-';
+        res[5][9]='-';
+        res[7][5]='-';
+        res[7][7]='-';
+        res[7][9]='-';
+        res[9][7]='-';
+
+        res[4][7]='=';
+        res[6][5]='=';
+        res[6][7]='=';
+        res[6][9]='=';
+        res[8][7]='=';
+
+        return res;
+    }
+
+    /**
+     * @return a string that describes CommonGoalCard10
+     * @author martagiliberto
+     */
+    @Override
+    public String getDescription() {
+        return "Five tiles of the same type forming an X.";
+    }
+
+    /**
+     * this method returns a CLI representation of CommonGoalCard10's description
+     * @return the String[] "matrix" of the representation
+     * @author martagiliberto
+     */
+    @Override
+    public String[] getCommonGoalDescription(){
+        String[] description = new String[8];
+
+        description[0] = "Five tiles of the same type";
+        description[1] = "forming an X.              ";
+        description[2] = "                           ";
+        description[3] = "                           ";
+        description[4] = "                           ";
+        description[5] = "                           ";
+        description[6] = "                           ";
+        description[7] = "                           ";
+        return description;
+    }
 }

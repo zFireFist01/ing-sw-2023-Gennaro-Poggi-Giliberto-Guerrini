@@ -18,9 +18,7 @@ public class Closing extends MatchStatus {
         return null;
     }
 
-    public void devolve(){
-
-    }
+    public void devolve(){}
 
     public String getReasonClosing(){
         return closedBecause;

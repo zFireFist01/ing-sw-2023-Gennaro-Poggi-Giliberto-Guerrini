@@ -18,7 +18,7 @@ public enum TileType{
     }
 
     /**
-     * This method is used fromn the CLI to obtain a printable represention of this object
+     * This method is used from the CLI to obtain a printable representation of this object
      * @return the char matrix that represents a "drawing" of this object
      */
     public char[][] getCLIRepresentation(){
