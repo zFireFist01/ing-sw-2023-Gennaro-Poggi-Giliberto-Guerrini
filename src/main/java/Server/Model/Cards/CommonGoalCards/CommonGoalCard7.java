@@ -5,7 +5,6 @@ import Server.Model.GameItems.Bookshelf;
 import Server.Model.GameItems.BookshelfTileSpot;
 import Server.Model.GameItems.TileType;
 
-import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -47,6 +46,111 @@ public class CommonGoalCard7 extends CommonGoalCard {
         }
         return rowsFitting >= 4;
     }
+
+    /**
+     * This method returns a CLI representation (ASCII-art like) of the 7th common goal card
+     * @return the char[][] matrix of the representation
+     * @author patrickpoggi
+     */
+    @Override
+    public char[][] getCLIRepresentation() {
+        char[][] res  = new char[13][15];
+        res[0][0] = '|';
+        res[0][14] = '|';
+        res[12][0] = '|';
+        res[12][14] = '|';
+        for(int i=0;i<13;i++){
+            res[i][1] = ' ';
+            res[i][13] = ' ';
+        }
+        for(int i=0;i<13;i++){
+            for(int j=2;j<13;j++){
+                if(i%2 == 0){
+                    if(j%2 == 0){
+                        res[i][j] = '+';
+                    }else{
+                        res[i][j] = '-';
+                    }
+                }else{
+                    if(j%2 == 0){
+                        res[i][j] = '|';
+                    }else{
+                        res[i][j] = ' ';
+                    }
+                }
+            }
+        }
+
+        res[1][3] = 'C';
+        res[1][5] = 'C';
+        res[1][7] = 'C';
+        res[1][9] = 'C';
+        res[1][11] = 'C';
+
+        res[3][3] = 'B';
+        res[3][5] = 'B';
+        res[3][7] = 'B';
+        res[3][9] = 'B';
+        res[3][11] = 'B';
+
+        res[5][3] = ' ';
+        res[5][3] = ' ';
+        res[5][3] = ' ';
+        res[5][3] = ' ';
+        res[5][3] = ' ';
+
+        res[7][3] = 'T';
+        res[7][5] = 'T';
+        res[7][7] = 'T';
+        res[7][9] = 'T';
+        res[7][11] = 'T';
+
+        res[9][3] = ' ';
+        res[9][3] = ' ';
+        res[9][3] = ' ';
+        res[9][3] = ' ';
+        res[9][3] = ' ';
+
+        res[11][3] = 'C';
+        res[11][5] = 'C';
+        res[11][7] = 'C';
+        res[11][9] = 'C';
+        res[11][11] = 'C';
+
+        return res;
+    }
+
+    /**
+     * This method returns a CLI representation (ASCII-art like) of the 7th common goal card's description
+     * @return the String[] "matrix" of the representation
+     * @author patrickpoggi
+     */
+    @Override
+    public String[] getCommonGoalDescription() {
+        String[] description = new String[8];
+
+        description[0] = "Four lines each formed by 5";
+        description[1] = "tiles of maximum three dif-";
+        description[2] = "ferent types. One line can ";
+        description[3] = "show the same or a         ";
+        description[4] = "different combination of   ";
+        description[5] = "another line               ";
+        description[6] = "                           ";
+        description[7] = "                           ";
+
+        return description;
+    }
+
+    /**
+     * @return a string that describes the 7th common goal
+     * @author patrickpoggi
+     */
+    @Override
+    public String getDescription() {
+        return "Four lines each formed by 5 tiles of maximum three different types. One line can show the same or " +
+                "a different combination of another line";
+    }
+
     /**
      * This method returns the ID of the common goal card
      * @return the ID of the common goal card

@@ -83,4 +83,72 @@ public class CommonGoalCard5 extends CommonGoalCard {
     public int getCardID() {
         return 5;
     }
+
+
+    public char[][] getCLIRepresentation() {
+        char[][] res = new char[13][15];
+
+        for(int i = 0; i<13; i++){
+            for(int j = 0; j<15; j++){
+                if(j ==0 || j == 14){
+                    res[i][j] = '|';
+                }
+            }
+        }
+
+        res[0][5] = '+';
+        res[0][6] = '-';
+        res[0][7] = '+';
+        res[1][5] = '+';
+        res[1][7] = '+';
+        res[2][5] = '+';
+        res[2][6] = '-';
+        res[2][7] = '+';
+        res[3][5] = '+';
+        res[3][7] = '+';
+        res[4][5] = '+';
+        res[4][6] = '-';
+        res[4][7] = '+';
+        res[5][5] = '+';
+        res[5][7] = '+';
+        res[6][5] = '+';
+        res[6][6] = '-';
+        res[6][7] = '+';
+        res[7][5] = '+';
+        res[7][7] = '+';
+        res[8][5] = '+';
+        res[8][6] = '-';
+        res[8][7] = '+';
+        res[9][5] = '+';
+        res[9][7] = '+';
+        res[10][5] = '+';
+        res[10][6] = '-';
+        res[10][7] = '+';
+        res[11][5] = '+';
+        res[11][7] = '+';
+        res[12][5] = '+';
+        res[12][6] = '-';
+        res[12][7] = '+';
+
+        return res;
+    }
+
+    public String[] getCommonGoalDescription(){
+        String[] description = new String[8];
+
+        description[0] = "Three columns each formed  ";
+        description[1] = "by 6 tiles of maximum three";
+        description[2] = "different types. One column";
+        description[3] = "can show the same or a     ";
+        description[4] = "different combination of   ";
+        description[5] = "another column.            ";
+        description[6] = "                           ";
+        description[7] = "                           ";
+        return description;
+    }
+
+
 }
+
+
+

@@ -1,7 +1,6 @@
 package Server.Model.Cards;
 
 import Server.Model.GameItems.Bookshelf;
-import Server.Model.Cards.Card;
 import Server.Model.GameItems.PointsTile;
 
 import java.util.ArrayList;
@@ -76,6 +75,8 @@ public abstract class CommonGoalCard implements Card {
     public abstract char[][] getCLIRepresentation();
     public abstract String getDescription();
 
+    public abstract String[] getCommonGoalDescription();
+
     /**
      * This method returns the points tiles of the common goal card
      * @return the points tiles of the common goal card
@@ -101,5 +102,5 @@ public abstract class CommonGoalCard implements Card {
      * @param bookshelf the bookshelf of the player
      * @return true if the common goal card is completed, false otherwise
      */
-   abstract public boolean check(Bookshelf bookshelf);
+    public abstract boolean check(Bookshelf bookshelf);
 }

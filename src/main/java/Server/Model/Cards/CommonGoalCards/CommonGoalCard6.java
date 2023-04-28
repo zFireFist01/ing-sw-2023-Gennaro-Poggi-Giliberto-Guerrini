@@ -70,4 +70,64 @@ public class CommonGoalCard6 extends CommonGoalCard {
     public int getCardID() {
         return 6;
     }
+
+
+    @Override
+    public char[][] getCLIRepresentation() {
+        char[][] res = new char[13][15];
+
+        for(int i = 0; i<13; i++){
+            for(int j = 0; j<15; j++){
+                if(j ==0 || j == 14){
+                    res[i][j] = '|';
+                }
+            }
+        }
+        res[4][2] = '+';
+        res[4][3] = '-';
+        res[4][4] = '+';
+        res[4][5] = '-';
+        res[4][6] = '+';
+        res[4][7] = '-';
+        res[4][8] = '+';
+        res[4][9] = '-';
+        res[4][10] = '+';
+        res[4][11] = '-';
+        res[4][12] = '+';
+        res[5][2] = '|';
+        res[5][4] = '|';
+        res[5][6] = '|';
+        res[5][8] = '|';
+        res[5][10] = '|';
+        res[5][12] = '|';
+        res[6][2] = '+';
+        res[6][3] = '-';
+        res[6][4] = '+';
+        res[6][5] = '-';
+        res[6][6] = '+';
+        res[6][7] = '-';
+        res[6][8] = '+';
+        res[6][9] = '-';
+        res[6][10] = '+';
+        res[6][11] = '-';
+        res[6][12] = '+';
+
+        return res;
+    }
+
+    public String[] getCommonGoalDescription(){
+        String[] description = new String[8];
+
+        description[0] = "Two lines each formed by 5 ";
+        description[1] = "different types of tiles.  ";
+        description[2] = "One line can show the same ";
+        description[3] = "or a different combination ";
+        description[4] = "of the other line          ";
+        description[5] = "                           ";
+        description[6] = "                           ";
+        description[7] = "                           ";
+        return description;
+    }
+
+
 }

@@ -6,4 +6,9 @@ public class NotRunning extends MatchStatus{
     public MatchStatus evolve() throws UnsupportedOperationException {
         return new WaitingForPlayers();
     }
+
+
+    public void devolve(){
+
+    }
 }

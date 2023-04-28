@@ -118,8 +118,24 @@ public class CommonGoalCard3 extends CommonGoalCard {
         return res;
     }
 
+    @Override
+    public String[] getCommonGoalDescription(){
+        String[] description = new String[8];
+
+        description[0] = "Four groups each containing";
+        description[1] = "at least 4 tiles of the    ";
+        description[2] = "same type (not necessarily ";
+        description[3] = "in the depicted shape).    ";
+        description[4] = "The tiles of one group can ";
+        description[5] = "be different from those of ";
+        description[6] = "another group.             ";
+        description[7] = "                           ";
+        return description;
+    }
+
+    @Override
     public String getDescription(){
-        return "Four groups each containing at least  4 tiles of the same type (not necessarily in the depicted shape). The tiles of one group can be different from those of another group.";
+        return "Four groups each containing at least 4 tiles of the same type (not necessarily in the depicted shape). The tiles of one group can be different from those of another group.";
     }
 
     /**

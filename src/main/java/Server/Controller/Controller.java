@@ -136,8 +136,6 @@ public class Controller implements VCEventListener {
             }
         }
         match.setSelectedTiles(selectedTiles);
-
-
     }
 
     private SelectViewEvent onCheckoutTilesEvent(){
@@ -188,8 +186,8 @@ public class Controller implements VCEventListener {
                 }
             }
         }
-
     }
+
     @Override
     public void onVCEvent(VCEvent event) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         String methodName = event.getMethodName();

@@ -11,16 +11,19 @@ public class Closing extends MatchStatus {
     /**
      * this method ended the match
      * @return null
-     * @throws UnsupportedOperationException
+     * @throws UnsupportedOperationException if MatchStatus can't evolve
      */
     @Override
     public MatchStatus evolve() throws UnsupportedOperationException {
-
         return null;
     }
 
+    public void devolve(){
+
+    }
 
     public String getReasonClosing(){
         return closedBecause;
     }
+
 }

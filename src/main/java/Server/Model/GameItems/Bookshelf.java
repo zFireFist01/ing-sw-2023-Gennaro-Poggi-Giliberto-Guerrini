@@ -72,4 +72,37 @@ public class Bookshelf {
     public int getBookshelfHeight(){
         return BOOKSHELFHEIGHT;
     }
+
+    public char[][] getCLIRepresentation(){
+        char[][] res = new char[14][21];
+
+
+        for(int i = 0; i<13; i++){
+            for(int j = 0; j<21; j++){
+                if(i%2 == 0){
+                    if(j%4 == 0){
+                        res[i][j] = '+';
+                    }else{
+                        res[i][j] = '-';
+                    }
+                }else{
+                    if(j%4 == 0){
+                        res[i][j] = '|';
+                    }else{
+                        res[i][j] = ' ';
+                    }
+                }
+            }
+        }
+
+        res[13][2] = '0';
+        res[13][6] = '1';
+        res[13][10] = '2';
+        res[13][14] = '3';
+        res[13][18] = '4';
+
+
+        return res;
+    }
+
 }
