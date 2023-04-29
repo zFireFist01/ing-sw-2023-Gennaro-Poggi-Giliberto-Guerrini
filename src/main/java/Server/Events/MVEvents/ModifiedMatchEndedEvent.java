@@ -1,5 +1,7 @@
 package Server.Events.MVEvents;
 
+import Server.Model.LightMatch;
+
 public class ModifiedMatchEndedEvent extends MVEvent{
     private final String methodName;
     private final LightMatch match;

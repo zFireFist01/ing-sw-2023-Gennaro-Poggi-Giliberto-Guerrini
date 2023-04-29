@@ -1,5 +1,7 @@
 package Server.Events.MVEvents;
 
+import Server.Model.LightMatch;
+
 public abstract class MVEvent {
     private String methodName;
     private LightMatch match;

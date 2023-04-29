@@ -26,6 +26,19 @@ import java.util.Random;
 public class Match {
     private ArrayList<Player> players;
     private PlayersChat gameChat;
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public Player getWinner() {
+        return winner;
+    }
+
     private ArrayList<Integer> selectedTiles;
     private int width;
     private int height;

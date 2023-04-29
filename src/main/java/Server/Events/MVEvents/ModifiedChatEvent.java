@@ -2,12 +2,12 @@ package Server.Events.MVEvents;
 
 import Server.Model.LightMatch;
 
-public class ModifiedPointsEvent extends MVEvent{
+public class ModifiedChatEvent extends MVEvent{
     private final String methodName;
     private final LightMatch match;
 
-    public ModifiedPointsEvent(LightMatch match){
-        this.methodName = "onModifiedPointsEvent";
+    public ModifiedChatEvent(LightMatch match){
+        this.methodName = "onModifiedChatEvent";
         this.match = match;
     }
 
@@ -21,6 +21,6 @@ public class ModifiedPointsEvent extends MVEvent{
 
     @Override
     public String getType() {
-        return "ModifiedPointsEvent";
+        return "ModifiedChatEvent";
     }
 }
