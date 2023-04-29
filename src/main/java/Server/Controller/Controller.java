@@ -2,6 +2,8 @@ package Server.Controller;
 
 import Server.Events.SelectViewEvents.*;
 
+import Server.Listeners.SelectViewEventListener;
+
 import Server.Listeners.VCEventListener;
 import Server.Model.Chat.Message;
 import Server.Model.GameItems.LivingRoom;
@@ -11,6 +13,7 @@ import Server.Model.GameItems.TileType;
 import Server.Model.Match;
 import Server.Events.VCEvents.VCEvent;
 import Server.Model.Player.Player;
+import Server.Network.Server;
 import Server.Network.VirtualView;
 import Utils.MathUtils.*;
 
@@ -30,7 +33,7 @@ public class Controller implements VCEventListener {
     private VirtualView currentPlayerView;
     private final Map<Integer,VirtualView > PlayerViews=new HashMap<>();
 
-
+    private List<SelectViewEventListener> selectViewEventListeners;
 
 
 
@@ -42,9 +45,8 @@ public class Controller implements VCEventListener {
 
     public Controller(Match match){
         this.match = match;
+        selectViewEventListeners = new ArrayList<>();
     }
-
-
 
     /**
      * Method to manage the login event, if there is a player with the same nickname, the login is not possible so
@@ -54,6 +56,7 @@ public class Controller implements VCEventListener {
      */
 
     private void onLoginEvent(String nickname){
+
         ArrayList<Player> players = match.getPlayers();
         for(Player player : players){
             if(player.getPlayerID()==nickname.hashCode()) {
@@ -75,7 +78,6 @@ public class Controller implements VCEventListener {
 
     }
 
-
     /**
      *Method to manage the OpenChat event, it returns a ViewType event with the chat open
      * @author ValentinoGuerrini
@@ -83,7 +85,6 @@ public class Controller implements VCEventListener {
     private void onOpenChatEvent(){
         currentPlayerView.send(new SelectViewEvent(new ChatONView()));
     }
-
 
     /**
      *Method to manage the CloseChat event, it returns a ViewType event with the chat closed
@@ -101,7 +102,6 @@ public class Controller implements VCEventListener {
     private void onSendMessageEvent(Message message){
         match.getGameChat().addMessage(message);
     }
-
 
     /**
      * Method to manage the select column event, it adds the selectedTiles of the current player
@@ -163,7 +163,6 @@ public class Controller implements VCEventListener {
                                 PlayerViews.get(match.getPlayers().get(i).getPlayerID()).send(new SelectViewEvent(new EndedMatchVIew()));
                             }
 
-
                         }else{
                             currentPlayerView.send(new SelectViewEvent(new GameView()));
                             currentPlayerView = PlayerViews.get(currentPlayer.getNextPlayer().getPlayerID());
@@ -209,6 +208,7 @@ public class Controller implements VCEventListener {
         } catch (IndexOutOfBoundsException e){
 
             currentPlayerView.send(new SelectViewEvent(new InsertingTilesGameView( "This column does not exists!")));
+
         }
     }
 
@@ -218,7 +218,9 @@ public class Controller implements VCEventListener {
      * @author ValentinoGuerrini
      */
 
+
     private void onClickOnTileEvent(int[] coordinates){
+
         int[] tmp,selectedTiles;
         boolean flag=false;
         int playernumber = match.getNumberOfPlayers();
@@ -273,7 +275,6 @@ public class Controller implements VCEventListener {
         }
         match.setSelectedTiles(selectedTiles);
     }
-
 
     /**
      * Method to manage the checkout tiles event, it returns a ViewType event depending on the position of the tiles selected
@@ -346,7 +347,6 @@ public class Controller implements VCEventListener {
      * @throws InvocationTargetException if the method called throws an exception
      * @throws IllegalAccessException if the method called is not accessible
      */
-
     @Override
     public void onVCEvent(VCEvent event, VirtualView view) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         String methodName = event.getMethodName();
@@ -380,8 +380,12 @@ public class Controller implements VCEventListener {
 
     }
 
+    public void addSelectViewEventListener(SelectViewEventListener listener){
+        selectViewEventListeners.add(listener);
+    }
 
-
-
+    public void removeSelectViewEventListener(SelectViewEventListener listener){
+        selectViewEventListeners.remove(listener);
+    }
 
 }

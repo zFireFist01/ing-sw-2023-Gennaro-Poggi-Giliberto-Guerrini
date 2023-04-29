@@ -1,5 +1,6 @@
 package Server.Model;
 
+import Server.Listeners.MVEventListener;
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Cards.PersonalGoalCard;
 import Server.Model.Chat.PlayersChat;
@@ -13,10 +14,7 @@ import Server.Model.MatchStatus.MatchStatus;
 import Server.Model.Player.Player;
 
 import java.sql.Time;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 
 /**
@@ -46,6 +44,8 @@ public class Match {
 
     private int count=0;
 
+    private List<MVEventListener> mvEventListeners;
+
     public Match(int numberOfPlayers, Player matchOpener) {
         this.gameChat = new PlayersChat();
         this.numberOfPlayers = numberOfPlayers;
@@ -60,6 +60,7 @@ public class Match {
         this.width= matchOpener.getBookshelf().getBookshelfWidth();
         this.height=matchOpener.getBookshelf().getBookshelfHeight();
         this.firstToFinish = null;
+        this.mvEventListeners = new ArrayList<>();
     }
 
     public PlayersChat getGameChat() {
@@ -401,4 +402,11 @@ public class Match {
         }
     }
 
+    public void addMVEventListener(MVEventListener listener){
+        this.mvEventListeners.add(listener);
+    }
+
+    public void removeMVEventListener(MVEventListener listener){
+        this.mvEventListeners.remove(listener);
+    }
 }
