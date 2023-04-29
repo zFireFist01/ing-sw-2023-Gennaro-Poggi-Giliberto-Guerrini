@@ -2,6 +2,10 @@ package Server.Events.MVEvents;
 
 import Server.Model.LightMatch;
 
+/**
+ * This event is used to notify the client that a bookshelf has been modified.
+ * @author Paolo Gennaro
+ */
 public class ModifiedBookshelfEvent extends MVEvent{
     private final String methodName;
     private final LightMatch match;
