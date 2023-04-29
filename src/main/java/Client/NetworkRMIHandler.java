@@ -1,5 +1,9 @@
 package Client;
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> 48fd7eabb0a886931093c2b6aae59223e5906ca2
 import Client.View.View;
 import Server.Events.Event;
 import Server.Events.MVEvents.MVEvent;
