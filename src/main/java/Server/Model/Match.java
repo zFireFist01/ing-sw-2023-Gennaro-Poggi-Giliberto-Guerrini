@@ -11,6 +11,7 @@ import Server.Model.GameItems.LivingRoom;
 import Server.Model.GameItems.PointsTile;
 import Server.Model.GameItems.TileType;
 import Server.Model.MatchStatus.MatchStatus;
+import Server.Model.MatchStatus.NotRunning;
 import Server.Model.Player.Player;
 
 import java.sql.Time;
@@ -58,6 +59,21 @@ public class Match {
     private int count=0;
 
     private List<MVEventListener> mvEventListeners;
+
+    public Match(){
+        this.matchStatus= new NotRunning();
+        this.gameChat = null;
+        this.numberOfPlayers = 0;
+        this.matchOpener = null;
+        this.livingRoom = null;
+        this.commonGoalDeck = null;
+        this.personalGoalDeck = null;
+        this.players= new ArrayList<>();
+        this.commonGoals=new CommonGoalCard[2];
+        this.scores= new HashMap<>() ;
+        this.firstToFinish = null;
+    }
+
 
     public Match(int numberOfPlayers, Player matchOpener) {
         this.gameChat = new PlayersChat();
