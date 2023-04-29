@@ -5,7 +5,9 @@ package Server.Events.SelectViewEvents;
     * @Author Valentino Guerrini
  */
 
-public class SelectViewEvent {
+import Server.Events.Event;
+
+public class SelectViewEvent extends Event {
 
     private final ViewType viewType;
 
@@ -37,5 +39,8 @@ public class SelectViewEvent {
     }
 
 
-
+    @Override
+    public String getPrimaryType() {
+        return "SelectViewEvent";
+    }
 }

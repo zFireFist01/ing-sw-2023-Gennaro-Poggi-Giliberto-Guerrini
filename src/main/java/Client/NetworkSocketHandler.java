@@ -15,6 +15,7 @@ import java.rmi.RemoteException;
 import java.util.Scanner;
 
 public class NetworkSocketHandler implements NetworkHandler{
+<<<<<<< HEAD
     Socket socket;
     ServerSocket server;
     Scanner in;
@@ -114,5 +115,10 @@ public class NetworkSocketHandler implements NetworkHandler{
                     throw new RuntimeException("Unknown event type");
             }
         }
+=======
+
+    public NetworkSocketHandler(Socket client, ServerSocket server) {
+>>>>>>> 48fd7eabb0a886931093c2b6aae59223e5906ca2
     }
+
 }

@@ -17,4 +17,8 @@ public class ClickOnTile extends VCEvent{
     public Object getValue(){
         return this.coordinates;
     }
+
+    public String getType(){
+        return "ClickOnTile";
+    }
 }
