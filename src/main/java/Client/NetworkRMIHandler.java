@@ -1,7 +1,6 @@
 package Client;
 
-
-import Client.View.CLI.View;
+import Client.View.View;
 import Server.Events.MVEvents.MVEvent;
 import Server.Events.SelectViewEvents.SelectViewEvent;
 import Server.Events.VCEvents.VCEvent;

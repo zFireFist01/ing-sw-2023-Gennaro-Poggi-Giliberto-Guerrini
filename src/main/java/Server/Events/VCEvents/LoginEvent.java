@@ -17,4 +17,8 @@ public class LoginEvent extends VCEvent{
     public Object getValue() {
         return this.nickname;
     }
+
+    public String getType(){
+        return "LoginEvent";
+    }
 }

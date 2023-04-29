@@ -14,4 +14,9 @@ public class OpenChat extends VCEvent{
     public Object getValue(){
         return null;
     }
+
+    public String getType(){
+        return "OpenChat";
+    }
+
 }

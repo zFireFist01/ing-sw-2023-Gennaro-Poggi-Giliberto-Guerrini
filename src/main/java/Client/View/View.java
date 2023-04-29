@@ -1,4 +1,4 @@
-package Client.View.CLI;
+package Client.View;
 
 import Server.Listeners.MVEventListener;
 import Server.Listeners.SelectViewEventListener;

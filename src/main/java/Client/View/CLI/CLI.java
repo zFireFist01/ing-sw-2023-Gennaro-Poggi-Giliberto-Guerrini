@@ -1,12 +1,11 @@
 package Client.View.CLI;
 
-import Client.ConnectionHandler;
-import Client.ConnectionType;
+import Client.*;
 
 import java.util.Scanner;
-
-public class CLI implements Runnable{
-    private ConnectionHandler connectionHandler;
+import Client.View.View;
+public class CLI implements Runnable, View{
+    private NetworkHandler networkHandler;
 
 
     private Scanner scanner;
@@ -69,7 +68,12 @@ public class CLI implements Runnable{
 
         }
         try{
-            connectionHandler = new ConnectionHandler(connectionType,port,host);
+            //connectionHandler = new ConnectionHandler(connectionType,port,host);
+            if(connectionType == ConnectionType.SOCKET) {
+                networkHandler = new NetworkSocketHandler();
+            }else{
+                networkHandler = new NetworkRMIHandler(this);
+            }
         }catch (Exception e){
             System.out.println("Connection failed");
             System.exit(1);

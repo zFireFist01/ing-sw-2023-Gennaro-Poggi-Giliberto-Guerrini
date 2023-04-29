@@ -16,5 +16,9 @@ public class SelectColumn extends VCEvent{
         return this.column;
     }
 
+    public String getType(){
+        return "SelectColumn";
+    }
+
 
 }
