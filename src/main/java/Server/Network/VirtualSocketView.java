@@ -38,4 +38,14 @@ public class VirtualSocketView implements VirtualView{
     public void sendVCEvent(VCEvent vcEvent){
 
     }
+
+    @Override
+    public void addVCEventListener(VCEventListener listener) {
+
+    }
+
+    @Override
+    public void removeVCEventListener(VCEventListener listener) {
+
+    }
 }

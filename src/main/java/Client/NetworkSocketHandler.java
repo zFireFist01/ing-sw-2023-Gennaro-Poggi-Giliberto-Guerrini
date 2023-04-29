@@ -1,6 +1,6 @@
 package Client;
 
-import Server.Network.Server;
+import java.net.ServerSocket;
 
 import java.net.Socket;
 
