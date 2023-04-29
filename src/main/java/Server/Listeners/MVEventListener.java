@@ -1,6 +1,6 @@
 package Server.Listeners;
 
-import Server.Events.SelectViewEvents.SelectViewEvent;
+import Server.Events.MVEvents.MVEvent;
 
 import java.rmi.RemoteException;
 
