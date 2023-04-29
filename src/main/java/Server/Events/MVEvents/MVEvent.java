@@ -24,4 +24,8 @@ public abstract class MVEvent {
     public Object getValue() {
         return null;
     }
+
+    public LightMatch getMatch() {
+        return this.match;
+    }
 }

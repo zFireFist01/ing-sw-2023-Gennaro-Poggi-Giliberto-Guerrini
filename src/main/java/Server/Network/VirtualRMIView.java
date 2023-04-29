@@ -23,6 +23,9 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import static java.lang.System.currentTimeMillis;
 
 public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, Remote {
@@ -36,7 +39,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
 
     @Override
     public void run() {
-        boolean done = false;
+        /*boolean done = false;
         while(!done){
             try{
                 client.onSelectViewEvent(new SelectViewEvent(new LoginView()));
@@ -44,7 +47,8 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
                 //We could say that the method invocation went wrong and so may be that the client lost connection
                 System.err.println(e.getStackTrace());
             }
-        }
+        }*/
+        client.onSelectViewEvent(new SelectViewEvent(new LoginView()));
     }
 
     /*
@@ -64,7 +68,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
 
 
     public void onMVEvent(MVEvent event) {
-        boolean done = false;
+        /*boolean done = false;
         while(!done){
             try{
                 client.onMVEvent(event);
@@ -73,12 +77,14 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
                 //We could say that the method invocation went wrong and so may be that the client lost connection
                 System.err.println(e.getStackTrace());
             }
-        }
+        }*/
+        Gson gson = new Gson();
+        client.onMVEvent(event);
     }
 
 
     public void onSelectViewEvent(SelectViewEvent event) {
-        boolean done = false;
+        /*boolean done = false;
         while(!done){
             try{
                 client.onSelectViewEvent(event);
@@ -87,7 +93,8 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
                 //We could say that the method invocation went wrong and so may be that the client lost connection
                 System.err.println(e.getStackTrace());
             }
-        }
+        }*/
+        client.onSelectViewEvent(event);
     }
 
     @Override

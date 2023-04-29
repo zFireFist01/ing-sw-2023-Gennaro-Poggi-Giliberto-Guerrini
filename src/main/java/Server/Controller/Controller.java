@@ -374,11 +374,8 @@ public class Controller implements VCEventListener {
         selectViewEventListeners.add(listener);
     }
 
-<<<<<<< HEAD
-=======
     public void removeSelectViewEventListener(SelectViewEventListener listener){
         selectViewEventListeners.remove(listener);
     }
 
->>>>>>> 72a1719000438f58393ee3095220f5b5e274f880
 }
