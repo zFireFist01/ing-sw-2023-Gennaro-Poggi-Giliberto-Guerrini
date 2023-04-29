@@ -48,7 +48,17 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
                 System.err.println(e.getStackTrace());
             }
         }*/
-        client.onSelectViewEvent(new SelectViewEvent(new LoginView()));
+        try {
+            client.sendSelectViewEvent(
+                    new Gson().toJson(
+                            new SelectViewEvent(new LoginView())
+                    )
+            );
+        } catch (RemoteException e) {
+            //We could say that the method invocation went wrong and so may be that the client lost connection
+            System.err.println(e.getStackTrace());
+            throw new RuntimeException(e);
+        }
     }
 
     /*
@@ -60,7 +70,9 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
     }
     */
 
-    public void sendVCEvent(VCEvent event) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public void sendVCEvent(String json) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Gson gson = new Gson();
+        VCEvent event = gson.fromJson(json,VCEvent.class);
         for(VCEventListener listener : vcEventListeners){
             listener.onVCEvent(event,this);
         }
@@ -68,33 +80,26 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
 
 
     public void onMVEvent(MVEvent event) {
-        /*boolean done = false;
-        while(!done){
-            try{
-                client.onMVEvent(event);
-                done = true;
-            }catch (RemoteException e){
-                //We could say that the method invocation went wrong and so may be that the client lost connection
-                System.err.println(e.getStackTrace());
-            }
-        }*/
         Gson gson = new Gson();
-        client.onMVEvent(event);
+        String json = gson.toJson(event);
+        try {
+            client.sendMVEvent(json);
+        } catch (RemoteException e) {
+            //We could say that the method invocation went wrong and so may be that the client lost connection
+            System.err.println(e.getStackTrace());
+        }
     }
 
 
     public void onSelectViewEvent(SelectViewEvent event) {
-        /*boolean done = false;
-        while(!done){
-            try{
-                client.onSelectViewEvent(event);
-                done = true;
-            }catch (RemoteException e){
-                //We could say that the method invocation went wrong and so may be that the client lost connection
-                System.err.println(e.getStackTrace());
-            }
-        }*/
-        client.onSelectViewEvent(event);
+        Gson gson = new Gson();
+        String json = gson.toJson(event);
+        try {
+            client.sendSelectViewEvent(json);
+        } catch (RemoteException e) {
+            //We could say that the method invocation went wrong and so may be that the client lost connection
+            System.err.println(e.getStackTrace());
+        }
     }
 
     @Override

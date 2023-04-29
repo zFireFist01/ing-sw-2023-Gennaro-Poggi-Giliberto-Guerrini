@@ -370,6 +370,11 @@ public class Controller implements VCEventListener {
 
     }
 
+    @Override
+    public void onVCEvent(VCEvent event) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        throw new IllegalAccessException("This method should not be called");
+    }
+
     public void addSelectViewEventListener(SelectViewEventListener listener){
         selectViewEventListeners.add(listener);
     }
