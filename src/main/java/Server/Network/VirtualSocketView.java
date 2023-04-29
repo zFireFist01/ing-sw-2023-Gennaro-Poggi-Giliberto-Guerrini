@@ -17,20 +17,15 @@ import java.util.Scanner;
 
 public class VirtualSocketView implements VirtualView{
 
-    Socket socket= new Socket();
-    Socket client;
+    Socket socket;
+    Scanner in;
+    OutputStream out;
 
     List<VCEventListener> vcEventListeners;
 
     public VirtualSocketView(Socket socket) {
-        this.client = client;
+        this.socket = socket;
         this.vcEventListeners= new ArrayList<>();
-    }
-
-    @Override
-    public void run(){
-        Scanner in;
-        OutputStream out;
         try {
             in = new Scanner(socket.getInputStream());
             out = socket.getOutputStream();
@@ -38,6 +33,10 @@ public class VirtualSocketView implements VirtualView{
             System.err.println(e.getStackTrace());
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void run(){
         while (true){
             String message = in.nextLine();
             manageMessage(message);
@@ -47,6 +46,37 @@ public class VirtualSocketView implements VirtualView{
     private void manageMessage(String message){
         Gson gson = new Gson();
         VCEvent vcEvent = gson.fromJson(message, VCEvent.class);
+        sendVCEvent(vcEvent);
+    }
+    @Override
+    public void onMVEvent(MVEvent mvEvent){
+        Gson gson = new Gson();
+        String message = gson.toJson(mvEvent);
+        try {
+            out.write(message.getBytes());
+            out.flush();
+        } catch (IOException e) {
+            System.err.println(e.getStackTrace());
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void onSelectViewEvent(SelectViewEvent selectViewEvent){
+        Gson gson = new Gson();
+        String message = gson.toJson(selectViewEvent);
+        try {
+            out.write(message.getBytes());
+            out.flush();
+        } catch (IOException e) {
+            System.err.println(e.getStackTrace());
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
+    public void sendVCEvent(VCEvent vcEvent){
         for(VCEventListener listener: vcEventListeners){
             try {
                 listener.onVCEvent(vcEvent);
@@ -58,19 +88,6 @@ public class VirtualSocketView implements VirtualView{
                 throw new RuntimeException(e);
             }
         }
-    }
-    @Override
-    public void onMVEvent(MVEvent mvEvent){
-
-    }
-
-    @Override
-    public void onSelectViewEvent(SelectViewEvent selectViewEvent){
-
-    }
-
-    public void sendVCEvent(VCEvent vcEvent){
-
     }
 
     @Override
