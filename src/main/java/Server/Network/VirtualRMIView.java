@@ -3,6 +3,7 @@ package Server.Network;
 import Client.NetworkHandler;
 import Client.NetworkRMIHandler;
 import Server.Controller.Controller;
+import Server.Events.MVEvents.MVEvent;
 import Server.Events.SelectViewEvents.LoginView;
 import Server.Events.SelectViewEvents.SelectViewEvent;
 import Server.Events.VCEvents.LoginEvent;
@@ -61,7 +62,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
         }
     }
 
-    @Override
+
     public void onMVEvent(MVEvent event) {
         boolean done = false;
         while(!done){
@@ -75,7 +76,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
         }
     }
 
-    @Override
+
     public void onSelectViewEvent(SelectViewEvent event) {
         boolean done = false;
         while(!done){
@@ -94,7 +95,6 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
         vcEventListeners.add(listener);
     }
 
-    @Override
     public void removeVCEventListener(VCEventListener listener){
         vcEventListeners.remove(listener);
     }
