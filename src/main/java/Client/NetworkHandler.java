@@ -6,4 +6,7 @@ import Server.Listeners.VCEventListener;
 
 public interface NetworkHandler extends MVEventListener, SelectViewEventListener {
 
+
+
+
 }

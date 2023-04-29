@@ -19,6 +19,7 @@ import Utils.MathUtils.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.rmi.RemoteException;
 import java.util.*;
 
 /**
@@ -55,22 +56,22 @@ public class Controller implements VCEventListener {
      * @author ValentinoGuerrini
      */
 
-    private void onLoginEvent(String nickname){
+    private void onLoginEvent(String nickname) throws RemoteException{
 
         ArrayList<Player> players = match.getPlayers();
         for(Player player : players){
             if(player.getPlayerID()==nickname.hashCode()) {
-                currentPlayerView.send(new  SelectViewEvent(new LoginView("Nickname already taken")));
+                currentPlayerView.onSelectViewEvent(new  SelectViewEvent(new LoginView("Nickname already taken")));
             }else if(nickname.length() > 20) {
-                currentPlayerView.send(new SelectViewEvent(new LoginView("Nickname too long, max 20 characters")));
+                currentPlayerView.onSelectViewEvent(new SelectViewEvent(new LoginView("Nickname too long, max 20 characters")));
             }else if(nickname.length() < 3) {
-                currentPlayerView.send(new SelectViewEvent(new LoginView("Nickname too short, min 3 characters")));
+                currentPlayerView.onSelectViewEvent(new SelectViewEvent(new LoginView("Nickname too short, min 3 characters")));
             }else if(nickname.contains(" ")) {
-                currentPlayerView.send(new SelectViewEvent(new LoginView("Nickname cannot contain spaces")));
+                currentPlayerView.onSelectViewEvent(new SelectViewEvent(new LoginView("Nickname cannot contain spaces")));
             }else{
                 match.addContestant(new Player(nickname.hashCode(),nickname));
                 PlayerViews.put(nickname.hashCode(),caller);
-                currentPlayerView.send(new SelectViewEvent(new GameView()));
+                currentPlayerView.onSelectViewEvent(new SelectViewEvent(new GameView()));
             }
         }
 
@@ -82,16 +83,16 @@ public class Controller implements VCEventListener {
      *Method to manage the OpenChat event, it returns a ViewType event with the chat open
      * @author ValentinoGuerrini
      */
-    private void onOpenChatEvent(){
-        currentPlayerView.send(new SelectViewEvent(new ChatONView()));
+    private void onOpenChatEvent() throws RemoteException{
+        currentPlayerView.onSelectViewEvent(new SelectViewEvent(new ChatONView()));
     }
 
     /**
      *Method to manage the CloseChat event, it returns a ViewType event with the chat closed
      * @author ValentinoGuerrini
      */
-    private void onCloseChatEvent(){
-        currentPlayerView.send( new SelectViewEvent(new ChatOFFView()));
+    private void onCloseChatEvent() throws RemoteException {
+        currentPlayerView.onSelectViewEvent( new SelectViewEvent(new ChatOFFView()));
     }
 
     /**
@@ -110,10 +111,10 @@ public class Controller implements VCEventListener {
 
      * @author Paolo Gennaro
      */
-    private void onSelectColumnEvent(int column) {
+    private void onSelectColumnEvent(int column) throws RemoteException{
         //check if is the player turn
         if(PlayerViews.get(match.getCurrentPlayer().getPlayerID())!=caller){
-            caller.send(new SelectViewEvent(new GameView("It's not your turn!")));
+            caller.onSelectViewEvent(new SelectViewEvent(new GameView("It's not your turn!")));
         }
 
 
@@ -133,7 +134,7 @@ public class Controller implements VCEventListener {
 
         if(currentPlayer.getBookshelf().getLastIndexes().get(column) < numberTakenTiles){
 
-            currentPlayerView.send(new SelectViewEvent(new InsertingTilesGameView("No space for this tiles!")));
+            currentPlayerView.onSelectViewEvent(new SelectViewEvent(new InsertingTilesGameView("No space for this tiles!")));
         }
 
         try{
@@ -160,38 +161,38 @@ public class Controller implements VCEventListener {
                         if(currentPlayer.getNextPlayer().equals(match.getFirstPlayer())){
                             match.calculateFinalScores();
                             for(int i=0; i<numberOfPlayers; i++){
-                                PlayerViews.get(match.getPlayers().get(i).getPlayerID()).send(new SelectViewEvent(new EndedMatchVIew()));
+                                PlayerViews.get(match.getPlayers().get(i).getPlayerID()).onSelectViewEvent(new SelectViewEvent(new EndedMatchVIew()));
                             }
 
                         }else{
-                            currentPlayerView.send(new SelectViewEvent(new GameView()));
+                            currentPlayerView.onSelectViewEvent(new SelectViewEvent(new GameView()));
                             currentPlayerView = PlayerViews.get(currentPlayer.getNextPlayer().getPlayerID());
                             match.setCurrentPlayer();
-                            currentPlayerView.send(new SelectViewEvent(new PickingTilesGameView("This is your last turn!")));
+                            currentPlayerView.onSelectViewEvent(new SelectViewEvent(new PickingTilesGameView("This is your last turn!")));
                         }
 
                     }catch (UnsupportedOperationException e) {
                         //do nothing
                     }
                 }else{
-                    currentPlayerView.send(new SelectViewEvent(new GameView()));
+                    currentPlayerView.onSelectViewEvent(new SelectViewEvent(new GameView()));
                     currentPlayerView = PlayerViews.get(currentPlayer.getNextPlayer().getPlayerID());
                     match.setCurrentPlayer();
-                    currentPlayerView.send(new SelectViewEvent(new PickingTilesGameView()));
+                    currentPlayerView.onSelectViewEvent(new SelectViewEvent(new PickingTilesGameView()));
                 }
             }else{
                 if(currentPlayer.getNextPlayer().equals(match.getFirstPlayer())){
                     match.calculateFinalScores();
                     for(int i=0; i<numberOfPlayers; i++){
-                        PlayerViews.get(match.getPlayers().get(i).getPlayerID()).send(new SelectViewEvent(new EndedMatchVIew()));
+                        PlayerViews.get(match.getPlayers().get(i).getPlayerID()).onSelectViewEvent(new SelectViewEvent(new EndedMatchVIew()));
                     }
 
 
                 }else{
-                    currentPlayerView.send(new SelectViewEvent(new GameView()));
+                    currentPlayerView.onSelectViewEvent(new SelectViewEvent(new GameView()));
                     currentPlayerView = PlayerViews.get(currentPlayer.getNextPlayer().getPlayerID());
                     match.setCurrentPlayer();
-                    currentPlayerView.send(new SelectViewEvent(new PickingTilesGameView("This is your last turn!")));
+                    currentPlayerView.onSelectViewEvent(new SelectViewEvent(new PickingTilesGameView("This is your last turn!")));
                 }
             }
 
@@ -204,10 +205,10 @@ public class Controller implements VCEventListener {
 
         } catch (UnsupportedOperationException e){
 
-            currentPlayerView.send(new SelectViewEvent(new InsertingTilesGameView("This column is already full|")));
+            currentPlayerView.onSelectViewEvent(new SelectViewEvent(new InsertingTilesGameView("This column is already full|")));
         } catch (IndexOutOfBoundsException e){
 
-            currentPlayerView.send(new SelectViewEvent(new InsertingTilesGameView( "This column does not exists!")));
+            currentPlayerView.onSelectViewEvent(new SelectViewEvent(new InsertingTilesGameView( "This column does not exists!")));
 
         }
     }
@@ -219,7 +220,7 @@ public class Controller implements VCEventListener {
      */
 
 
-    private void onClickOnTileEvent(int[] coordinates){
+    private void onClickOnTileEvent(int[] coordinates) throws RemoteException{
 
         int[] tmp,selectedTiles;
         boolean flag=false;
@@ -227,7 +228,7 @@ public class Controller implements VCEventListener {
         tmp=match.getSelectedTiles();
 
         if(PlayerViews.get(match.getCurrentPlayer().getPlayerID())!=caller){
-            caller.send(new SelectViewEvent(new GameView("It's not your turn!")));
+            caller.onSelectViewEvent(new SelectViewEvent(new GameView("It's not your turn!")));
         }
 
         LivingRoomTileSpot[][] livingRoomTileSpots = match.getLivingRoom().getTileMatrix();
@@ -235,11 +236,11 @@ public class Controller implements VCEventListener {
         //verifies if the tile in that position is selectable
 
         if(livingRoomTileSpots[coordinates[0]][coordinates[1]].getDotsNumber()==-1){
-            caller.send(new SelectViewEvent(new PickingTilesGameView("This tile is not selectable!")));
+            caller.onSelectViewEvent(new SelectViewEvent(new PickingTilesGameView("This tile is not selectable!")));
         }else if(playernumber==2 && livingRoomTileSpots[coordinates[0]][coordinates[1]].getDotsNumber()>=3) {
-            caller.send(new SelectViewEvent(new PickingTilesGameView("This tile is not selectable!")));
+            caller.onSelectViewEvent(new SelectViewEvent(new PickingTilesGameView("This tile is not selectable!")));
         }else if(playernumber==3 && livingRoomTileSpots[coordinates[0]][coordinates[1]].getDotsNumber()>=4) {
-            caller.send(new SelectViewEvent(new PickingTilesGameView("This tile is not selectable!")));
+            caller.onSelectViewEvent(new SelectViewEvent(new PickingTilesGameView("This tile is not selectable!")));
         }
 
         //check if the tile is already selected in if it is the coordinates are setted to -1
@@ -281,7 +282,7 @@ public class Controller implements VCEventListener {
      * If the tiles are not pickable the method returns a PickingTilesGameView event, otherwise it returns a InsertingTilesGameView event
      * @author ValentinoGuerrini
      */
-    private void onCheckoutTilesEvent(){
+    private void onCheckoutTilesEvent() throws RemoteException{
         Player currentPlayer = match.getCurrentPlayer();
         int[] selectedTiles = match.getSelectedTiles();
         LivingRoom livingRoom = match.getLivingRoom();
@@ -292,8 +293,8 @@ public class Controller implements VCEventListener {
                 match.clearSelectedTiles();
                 match.setCurrentPlayer();
                 currentPlayerView = PlayerViews.get(match.getCurrentPlayer().getPlayerID());
-                currentPlayerView.send(new SelectViewEvent(new PickingTilesGameView()));
-                caller.send(new SelectViewEvent(new GameView()));
+                currentPlayerView.onSelectViewEvent(new SelectViewEvent(new PickingTilesGameView()));
+                caller.onSelectViewEvent(new SelectViewEvent(new GameView()));
             }
             case 2 -> {
                 try{
@@ -301,11 +302,11 @@ public class Controller implements VCEventListener {
                     tiles[0]=livingRoom.takeTile(selectedTiles[0],selectedTiles[1]);
                     currentPlayer.setTakenTiles(tiles);
                     match.clearSelectedTiles();
-                    currentPlayerView.send(new SelectViewEvent(new InsertingTilesGameView()));
+                    currentPlayerView.onSelectViewEvent(new SelectViewEvent(new InsertingTilesGameView()));
 
                 }catch(UnsupportedOperationException e){
                     match.clearSelectedTiles();
-                    currentPlayerView.send( new SelectViewEvent(new PickingTilesGameView(e.getMessage())));
+                    currentPlayerView.onSelectViewEvent( new SelectViewEvent(new PickingTilesGameView(e.getMessage())));
                 }
             }
             case 4 -> {
@@ -316,10 +317,10 @@ public class Controller implements VCEventListener {
                     tiles= livingRoom.takeTiles(coordinates);
                     currentPlayer.setTakenTiles(tiles);
                     match.clearSelectedTiles();
-                    currentPlayerView.send( new SelectViewEvent(new InsertingTilesGameView()));
+                    currentPlayerView.onSelectViewEvent( new SelectViewEvent(new InsertingTilesGameView()));
                 }catch(UnsupportedOperationException e){
                     match.clearSelectedTiles();
-                    currentPlayerView.send( new SelectViewEvent(new PickingTilesGameView(e.getMessage())));
+                    currentPlayerView.onSelectViewEvent( new SelectViewEvent(new PickingTilesGameView(e.getMessage())));
                 }
             }
             case 6 -> {
@@ -331,10 +332,10 @@ public class Controller implements VCEventListener {
                     tiles= livingRoom.takeTiles(coordinates);
                     currentPlayer.setTakenTiles(tiles);
                     match.clearSelectedTiles();
-                    currentPlayerView.send( new SelectViewEvent(new InsertingTilesGameView()));
+                    currentPlayerView.onSelectViewEvent( new SelectViewEvent(new InsertingTilesGameView()));
                 }catch(UnsupportedOperationException e){
                     match.clearSelectedTiles();
-                    currentPlayerView.send( new SelectViewEvent(new PickingTilesGameView(e.getMessage())));
+                    currentPlayerView.onSelectViewEvent( new SelectViewEvent(new PickingTilesGameView(e.getMessage())));
                 }
             }
         }
@@ -355,24 +356,45 @@ public class Controller implements VCEventListener {
         switch(methodName){
             case"onLoginEvent" -> {
                 Method method = Controller.class.getDeclaredMethod("onLoginEvent", String.class);
-                method.invoke(this, (String)event.getValue());
+                try {
+                    method.invoke(this, (String)event.getValue());
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
             }
             case "onSendMessageEvent" -> {
                 Method method = Controller.class.getDeclaredMethod(methodName, Message.class);
-                method.invoke(this, (Message)event.getValue());
+                try {
+                    method.invoke(this, (Message)event.getValue());
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
             }
             case "onSelectColumnEvent" -> {
                 Method method = Controller.class.getDeclaredMethod(methodName, int.class);
-                method.invoke(this, (int)event.getValue());
+                try {
+                    method.invoke(this, (int)event.getValue());
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+
             }
             case "onClickOnTileEvent" -> {
                 Method method = Controller.class.getDeclaredMethod(methodName, int[].class);
                 int[] intArray = (int[]) event.getValue();
-                method.invoke(this, intArray);
+                try {
+                    method.invoke(this, intArray);
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
             }
             default -> {
                 Method method = Controller.class.getDeclaredMethod(methodName);
-                method.invoke(this);
+                try {
+                    method.invoke(this);
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
