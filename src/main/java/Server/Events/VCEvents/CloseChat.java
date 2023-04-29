@@ -14,4 +14,8 @@ public class CloseChat extends VCEvent{
     public Object getValue() {
         return null;
     }
+
+    public String getType(){
+        return "CloseChat";
+    }
 }

@@ -18,5 +18,8 @@ public class SendMessage extends VCEvent{
         return this.message;
     }
 
+    public String getType(){
+        return "SendMessage";
+    }
 
 }

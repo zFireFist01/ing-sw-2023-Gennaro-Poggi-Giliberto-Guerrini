@@ -1,6 +1,7 @@
 package Server.Network;
 
 import Client.NetworkRMIHandler;
+import Server.Events.Event;
 import Server.Events.MVEvents.MVEvent;
 import Server.Events.SelectViewEvents.LoginView;
 import Server.Events.SelectViewEvents.SelectViewEvent;
@@ -59,9 +60,18 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
 
     public void sendVCEvent(String json) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Gson gson = new Gson();
-        VCEvent event = gson.fromJson(json,VCEvent.class);
-        for(VCEventListener listener : vcEventListeners){
-            listener.onVCEvent(event,this);
+        Event event = gson.fromJson(json,Event.class);
+        switch (event.getPrimaryType()){
+            case "VCEvent":
+                event = gson.fromJson(json,VCEvent.class);
+                for(VCEventListener listener : vcEventListeners){
+                    listener.onVCEvent((VCEvent)event,this);
+                }
+                break;
+            case "MVEvent":
+                throw new IllegalAccessException("MVEvent not allowed in this context");
+            case "SelectViewEvent":
+                throw new IllegalAccessException("SelectViewEvent not allowed in this context");
         }
     }
 

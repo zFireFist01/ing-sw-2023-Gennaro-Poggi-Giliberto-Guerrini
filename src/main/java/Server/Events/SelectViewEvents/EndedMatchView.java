@@ -1,9 +1,9 @@
 package Server.Events.SelectViewEvents;
 
-public class EndedMatchVIew extends ViewType{
+public class EndedMatchView extends ViewType{
     private final String message;
 
-    public EndedMatchVIew(){
+    public EndedMatchView(){
         this.message = "The match is ended";
     }
 

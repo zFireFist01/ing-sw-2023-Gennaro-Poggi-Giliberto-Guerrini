@@ -1,7 +1,7 @@
 package Client;
 
-
 import Client.View.View;
+import Server.Events.Event;
 import Server.Events.MVEvents.MVEvent;
 import Server.Events.SelectViewEvents.SelectViewEvent;
 import Server.Events.VCEvents.VCEvent;
@@ -11,7 +11,6 @@ import Server.Network.VirtualView;
 import com.google.gson.Gson;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -60,15 +59,36 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements NetworkHan
     @Override
     public void sendMVEvent(String json) throws RemoteException{
         Gson gson = new Gson();
-        MVEvent event = gson.fromJson(json, MVEvent.class);
-        view.onMVEvent(event);
+        Event event = gson.fromJson(json, Event.class);
+        String type = event.getPrimaryType();
+        switch (type) {
+            case "MVEvent":
+                view.onMVEvent((MVEvent) event);
+                break;
+            case "VCEvent":
+                throw new IllegalArgumentException("VCEvent should not be sent to the client");
+            default:
+                throw new IllegalArgumentException("Event type not recognized");
+        }
     }
+
 
     @Override
     public void sendSelectViewEvent(String json) throws RemoteException{
         Gson gson = new Gson();
-        SelectViewEvent event = gson.fromJson(json, SelectViewEvent.class);
-        view.onSelectViewEvent(event);
+        Event event = gson.fromJson(json, Event.class);
+        String type = event.getPrimaryType();
+        switch (type) {
+            case "MVEvent":
+                throw new IllegalArgumentException("MVEvent should not be sent to the client");
+            case "VCEvent":
+                throw new IllegalArgumentException("VCEvent should not be sent to the client");
+            case "SelectViewEvent":
+                view.onSelectViewEvent((SelectViewEvent) event);
+                break;
+            default:
+                throw new IllegalArgumentException("Event type not recognized");
+        }
     }
 
     @Override
@@ -82,4 +102,5 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements NetworkHan
     public void onVCEvent(VCEvent event, VirtualView view) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         throw new IllegalAccessError("This method should not be called");
     }
+
 }

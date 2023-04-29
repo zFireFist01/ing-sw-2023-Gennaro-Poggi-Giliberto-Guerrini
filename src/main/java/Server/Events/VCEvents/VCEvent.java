@@ -1,6 +1,8 @@
 package Server.Events.VCEvents;
 
-public abstract class VCEvent {
+import Server.Events.Event;
+
+public abstract class VCEvent extends Event {
 
     private String methodName;
 
@@ -10,5 +12,11 @@ public abstract class VCEvent {
 
     public Object getValue() {
         return null;
+    }
+
+    public abstract String getType();
+
+    public String getPrimaryType() {
+        return "VCEvent";
     }
 }
