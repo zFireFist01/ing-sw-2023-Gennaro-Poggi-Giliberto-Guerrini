@@ -44,7 +44,7 @@ public class CLI implements Runnable{
 
 
 
-    private ConnectionHandler connectionHandler;
+    private NetworkHandler networkHandler;
     private Environment board = new Environment();
 
 
@@ -67,7 +67,7 @@ public class CLI implements Runnable{
         String input;
         input = scanner.nextLine();
         while(input != null){
-            connectionHandler.parseInput(input);
+            //networkHandler.parseInput(input);
             if(input.equals("quit")){
                 System.exit(0);
             }
