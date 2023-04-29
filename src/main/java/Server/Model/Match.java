@@ -1,5 +1,6 @@
 package Server.Model;
 
+import Server.Events.MVEvents.MVEvent;
 import Server.Listeners.MVEventListener;
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Cards.PersonalGoalCard;
@@ -437,5 +438,11 @@ public class Match {
 
     public void removeMVEventListener(MVEventListener listener){
         this.mvEventListeners.remove(listener);
+    }
+
+    public void notifyMVEventListeners(MVEvent event){
+        for(MVEventListener listener : this.mvEventListeners){
+            listener.onMVEvent(event);
+        }
     }
 }

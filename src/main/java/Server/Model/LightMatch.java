@@ -4,6 +4,10 @@ import Server.Model.Chat.PlayersChat;
 import Server.Model.GameItems.LivingRoom;
 import Server.Model.Player.Player;
 
+/**
+ * This class is a light version of the Match class.
+ * @author Paolo Gennaro
+ */
 public class LightMatch {
     private final PlayersChat gameChat;
     private final int width;

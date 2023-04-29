@@ -107,7 +107,6 @@ public class Controller implements VCEventListener {
      * Method to manage the select column event, it adds the selectedTiles of the current player
      * to the column selected by him.
      * @param column selected from the player
-
      * @author Paolo Gennaro
      */
     private void onSelectColumnEvent(int column) {
@@ -179,13 +178,13 @@ public class Controller implements VCEventListener {
                     match.setCurrentPlayer();
                     currentPlayerView.send(new SelectViewEvent(new PickingTilesGameView()));
                 }
+
             }else{
                 if(currentPlayer.getNextPlayer().equals(match.getFirstPlayer())){
                     match.calculateFinalScores();
                     for(int i=0; i<numberOfPlayers; i++){
                         PlayerViews.get(match.getPlayers().get(i).getPlayerID()).send(new SelectViewEvent(new EndedMatchVIew()));
                     }
-
 
                 }else{
                     currentPlayerView.send(new SelectViewEvent(new GameView()));
@@ -194,13 +193,6 @@ public class Controller implements VCEventListener {
                     currentPlayerView.send(new SelectViewEvent(new PickingTilesGameView("This is your last turn!")));
                 }
             }
-
-
-
-
-
-
-
 
         } catch (UnsupportedOperationException e){
 
@@ -211,14 +203,11 @@ public class Controller implements VCEventListener {
 
         }
     }
-
     /**
      * Method to manage the selected tile event, the selected tiles are added to the match if there is space for them
      * @param coordinates of the tile selected by the player
      * @author ValentinoGuerrini
      */
-
-
     private void onClickOnTileEvent(int[] coordinates){
 
         int[] tmp,selectedTiles;
@@ -381,15 +370,17 @@ public class Controller implements VCEventListener {
 
     }
 
+    @Override
+    public void onVCEvent(VCEvent event) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        throw new IllegalAccessException("This method should not be called");
+    }
+
     public void addSelectViewEventListener(SelectViewEventListener listener){
         selectViewEventListeners.add(listener);
     }
 
-<<<<<<< HEAD
-=======
     public void removeSelectViewEventListener(SelectViewEventListener listener){
         selectViewEventListeners.remove(listener);
     }
 
->>>>>>> 72a1719000438f58393ee3095220f5b5e274f880
 }

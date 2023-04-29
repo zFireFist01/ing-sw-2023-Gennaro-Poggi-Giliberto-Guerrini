@@ -6,6 +6,7 @@ import Server.Events.SelectViewEvents.LoginView;
 import Server.Events.SelectViewEvents.SelectViewEvent;
 import Server.Events.VCEvents.VCEvent;
 import Server.Listeners.VCEventListener;
+import com.google.gson.Gson;
 
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.Remote;
@@ -25,7 +26,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
 
     @Override
     public void run() {
-        boolean done = false;
+        /*boolean done = false;
         while(!done){
             try{
                 client.onSelectViewEvent(new SelectViewEvent(new LoginView()));
@@ -33,6 +34,17 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
                 //We could say that the method invocation went wrong and so may be that the client lost connection
                 System.err.println(e.getStackTrace());
             }
+        }*/
+        try {
+            client.sendSelectViewEvent(
+                    new Gson().toJson(
+                            new SelectViewEvent(new LoginView())
+                    )
+            );
+        } catch (RemoteException e) {
+            //We could say that the method invocation went wrong and so may be that the client lost connection
+            System.err.println(e.getStackTrace());
+            throw new RuntimeException(e);
         }
     }
 
@@ -45,37 +57,35 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
     }
     */
 
-    public void sendVCEvent(VCEvent event) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public void sendVCEvent(String json) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Gson gson = new Gson();
+        VCEvent event = gson.fromJson(json,VCEvent.class);
         for(VCEventListener listener : vcEventListeners){
             listener.onVCEvent(event,this);
         }
     }
 
-    @Override
+
     public void onMVEvent(MVEvent event) {
-        boolean done = false;
-        while(!done){
-            try{
-                client.onMVEvent(event);
-                done = true;
-            }catch (RemoteException e){
-                //We could say that the method invocation went wrong and so may be that the client lost connection
-                System.err.println(e.getStackTrace());
-            }
+        Gson gson = new Gson();
+        String json = gson.toJson(event);
+        try {
+            client.sendMVEvent(json);
+        } catch (RemoteException e) {
+            //We could say that the method invocation went wrong and so may be that the client lost connection
+            System.err.println(e.getStackTrace());
         }
     }
 
-    @Override
+
     public void onSelectViewEvent(SelectViewEvent event) {
-        boolean done = false;
-        while(!done){
-            try{
-                client.onSelectViewEvent(event);
-                done = true;
-            }catch (RemoteException e){
-                //We could say that the method invocation went wrong and so may be that the client lost connection
-                System.err.println(e.getStackTrace());
-            }
+        Gson gson = new Gson();
+        String json = gson.toJson(event);
+        try {
+            client.sendSelectViewEvent(json);
+        } catch (RemoteException e) {
+            //We could say that the method invocation went wrong and so may be that the client lost connection
+            System.err.println(e.getStackTrace());
         }
     }
 
@@ -84,7 +94,6 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
         vcEventListeners.add(listener);
     }
 
-    @Override
     public void removeVCEventListener(VCEventListener listener){
         vcEventListeners.remove(listener);
     }
