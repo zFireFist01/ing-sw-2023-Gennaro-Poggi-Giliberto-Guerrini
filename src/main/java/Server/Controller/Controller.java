@@ -360,13 +360,11 @@ public class Controller implements VCEventListener {
                 method.invoke(this);
             }
         }
+        //print
 
 
 
     }
-
-
-
 
 
 }
