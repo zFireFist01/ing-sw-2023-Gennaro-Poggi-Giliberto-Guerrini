@@ -73,6 +73,10 @@ public class Bookshelf {
         return BOOKSHELFHEIGHT;
     }
 
+    public Map<Integer, Integer> getLastIndexes() {
+        return lastIndexes;
+    }
+
     public char[][] getCLIRepresentation(){
         char[][] res = new char[14][21];
 

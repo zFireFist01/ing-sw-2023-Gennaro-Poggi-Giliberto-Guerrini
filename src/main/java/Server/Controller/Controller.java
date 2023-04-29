@@ -1,10 +1,12 @@
 package Server.Controller;
 
 import Server.Events.SelectViewEvents.*;
+import Server.Events.VCEvents.SelectColumn;
 import Server.Listeners.VCEventListener;
 import Server.Model.Chat.Message;
 import Server.Model.GameItems.LivingRoom;
 import Server.Model.GameItems.LivingRoomTileSpot;
+import Server.Model.GameItems.PointsTile;
 import Server.Model.GameItems.TileType;
 import Server.Model.Match;
 import Server.Events.VCEvents.VCEvent;
@@ -18,7 +20,7 @@ import java.util.*;
 
 /**
  * Controller class to manage the requests from the client
- * @Author ValentinoGuerrini & PaoloGennaro
+ * @author Valentino Guerrini & Paolo Gennaro
  */
 public class Controller implements VCEventListener {
 
@@ -104,18 +106,91 @@ public class Controller implements VCEventListener {
     }
 
 
+    /**
+     * Method to manage the select column event, it adds the selectedTiles of the current player
+     * to the column selected by him.
+     * @param column selected from the player
+     * @return if the column is there is something wrong about the column we return the SelectColumn view
+     *         to the player, to let him choose again; else we update the view of all the players
+     * @throws NotYourTurnException when is not the current player who is calling the event
+     * @throws InvalidColumnSelectionException when the column is full or not able to contain all the selected tile
+     * @throws NoTilesSelectedException when the current player hasn't selected any tiles
+     * @throws NullPointerException when the tile I'm trying to insert is null
+     * @author Paolo Gennaro
+     */
+    private void onSelectColumnEvent(int column) throws NotYourTurnException, InvalidColumnSelectionException, NoTilesSelectedException, NullPointerException{
+        //check if is the player turn
+        if(PlayerViews.get(match.getCurrentPlayer().getPlayerID())!=caller){
+            throw new NotYourTurnException();
+        }
 
-    private SelectViewEvent onSelectColumnEvent(int column){
-        // TODO implement here
-        //il metodo deve lanciare notyourturexception nel caso non sia il turno del giocatore che ha mandato l'evento
-        //il metodo deve prima verificare che la colonna non sia piena nel caso sia piena deve restituire la stessa viewtype precedente con un messaggio di errore
-        //nel caso non sia piena inserisce le tiles, aggiorna la view e restituisce la viewtype standard
-        //ATTENZIONE il metodo deve essere chiamato solo se il giocatore ha selezionato le tiles
-        //il metodo deve verificare se la bookshelf e piena dopo l'inserimento e nel caso assegnare la pointile inoltre bisogna creare un sistema per la gestione dell'ultimo giro
-        // se necessario aggiungere metodi nella classe match
-        //il metodo deve controllare se il giocatore ha completato una commongoal card e nel caso assegnare la point tile
-        //deve anche controllare che il giocatore non aveva gia luna pointtile di quella commongoal
-        //il metodo si occupa di impostare il prossimo giocatore sia nel controller che nel model e di conseguenza aggiornare le view
+
+        Player currentPlayer = match.getCurrentPlayer();
+        int numberTakenTiles;
+
+        for(int i=0; i<currentPlayer.getTakenTiles().length; i++){
+            if(currentPlayer.getTakenTiles()[i] != null){
+                numberTakenTiles++;
+            }
+        }
+
+        //if(numberTakenTiles == 0){
+        //    throw new NoTilesSelectedException();
+        //    return new SelectViewEvent(new PickingTilesGameView(è));
+        //}
+
+        if(currentPlayer.getBookshelf().getLastIndexes().get(column) < numberTakenTiles){
+            throw new InvalidColumnSelectionException("No space for this tiles!");
+            currentPlayerView.updateView(new SelectViewEvent(new InsertingTilesGameView()));
+        }
+
+        try{
+            for(int i=0; i<match.getCurrentPlayer().getTakenTiles().length; i++){
+                if(match.getCurrentPlayer().getTakenTiles()[i] != null) {
+                    match.getCurrentPlayer().getBookshelf().insertTile(column, match.getCurrentPlayer().getTakenTiles()[i]);
+                }
+            }
+            match.getCurrentPlayer().clearTakenTiles();
+            match.clearSelectedTiles();
+            try{
+                match.checkCommonGoals(currentPlayer);
+            }catch(UnsupportedOperationException e){
+                throw new UnsupportedOperationException();
+            }
+
+            int numberOfPlayers = match.getNumberOfPlayers();
+
+            if(match.checkIfBookshelfIsFull(currentPlayer) && match.getFirstToFinish()!=null){
+                try{
+                    match.assignMatchEndedTile();
+
+
+                    currentPlayerView.updateView(new SelectViewEvent(new GameView()));
+
+                    currentPlayerView = PlayerViews.get(match.getCurrentPlayer().getNextPlayer().getPlayerID());
+                    match.setCurrentPlayer();
+                    currentPlayerView.updateView(new SelectViewEvent(new PickingTilesGameView()));
+
+                }catch (UnsupportedOperationException e) {
+                    throw new UnsupportedOperationException();
+                }
+            }else{
+                currentPlayerView.updateView(new SelectViewEvent(new GameView()));
+                currentPlayerView = PlayerViews.get(match.getCurrentPlayer().getNextPlayer().getPlayerID());
+                match.setCurrentPlayer();
+                currentPlayerView.updateView(new SelectViewEvent(new PickingTilesGameView())));
+            }
+
+        } catch (UnsupportedOperationException e){
+            throw new InvalidColumnSelectionException("This column is already full|");
+            currentPlayerView.updateView(new SelectViewEvent(new SelectColumnView())));
+        } catch (IndexOutOfBoundsException e){
+            throw new InvalidColumnSelectionException("This column does not exists!");
+            currentPlayerView.updateView(new SelectViewEvent(new SelectColumnView())));
+        } catch (NullPointerException e){
+            throw new NullPointerException("The tile's type cannot be null!");
+            currentPlayerView.updateView(new SelectViewEvent(new SelectColumnView())));
+        }
     }
 
     /**
@@ -124,7 +199,7 @@ public class Controller implements VCEventListener {
      * @author ValentinoGuerrini
      */
 
-    private void onClickOnTileEvent(int[] coordinates) Throws NotYourTurnException, InvalidTileSelectionException {
+    private void onClickOnTileEvent(int[] coordinates) throws NotYourTurnException, InvalidTileSelectionException {
         int[] tmp,selectedTiles;
         boolean flag=false;
         int playernumber = match.getNumberOfPlayers();

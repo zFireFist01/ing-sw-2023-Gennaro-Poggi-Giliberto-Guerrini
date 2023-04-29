@@ -41,6 +41,8 @@ public class Match {
     private Map<Player, Integer> scores;
     private Time matchDuration;
 
+    private Player firstToFinish;
+
     private int count=0;
 
     public Match(int numberOfPlayers, Player matchOpener) {
@@ -57,6 +59,7 @@ public class Match {
         this.scores= new HashMap<Player, Integer>() ;
         this.width= matchOpener.getBookshelf().getBookshelfWidth();
         this.height=matchOpener.getBookshelf().getBookshelfHeight();
+        this.firstToFinish = null;
     }
 
     public PlayersChat getGameChat() {
@@ -345,6 +348,10 @@ public class Match {
         return matchStatus;
     }
 
+    public Player getFirstToFinish() {
+        return firstToFinish;
+    }
+
     public Player getFirstPlayer() {
         return firstPlayer;
     }
@@ -367,6 +374,19 @@ public class Match {
 
     public int getNumberOfPlayers() {
         return numberOfPlayers;
+    }
+
+    public void assignMatchEndedTile(){
+        if(this.firstToFinish == null) {
+            if (checkIfBookshelfIsFull(this.currentPlayer)) {
+                this.currentPlayer.assignPointTile(PointsTile.MATCH_ENDED);
+                this.firstToFinish = this.currentPlayer;
+            } else{
+                throw new UnsupportedOperationException("Bookshelf not full!");
+            }
+        }else{
+            throw new UnsupportedOperationException("Someone finished before!");
+        }
     }
 
 }
