@@ -11,12 +11,12 @@ public class PickingTilesGameView extends GameView{
     private final String message;
 
 
-    public PickingTilesGameView(boolean chatOn){
-        super(chatOn);
+    public PickingTilesGameView( ){
+        super();
         this.message="please, select a tile or check out selected tiles";
     }
-    public PickingTilesGameView(boolean chatOn ,String message){
-        super(chatOn);
+    public PickingTilesGameView(String message){
+        super();
         this.message = message;
     }
 

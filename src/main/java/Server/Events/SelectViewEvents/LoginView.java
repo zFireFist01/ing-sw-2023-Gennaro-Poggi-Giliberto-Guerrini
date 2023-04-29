@@ -25,9 +25,6 @@ public class LoginView extends ViewType{
         return this.Message;
     }
 
-    public boolean getChatOn(){
-        return false;
-    }
 
     public String getType(){
         return "LoginView";

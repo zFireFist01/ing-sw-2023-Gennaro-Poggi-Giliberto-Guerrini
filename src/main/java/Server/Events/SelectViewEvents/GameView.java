@@ -8,21 +8,19 @@ package Server.Events.SelectViewEvents;
 
 public class GameView extends ViewType{
     private final String message;
-    private final boolean chatOn;
+
 
     public GameView(){
         this.message = "wait for your turn";
-        this.chatOn = true;
+
     }
 
-    public GameView(boolean chatOn){
-        this.message = "wait for your turn";
-        this.chatOn = chatOn;
+    public GameView(String message){
+        this.message = message;
     }
 
-    public boolean getChatOn(){
-        return this.chatOn;
-    }
+
+
 
     public String getMessage(){
         return this.message;

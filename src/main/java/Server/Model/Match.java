@@ -325,6 +325,7 @@ public class Match {
                 setWinner(tmp);
             }
         }
+        matchStatus.evolve();
 
     }
 

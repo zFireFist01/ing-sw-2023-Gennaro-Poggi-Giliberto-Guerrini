@@ -11,12 +11,12 @@ public class InsertingTilesGameView extends GameView{
     private final String message;
 
 
-    public InsertingTilesGameView(boolean chatOn){
-        super(chatOn);
+    public InsertingTilesGameView(){
+        super();
         this.message="please, select the coloumn where you want to insert the tiles";
     }
-    public InsertingTilesGameView(boolean chatOn ,String message){
-        super(chatOn);
+    public InsertingTilesGameView(String message){
+        super();
         this.message = message;
     }
 
