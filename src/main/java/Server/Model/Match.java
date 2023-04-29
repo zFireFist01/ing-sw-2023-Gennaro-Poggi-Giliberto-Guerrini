@@ -5,9 +5,11 @@ import Server.Model.Cards.PersonalGoalCard;
 import Server.Model.Chat.PlayersChat;
 import Server.Model.Decks.CommonGoalCardsDeck;
 import Server.Model.Decks.PersonalGoalCardsDeck;
-import Server.Model.GameItems.*;
+import Server.Model.GameItems.BookshelfTileSpot;
+import Server.Model.GameItems.LivingRoom;
+import Server.Model.GameItems.PointsTile;
+import Server.Model.GameItems.TileType;
 import Server.Model.MatchStatus.MatchStatus;
-import Server.Model.MatchStatus.WaitingForPlayers;
 import Server.Model.Player.Player;
 
 import java.sql.Time;
@@ -15,7 +17,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-
 
 
 /**
@@ -55,7 +56,6 @@ public class Match {
         this.players= new ArrayList<Player>();
         this.players.add(matchOpener);
         this.commonGoals=new CommonGoalCard[2];
-        this.matchStatus= new WaitingForPlayers();
         this.scores= new HashMap<Player, Integer>() ;
         this.width= matchOpener.getBookshelf().getBookshelfWidth();
         this.height=matchOpener.getBookshelf().getBookshelfHeight();
@@ -88,6 +88,7 @@ public class Match {
 
     /**
      * this method initializes the match
+     * @author martagiliberto
      */
     public void setup(){
 
@@ -108,6 +109,7 @@ public class Match {
 
     /**
      * this method checks if a player has completed a common goal
+     * @author martagiliberto
      */
     public void checkCommonGoals(Player player){
         if(commonGoals[0].check(player.getBookshelf())) {
@@ -121,6 +123,7 @@ public class Match {
 
     /**
      * this method extracts first player
+     * @author martagiliberto
      */
     private void extractFirstPlayer(){
         Random random = new Random();
@@ -130,6 +133,7 @@ public class Match {
 
     /**
      * this method extracts the common goals cards of the mach from the deck
+     * @author martagiliberto
      */
     public void extractCommonGoals(){
         commonGoalDeck.shuffle();
@@ -140,6 +144,7 @@ public class Match {
     /**
      * this method adds a new player to the match
      * @param newPlayer who wants to play
+     * @author martagiliberto
      */
     public void addContestant(Player newPlayer) throws UnsupportedOperationException{
         for(int i=0; i<players.size(); i++) {
@@ -161,7 +166,8 @@ public class Match {
     /**
      * this method checks if a player has ended the match
      * @param player who has just ended his move
-     * @return false if bookshelf is empty and true if it is full
+     * @return false if bookshelf is empty or true if it is full
+     * @author martagiliberto
      */
     public boolean checkIfBookshelfIsFull(Player player){
         BookshelfTileSpot[][] bookshelf;
@@ -184,6 +190,7 @@ public class Match {
      * @param j index of column
      * @param matrix that represents the bookshelf but with int in the place of tile types
      * @param tileType int that represents the tile type, that I want to check now
+     * @author martagiliberto
      */
     private void howManyAdjacentTiles(int i, int j, int[][] matrix, int tileType ){
         this.count++;
@@ -216,6 +223,7 @@ public class Match {
      * this method returns the points made by a player for adjacent tiles
      * @param player whose bookshelf I want to check
      * @return points of adjacent tiles, made by a player
+     * @author martagiliberto
      */
     public Integer checkAdjacentTiles(Player player) {
         BookshelfTileSpot[][] bookshelf = player.getBookshelf().getTileMatrix();
@@ -269,6 +277,7 @@ public class Match {
 
     /**
      * this method calculates final scores of all players of the match, and it sets the winner
+     * @author martagiliberto
      */
     public void calculateFinalScores(){
 
@@ -321,6 +330,7 @@ public class Match {
 
     /**
      * this method sets current player
+     * @author martagiliberto
      */
     public void setCurrentPlayer() {
         this.currentPlayer = currentPlayer.getNextPlayer();
@@ -328,6 +338,7 @@ public class Match {
 
     /**
      * this method sets winner
+     * @author martagiliberto
      */
     public void setWinner(Player winner) {
         this.winner = winner;
