@@ -4,33 +4,34 @@ import Server.Controller.Controller;
 import Server.Model.Match;
 import Server.Model.MatchStatus.WaitingForPlayers;
 
+import java.io.IOException;
 import java.rmi.AccessException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.rmi.server.*;
-import java.rmi.registry.*;
 import java.util.Map;
+
 
 
 public class Server {
     SocketWaiter socketWaiter;
     RMIWaiter rmiWaiter;
-
     Registry rmiRegistry;
-
     List<Match> matches;
     Map<Match, Controller> macthesControllers;
     Map<Match, VirtualView> matchesViews;
 
 
-    public Server() {
+    public Server() throws IOException {
         boolean done = false;
         this.matches = new ArrayList<>();
         this.macthesControllers = new HashMap<>();
-        this.socketWaiter = new SocketWaiter();
+        this.socketWaiter = new SocketWaiter(this,1234);
+        new Thread(socketWaiter).start();
         while(!done){
             try{
                 this.rmiWaiter = new RMIWaiter(this);
@@ -86,4 +87,5 @@ public class Server {
     protected void subscribeNewViewToExistingMatch(Match m, VirtualView vv){
         matchesViews.put(m,vv);
     }
+
 }

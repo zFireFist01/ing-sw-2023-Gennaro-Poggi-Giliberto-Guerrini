@@ -1,5 +1,6 @@
 package Server.Model;
 
+import Server.Events.MVEvents.MVEvent;
 import Server.Listeners.MVEventListener;
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Cards.PersonalGoalCard;
@@ -11,6 +12,7 @@ import Server.Model.GameItems.LivingRoom;
 import Server.Model.GameItems.PointsTile;
 import Server.Model.GameItems.TileType;
 import Server.Model.MatchStatus.MatchStatus;
+import Server.Model.MatchStatus.NotRunning;
 import Server.Model.Player.Player;
 
 import java.sql.Time;
@@ -24,6 +26,19 @@ import java.util.*;
 public class Match {
     private ArrayList<Player> players;
     private PlayersChat gameChat;
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public Player getWinner() {
+        return winner;
+    }
+
     private ArrayList<Integer> selectedTiles;
     private int width;
     private int height;
@@ -45,6 +60,21 @@ public class Match {
     private int count=0;
 
     private List<MVEventListener> mvEventListeners;
+
+    public Match(){
+        this.matchStatus= new NotRunning();
+        this.gameChat = null;
+        this.numberOfPlayers = 0;
+        this.matchOpener = null;
+        this.livingRoom = null;
+        this.commonGoalDeck = null;
+        this.personalGoalDeck = null;
+        this.players= new ArrayList<>();
+        this.commonGoals=new CommonGoalCard[2];
+        this.scores= new HashMap<>() ;
+        this.firstToFinish = null;
+    }
+
 
     public Match(int numberOfPlayers, Player matchOpener) {
         this.gameChat = new PlayersChat();
@@ -408,5 +438,11 @@ public class Match {
 
     public void removeMVEventListener(MVEventListener listener){
         this.mvEventListeners.remove(listener);
+    }
+
+    public void notifyMVEventListeners(MVEvent event){
+        for(MVEventListener listener : this.mvEventListeners){
+            listener.onMVEvent(event);
+        }
     }
 }

@@ -108,7 +108,6 @@ public class Controller implements VCEventListener {
      * Method to manage the select column event, it adds the selectedTiles of the current player
      * to the column selected by him.
      * @param column selected from the player
-
      * @author Paolo Gennaro
      */
     private void onSelectColumnEvent(int column) throws RemoteException{
@@ -180,13 +179,13 @@ public class Controller implements VCEventListener {
                     match.setCurrentPlayer();
                     currentPlayerView.onSelectViewEvent(new SelectViewEvent(new PickingTilesGameView()));
                 }
+
             }else{
                 if(currentPlayer.getNextPlayer().equals(match.getFirstPlayer())){
                     match.calculateFinalScores();
                     for(int i=0; i<numberOfPlayers; i++){
                         PlayerViews.get(match.getPlayers().get(i).getPlayerID()).onSelectViewEvent(new SelectViewEvent(new EndedMatchVIew()));
                     }
-
 
                 }else{
                     currentPlayerView.onSelectViewEvent(new SelectViewEvent(new GameView()));
@@ -195,13 +194,6 @@ public class Controller implements VCEventListener {
                     currentPlayerView.onSelectViewEvent(new SelectViewEvent(new PickingTilesGameView("This is your last turn!")));
                 }
             }
-
-
-
-
-
-
-
 
         } catch (UnsupportedOperationException e){
 
@@ -212,7 +204,6 @@ public class Controller implements VCEventListener {
 
         }
     }
-
     /**
      * Method to manage the selected tile event, the selected tiles are added to the match if there is space for them
      * @param coordinates of the tile selected by the player
@@ -220,7 +211,9 @@ public class Controller implements VCEventListener {
      */
 
 
+
     private void onClickOnTileEvent(int[] coordinates) throws RemoteException{
+
 
         int[] tmp,selectedTiles;
         boolean flag=false;
@@ -397,9 +390,15 @@ public class Controller implements VCEventListener {
                 }
             }
         }
+        //print
 
 
 
+    }
+
+    @Override
+    public void onVCEvent(VCEvent event) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        throw new IllegalAccessException("This method should not be called");
     }
 
     public void addSelectViewEventListener(SelectViewEventListener listener){

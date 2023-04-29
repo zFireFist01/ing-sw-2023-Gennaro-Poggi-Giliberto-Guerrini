@@ -2,16 +2,17 @@ package Server.Events.MVEvents;
 
 import Server.Model.LightMatch;
 
+
 /**
- * This event is used to notify the client that the match ended tile has been assigned to someone.
+ * This event is used to notify the client that the chat has been modified.
  * @author Paolo Gennaro
  */
-public class ModifiedMatchEndedEvent extends MVEvent{
+public class ModifiedChatEvent extends MVEvent{
     private final String methodName;
     private final LightMatch match;
 
-    public ModifiedMatchEndedEvent(LightMatch match){
-        this.methodName = "onModifiedMatchEndedEvent";
+    public ModifiedChatEvent(LightMatch match){
+        this.methodName = "onModifiedChatEvent";
         this.match = match;
     }
 
@@ -25,6 +26,6 @@ public class ModifiedMatchEndedEvent extends MVEvent{
 
     @Override
     public String getType() {
-        return "ModifiedMatchEndedEvent";
+        return "ModifiedChatEvent";
     }
 }

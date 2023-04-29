@@ -27,7 +27,5 @@ public class WaitingForPlayers extends MatchStatus {
         numberMissingPlayers++;
     }
 
-    public int getNumberMissingPlayers(){
-        return numberMissingPlayers;
-    }
+
 }
