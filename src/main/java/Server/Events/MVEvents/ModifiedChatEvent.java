@@ -2,6 +2,11 @@ package Server.Events.MVEvents;
 
 import Server.Model.LightMatch;
 
+
+/**
+ * This event is used to notify the client that the chat has been modified.
+ * @author Paolo Gennaro
+ */
 public class ModifiedChatEvent extends MVEvent{
     private final String methodName;
     private final LightMatch match;

@@ -2,6 +2,10 @@ package Server.Events.MVEvents;
 
 import Server.Model.LightMatch;
 
+/**
+ * This event is used to notify the client that the match ended tile has been assigned to someone.
+ * @author Paolo Gennaro
+ */
 public class ModifiedMatchEndedEvent extends MVEvent{
     private final String methodName;
     private final LightMatch match;
