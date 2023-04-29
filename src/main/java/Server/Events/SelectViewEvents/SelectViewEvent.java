@@ -36,13 +36,6 @@ public class SelectViewEvent {
         return this.viewType.getMessage();
     }
 
-    /**
-     * Getter for the chatOn boolean
-     * @return the chatOn boolean
-     */
-    public Boolean getChatOn(){
-        return this.viewType.getChatOn();
-    }
 
 
 }

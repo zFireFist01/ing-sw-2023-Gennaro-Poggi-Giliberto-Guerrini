@@ -8,12 +8,8 @@ package Server.Events.SelectViewEvents;
 
 public abstract class ViewType {
 
-    /**
-     * Getter for the ChatOn boolean
-     * @return the ChatOn boolean
-     */
 
-    public abstract boolean getChatOn();
+
 
     /**
      * Getter for the message to show in the view

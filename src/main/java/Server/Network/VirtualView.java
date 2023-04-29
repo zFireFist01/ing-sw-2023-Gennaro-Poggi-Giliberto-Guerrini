@@ -12,5 +12,5 @@ import java.lang.reflect.InvocationTargetException;
 
 public interface VirtualView extends Runnable, MVEventListener, SelectViewEventListener {
 
-
+    public void addVCEventListener(VCEventListener listener);
 }
