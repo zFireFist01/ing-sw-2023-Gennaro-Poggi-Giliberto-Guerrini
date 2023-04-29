@@ -1,9 +1,5 @@
 package Client;
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 48fd7eabb0a886931093c2b6aae59223e5906ca2
 import Client.View.View;
 import Server.Events.MVEvents.MVEvent;
 import Server.Events.SelectViewEvents.SelectViewEvent;
@@ -14,7 +10,6 @@ import Server.Network.VirtualView;
 import com.google.gson.Gson;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -67,6 +62,7 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements NetworkHan
         view.onMVEvent(event);
     }
 
+
     @Override
     public void sendSelectViewEvent(String json) throws RemoteException{
         Gson gson = new Gson();
@@ -85,4 +81,5 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements NetworkHan
     public void onVCEvent(VCEvent event, VirtualView view) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         throw new IllegalAccessError("This method should not be called");
     }
+
 }

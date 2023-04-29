@@ -1,7 +1,9 @@
 package Client;
 
+import Client.View.View;
+import Server.Events.Event;
 import Server.Events.MVEvents.MVEvent;
-import Server.Events.MVEvents.ModifiedLivingRoomEvent;
+import Server.Events.SelectViewEvents.SelectViewEvent;
 import Server.Events.VCEvents.VCEvent;
 import Server.Network.VirtualView;
 import com.google.gson.Gson;
@@ -11,17 +13,35 @@ import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.rmi.RemoteException;
 import java.util.Scanner;
 
+
+/**
+ * This class is used to handle the network connection with the server
+ * @author Marta Giliberto & Paolo Gennaro & Patrick Poggi
+ */
 public class NetworkSocketHandler implements NetworkHandler{
-<<<<<<< HEAD
+    View view;
     Socket socket;
     ServerSocket server;
     Scanner in;
     OutputStream out;
-    public NetworkSocketHandler(ServerSocket server) {
+
+    /**
+     * This constructor is used to create a new NetworkSocketHandler and connect it to the server
+     * @param server the server socket
+     * @param view the view
+     */
+    public NetworkSocketHandler(ServerSocket server, View view) {
         socket = new Socket();
+        try {
+            socket.connect(server.getLocalSocketAddress());
+        } catch (IOException e) {
+            System.err.println(e.getStackTrace());
+            throw new RuntimeException(e);
+        }
+        this.view = view;
+        this.server = server;
         try {
             in = new Scanner(socket.getInputStream());
             out = socket.getOutputStream();
@@ -32,13 +52,17 @@ public class NetworkSocketHandler implements NetworkHandler{
     }
 
     @Override
-    public void sendMVEvent(String json) throws RemoteException {
-
+    public void sendMVEvent(String json) {
+        Gson gson = new Gson();
+        MVEvent event = gson.fromJson(json, MVEvent.class);
+        view.onMVEvent(event);
     }
 
     @Override
-    public void sendSelectViewEvent(String json) throws RemoteException {
-
+    public void sendSelectViewEvent(String json){
+        Gson gson = new Gson();
+        SelectViewEvent event = gson.fromJson(json, SelectViewEvent.class);
+        view.onSelectViewEvent(event);
     }
 
     @Override
@@ -62,63 +86,26 @@ public class NetworkSocketHandler implements NetworkHandler{
     public void run() {
         String message;
         String primaryType;
-        String secondaryType;
         Event event;
-        while (true){
+
+
+        while (true) {
             message = in.nextLine();
 
             Gson gson = new Gson();
-            Event event = gson.fromJson(message, Event.class);
+            event = gson.fromJson(message, Event.class);
             primaryType = event.getPrimaryType();
 
-            switch (primaryType){
+            switch (primaryType) {
                 case "MVEvent":
-                    secondaryType = (MVEvent)event.getType();
-                    switch (secondaryType){
-                        case "ModifiedPointsEvent":
-                            ModifiedPointsEvent modifiedPointsEvent = gson.fromJson(message, ModifiedPointsEvent.class);
-                            break;
-                        case "ModifiedBookshelfEvent":
-                            ModifiedBookshelfEvent modifiedBookshelfEvent = gson.fromJson(message,ModifiedBookshelfEvent.class);
-                            break;
-                        case "ModifiedChatEvent":
-                            ModifiedChatEvent modifiedChatEvent = gson.fromJson(message, ModifiedChatEvent.class);
-                            break;
-                        case "ModifiedLivingRoomEvent":
-                            ModifiedLivingRoomEvent modifiedLivingRoomEvent = gson.fromJson(message, ModifiedLivingRoomEvent.class);
-                            break;
-                        case "ModifiedMatchEndedEvent":
-                            ModifiedMatchEndedEvent modifiedMatchEndedEvent = gson.fromJson(message, ModifiedMatchEndedEvent.class);
-                            break;
-                        default:
-                            throw new RuntimeException("Unknown event type");
-                    }
+                    sendMVEvent(message);
                     break;
                 case "SelectViewEvent":
-                    secondaryType = (SelectViewEvent)event.getType();
-                    switch (secondaryType){
-
-                        case "EndedMatchEvent":
-                            EndedMatchEvent endedMatchEvent = gson.fromJson(message, EndedMatchEvent.class);
-                            break;
-                        case "ChatONEvent":
-                            ChatONEvent chatOFFEvent = gson.fromJson(message, ChatONEvent.class);
-                            break;
-                        case "ChatOFFEvent":
-                            ChatOFFEvent chatOFFEvent = gson.fromJson(message, ChatOFFEvent.class);
-                            break;
-                        default:
-                            throw new RuntimeException("Unknown event type");
-                    }
+                    sendSelectViewEvent(message);
                     break;
                 default:
                     throw new RuntimeException("Unknown event type");
             }
         }
-=======
-
-    public NetworkSocketHandler(Socket client, ServerSocket server) {
->>>>>>> 48fd7eabb0a886931093c2b6aae59223e5906ca2
     }
-
 }
