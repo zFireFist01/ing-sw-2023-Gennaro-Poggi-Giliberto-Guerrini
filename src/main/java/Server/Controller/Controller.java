@@ -47,8 +47,6 @@ public class Controller implements VCEventListener {
         selectViewEventListeners = new ArrayList<>();
     }
 
-
-
     /**
      * Method to manage the login event, if there is a player with the same nickname, the login is not possible so
      * the method return a LoginView event with the boolean value set to false, otherwise the player is added to the match
@@ -56,7 +54,6 @@ public class Controller implements VCEventListener {
      * @return SelectViewEvent event
      * @Author ValentinoGuerrini
      */
-
     private SelectViewEvent onLoginEvent(String nickname){
         ArrayList<Player> players = match.getPlayers();
         for(Player player : players){
@@ -79,7 +76,6 @@ public class Controller implements VCEventListener {
 
     }
 
-
     /**
      *Method to manage the OpenChat event, it returns a ViewType event with the chat open
      * @return ViewType event
@@ -88,7 +84,6 @@ public class Controller implements VCEventListener {
     private SelectViewEvent onOpenChatEvent(){
         return new SelectViewEvent(new GameView(true));
     }
-
 
     /**
      *Method to manage the CloseChat event, it returns a ViewType event with the chat closed
@@ -107,7 +102,6 @@ public class Controller implements VCEventListener {
     private void onSendMessageEvent(Message message){
         match.getGameChat().addMessage(message);
     }
-
 
     /**
      * Method to manage the select column event, it adds the selectedTiles of the current player
@@ -163,7 +157,7 @@ public class Controller implements VCEventListener {
 
             int numberOfPlayers = match.getNumberOfPlayers();
 
-            if(match.checkIfBookshelfIsFull(currentPlayer) && match.getFirstToFinish()!=null){
+            if(match.checkIfBookshelfIsFull(currentPlayer) && match.getFirstToFinish()==null){
                 try{
                     match.assignMatchEndedTile();
 
@@ -186,13 +180,13 @@ public class Controller implements VCEventListener {
 
         } catch (UnsupportedOperationException e){
             throw new InvalidColumnSelectionException("This column is already full|");
-            currentPlayerView.updateView(new SelectViewEvent(new SelectColumnView())));
+            currentPlayerView.updateView(new SelectViewEvent(new InsertingTilesGameView())));
         } catch (IndexOutOfBoundsException e){
             throw new InvalidColumnSelectionException("This column does not exists!");
-            currentPlayerView.updateView(new SelectViewEvent(new SelectColumnView())));
+            currentPlayerView.updateView(new SelectViewEvent(new InsertingTilesGameView())));
         } catch (NullPointerException e){
             throw new NullPointerException("The tile's type cannot be null!");
-            currentPlayerView.updateView(new SelectViewEvent(new SelectColumnView())));
+            currentPlayerView.updateView(new SelectViewEvent(new InsertingTilesGameView())));
         }
     }
 
@@ -201,7 +195,6 @@ public class Controller implements VCEventListener {
      * @param coordinates
      * @author ValentinoGuerrini
      */
-
     private void onClickOnTileEvent(int[] coordinates) throws NotYourTurnException, InvalidTileSelectionException {
         int[] tmp,selectedTiles;
         boolean flag=false;
@@ -261,7 +254,6 @@ public class Controller implements VCEventListener {
         }
         match.setSelectedTiles(selectedTiles);
     }
-
 
     /**
      * Method to manage the checkout tiles event, it returns a ViewType event depending on the position of the tiles selected
@@ -335,7 +327,6 @@ public class Controller implements VCEventListener {
      * @throws InvocationTargetException
      * @throws IllegalAccessException
      */
-
     @Override
     public void onVCEvent(VCEvent event, VirtualView view) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         String methodName = event.getMethodName();
