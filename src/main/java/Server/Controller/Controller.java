@@ -2,6 +2,7 @@ package Server.Controller;
 
 import Server.Events.SelectViewEvents.*;
 import Server.Events.VCEvents.SelectColumn;
+import Server.Listeners.SelectViewEventListener;
 import Server.Listeners.VCEventListener;
 import Server.Model.Chat.Message;
 import Server.Model.GameItems.LivingRoom;
@@ -11,6 +12,7 @@ import Server.Model.GameItems.TileType;
 import Server.Model.Match;
 import Server.Events.VCEvents.VCEvent;
 import Server.Model.Player.Player;
+import Server.Network.Server;
 import Server.Network.VirtualView;
 import Utils.MathUtils.*;
 
@@ -30,7 +32,7 @@ public class Controller implements VCEventListener {
     private VirtualView currentPlayerView;
     private Map<Integer,VirtualView > PlayerViews=new HashMap<>();
 
-
+    private List<SelectViewEventListener> selectViewEventListeners;
 
 
 
@@ -42,6 +44,7 @@ public class Controller implements VCEventListener {
 
     public Controller(Match match){
         this.match = match;
+        selectViewEventListeners = new ArrayList<>();
     }
 
 
@@ -365,8 +368,12 @@ public class Controller implements VCEventListener {
 
     }
 
+    public void addSelectViewEventListener(SelectViewEventListener listener){
+        selectViewEventListeners.add(listener);
+    }
 
-
-
+    public void removeSelectViewEventListener(SelectViewEventListener listener){
+        selectViewEventListeners.remove(listener);
+    }
 
 }
