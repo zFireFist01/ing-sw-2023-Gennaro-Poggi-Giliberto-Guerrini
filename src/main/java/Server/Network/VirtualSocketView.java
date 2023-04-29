@@ -1,16 +1,22 @@
 package Server.Network;
 
 import Client.NetworkHandler;
+import Client.NetworkSocketHandler;
 import Server.Events.SelectViewEvents.SelectViewEvent;
+import Server.Listeners.VCEventListener;
 
 import java.net.Socket;
+import java.util.List;
 
 public class VirtualSocketView implements VirtualView{
 
     Socket socket= new Socket();
-    NetworkHandler client;
-    public VirtualSocketView(NetworkHandler networkHandler) {
-        this.client = networkHandler;
+    NetworkSocketHandler client;
+
+    List<VCEventListener> vcEventListeners;
+
+    public VirtualSocketView(NetworkSocketHandler networkSocketHandler) {
+        this.client = networkSocketHandler;
     }
 
     @Override

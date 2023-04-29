@@ -5,5 +5,5 @@ import Server.Listeners.SelectViewEventListener;
 
 public interface VirtualView extends Runnable, MVEventListener, SelectViewEventListener {
 
-
+    public void addVCEventListener(VCEventListener listener);
 }

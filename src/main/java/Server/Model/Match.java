@@ -1,5 +1,6 @@
 package Server.Model;
 
+import Server.Listeners.MVEventListener;
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Cards.PersonalGoalCard;
 import Server.Model.Chat.PlayersChat;
@@ -14,10 +15,7 @@ import Server.Model.MatchStatus.NotRunning;
 import Server.Model.Player.Player;
 
 import java.sql.Time;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 
 /**
@@ -27,6 +25,19 @@ import java.util.Random;
 public class Match {
     private ArrayList<Player> players;
     private PlayersChat gameChat;
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public Player getWinner() {
+        return winner;
+    }
+
     private ArrayList<Integer> selectedTiles;
     private int width;
     private int height;
@@ -46,6 +57,8 @@ public class Match {
     private Player firstToFinish;
 
     private int count=0;
+
+    private List<MVEventListener> mvEventListeners;
 
     public Match(){
         this.matchStatus= new NotRunning();
@@ -76,6 +89,7 @@ public class Match {
         this.width= matchOpener.getBookshelf().getBookshelfWidth();
         this.height=matchOpener.getBookshelf().getBookshelfHeight();
         this.firstToFinish = null;
+        this.mvEventListeners = new ArrayList<>();
     }
 
     public PlayersChat getGameChat() {
@@ -341,6 +355,7 @@ public class Match {
                 setWinner(tmp);
             }
         }
+        matchStatus.evolve();
 
     }
 
@@ -416,4 +431,11 @@ public class Match {
         }
     }
 
+    public void addMVEventListener(MVEventListener listener){
+        this.mvEventListeners.add(listener);
+    }
+
+    public void removeMVEventListener(MVEventListener listener){
+        this.mvEventListeners.remove(listener);
+    }
 }

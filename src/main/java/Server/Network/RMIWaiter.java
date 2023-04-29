@@ -19,6 +19,7 @@ public class RMIWaiter extends UnicastRemoteObject implements Remote {
     }
 
     public synchronized VirtualView giveConnection(NetworkHandler requestingClient) throws RemoteException{
+        //VirtualView clientsVV = new VirtualRMIView((NetworkRMIHandler) requestingClient);
         VirtualView clientsVV = new VirtualRMIView((NetworkRMIHandler) requestingClient);
         if(server.waitingMatch()){
             //We don't need to istantiate a new match
@@ -32,7 +33,7 @@ public class RMIWaiter extends UnicastRemoteObject implements Remote {
         }else{
             //We need to create a new match
             Match m = new Match();
-            Controller c = new Controller(clientsVV, m);
+            Controller c = new Controller(m);
             m.addMVEventListener(clientsVV);
             clientsVV.addVCEventListener(c);
             c.addSelectViewEventListener(clientsVV);
