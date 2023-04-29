@@ -1,32 +1,19 @@
 package Server.Network;
 
-import Client.NetworkHandler;
 import Client.NetworkRMIHandler;
-import Server.Controller.Controller;
 import Server.Events.MVEvents.MVEvent;
 import Server.Events.SelectViewEvents.LoginView;
 import Server.Events.SelectViewEvents.SelectViewEvent;
-import Server.Events.VCEvents.LoginEvent;
 import Server.Events.VCEvents.VCEvent;
-import Server.Listeners.MVEventListener;
-import Server.Listeners.SelectViewEventListener;
 import Server.Listeners.VCEventListener;
+import com.google.gson.Gson;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.rmi.AlreadyBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import static java.lang.System.currentTimeMillis;
 
 public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, Remote {
     NetworkRMIHandler client;

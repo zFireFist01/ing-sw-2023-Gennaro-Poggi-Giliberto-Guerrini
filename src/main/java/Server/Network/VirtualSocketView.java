@@ -1,9 +1,9 @@
 package Server.Network;
 
-import Client.NetworkHandler;
-import Client.NetworkSocketHandler;
+
 import Server.Events.MVEvents.MVEvent;
 import Server.Events.SelectViewEvents.SelectViewEvent;
+import Server.Events.VCEvents.VCEvent;
 import Server.Listeners.VCEventListener;
 
 import java.net.Socket;
@@ -12,12 +12,12 @@ import java.util.List;
 public class VirtualSocketView implements VirtualView{
 
     Socket socket= new Socket();
-    NetworkSocketHandler client;
+    Socket client;
 
     List<VCEventListener> vcEventListeners;
 
-    public VirtualSocketView(NetworkSocketHandler networkSocketHandler) {
-        this.client = networkSocketHandler;
+    public VirtualSocketView(Socket client) {
+        this.client = client;
     }
 
     @Override
@@ -32,6 +32,10 @@ public class VirtualSocketView implements VirtualView{
 
     @Override
     public void onSelectViewEvent(SelectViewEvent selectViewEvent){
+
+    }
+
+    public void sendVCEvent(VCEvent vcEvent){
 
     }
 }
