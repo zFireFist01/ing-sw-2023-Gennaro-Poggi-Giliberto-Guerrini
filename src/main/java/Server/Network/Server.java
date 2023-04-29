@@ -18,9 +18,7 @@ import java.util.Map;
 public class Server {
     SocketWaiter socketWaiter;
     RMIWaiter rmiWaiter;
-
     Registry rmiRegistry;
-
     List<Match> matches;
     Map<Match, Controller> macthesControllers;
     Map<Match, VirtualView> matchesViews;
