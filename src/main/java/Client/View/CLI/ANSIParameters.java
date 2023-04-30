@@ -9,6 +9,7 @@ public class ANSIParameters {
     // Codici ANSI
 
     public static final String CLEAR_SCREEN = "\033[2J";
+    public static final String CRESET = "\u001B[0m";
     public static final String CURSOR_HOME = "\033[H";
     public static final String BLACK = "\033[30m";
     public static final String RED = "\033[31m";

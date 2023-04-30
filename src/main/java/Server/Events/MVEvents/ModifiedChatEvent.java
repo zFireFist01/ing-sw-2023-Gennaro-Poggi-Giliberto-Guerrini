@@ -1,5 +1,6 @@
 package Server.Events.MVEvents;
 
+import Server.Model.Chat.Message;
 import Server.Model.LightMatch;
 
 
@@ -9,11 +10,11 @@ import Server.Model.LightMatch;
  */
 public class ModifiedChatEvent extends MVEvent{
     private final String methodName;
-    private final LightMatch match;
+    private final Message message;
 
-    public ModifiedChatEvent(LightMatch match){
+    public ModifiedChatEvent(Message message){
         this.methodName = "onModifiedChatEvent";
-        this.match = match;
+        this.message = message;
     }
 
     public String getMethodName(){
@@ -21,7 +22,7 @@ public class ModifiedChatEvent extends MVEvent{
     }
 
     public Object getValue(){
-        return null;
+        return message;
     }
 
     @Override
