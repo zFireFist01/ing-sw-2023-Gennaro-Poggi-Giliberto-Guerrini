@@ -9,6 +9,7 @@ import Server.Events.MVEvents.MVEvent;
 import Server.Events.SelectViewEvents.SelectViewEvent;
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Chat.Message;
+import Server.Model.LightMatch;
 import Server.Model.Match;
 import Server.Model.Player.Player;
 
@@ -180,7 +181,7 @@ public class CLI implements Runnable , View {
 
     }
 
-    private void onMatchStartedEvent(Match match){
+    private void onMatchStartedEvent(LightMatch match){
         numberPlayers = match.getPlayers().size();
         for(int i = 0; i < numberPlayers; i++){
             players.put(i,match.getPlayers().get(i));
@@ -194,12 +195,60 @@ public class CLI implements Runnable , View {
         CommonGoalCard commonGoal= match.getCommonGoals()[0];
         printCommonGoal1(commonGoal.getCLIRepresentation());
         printPoints1(commonGoal.getPointsTiles().get(0).getCLIRepresentation());
+        printDescription1(commonGoal.getCommonGoalDescription());
         commonGoal = match.getCommonGoals()[1];
         printCommonGoal2(commonGoal.getCLIRepresentation());
         printPoints2(commonGoal.getPointsTiles().get(0).getCLIRepresentation());
+        printDescription2(commonGoal.getCommonGoalDescription());
 
+        switch(numberPlayers) {
+            case 2 -> {
+                printBookshelf1(players.get(0).getBookshelf().getCLIRepresentation());
+                printEndTile1(EMPTYSPOT);
+                printPlayer1Points(EMPTYSPOT, EMPTYSPOT);
 
+                printBookshelf2(players.get(1).getBookshelf().getCLIRepresentation());
+                printEndTile2(EMPTYSPOT);
+                printPlayer2Points(EMPTYSPOT, EMPTYSPOT);
+            }
+            case 3 -> {
+                printBookshelf1(players.get(0).getBookshelf().getCLIRepresentation());
+                printEndTile1(EMPTYSPOT);
+                printPlayer1Points(EMPTYSPOT, EMPTYSPOT);
 
+                printBookshelf2(players.get(1).getBookshelf().getCLIRepresentation());
+                printEndTile2(EMPTYSPOT);
+                printPlayer2Points(EMPTYSPOT, EMPTYSPOT);
+
+                printBookshelf3(players.get(2).getBookshelf().getCLIRepresentation());
+                printEndTile3(EMPTYSPOT);
+                printPlayer3Points(EMPTYSPOT, EMPTYSPOT);
+            }
+            case 4 -> {
+                printBookshelf1(players.get(0).getBookshelf().getCLIRepresentation());
+                printEndTile1(EMPTYSPOT);
+                printPlayer1Points(EMPTYSPOT, EMPTYSPOT);
+
+                printBookshelf2(players.get(1).getBookshelf().getCLIRepresentation());
+                printEndTile2(EMPTYSPOT);
+                printPlayer2Points(EMPTYSPOT, EMPTYSPOT);
+
+                printBookshelf3(players.get(2).getBookshelf().getCLIRepresentation());
+                printEndTile3(EMPTYSPOT);
+                printPlayer3Points(EMPTYSPOT, EMPTYSPOT);
+
+                printBookshelf4(players.get(3).getBookshelf().getCLIRepresentation());
+                printEndTile4(EMPTYSPOT);
+                printPlayer4Points(EMPTYSPOT, EMPTYSPOT);
+            }
+        }
+        String[] names = new String[numberPlayers];
+
+        for (int i = 0; i < numberPlayers; i++) {
+            names[i] = players.get(i).getPlayerNickName();
+        }
+
+        printNames(names);
 
 
     }
