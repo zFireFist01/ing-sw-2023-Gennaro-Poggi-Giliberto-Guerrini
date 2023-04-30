@@ -139,7 +139,7 @@ public class CLI implements Runnable , View {
         try{
             //connectionHandler = new ConnectionHandler(connectionType,port,host);
             if(connectionType == ConnectionType.SOCKET) {
-                networkHandler = new NetworkSocketHandler();
+                networkHandler = new NetworkSocketHandler(host, port, this);
             }else{
                 networkHandler = new NetworkRMIHandler(this);
             }

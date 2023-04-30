@@ -99,5 +99,5 @@ public class VirtualSocketView implements VirtualView{
     public void removeVCEventListener(VCEventListener listener){
         vcEventListeners.remove(listener);
     }
-    
+
 }
