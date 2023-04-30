@@ -1,6 +1,9 @@
 package Server.Model;
 
 import Server.Events.MVEvents.MVEvent;
+import Server.Events.MVEvents.MatchStartedEvent;
+import Server.Events.MVEvents.ModifiedMatchEndedEvent;
+import Server.Events.MVEvents.ModifiedPointsEvent;
 import Server.Listeners.MVEventListener;
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Cards.PersonalGoalCard;
@@ -62,7 +65,7 @@ public class Match {
     private List<MVEventListener> mvEventListeners;
 
     public Match(){
-        this.matchStatus= new NotRunning();
+        this.matchStatus= new NotRunning(this);
         this.gameChat = null;
         this.numberOfPlayers = 0;
         this.matchOpener = null;
@@ -145,10 +148,12 @@ public class Match {
     public void checkCommonGoals(Player player){
         if(commonGoals[0].check(player.getBookshelf())) {
             player.assignPointTile(commonGoals[0].pickPointsTile());
+            notifyMVEventListeners(new ModifiedPointsEvent(new LightMatch(this)));
         }
 
         if(commonGoals[1].check(player.getBookshelf())) {
             player.assignPointTile(commonGoals[1].pickPointsTile());
+            notifyMVEventListeners(new ModifiedPointsEvent(new LightMatch(this)));
         }
     }
 
@@ -186,6 +191,7 @@ public class Match {
                 try {
                     matchStatus = matchStatus.evolve();
                     setup();
+                    notifyMVEventListeners(new MatchStartedEvent(new LightMatch(this)));
                 } catch (UnsupportedOperationException e) {
                     System.err.println(e.getMessage());
                 }
@@ -211,6 +217,8 @@ public class Match {
             }
         }
         player.assignPointTile(PointsTile.MATCH_ENDED);
+        notifyMVEventListeners(new ModifiedPointsEvent(new LightMatch(this)));
+
         return true;
     }
 
@@ -357,7 +365,7 @@ public class Match {
             }
         }
         matchStatus.evolve();
-
+        notifyMVEventListeners(new ModifiedMatchEndedEvent(new LightMatch(this)));
     }
 
     /**
