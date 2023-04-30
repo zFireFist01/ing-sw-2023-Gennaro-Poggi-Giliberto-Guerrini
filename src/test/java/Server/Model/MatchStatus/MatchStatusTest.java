@@ -1,33 +1,38 @@
 package Server.Model.MatchStatus;
 
+import Server.Model.Match;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertSame;
 
 public class MatchStatusTest {
-
     @Test
     public void NotRunning_test(){
-        MatchStatus status = new NotRunning();
+        Match match= new Match();
+        MatchStatus status = new NotRunning(match);
         status.evolve();
-        assertSame(new WaitingForPlayers(), status);
+        assertSame(new WaitingForPlayers(match), status);
     }
 
     @Test
     public void WaitingForPlayers_test(){
-        MatchStatus status = new WaitingForPlayers();
+        Match match= new Match();
+        MatchStatus status = new WaitingForPlayers(match);
         status.evolve();
     }
 
     @Test
     public void Running_test(){
-        MatchStatus status = new Running();
+        Match match= new Match();
+        MatchStatus status = new Running(match);
         status.evolve();
-        assertSame(new Closing(), status);
+        assertSame(new Closing(match), status);
     }
 
     @Test
     public void Closing_test(){
-        MatchStatus status = new Closing();
+        Match match= new Match();
+        MatchStatus status = new Closing(match);
         status.evolve();
         assertSame(null, status);
     }
