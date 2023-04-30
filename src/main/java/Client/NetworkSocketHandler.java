@@ -24,32 +24,29 @@ import java.util.Scanner;
 public class NetworkSocketHandler implements NetworkHandler{
     View view;
     Socket socket;
-    ServerSocket server;
     Scanner in;
     OutputStream out;
 
     /**
      * This constructor is used to create a new NetworkSocketHandler and connect it to the server
-     * @param server the server socket
+     * @param host the host address
+     * @param port the port of the server
      * @param view the view
      */
-    public NetworkSocketHandler(ServerSocket server, View view) {
-        socket = new Socket();
+    public NetworkSocketHandler(String host, int port, View view) {
         try {
-            socket.connect(server.getLocalSocketAddress());
+            socket = new Socket(host, port);
         } catch (IOException e) {
             System.err.println(e.getStackTrace());
             throw new RuntimeException(e);
         }
         this.view = view;
-        this.server = server;
         try {
             in = new Scanner(socket.getInputStream());
             out = socket.getOutputStream();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     @Override
