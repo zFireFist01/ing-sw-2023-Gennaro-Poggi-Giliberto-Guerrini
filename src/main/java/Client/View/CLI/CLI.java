@@ -7,6 +7,7 @@ import Client.View.View;
 import Server.Controller.Controller;
 import Server.Events.MVEvents.MVEvent;
 import Server.Events.SelectViewEvents.SelectViewEvent;
+import Server.Events.VCEvents.LoginEvent;
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Chat.Message;
 import Server.Model.LightMatch;
@@ -70,6 +71,7 @@ public class CLI implements Runnable , View {
     private int numberPlayers;
     private Player me;
     private String myNick;
+    private boolean MatchEnded = false;
 
 
 
@@ -169,11 +171,16 @@ public class CLI implements Runnable , View {
             }
             case "onModifiedPointsEvent" -> {
                 onModifiedPointsEvent(event.getMatch());
+
             }
             case "onMatchStartedEvent" -> {
                 onMatchStartedEvent(event.getMatch());
+
             }
 
+        }
+        if(!chatIsOpened && !MatchEnded){
+            print();
         }
 
     }
@@ -250,6 +257,107 @@ public class CLI implements Runnable , View {
 
     }
 
+    private void onModifiedPointsEvent(LightMatch match){
+        switch(numberPlayers) {
+            case 2 -> {
+                if(match.getPlayers()[0].getPointsTiles().size() == 1) {
+                    printPlayer1Points(match.getPlayers()[0].getPointsTiles()[0], EMPTYSPOT);
+                }else if(match.getPlayers()[0].getPointsTiles().size() == 2){
+                    printPlayer1Points(match.getPlayers()[0].getPointsTiles()[0], match.getPlayers()[0].getPointsTiles()[1]);
+                }
+                if(match.getPlayers()[1].getPointsTiles().size() == 1) {
+                    printPlayer2Points(match.getPlayers()[1].getPointsTiles()[0], EMPTYSPOT);
+                }else if(match.getPlayers()[1].getPointsTiles().size() == 2){
+                    printPlayer2Points(match.getPlayers()[1].getPointsTiles()[0], match.getPlayers()[1].getPointsTiles()[1]);
+                }
+            }
+            case 3->{
+                if(match.getPlayers()[0].getPointsTiles().size() == 1) {
+                    printPlayer1Points(match.getPlayers()[0].getPointsTiles()[0], EMPTYSPOT);
+                }else if(match.getPlayers()[0].getPointsTiles().size() == 2){
+                    printPlayer1Points(match.getPlayers()[0].getPointsTiles()[0], match.getPlayers()[0].getPointsTiles()[1]);
+
+                }
+
+                if(match.getPlayers()[1].getPointsTiles().size() == 1) {
+                    printPlayer2Points(match.getPlayers()[1].getPointsTiles()[0], EMPTYSPOT);
+                }else if(match.getPlayers()[1].getPointsTiles().size() == 2){
+                    printPlayer2Points(match.getPlayers()[1].getPointsTiles()[0], match.getPlayers()[1].getPointsTiles()[1]);
+                }
+
+                if(match.getPlayers()[2].getPointsTiles().size() == 1) {
+                    printPlayer3Points(match.getPlayers()[2].getPointsTiles()[0], EMPTYSPOT);
+                }else if(match.getPlayers()[2].getPointsTiles().size() == 2){
+                    printPlayer3Points(match.getPlayers()[2].getPointsTiles()[0], match.getPlayers()[2].getPointsTiles()[1]);
+
+                }
+            }case 4->{
+                if(match.getPlayers()[0].getPointsTiles().size() == 1) {
+                    printPlayer1Points(match.getPlayers()[0].getPointsTiles()[0], EMPTYSPOT);
+                }else if(match.getPlayers()[0].getPointsTiles().size() == 2){
+                    printPlayer1Points(match.getPlayers()[0].getPointsTiles()[0], match.getPlayers()[0].getPointsTiles()[1]);
+
+                }
+
+                if(match.getPlayers()[1].getPointsTiles().size() == 1) {
+                    printPlayer2Points(match.getPlayers()[1].getPointsTiles()[0], EMPTYSPOT);
+                }else if(match.getPlayers()[1].getPointsTiles().size() == 2){
+                    printPlayer2Points(match.getPlayers()[1].getPointsTiles()[0], match.getPlayers()[1].getPointsTiles()[1]);
+                }
+
+                if(match.getPlayers()[2].getPointsTiles().size() == 1) {
+                    printPlayer3Points(match.getPlayers()[2].getPointsTiles()[0], EMPTYSPOT);
+                }else if(match.getPlayers()[2].getPointsTiles().size() == 2) {
+                    printPlayer3Points(match.getPlayers()[2].getPointsTiles()[0], match.getPlayers()[2].getPointsTiles()[1]);
+                }
+
+                if(match.getPlayers()[3].getPointsTiles().size() == 1) {
+                    printPlayer4Points(match.getPlayers()[3].getPointsTiles()[0], EMPTYSPOT);
+                }else if(match.getPlayers()[3].getPointsTiles().size() == 2){
+                    printPlayer4Points(match.getPlayers()[3].getPointsTiles()[0], match.getPlayers()[3].getPointsTiles()[1]);
+                }
+            }
+
+        }
+    }
+
+    private void onModifiedBookshelfEvent(LightMatch match){
+        switch(numberPlayers) {
+            case 2 -> {
+                printBookshelf1(match.getPlayers()[0].getBookshelf().getCLIRepresentation());
+                printBookshelf2(match.getPlayers()[1].getBookshelf().getCLIRepresentation());
+            }
+            case 3->{
+                printBookshelf1(match.getPlayers()[0].getBookshelf().getCLIRepresentation());
+                printBookshelf2(match.getPlayers()[1].getBookshelf().getCLIRepresentation());
+                printBookshelf3(match.getPlayers()[2].getBookshelf().getCLIRepresentation());
+            }case 4->{
+                printBookshelf1(match.getPlayers()[0].getBookshelf().getCLIRepresentation());
+                printBookshelf2(match.getPlayers()[1].getBookshelf().getCLIRepresentation());
+                printBookshelf3(match.getPlayers()[2].getBookshelf().getCLIRepresentation());
+                printBookshelf4(match.getPlayers()[3].getBookshelf().getCLIRepresentation());
+            }
+
+        }
+    }
+
+    private void onModifiedLivingRoomEvent(LightMatch match){
+        printLivingRoom(match.getLivingRoom().getCLIRepresentation());
+    }
+
+    private void onModifiedMatchEndedEvent(LightMatch match){
+        MatchEnded = true;
+        System.out.print(ANSIParameters.CLEAR_SCREEN + ANSIParameters.CURSOR_HOME);
+        System.out.flush();
+
+        System.out.println("Match ended");
+        System.out.println("The winner is: " + ANSIParameters.YELLOW + match.getWinner().getName() + ANSIParameters.CRESET
+        System.out.println("The final score is: ");
+        for(Player p : match.getPlayers()){
+            System.out.println(ANSIParameters.RED + p.getPlayerNickName() + ANSIParameters.CRESET + " with: " + ANSIParameters.MAGENTA + match.getScores().get(p) + " points" + ANSIParameters.CRESET);
+        }
+    }
+
     @Override
     public void onSelectViewEvent(SelectViewEvent event){
          String view = event.getType();
@@ -308,7 +416,22 @@ public class CLI implements Runnable , View {
     }
 
 
-
+    private void parseInput(String input){
+        switch (input){
+            case "info" -> {
+                System.out.println("info        : show this message\n"+
+                        "login       : login to the server\n"+
+                        "quit        : quit the game\n");
+            }
+            case "login" -> {
+                networkHandler.run();
+            }
+            case "quit" -> {
+                System.out.println("Bye!");
+                System.exit(0);
+            }
+        }
+    }
 
 
 
