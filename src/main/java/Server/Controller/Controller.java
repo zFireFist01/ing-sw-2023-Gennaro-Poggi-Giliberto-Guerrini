@@ -33,16 +33,9 @@ public class Controller implements VCEventListener {
     private VirtualView caller;
     private VirtualView currentPlayerView;
     private final Map<Integer,VirtualView > PlayerViews=new HashMap<>();
-
     private List<SelectViewEventListener> selectViewEventListeners;
 
 
-
-
-//    public Controller(Match match,VirtualView... virtualViews){
-//        this.virtualViews = virtualViews;
-//        this.match = match;
-//        }
 
     public Controller(Match match){
         this.match = match;
@@ -221,8 +214,6 @@ public class Controller implements VCEventListener {
      * @author ValentinoGuerrini
      */
 
-
-
     private void onClickOnTileEvent(int[] coordinates) throws RemoteException{
 
 
@@ -349,11 +340,10 @@ public class Controller implements VCEventListener {
      * Method to manage VCEvents, it uses reflection to call the right method depending on the event
      * @param event the event to manage
      * @throws NoSuchMethodException if the method called doesn't exist
-     * @throws InvocationTargetException if the method called throws an exception
      * @throws IllegalAccessException if the method called is not accessible
      */
     @Override
-    public void onVCEvent(VCEvent event, VirtualView view) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public void onVCEvent(VCEvent event, VirtualView view) throws NoSuchMethodException, IllegalAccessException {
         String methodName = event.getMethodName();
         caller= view;
 
@@ -408,7 +398,7 @@ public class Controller implements VCEventListener {
     }
 
     @Override
-    public void onVCEvent(VCEvent event) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public void onVCEvent(VCEvent event) throws IllegalAccessException {
         throw new IllegalAccessException("This method should not be called");
     }
 

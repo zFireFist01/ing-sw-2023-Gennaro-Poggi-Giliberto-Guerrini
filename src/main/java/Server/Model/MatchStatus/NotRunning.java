@@ -2,9 +2,9 @@ package Server.Model.MatchStatus;
 
 import Server.Model.Match;
 
-public class NotRunning extends MatchStatus{
+public class NotRunning extends MatchStatus {
 
-    public NotRunning(Match match){
+    public NotRunning(Match match) {
         super(match);
     }
 
@@ -13,4 +13,8 @@ public class NotRunning extends MatchStatus{
         return new WaitingForPlayers(match);
     }
 
-    public MatchStatus devolve(){return this;}
+    public MatchStatus devolve() {
+        return this;
+    }
+
+}

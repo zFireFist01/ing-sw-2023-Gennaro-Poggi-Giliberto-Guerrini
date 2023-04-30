@@ -2,11 +2,12 @@ package Server.Model.GameItems;
 
 import Server.Events.MVEvents.MVEvent;
 import Server.Events.MVEvents.ModifiedLivingRoomEvent;
-import Server.Listeners.MVEventListener;
 import Server.Model.LightMatch;
 import Server.Model.Match;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 import static Utils.MathUtils.*;
 
@@ -282,15 +283,15 @@ public class LivingRoom {
     public char[][] getCLIRepresentation(){
         char[][] res= new char[20][39];
 
-        res[1][0]='i';
-        res[3][0]='h';
-        res[5][0]='g';
-        res[7][0]='f';
+        res[1][0]='a';
+        res[3][0]='b';
+        res[5][0]='c';
+        res[7][0]='d';
         res[9][0]='e';
-        res[11][0]='d';
-        res[13][0]='c';
-        res[15][0]='b';
-        res[17][0]='a';
+        res[11][0]='f';
+        res[13][0]='g';
+        res[15][0]='h';
+        res[17][0]='i';
 
         res[19][4]='0';
         res[19][8]='1';

@@ -2,6 +2,7 @@ package Server.Model.Chat;
 
 import Server.Model.GameItems.Bookshelf;
 import Server.Model.GameItems.PointsTile;
+import Server.Model.Match;
 import Server.Model.Player.Player;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,9 +21,10 @@ public class MessageTest {
 
     @Test
     public void messageConstructor_NoSelfTexting_UnsupportedOperationException() {
+        Match match = new Match();
         String senderName = "Sender";
         int senderID = 3;
-        Player sender = new Player(senderID, senderName);
+        Player sender = new Player(match, senderID, senderName);
         Time timeSent = new Time(60);
         String content = "Test for message";
         assertThrows(UnsupportedOperationException.class, ()->this.tester = new Message(sender, content, timeSent, sender));
