@@ -43,7 +43,7 @@ public class Match {
     private int width;
     private int height;
     private final int numberOfPlayers;
-    private CommonGoalCard[] commonGoals;
+    private final CommonGoalCard[] commonGoals;
     private MatchStatus matchStatus;
     private final Player matchOpener;
     private Player firstPlayer;
