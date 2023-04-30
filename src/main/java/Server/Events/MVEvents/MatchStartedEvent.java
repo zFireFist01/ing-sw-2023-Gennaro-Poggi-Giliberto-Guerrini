@@ -2,6 +2,10 @@ package Server.Events.MVEvents;
 
 import Server.Model.LightMatch;
 
+/**
+ * This event is used to notify the client that the match just started
+ * @author Valentino Guerrini
+ */
 public class MatchStartedEvent extends MVEvent{
 
     private final String methodName;

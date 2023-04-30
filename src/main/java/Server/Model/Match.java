@@ -29,19 +29,6 @@ import java.util.*;
 public class Match {
     private ArrayList<Player> players;
     private PlayersChat gameChat;
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public Player getWinner() {
-        return winner;
-    }
-
     private ArrayList<Integer> selectedTiles;
     private int width;
     private int height;
@@ -57,9 +44,7 @@ public class Match {
     private final PersonalGoalCardsDeck personalGoalDeck;
     private Map<Player, Integer> scores;
     private Time matchDuration;
-
     private Player firstToFinish;
-
     private int count=0;
 
     private List<MVEventListener> mvEventListeners;
@@ -77,7 +62,6 @@ public class Match {
         this.scores= new HashMap<>() ;
         this.firstToFinish = null;
     }
-
 
     public Match(int numberOfPlayers, Player matchOpener) {
         this.gameChat = new PlayersChat();
@@ -99,9 +83,7 @@ public class Match {
     public PlayersChat getGameChat() {
         return gameChat;
     }
-
     public void setSelectedTiles(int[] selectedTiles) {
-
         //copy the int array into the arraylist
         this.selectedTiles = new ArrayList<Integer>();
         for (int i = 0; i < selectedTiles.length; i++) {
@@ -111,7 +93,6 @@ public class Match {
     public void clearSelectedTiles() {
         this.selectedTiles = null;
     }
-
     public int[] getSelectedTiles() {
         int [] selectedTiles = new int[this.selectedTiles.size()];
         for (int i = 0; i < this.selectedTiles.size(); i++) {
@@ -222,7 +203,6 @@ public class Match {
         return true;
     }
 
-
     /**
      * this recursive method is used to count how many tiles with the same tile type are adjacent
      * @param i index of line
@@ -313,7 +293,6 @@ public class Match {
         return scores;
     }
 
-
     /**
      * this method calculates final scores of all players of the match, and it sets the winner
      * @author Marta Giliberto
@@ -386,47 +365,54 @@ public class Match {
 
     //METODI GETTER
 
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public Player getWinner() {
+        return winner;
+    }
+
     public ArrayList<Player> getPlayers() {
         return new ArrayList<>(players);
     }
-
     public CommonGoalCard[] getCommonGoals() {
 
         return commonGoals;
     }
-
     public MatchStatus getMatchStatus() {
         return matchStatus;
     }
-
     public Player getFirstToFinish() {
         return firstToFinish;
     }
-
     public Player getFirstPlayer() {
         return firstPlayer;
     }
-
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
-
     public LivingRoom getLivingRoom() {
         return livingRoom;
     }
-
     public Map<Player, Integer> getScores() {
         return scores;
     }
-
     public Time getMatchDuration() {
         return matchDuration;
     }
-
     public int getNumberOfPlayers() {
         return numberOfPlayers;
     }
 
+    /**
+     * this method assign the Match Ended Tile to the first player who filled the bookshelf and set the first to finish attribute
+     * @author Paolo Gennaro
+     */
     public void assignMatchEndedTile(){
         if(this.firstToFinish == null) {
             if (checkIfBookshelfIsFull(this.currentPlayer)) {
