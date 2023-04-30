@@ -7,6 +7,7 @@ import Client.View.View;
 import Server.Controller.Controller;
 import Server.Events.MVEvents.MVEvent;
 import Server.Events.SelectViewEvents.SelectViewEvent;
+import Server.Events.VCEvents.LoginEvent;
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Chat.Message;
 import Server.Model.LightMatch;
@@ -311,7 +312,22 @@ public class CLI implements Runnable , View {
     }
 
 
-
+    private void parseInput(String input){
+        switch (input){
+            case "info" -> {
+                System.out.println("info        : show this message\n"+
+                        "login       : login to the server\n"+
+                        "quit        : quit the game\n");
+            }
+            case "login" -> {
+                networkHandler.run();
+            }
+            case "quit" -> {
+                System.out.println("Bye!");
+                System.exit(0);
+            }
+        }
+    }
 
 
 
