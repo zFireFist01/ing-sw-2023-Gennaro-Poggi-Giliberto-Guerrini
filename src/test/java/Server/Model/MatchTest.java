@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 
 /**
  * This class represents the tests of Match
- * @author martagiliberto
+ * @author Marta Giliberto
  */
 
 public class MatchTest {
@@ -20,6 +20,7 @@ public class MatchTest {
     /**
      * addContestant test1 checks if when number of missing players is equal to 0, evolves the match status
      * in Running
+     *  @author Marta Giliberto
      */
     @Test
     public void addContestant_test1(){
@@ -33,6 +34,7 @@ public class MatchTest {
     /**
      * addContestant test2 checks if when number of missing players is greater than 0, it throws
      * UnsupportedOperationException
+     *  @author Marta Giliberto
      */
     @Test
     public void addContestant_test2(){
@@ -45,6 +47,7 @@ public class MatchTest {
     /**
      * addContestant test3 checks if when addContestant want to add a player who has the same ID of one player
      * who is already in the match,it throws UnsupportedOperationException
+     *  @author Marta Giliberto
      */
     @Test
     public void addContestant_test3(){
@@ -57,6 +60,7 @@ public class MatchTest {
 
     /**
      * checkIfBookshelfIsFull test1 checks if a full bookshelf results full
+     *  @author Marta Giliberto
      */
     @Test
     public void checkIfBookshelfIsFull_test1(){
@@ -77,6 +81,7 @@ public class MatchTest {
 
     /**
      * checkIfBookshelfIsFull test2 checks if a bookshelf with just one spot free results empty
+     *  @author Marta Giliberto
      */
 
     @Test
@@ -100,6 +105,7 @@ public class MatchTest {
 
     /**
      * checkIfBookshelfIsFull test3 checks if an empty bookshelf  results empty
+     *  @author Marta Giliberto
      */
 
     @Test
@@ -112,6 +118,7 @@ public class MatchTest {
 
     /**
      * checkAdjacentTiles test verifies if calculates right points in a bookshelf
+     *  @author Marta Giliberto
      */
     @Test
     public void checkAdjacentTiles_test(){

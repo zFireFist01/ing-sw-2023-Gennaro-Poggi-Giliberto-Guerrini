@@ -9,17 +9,15 @@ import Server.Model.Match;
 public class WaitingForPlayers extends MatchStatus {
     private int numberMissingPlayers;
 
+    public WaitingForPlayers(Match match){
+        super(match);
+        this.numberMissingPlayers = match.getNumberOfPlayers() - match.getPlayers().size();
+    }
     /**
      * this method tries to evolve the Match status from WaitingForPlayers to Running
      * @return Running status
      * @throws UnsupportedOperationException if Match status can't evolve
      */
-
-    public WaitingForPlayers(Match match){
-        super(match);
-        this.numberMissingPlayers = match.getNumberOfPlayers() - match.getPlayers().size();
-    }
-
 
     @Override
     public MatchStatus evolve() throws UnsupportedOperationException{
@@ -33,8 +31,11 @@ public class WaitingForPlayers extends MatchStatus {
     }
 
     @Override
-    public void devolve(){
+    public  MatchStatus devolve(){
         numberMissingPlayers++;
+        if(match.getNumberOfPlayers()==numberMissingPlayers){
+          return null;
+        }
     }
 
 

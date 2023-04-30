@@ -1,6 +1,9 @@
 package Server.Model;
 
 import Server.Events.MVEvents.MVEvent;
+import Server.Events.MVEvents.MatchStartedEvent;
+import Server.Events.MVEvents.ModifiedMatchEndedEvent;
+import Server.Events.MVEvents.ModifiedPointsEvent;
 import Server.Listeners.MVEventListener;
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Cards.PersonalGoalCard;
@@ -21,7 +24,7 @@ import java.util.*;
 
 /**
  * match class in order to store information about the match
- * @author martagiliberto
+ * @author Marta Giliberto
  */
 public class Match {
     private ArrayList<Player> players;
@@ -43,7 +46,7 @@ public class Match {
     private int width;
     private int height;
     private final int numberOfPlayers;
-    private CommonGoalCard[] commonGoals;
+    private final CommonGoalCard[] commonGoals;
     private MatchStatus matchStatus;
     private final Player matchOpener;
     private Player firstPlayer;
@@ -62,7 +65,7 @@ public class Match {
     private List<MVEventListener> mvEventListeners;
 
     public Match(){
-        this.matchStatus= new NotRunning();
+        this.matchStatus= new NotRunning(this);
         this.gameChat = null;
         this.numberOfPlayers = 0;
         this.matchOpener = null;
@@ -119,7 +122,7 @@ public class Match {
 
     /**
      * this method initializes the match
-     * @author martagiliberto
+     * @author Marta Giliberto
      */
     public void setup(){
 
@@ -140,21 +143,23 @@ public class Match {
 
     /**
      * this method checks if a player has completed a common goal
-     * @author martagiliberto
+     * @author Marta Giliberto
      */
     public void checkCommonGoals(Player player){
         if(commonGoals[0].check(player.getBookshelf())) {
             player.assignPointTile(commonGoals[0].pickPointsTile());
+            notifyMVEventListeners(new ModifiedPointsEvent(new LightMatch(this)));
         }
 
         if(commonGoals[1].check(player.getBookshelf())) {
             player.assignPointTile(commonGoals[1].pickPointsTile());
+            notifyMVEventListeners(new ModifiedPointsEvent(new LightMatch(this)));
         }
     }
 
     /**
      * this method extracts first player
-     * @author martagiliberto
+     * @author Marta Giliberto
      */
     private void extractFirstPlayer(){
         Random random = new Random();
@@ -164,7 +169,7 @@ public class Match {
 
     /**
      * this method extracts the common goals cards of the mach from the deck
-     * @author martagiliberto
+     * @author Marta Giliberto
      */
     public void extractCommonGoals(){
         commonGoalDeck.shuffle();
@@ -175,7 +180,7 @@ public class Match {
     /**
      * this method adds a new player to the match
      * @param newPlayer who wants to play
-     * @author martagiliberto
+     * @author Marta Giliberto
      */
     public void addContestant(Player newPlayer) throws UnsupportedOperationException{
         for(int i=0; i<players.size(); i++) {
@@ -186,6 +191,7 @@ public class Match {
                 try {
                     matchStatus = matchStatus.evolve();
                     setup();
+                    notifyMVEventListeners(new MatchStartedEvent(new LightMatch(this)));
                 } catch (UnsupportedOperationException e) {
                     System.err.println(e.getMessage());
                 }
@@ -198,7 +204,7 @@ public class Match {
      * this method checks if a player has ended the match
      * @param player who has just ended his move
      * @return false if bookshelf is empty or true if it is full
-     * @author martagiliberto
+     * @author Marta Giliberto
      */
     public boolean checkIfBookshelfIsFull(Player player){
         BookshelfTileSpot[][] bookshelf;
@@ -211,6 +217,8 @@ public class Match {
             }
         }
         player.assignPointTile(PointsTile.MATCH_ENDED);
+        notifyMVEventListeners(new ModifiedPointsEvent(new LightMatch(this)));
+
         return true;
     }
 
@@ -221,7 +229,7 @@ public class Match {
      * @param j index of column
      * @param matrix that represents the bookshelf but with int in the place of tile types
      * @param tileType int that represents the tile type, that I want to check now
-     * @author martagiliberto
+     * @author Marta Giliberto
      */
     private void howManyAdjacentTiles(int i, int j, int[][] matrix, int tileType ){
         this.count++;
@@ -254,7 +262,7 @@ public class Match {
      * this method returns the points made by a player for adjacent tiles
      * @param player whose bookshelf I want to check
      * @return points of adjacent tiles, made by a player
-     * @author martagiliberto
+     * @author Marta Giliberto
      */
     public Integer checkAdjacentTiles(Player player) {
         BookshelfTileSpot[][] bookshelf = player.getBookshelf().getTileMatrix();
@@ -308,7 +316,7 @@ public class Match {
 
     /**
      * this method calculates final scores of all players of the match, and it sets the winner
-     * @author martagiliberto
+     * @author Marta Giliberto
      */
     public void calculateFinalScores(){
 
@@ -357,12 +365,12 @@ public class Match {
             }
         }
         matchStatus.evolve();
-
+        notifyMVEventListeners(new ModifiedMatchEndedEvent(new LightMatch(this)));
     }
 
     /**
      * this method sets current player
-     * @author martagiliberto
+     * @author Marta Giliberto
      */
     public void setCurrentPlayer() {
         this.currentPlayer = currentPlayer.getNextPlayer();
@@ -370,7 +378,7 @@ public class Match {
 
     /**
      * this method sets winner
-     * @author martagiliberto
+     * @author Marta Giliberto
      */
     public void setWinner(Player winner) {
         this.winner = winner;
@@ -422,7 +430,6 @@ public class Match {
     public void assignMatchEndedTile(){
         if(this.firstToFinish == null) {
             if (checkIfBookshelfIsFull(this.currentPlayer)) {
-                this.currentPlayer.assignPointTile(PointsTile.MATCH_ENDED);
                 this.firstToFinish = this.currentPlayer;
             } else{
                 throw new UnsupportedOperationException("Bookshelf not full!");

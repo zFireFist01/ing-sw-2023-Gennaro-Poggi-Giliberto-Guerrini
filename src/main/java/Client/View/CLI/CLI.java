@@ -7,7 +7,9 @@ import Client.View.View;
 import Server.Controller.Controller;
 import Server.Events.MVEvents.MVEvent;
 import Server.Events.SelectViewEvents.SelectViewEvent;
+
 import Server.Events.SelectViewEvents.ViewType;
+
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Chat.Message;
 import Server.Model.LightMatch;
@@ -104,12 +106,9 @@ public class CLI implements Runnable , View {
         String input;
         input = scanner.nextLine();
         while(input != null){
+            this.parseInput(input);
 
-            //networkHandler.parseInput(input);
 
-            if(input.equals("quit")){
-                System.exit(0);
-            }
             input = scanner.nextLine();
         }
 
@@ -290,10 +289,10 @@ public class CLI implements Runnable , View {
     private void onModifiedPointsEvent(LightMatch match){
         switch(numberPlayers) {
             case 2 -> {
-                if(match.getPlayers()[0].getPointsTiles().size() == 1) {
-                    printPlayer1Points(match.getPlayers()[0].getPointsTiles()[0], EMPTYSPOT);
-                }else if(match.getPlayers()[0].getPointsTiles().size() == 2){
-                    printPlayer1Points(match.getPlayers()[0].getPointsTiles()[0], match.getPlayers()[0].getPointsTiles()[1]);
+                if(match.getPlayers().get(0).getPointsTiles().size() == 1) {
+                    printPlayer1Points(match.getPlayers().get(0).getPointsTiles().get(0).getCLIRepresentation(), EMPTYSPOT);
+                }else if(match.getPlayers().get(0).getPointsTiles().size() == 2){
+                    printPlayer1Points(match.getPlayers().get(0).getPointsTiles().get(0).getCLIRepresentation(),match.getPlayers().get(0).getPointsTiles().get(1).getCLIRepresentation());
                 }
                 if(match.getPlayers()[1].getPointsTiles().size() == 1) {
                     printPlayer2Points(match.getPlayers()[1].getPointsTiles()[0], EMPTYSPOT);
@@ -392,7 +391,7 @@ public class CLI implements Runnable , View {
     }
 
     private void onModifiedMatchEndedEvent(LightMatch match){
-        finalScores=match.getScores();
+        finalScores= (HashMap<Player, Integer>) match.getScores();
         winner = match.getWinner();
 
     }
@@ -509,7 +508,22 @@ public class CLI implements Runnable , View {
     }
 
 
-
+    private void parseInput(String input){
+        switch (input){
+            case "info" -> {
+                System.out.println("info        : show this message\n"+
+                        "login       : login to the server\n"+
+                        "quit        : quit the game\n");
+            }
+            case "login" -> {
+                networkHandler.run();
+            }
+            case "quit" -> {
+                System.out.println("Bye!");
+                System.exit(0);
+            }
+        }
+    }
 
 
 

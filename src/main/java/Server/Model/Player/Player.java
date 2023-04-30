@@ -6,8 +6,10 @@ import Server.Model.Cards.PersonalGoalCard;
 import Server.Model.GameItems.PointsTile;
 import Server.Model.GameItems.TileSpot;
 import Server.Model.GameItems.TileType;
+import Server.Model.Match;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * This class defines the player in game
@@ -23,9 +25,12 @@ public class Player {
     private Player nextPlayer;
     private TileType[] takenTiles;
 
-    public Player(int playerID, String playerNickName){
+    private Match m;
+
+    public Player(Match m, int playerID, String playerNickName){
+        this.m = m;
         this.playerID = playerID;
-        this.bookshelf = new Bookshelf();
+        this.bookshelf = new Bookshelf(m);
         this.playerNickName = playerNickName;
         this.pointsTiles = new ArrayList<PointsTile>();
         this.playerStatus = new Connected();

@@ -22,10 +22,12 @@ import java.util.Scanner;
  * @author Marta Giliberto & Paolo Gennaro & Patrick Poggi
  */
 public class NetworkSocketHandler implements NetworkHandler{
-    View view;
-    Socket socket;
-    Scanner in;
-    OutputStream out;
+    private View view;
+    private Socket socket;
+    private Scanner in;
+    private OutputStream out;
+    private final String host;
+    private final int port;
 
     /**
      * This constructor is used to create a new NetworkSocketHandler and connect it to the server
@@ -34,19 +36,9 @@ public class NetworkSocketHandler implements NetworkHandler{
      * @param view the view
      */
     public NetworkSocketHandler(String host, int port, View view) {
-        try {
-            socket = new Socket(host, port);
-        } catch (IOException e) {
-            System.err.println(e.getStackTrace());
-            throw new RuntimeException(e);
-        }
+        this.host = host;
         this.view = view;
-        try {
-            in = new Scanner(socket.getInputStream());
-            out = socket.getOutputStream();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        this.port = port;
     }
 
     @Override
@@ -85,6 +77,15 @@ public class NetworkSocketHandler implements NetworkHandler{
         String message;
         String primaryType;
         Event event;
+
+        try {
+            this.socket = new Socket(host, port);
+            this.in = new Scanner(socket.getInputStream());
+            this.out = socket.getOutputStream();
+        } catch (IOException e) {
+            System.err.println(e.getStackTrace());
+            throw new RuntimeException(e);
+        }
 
 
         while (true) {

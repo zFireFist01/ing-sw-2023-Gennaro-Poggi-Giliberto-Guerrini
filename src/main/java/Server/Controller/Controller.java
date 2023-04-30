@@ -68,7 +68,7 @@ public class Controller implements VCEventListener {
             }else if(nickname.contains(" ")) {
                 currentPlayerView.onSelectViewEvent(new SelectViewEvent(new LoginView("Nickname cannot contain spaces")));
             }else{
-                match.addContestant(new Player(nickname.hashCode(),nickname));
+                match.addContestant(new Player(match, nickname.hashCode(),nickname));
                 PlayerViews.put(nickname.hashCode(),caller);
                 currentPlayerView.onSelectViewEvent(new SelectViewEvent(new GameView()));
             }

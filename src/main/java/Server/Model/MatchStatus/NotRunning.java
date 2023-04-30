@@ -13,5 +13,4 @@ public class NotRunning extends MatchStatus{
         return new WaitingForPlayers(match);
     }
 
-    public void devolve(){}
-}
+    public MatchStatus devolve(){return this;}
