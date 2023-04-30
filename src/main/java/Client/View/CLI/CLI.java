@@ -7,6 +7,7 @@ import Client.View.View;
 import Server.Controller.Controller;
 import Server.Events.MVEvents.MVEvent;
 import Server.Events.SelectViewEvents.SelectViewEvent;
+import Server.Events.SelectViewEvents.ViewType;
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Chat.Message;
 import Server.Model.LightMatch;
@@ -18,6 +19,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+
+
 
 public class CLI implements Runnable , View {
 
@@ -67,10 +70,17 @@ public class CLI implements Runnable , View {
     private ArrayList<String> chat = new ArrayList<>();
     private boolean chatIsOpened = false;
     private HashMap<Integer,Player> players = new HashMap<>();
+    private HashMap<Player,Integer> finalScores;
+    private Player winner;
     private int numberPlayers;
     private Player me;
     private String myNick;
+    private boolean matchStarted = false;
     private boolean MatchEnded = false;
+    private ViewType currentView;
+
+    private boolean myTurn = false;
+
 
 
 
@@ -152,6 +162,12 @@ public class CLI implements Runnable , View {
 
     }
 
+    /**
+     * This method is used to manage the MVEvents sended by the model
+     * @param event is the event sended by the model
+     * @author ValentinoGuerrini
+     */
+
     @Override
     public void onMVEvent (MVEvent event){
         String methodName = event.getMethodName();
@@ -187,7 +203,13 @@ public class CLI implements Runnable , View {
 
     }
 
+    /**
+     * This method is used to setup the board at the start of the match
+     * @param match
+     */
+
     private void onMatchStartedEvent(LightMatch match){
+        matchStarted = true;
         numberPlayers = match.getPlayers().size();
         for(int i = 0; i < numberPlayers; i++){
             players.put(i,match.getPlayers().get(i));
@@ -259,6 +281,12 @@ public class CLI implements Runnable , View {
 
     }
 
+    /**
+     * This method is used to updete the points tiles of the players
+     * @param match
+     *
+     */
+
     private void onModifiedPointsEvent(LightMatch match){
         switch(numberPlayers) {
             case 2 -> {
@@ -321,6 +349,22 @@ public class CLI implements Runnable , View {
             }
 
         }
+        printPoints1(match.getCommonGoals()[0].getPointsTiles().get(0).getCLIRepresentation());
+        printPoints2(match.getCommonGoals()[1].getPointsTiles().get(0).getCLIRepresentation());
+        if(match.getFirstToFinish()!=null){
+            int i;
+            for(i=0;i<numberPlayers;i++){
+                if(match.getFirstToFinish().getPlayerNickName().equals(players.get(i).getPlayerNickName())){
+                    break;
+                }
+            }
+            switch(i){
+                case 0 -> printEndTile1(ENDTILE);
+                case 1 -> printEndTile2(ENDTILE);
+                case 2 -> printEndTile3(ENDTILE);
+                case 3 -> printEndTile4(ENDTILE);
+            }
+        }
     }
 
     private void onModifiedBookshelfEvent(LightMatch match){
@@ -348,16 +392,9 @@ public class CLI implements Runnable , View {
     }
 
     private void onModifiedMatchEndedEvent(LightMatch match){
-        MatchEnded = true;
-        System.out.print(ANSIParameters.CLEAR_SCREEN + ANSIParameters.CURSOR_HOME);
-        System.out.flush();
+        finalScores=match.getScores();
+        winner = match.getWinner();
 
-        System.out.println("Match ended");
-        System.out.println("The winner is: " + ANSIParameters.YELLOW + match.getWinner().getName() + ANSIParameters.CRESET
-        System.out.println("The final score is: ");
-        for(Player p : match.getPlayers()){
-            System.out.println(ANSIParameters.RED + p.getPlayerNickName() + ANSIParameters.CRESET + " with: " + ANSIParameters.MAGENTA + match.getScores().get(p) + " points" + ANSIParameters.CRESET);
-        }
     }
 
     @Override
@@ -366,9 +403,63 @@ public class CLI implements Runnable , View {
          switch(view){
              case "ChatONView" -> onOpenChatEvent();
              case "ChatOFFView" -> onCloseChatEvent();
+             case "LoginView" -> onLoginViewEvent(event);
+             case "GameView" -> onGameViewEvent(event);
+
+             case "EndedMatchView" -> onEndedMatchViewEvent(event);
+
+             default -> {
+                 currentView = event.getViewType();
+                 print();
+             }
+
+
          }
 
 
+    }
+
+    private void onLoginViewEvent(SelectViewEvent event){
+        currentView = event.getViewType();
+        System.out.print(ANSIParameters.CLEAR_SCREEN + ANSIParameters.CURSOR_HOME);
+        System.out.flush();
+        System.out.println("Welcome to MyShelfie!");
+
+        System.out.println("Please insert your nickname: ");
+    }
+
+    private void onGameViewEvent(SelectViewEvent event){
+        currentView = event.getViewType();
+        if (!matchStarted) {
+            System.out.print(ANSIParameters.CLEAR_SCREEN + ANSIParameters.CURSOR_HOME);
+            System.out.flush();
+            System.out.println("Hi"+ ANSIParameters.BLUE + myNick+ ANSIParameters.CRESET+"Welcome to MyShelfie");
+            System.out.println("Please wait for the other players to join the match");
+        }
+        print();
+
+    }
+
+
+
+    private void onEndedMatchViewEvent(SelectViewEvent event){
+        MatchEnded = true;
+        currentView = event.getViewType();
+
+        System.out.print(ANSIParameters.CLEAR_SCREEN + ANSIParameters.CURSOR_HOME);
+        System.out.flush();
+
+        System.out.println("Match ended");
+
+        System.out.println("The final scores are: ");
+        Player p;
+
+        for(int i=0;i<numberPlayers;i++){
+            p =players.get(i);
+            System.out.println(ANSIParameters.RED + p.getPlayerNickName() + ANSIParameters.CRESET + " with: " + ANSIParameters.MAGENTA + finalScores.get(p) + " points" + ANSIParameters.CRESET);
+
+        }
+        System.out.println("The winner is: " + ANSIParameters.YELLOW + winner.getPlayerNickName() + ANSIParameters.CRESET );
     }
 
     //CHAT
@@ -668,6 +759,7 @@ public class CLI implements Runnable , View {
 
     private void print(){
         board.print();
+        System.out.println(ANSIParameters.GREEN + currentView.getMessage() + ANSIParameters.CRESET);
     }
 
 

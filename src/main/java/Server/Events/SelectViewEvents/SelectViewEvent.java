@@ -29,6 +29,11 @@ public class SelectViewEvent extends Event {
         return this.viewType.getType();
     }
 
+
+    public ViewType getViewType() {
+    	return this.viewType;
+    }
+
     /**
      * Getter for the message to show in the view
      * @return the message of the view
