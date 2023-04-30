@@ -13,7 +13,6 @@ import Server.Model.GameItems.TileType;
 import Server.Model.Match;
 import Server.Events.VCEvents.VCEvent;
 import Server.Model.Player.Player;
-import Server.Network.Server;
 import Server.Network.VirtualView;
 import Utils.MathUtils.*;
 
@@ -160,7 +159,7 @@ public class Controller implements VCEventListener {
                         if(currentPlayer.getNextPlayer().equals(match.getFirstPlayer())){
                             match.calculateFinalScores();
                             for(int i=0; i<numberOfPlayers; i++){
-                                PlayerViews.get(match.getPlayers().get(i).getPlayerID()).onSelectViewEvent(new SelectViewEvent(new EndedMatchVIew()));
+                                PlayerViews.get(match.getPlayers().get(i).getPlayerID()).onSelectViewEvent(new SelectViewEvent(new EndedMatchView()));
                             }
 
                         }else{
@@ -184,7 +183,7 @@ public class Controller implements VCEventListener {
                 if(currentPlayer.getNextPlayer().equals(match.getFirstPlayer())){
                     match.calculateFinalScores();
                     for(int i=0; i<numberOfPlayers; i++){
-                        PlayerViews.get(match.getPlayers().get(i).getPlayerID()).onSelectViewEvent(new SelectViewEvent(new EndedMatchVIew()));
+                        PlayerViews.get(match.getPlayers().get(i).getPlayerID()).onSelectViewEvent(new SelectViewEvent(new EndedMatchView()));
                     }
 
                 }else{

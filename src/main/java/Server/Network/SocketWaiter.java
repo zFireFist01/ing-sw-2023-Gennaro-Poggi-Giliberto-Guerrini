@@ -27,12 +27,12 @@ public class SocketWaiter implements Runnable{
     @Override
     public void run(){
         while(true){
-            Socket client;
+            Socket socket;
             VirtualSocketView clientVV;
             try {
-                client = this.serverSocket.accept();
-                clients.add(client);
-                clientVV = new VirtualSocketView(client);
+                socket = this.serverSocket.accept();
+                //clients.add(client);
+                clientVV = new VirtualSocketView(socket);
                 new Thread(clientVV).start();
                 if(server.waitingMatch()){
                     Match m = server.getWaitingMatch();

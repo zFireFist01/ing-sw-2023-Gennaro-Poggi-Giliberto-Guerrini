@@ -92,7 +92,9 @@ public class CLI implements Runnable , View {
         String input;
         input = scanner.nextLine();
         while(input != null){
-            networkHandler.parseInput(input);
+
+            //networkHandler.parseInput(input);
+
             if(input.equals("quit")){
                 System.exit(0);
             }
