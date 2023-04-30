@@ -79,7 +79,7 @@ public class NetworkSocketHandler implements NetworkHandler{
             out.write(json.getBytes());
             out.flush();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error while sending event to server");
         }
     }
 
