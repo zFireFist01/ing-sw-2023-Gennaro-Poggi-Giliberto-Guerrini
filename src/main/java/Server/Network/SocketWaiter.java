@@ -32,7 +32,7 @@ public class SocketWaiter implements Runnable{
             try {
                 socket = this.serverSocket.accept();
                 //clients.add(client);
-                clientVV = new VirtualSocketView(socket );
+                clientVV = new VirtualSocketView(socket);
                 new Thread(clientVV).start();
                 if(server.waitingMatch()){
                     Match m = server.getWaitingMatch();
