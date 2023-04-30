@@ -216,8 +216,11 @@ public class Match {
                     return false;
             }
         }
-        player.assignPointTile(PointsTile.MATCH_ENDED);
-        notifyMVEventListeners(new ModifiedPointsEvent(new LightMatch(this)));
+        if(firstToFinish==null) {
+            firstToFinish = player;
+            //player.assignPointTile(PointsTile.MATCH_ENDED);
+            notifyMVEventListeners(new ModifiedPointsEvent(new LightMatch(this)));
+        }
 
         return true;
     }
@@ -343,10 +346,14 @@ public class Match {
                 }else if((hisPointsTiles.get(j).equals(PointsTile.EIGHT_1)) ||
                         (hisPointsTiles.get(j).equals(PointsTile.EIGHT_2))){
                     hisScores += 8;
-                }else if(hisPointsTiles.get(j).equals(PointsTile.MATCH_ENDED)){
-                    hisScores++;
-                }
+                }//else if(hisPointsTiles.get(j).equals(PointsTile.MATCH_ENDED)){
+                //    hisScores++;
+                //}
             }
+            if(tmp.getPlayerID()==firstToFinish.getPlayerID()){
+                hisScores++;
+            }
+
 
             //aggiungo i punti di personal goal card
             hisScores+=tmp.getPersonalGoalCard().check(tmp.getBookshelf().getTileMatrix());
