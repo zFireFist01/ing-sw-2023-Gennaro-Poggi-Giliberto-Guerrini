@@ -11,6 +11,7 @@ public class Environment {
     private final char [][] matrix;
 
     public Environment() {
+
         this.matrix = new char[DEFAULT_HEIGHT][DEFAULT_WIDTH];
 
         for (int i = 0; i < DEFAULT_HEIGHT; i++) {
@@ -29,6 +30,7 @@ public class Environment {
             this.matrix[DEFAULT_HEIGHT - 1][i] = '-';
         }
     }
+
 
         public void setChar(int i, int j, char c) {
             this.matrix[i][j] = c;
@@ -66,7 +68,7 @@ public class Environment {
 
 
 
-    }
+
 
 
 

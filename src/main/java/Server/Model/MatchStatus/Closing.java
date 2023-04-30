@@ -1,4 +1,7 @@
 package Server.Model.MatchStatus;
+
+import Server.Model.Match;
+
 /**
  * this class represents the Closing status
  * @author martagiliberto
@@ -13,6 +16,10 @@ public class Closing extends MatchStatus {
      * @return null
      * @throws UnsupportedOperationException if MatchStatus can't evolve
      */
+
+    public Closing(Match match) {
+        super(match);
+    }
     @Override
     public MatchStatus evolve() throws UnsupportedOperationException {
         return null;

@@ -3,10 +3,22 @@ package Client.View.CLI;
 
 
 import Client.*;
+import Client.View.View;
+import Server.Controller.Controller;
+import Server.Events.MVEvents.MVEvent;
+import Server.Events.SelectViewEvents.SelectViewEvent;
+import Server.Model.Cards.CommonGoalCard;
+import Server.Model.Chat.Message;
+import Server.Model.Match;
+import Server.Model.Player.Player;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
-public class CLI implements Runnable{
+public class CLI implements Runnable , View {
 
     //draw coordinates
     private final static int LIVINGROOM_I= 5;
@@ -41,11 +53,24 @@ public class CLI implements Runnable{
     private final static int PLAYER_3_POINTS_2_J = 98;
     private final static int PLAYER_4_POINTS_1_J = 121;
     private final static int PLAYER_4_POINTS_2_J = 136;
+    private final static char[][] EMPTYSPOT= {{'+','-','-','-','-','-','-','-','+'},
+            {'|',' ',' ',' ',' ',' ',' ',' ','|'},
+            {'|',' ',' ',' ',' ',' ',' ',' ','|'},
+            {'|',' ',' ',' ',' ',' ',' ',' ','|'},
+            {'+','-','-','-','-','-','-','-','+'}};
 
 
 
-    private ConnectionHandler connectionHandler;
+    private NetworkHandler networkHandler;
     private Environment board = new Environment();
+    private ArrayList<String> chat = new ArrayList<>();
+    private boolean chatIsOpened = false;
+    private HashMap<Integer,Player> players = new HashMap<>();
+    private int numberPlayers;
+    private Player me;
+    private String myNick;
+
+
 
 
 
@@ -67,7 +92,7 @@ public class CLI implements Runnable{
         String input;
         input = scanner.nextLine();
         while(input != null){
-            connectionHandler.parseInput(input);
+            networkHandler.parseInput(input);
             if(input.equals("quit")){
                 System.exit(0);
             }
@@ -122,6 +147,138 @@ public class CLI implements Runnable{
         System.out.println("Connection successful");
 
     }
+
+    @Override
+    public void onMVEvent (MVEvent event){
+        String methodName = event.getMethodName();
+
+
+        switch(methodName) {
+            case "onModifiedChatEvent" -> {
+
+                onModifiedChatEvent((Message)event.getValue());
+            }
+            case "onModiefiedBookshelfEvent" -> {
+                onModifiedBookshelfEvent(event.getMatch());
+            }
+            case "onModifiedLivingRoomEvent" -> {
+                onModifiedLivingRoomEvent(event.getMatch());
+            }
+            case "onModifiedMatchEndedEvent" -> {
+                onModifiedMatchEndedEvent(event.getMatch());
+            }
+            case "onModifiedPointsEvent" -> {
+                onModifiedPointsEvent(event.getMatch());
+            }
+            case "onMatchStartedEvent" -> {
+                onMatchStartedEvent(event.getMatch());
+            }
+
+        }
+
+    }
+
+    private void onMatchStartedEvent(Match match){
+        numberPlayers = match.getPlayers().size();
+        for(int i = 0; i < numberPlayers; i++){
+            players.put(i,match.getPlayers().get(i));
+            if (match.getPlayers().get(i).getPlayerNickName().equals(myNick)){
+                me = match.getPlayers().get(i);
+            }
+        }
+        System.out.println("Match started");
+        System.out.println("You are " + myNick );
+        printPersonalGoal(me.getPersonalGoalCard().getCLIRepresentation());
+        CommonGoalCard commonGoal= match.getCommonGoals()[0];
+        printCommonGoal1(commonGoal.getCLIRepresentation());
+        printPoints1(commonGoal.getPointsTiles().get(0).getCLIRepresentation());
+        commonGoal = match.getCommonGoals()[1];
+        printCommonGoal2(commonGoal.getCLIRepresentation());
+        printPoints2(commonGoal.getPointsTiles().get(0).getCLIRepresentation());
+
+
+
+
+
+    }
+
+    @Override
+    public void onSelectViewEvent(SelectViewEvent event){
+         String view = event.getType();
+         switch(view){
+             case "ChatONView" -> onOpenChatEvent();
+             case "ChatOFFView" -> onCloseChatEvent();
+         }
+
+
+    }
+
+    //CHAT
+
+    public void onOpenChatEvent(){
+        chatIsOpened = true;
+        System.out.print(ANSIParameters.CLEAR_SCREEN + ANSIParameters.CURSOR_HOME);
+        System.out.flush();
+        System.out.println("Chat:");
+
+        for(String s : chat){
+            String message = s.substring(2,s.length()-1);
+            //print s[0] In RED
+            System.out.println(ANSIParameters.RED + s.split(" ")[0]+ ANSIParameters.CRESET + "Sent to :"  +  ANSIParameters.BLUE + s.split(" ")[1] + ANSIParameters.CRESET + " A message: " + message );
+
+        }
+
+    }
+
+    public void onCloseChatEvent(){
+        chatIsOpened = false;
+        print();
+    }
+
+    public void onModifiedChatEvent(Message El_loco_message){
+        String s = MessageToString(El_loco_message);
+
+        chat.add(s);
+        if(chatIsOpened){
+            String message = s.substring(2,s.length()-1);
+            //print s[0] In RED
+            System.out.println(ANSIParameters.RED + s.split(" ")[0]+ ANSIParameters.CRESET + "Sent to :"  +  ANSIParameters.BLUE + s.split(" ")[1] + ANSIParameters.CRESET + " A message: " + message );
+        }
+    }
+
+    private String MessageToString(Message message){
+        String receiver;
+        if(message.getReceiver() == null) {
+            receiver = "@All";
+        }else{
+            receiver = message.getReceiver().getPlayerNickName();
+        }
+
+        String s = message.getSender().getPlayerNickName() + "  @" + receiver + "  " + message.getContent();
+        return s;
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //refresh the board
 
     private void printLivingRoom(char[][] livingRoom){
 
