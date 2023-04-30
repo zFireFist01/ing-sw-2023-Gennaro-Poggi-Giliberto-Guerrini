@@ -1,10 +1,12 @@
 package Server.Model.GameItems;
 
+import Server.Events.MVEvents.MVEvent;
+import Server.Events.MVEvents.ModifiedLivingRoomEvent;
+import Server.Listeners.MVEventListener;
+import Server.Model.LightMatch;
 import Server.Model.Match;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import static Utils.MathUtils.*;
 
@@ -244,7 +246,7 @@ public class LivingRoom {
                                 //before applying changes
             }
         }
-
+        notifyMVEventListeners(new ModifiedLivingRoomEvent(new LightMatch(this.m)));
         return resultTypes;
     }
 
@@ -318,6 +320,10 @@ public class LivingRoom {
         }
 
         return res;
+    }
+
+    public void notifyMVEventListeners(MVEvent event){
+        m.notifyMVEventListeners(new ModifiedLivingRoomEvent(new LightMatch(this.m)));
     }
 
 }

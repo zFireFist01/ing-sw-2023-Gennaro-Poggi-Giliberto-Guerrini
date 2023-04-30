@@ -1,5 +1,10 @@
 package Server.Model.GameItems;
 
+import Server.Events.MVEvents.MVEvent;
+import Server.Events.MVEvents.ModifiedBookshelfEvent;
+import Server.Listeners.MVEventListener;
+import Server.Model.LightMatch;
+import Server.Model.Match;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -8,12 +13,15 @@ import java.util.*;
  * This class represents the bookshelf that every player has for the game
  */
 public class Bookshelf {
+    private Match m;
     private BookshelfTileSpot[][] tileMatrix;
     private final static int BOOKSHELFHEIGHT = 6;
     private final static int BOOKSHELFWIDTH = 5;
 
     private Map<Integer, Integer> lastIndexes = null; //map<column_index, last_row_index
-    public Bookshelf() {
+
+    public Bookshelf(Match m) {
+        this.m = m;
         tileMatrix = new BookshelfTileSpot[6][5];
         for(int i=0;i<BOOKSHELFHEIGHT;i++){
             for(int j=0; j<BOOKSHELFWIDTH;j++){
@@ -62,6 +70,7 @@ public class Bookshelf {
             int temp = lastIndexes.get(column);
             lastIndexes.put(column,--temp);
             tileMatrix[lastIndexes.get(column)][column].setTile(tileType);
+            notifyMVEventListeners(new ModifiedBookshelfEvent(new LightMatch(this.m)));
         }
     }
 
@@ -109,4 +118,7 @@ public class Bookshelf {
         return res;
     }
 
+    public void notifyMVEventListeners(@NotNull MVEvent event){
+        m.notifyMVEventListeners(event);
+    }
 }
