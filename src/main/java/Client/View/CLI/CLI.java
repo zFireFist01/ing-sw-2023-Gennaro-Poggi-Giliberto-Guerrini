@@ -2,28 +2,43 @@ package Client.View.CLI;
 //import org.fusesource.jansi.AnsiConsole;
 
 
-import Client.*;
+import Client.ConnectionType;
+import Client.NetworkHandler;
+import Client.NetworkRMIHandler;
+import Client.NetworkSocketHandler;
 import Client.View.View;
-import Server.Controller.Controller;
 import Server.Events.MVEvents.MVEvent;
+import Server.Events.SelectViewEvents.InsertingTilesGameView;
 import Server.Events.SelectViewEvents.SelectViewEvent;
 
+
+
 import Server.Events.SelectViewEvents.ViewType;
+
+
+import Server.Events.VCEvents.ClickOnTile;
+import Server.Events.VCEvents.LoginEvent;
+
+
+import Server.Events.SelectViewEvents.ViewType;
+import Server.Events.VCEvents.*;
 
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Chat.Message;
 import Server.Model.LightMatch;
-import Server.Model.Match;
 import Server.Model.Player.Player;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
 
-
+/**
+ * This class is used to manage the CLI view of the game
+ * @author Valentino Guerrini & Patrick Poggi & Marta Giliberto & Paolo Gennaro
+ */
 public class CLI implements Runnable , View {
 
     //draw coordinates
@@ -65,8 +80,6 @@ public class CLI implements Runnable , View {
             {'|',' ',' ',' ',' ',' ',' ',' ','|'},
             {'+','-','-','-','-','-','-','-','+'}};
 
-
-
     private NetworkHandler networkHandler;
     private Environment board = new Environment();
     private ArrayList<String> chat = new ArrayList<>();
@@ -82,13 +95,8 @@ public class CLI implements Runnable , View {
     private ViewType currentView;
 
     private boolean myTurn = false;
-
-
-
-
-
-
     private Scanner scanner;
+
 
     public CLI(){
         scanner = new Scanner(System.in);
@@ -117,6 +125,11 @@ public class CLI implements Runnable , View {
 
     //connect to the server
 
+
+    /**
+     * This method is used to connect to the server
+     * @author Valentino Guerrini & Paolo Gennaro & Patrick Poggi
+     */
     private void connect(){
         boolean flag = true;
         ConnectionType connectionType = null;
@@ -162,11 +175,10 @@ public class CLI implements Runnable , View {
     }
 
     /**
-     * This method is used to manage the MVEvents sended by the model
+     * This method is used to manage the MVEvents sent by the model
      * @param event is the event sended by the model
      * @author ValentinoGuerrini
      */
-
     @Override
     public void onMVEvent (MVEvent event){
         String methodName = event.getMethodName();
@@ -206,7 +218,6 @@ public class CLI implements Runnable , View {
      * This method is used to setup the board at the start of the match
      * @param match
      */
-
     private void onMatchStartedEvent(LightMatch match){
         matchStarted = true;
         numberPlayers = match.getPlayers().size();
@@ -281,11 +292,10 @@ public class CLI implements Runnable , View {
     }
 
     /**
-     * This method is used to updete the points tiles of the players
-     * @param match
-     *
+     * This method is used to update the points tiles of the players
+     * @param match is the light version of the match
+     * @author Valentino Guerrini & Paolo Gennaro
      */
-
     private void onModifiedPointsEvent(LightMatch match){
         switch(numberPlayers) {
             case 2 -> {
@@ -294,56 +304,56 @@ public class CLI implements Runnable , View {
                 }else if(match.getPlayers().get(0).getPointsTiles().size() == 2){
                     printPlayer1Points(match.getPlayers().get(0).getPointsTiles().get(0).getCLIRepresentation(),match.getPlayers().get(0).getPointsTiles().get(1).getCLIRepresentation());
                 }
-                if(match.getPlayers()[1].getPointsTiles().size() == 1) {
-                    printPlayer2Points(match.getPlayers()[1].getPointsTiles()[0], EMPTYSPOT);
-                }else if(match.getPlayers()[1].getPointsTiles().size() == 2){
-                    printPlayer2Points(match.getPlayers()[1].getPointsTiles()[0], match.getPlayers()[1].getPointsTiles()[1]);
+                if(match.getPlayers().get(1).getPointsTiles().size() == 1) {
+                    printPlayer2Points(match.getPlayers().get(1).getPointsTiles().get(0).getCLIRepresentation(), EMPTYSPOT);
+                }else if(match.getPlayers().get(1).getPointsTiles().size() == 2){
+                    printPlayer2Points(match.getPlayers().get(1).getPointsTiles().get(0).getCLIRepresentation(), match.getPlayers().get(1).getPointsTiles().get(1).getCLIRepresentation());
                 }
             }
             case 3->{
-                if(match.getPlayers()[0].getPointsTiles().size() == 1) {
-                    printPlayer1Points(match.getPlayers()[0].getPointsTiles()[0], EMPTYSPOT);
-                }else if(match.getPlayers()[0].getPointsTiles().size() == 2){
-                    printPlayer1Points(match.getPlayers()[0].getPointsTiles()[0], match.getPlayers()[0].getPointsTiles()[1]);
+                if(match.getPlayers().get(0).getPointsTiles().size() == 1) {
+                    printPlayer1Points(match.getPlayers().get(0).getPointsTiles().get(0).getCLIRepresentation(), EMPTYSPOT);
+                }else if(match.getPlayers().get(0).getPointsTiles().size() == 2){
+                    printPlayer1Points(match.getPlayers().get(0).getPointsTiles().get(0).getCLIRepresentation(), match.getPlayers().get(0).getPointsTiles().get(1).getCLIRepresentation());
 
                 }
 
-                if(match.getPlayers()[1].getPointsTiles().size() == 1) {
-                    printPlayer2Points(match.getPlayers()[1].getPointsTiles()[0], EMPTYSPOT);
-                }else if(match.getPlayers()[1].getPointsTiles().size() == 2){
-                    printPlayer2Points(match.getPlayers()[1].getPointsTiles()[0], match.getPlayers()[1].getPointsTiles()[1]);
+                if(match.getPlayers().get(1).getPointsTiles().size() == 1) {
+                    printPlayer2Points(match.getPlayers().get(1).getPointsTiles().get(0).getCLIRepresentation(), EMPTYSPOT);
+                }else if(match.getPlayers().get(1).getPointsTiles().size() == 2){
+                    printPlayer2Points(match.getPlayers().get(1).getPointsTiles().get(0).getCLIRepresentation(), match.getPlayers().get(1).getPointsTiles().get(1).getCLIRepresentation());
                 }
 
-                if(match.getPlayers()[2].getPointsTiles().size() == 1) {
-                    printPlayer3Points(match.getPlayers()[2].getPointsTiles()[0], EMPTYSPOT);
-                }else if(match.getPlayers()[2].getPointsTiles().size() == 2){
-                    printPlayer3Points(match.getPlayers()[2].getPointsTiles()[0], match.getPlayers()[2].getPointsTiles()[1]);
+                if(match.getPlayers().get(2).getPointsTiles().size() == 1) {
+                    printPlayer3Points(match.getPlayers().get(2).getPointsTiles().get(0).getCLIRepresentation(), EMPTYSPOT);
+                }else if(match.getPlayers().get(2).getPointsTiles().size() == 2){
+                    printPlayer3Points(match.getPlayers().get(2).getPointsTiles().get(0).getCLIRepresentation(), match.getPlayers().get(2).getPointsTiles().get(1).getCLIRepresentation());
 
                 }
             }case 4->{
-                if(match.getPlayers()[0].getPointsTiles().size() == 1) {
-                    printPlayer1Points(match.getPlayers()[0].getPointsTiles()[0], EMPTYSPOT);
-                }else if(match.getPlayers()[0].getPointsTiles().size() == 2){
-                    printPlayer1Points(match.getPlayers()[0].getPointsTiles()[0], match.getPlayers()[0].getPointsTiles()[1]);
+                if(match.getPlayers().get(0).getPointsTiles().size() == 1) {
+                    printPlayer1Points(match.getPlayers().get(0).getPointsTiles().get(0).getCLIRepresentation(), EMPTYSPOT);
+                }else if(match.getPlayers().get(0).getPointsTiles().size() == 2){
+                    printPlayer1Points(match.getPlayers().get(0).getPointsTiles().get(0).getCLIRepresentation(), match.getPlayers().get(0).getPointsTiles().get(1).getCLIRepresentation());
 
                 }
 
-                if(match.getPlayers()[1].getPointsTiles().size() == 1) {
-                    printPlayer2Points(match.getPlayers()[1].getPointsTiles()[0], EMPTYSPOT);
-                }else if(match.getPlayers()[1].getPointsTiles().size() == 2){
-                    printPlayer2Points(match.getPlayers()[1].getPointsTiles()[0], match.getPlayers()[1].getPointsTiles()[1]);
+                if(match.getPlayers().get(1).getPointsTiles().size() == 1) {
+                    printPlayer2Points(match.getPlayers().get(1).getPointsTiles().get(0).getCLIRepresentation(), EMPTYSPOT);
+                }else if(match.getPlayers().get(1).getPointsTiles().size() == 2){
+                    printPlayer2Points(match.getPlayers().get(1).getPointsTiles().get(0).getCLIRepresentation(), match.getPlayers().get(1).getPointsTiles().get(1).getCLIRepresentation());
                 }
 
-                if(match.getPlayers()[2].getPointsTiles().size() == 1) {
-                    printPlayer3Points(match.getPlayers()[2].getPointsTiles()[0], EMPTYSPOT);
-                }else if(match.getPlayers()[2].getPointsTiles().size() == 2) {
-                    printPlayer3Points(match.getPlayers()[2].getPointsTiles()[0], match.getPlayers()[2].getPointsTiles()[1]);
+                if(match.getPlayers().get(2).getPointsTiles().size() == 1) {
+                    printPlayer3Points(match.getPlayers().get(2).getPointsTiles().get(0).getCLIRepresentation(), EMPTYSPOT);
+                }else if(match.getPlayers().get(2).getPointsTiles().size() == 2) {
+                    printPlayer3Points(match.getPlayers().get(2).getPointsTiles().get(0).getCLIRepresentation(), match.getPlayers().get(2).getPointsTiles().get(1).getCLIRepresentation());
                 }
 
-                if(match.getPlayers()[3].getPointsTiles().size() == 1) {
-                    printPlayer4Points(match.getPlayers()[3].getPointsTiles()[0], EMPTYSPOT);
-                }else if(match.getPlayers()[3].getPointsTiles().size() == 2){
-                    printPlayer4Points(match.getPlayers()[3].getPointsTiles()[0], match.getPlayers()[3].getPointsTiles()[1]);
+                if(match.getPlayers().get(3).getPointsTiles().size() == 1) {
+                    printPlayer4Points(match.getPlayers().get(3).getPointsTiles().get(0).getCLIRepresentation(), EMPTYSPOT);
+                }else if(match.getPlayers().get(3).getPointsTiles().size() == 2){
+                    printPlayer4Points(match.getPlayers().get(3).getPointsTiles().get(0).getCLIRepresentation(), match.getPlayers().get(3).getPointsTiles().get(1).getCLIRepresentation());
                 }
             }
 
@@ -366,34 +376,47 @@ public class CLI implements Runnable , View {
         }
     }
 
+    /**
+     * This method is used to update the bookshelf of the players
+     * @param match is the light version of the match
+     * @author Valentino Guerrini & Paolo Gennaro
+     */
     private void onModifiedBookshelfEvent(LightMatch match){
         switch(numberPlayers) {
             case 2 -> {
-                printBookshelf1(match.getPlayers()[0].getBookshelf().getCLIRepresentation());
-                printBookshelf2(match.getPlayers()[1].getBookshelf().getCLIRepresentation());
+                printBookshelf1(match.getPlayers().get(0).getBookshelf().getCLIRepresentation());
+                printBookshelf2(match.getPlayers().get(1).getBookshelf().getCLIRepresentation());
             }
             case 3->{
-                printBookshelf1(match.getPlayers()[0].getBookshelf().getCLIRepresentation());
-                printBookshelf2(match.getPlayers()[1].getBookshelf().getCLIRepresentation());
-                printBookshelf3(match.getPlayers()[2].getBookshelf().getCLIRepresentation());
+                printBookshelf1(match.getPlayers().get(0).getBookshelf().getCLIRepresentation());
+                printBookshelf2(match.getPlayers().get(1).getBookshelf().getCLIRepresentation());
+                printBookshelf3(match.getPlayers().get(2).getBookshelf().getCLIRepresentation());
             }case 4->{
-                printBookshelf1(match.getPlayers()[0].getBookshelf().getCLIRepresentation());
-                printBookshelf2(match.getPlayers()[1].getBookshelf().getCLIRepresentation());
-                printBookshelf3(match.getPlayers()[2].getBookshelf().getCLIRepresentation());
-                printBookshelf4(match.getPlayers()[3].getBookshelf().getCLIRepresentation());
+                printBookshelf1(match.getPlayers().get(0).getBookshelf().getCLIRepresentation());
+                printBookshelf2(match.getPlayers().get(1).getBookshelf().getCLIRepresentation());
+                printBookshelf3(match.getPlayers().get(2).getBookshelf().getCLIRepresentation());
+                printBookshelf4(match.getPlayers().get(3).getBookshelf().getCLIRepresentation());
             }
 
         }
     }
 
+    /**
+     * This method is used to update the LivingRoom
+     * @param match is the light version of the match
+     * @author Valentino Guerrini
+     */
     private void onModifiedLivingRoomEvent(LightMatch match){
         printLivingRoom(match.getLivingRoom().getCLIRepresentation());
     }
 
+    /**
+     * This method is used to notify players that a player completed his bookshelf and took the "MatchEnded" tile
+     * @param match is the light version of the match
+     */
     private void onModifiedMatchEndedEvent(LightMatch match){
         finalScores= (HashMap<Player, Integer>) match.getScores();
         winner = match.getWinner();
-
     }
 
     @Override
@@ -438,8 +461,6 @@ public class CLI implements Runnable , View {
         print();
 
     }
-
-
 
     private void onEndedMatchViewEvent(SelectViewEvent event){
         MatchEnded = true;
@@ -508,36 +529,172 @@ public class CLI implements Runnable , View {
     }
 
 
+    private void printHelp(){
+        if(currentView.getType().equals("LoginView")){
+            System.out.println("info play \n quit");
+        }else if(currentView.getType().equals("PickingTileView")) {
+            System.out.println("info pick \n checkout open \n close send \n quit");
+        }else if(currentView.getType().equals("InsertingTilesGameView")){
+            System.out.println("info select \n open close \n send quit");
+        }else if(currentView.getType().equals("EndedMatchView")) {
+            System.out.println("info open \n close send \n quit");
+        }else if(currentView.getType().equals("GameView")) {
+            System.out.println("info open \n close send \n quit");
+        }else if(currentView.getType().equals("ChatONView")) {
+            System.out.println("info close \n send quit");
+        }else if(currentView.getType().equals("ChatOFFView")) {
+            System.out.println("info open \n quit");
+        }
+    }
+
     private void parseInput(String input){
-        switch (input){
-            case "info" -> {
-                System.out.println("info        : show this message\n"+
-                        "login       : login to the server\n"+
-                        "quit        : quit the game\n");
+        String[] inputArray = input.split(" ");
+        if(currentView.getType().equals("LoginView")) {
+            if (inputArray.length == 1) {
+                myNick = inputArray[0];
+                try {
+                    networkHandler.onVCEvent(new LoginEvent(myNick));
+                } catch (NoSuchMethodException e) {
+                    throw new RuntimeException(e);
+                } catch (InvocationTargetException e) {
+                    throw new RuntimeException(e);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                System.out.println("Nickname must be one word");
             }
-            case "login" -> {
+        }
+        switch (inputArray[0]){
+            case "info" -> {
+                printHelp();
+            }
+            case "play" -> {
                 networkHandler.run();
             }
+
             case "quit" -> {
                 System.out.println("Bye!");
                 System.exit(0);
             }
+            case "select" -> {
+                if(inputArray.length == 2){
+                    int index = Integer.parseInt(inputArray[1]);
+                    try {
+                        networkHandler.onVCEvent(new SelectColumn(index));
+                    } catch (NoSuchMethodException e) {
+                        throw new RuntimeException(e);
+                    } catch (InvocationTargetException e) {
+                        throw new RuntimeException(e);
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                }else{
+                    System.out.println("Invalid input");
+                }
+
+            }
+            case "pick" -> {
+                if(inputArray.length == 2){
+                    String[] coordinates = inputArray[1].split(",");
+                    char row= coordinates[0].charAt(0);
+                    int column = Integer.parseInt(coordinates[1]);
+                    int[] coordinatesInt = new int[2];
+                    if(row>='a' && row <='i' && column>=0 && column<=8) {
+                        coordinatesInt[0] = row - 'a';
+                        coordinatesInt[1] = column;
+                        try {
+                            networkHandler.onVCEvent(new ClickOnTile(coordinatesInt));
+                        } catch (NoSuchMethodException e) {
+                            throw new RuntimeException(e);
+                        } catch (InvocationTargetException e) {
+                            throw new RuntimeException(e);
+                        } catch (IllegalAccessException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                    }
+                }else{
+                    System.out.println("Invalid input");
+                }
+            }
+            case "checkout" ->{
+                if(inputArray.length==1){
+                    try {
+                        networkHandler.onVCEvent(new CheckOutTiles());
+                    } catch (NoSuchMethodException e) {
+                        throw new RuntimeException(e);
+                    } catch (InvocationTargetException e) {
+                        throw new RuntimeException(e);
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                }else {
+                    System.out.println("Invalid input");
+                }
+            }
+            case "open" ->{
+                if(inputArray.length==1){
+                    try {
+                        networkHandler.onVCEvent(new OpenChat());
+                    } catch (NoSuchMethodException e) {
+                        throw new RuntimeException(e);
+                    } catch (InvocationTargetException e) {
+                        throw new RuntimeException(e);
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                }else {
+                    System.out.println("Invalid input");
+                }
+            }
+            case "close" ->{
+                if(inputArray.length==1){
+                    try {
+                        networkHandler.onVCEvent(new CloseChat());
+                    } catch (NoSuchMethodException e) {
+                        throw new RuntimeException(e);
+                    } catch (InvocationTargetException e) {
+                        throw new RuntimeException(e);
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                }else {
+                    System.out.println("Invalid input");
+                }
+            }
+            case "send" ->{
+                if(inputArray.length>=3){
+                    try {
+                        String message = new String("");
+                        for(int i = 2; i < inputArray.length; i++){
+                            message = message + inputArray[i] + " ";
+                        }
+                        Message messageToSend=null;
+                        if(inputArray[1].equals("@All")) {
+                            messageToSend=new Message(this.me,message,new Time(60));
+                        }else{
+                            for(Integer i: this.players.keySet()){
+                                if(this.players.get(i).getPlayerNickName().equals(inputArray[1])){
+                                    messageToSend=new Message(this.me,message,new Time(60), this.players.get(i));
+                                }
+                            }
+                        }
+                        networkHandler.onVCEvent(new SendMessage(messageToSend));
+                    } catch (NoSuchMethodException e) {
+                        throw new RuntimeException(e);
+                    } catch (InvocationTargetException e) {
+                        throw new RuntimeException(e);
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                }else {
+                    System.out.println("Invalid input");
+                }
+            }
         }
+
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

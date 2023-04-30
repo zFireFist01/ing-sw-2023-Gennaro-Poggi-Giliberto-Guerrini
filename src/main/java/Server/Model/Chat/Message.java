@@ -13,8 +13,16 @@ public class Message {
     private final Player sender;
     private final String content;
     private final Time timeSent;
-    private Player receiver;
+    private final Player receiver;
 
+    /**
+     * This constructor is for creating a message between sender and receiver
+     * @param sender is the one who sends the message
+     * @param content is the content of the message
+     * @param timeSent is the time when the message is sent
+     * @param receiver is the one who receives the message
+     * @throws UnsupportedOperationException when the sender and the receiver are the same
+     */
     public Message(Player sender, String content, Time timeSent, Player receiver) throws UnsupportedOperationException{
         if(sender.equals(receiver)) throw new UnsupportedOperationException("You can't text yourself!");
         this.sender = sender;
@@ -23,7 +31,12 @@ public class Message {
         this.receiver = receiver;
     }
 
-
+    /**
+     * This constructor is for creating a message between sender and all the other players
+     * @param sender is the one who sends the message
+     * @param content is the content of the message
+     * @param timeSent is the time when the message is sent
+     */
     public Message(Player sender, String content, Time timeSent){
         this.sender = sender;
         this.content = content;

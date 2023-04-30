@@ -15,7 +15,6 @@ public abstract class MVEvent extends Event {
         return this.methodName;
     }
 
-
     /**
      * Getter for the type of event
      * @return the type of event
