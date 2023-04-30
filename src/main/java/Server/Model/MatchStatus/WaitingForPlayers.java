@@ -36,6 +36,7 @@ public class WaitingForPlayers extends MatchStatus {
         if(match.getNumberOfPlayers()==numberMissingPlayers){
           return null;
         }
+        return this;
     }
 
 

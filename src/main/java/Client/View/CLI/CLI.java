@@ -2,22 +2,22 @@ package Client.View.CLI;
 //import org.fusesource.jansi.AnsiConsole;
 
 
-import Client.*;
+import Client.ConnectionType;
+import Client.NetworkHandler;
+import Client.NetworkRMIHandler;
+import Client.NetworkSocketHandler;
 import Client.View.View;
-import Server.Controller.Controller;
 import Server.Events.MVEvents.MVEvent;
 import Server.Events.SelectViewEvents.SelectViewEvent;
-
 import Server.Events.SelectViewEvents.ViewType;
-
+import Server.Events.VCEvents.*;
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Chat.Message;
 import Server.Model.LightMatch;
-import Server.Model.Match;
 import Server.Model.Player.Player;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -506,23 +506,154 @@ public class CLI implements Runnable , View {
         return s;
 
     }
-
-
+    
     private void parseInput(String input){
-        switch (input){
-            case "info" -> {
-                System.out.println("info        : show this message\n"+
-                        "login       : login to the server\n"+
-                        "quit        : quit the game\n");
+        String[] inputArray = input.split(" ");
+        if(currentView.getType().equals("LoginView")) {
+            if (inputArray.length == 1) {
+                myNick = inputArray[0];
+                try {
+                    networkHandler.onVCEvent(new LoginEvent(myNick));
+                } catch (NoSuchMethodException e) {
+                    throw new RuntimeException(e);
+                } catch (InvocationTargetException e) {
+                    throw new RuntimeException(e);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                System.out.println("Nickname must be one word");
             }
-            case "login" -> {
+        }
+        switch (inputArray[0]){
+            case "info" -> {
+                printHelp();
+            }
+            case "play" -> {
                 networkHandler.run();
             }
+
             case "quit" -> {
                 System.out.println("Bye!");
                 System.exit(0);
             }
+            case "select" -> {
+                if(inputArray.length == 2){
+                    int index = Integer.parseInt(inputArray[1]);
+                    try {
+                        networkHandler.onVCEvent(new SelectColumn(index));
+                    } catch (NoSuchMethodException e) {
+                        throw new RuntimeException(e);
+                    } catch (InvocationTargetException e) {
+                        throw new RuntimeException(e);
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                }else{
+                    System.out.println("Invalid input");
+                }
+
+            }
+            case "pick" -> {
+                if(inputArray.length == 2){
+                    String[] coordinates = inputArray[1].split(",");
+                    char row= coordinates[0].charAt(0);
+                    int column = Integer.parseInt(coordinates[1]);
+                    int[] coordinatesInt = new int[2];
+                    if(row>='a' && row <='i' && column>=0 && column<=8) {
+                        coordinatesInt[0] = row - 'a';
+                        coordinatesInt[1] = column;
+                        try {
+                            networkHandler.onVCEvent(new ClickOnTile(coordinatesInt));
+                        } catch (NoSuchMethodException e) {
+                            throw new RuntimeException(e);
+                        } catch (InvocationTargetException e) {
+                            throw new RuntimeException(e);
+                        } catch (IllegalAccessException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                    }
+                }else{
+                    System.out.println("Invalid input");
+                }
+            }
+            case "checkout" ->{
+                if(inputArray.length==1){
+                    try {
+                        networkHandler.onVCEvent(new CheckOutTiles());
+                    } catch (NoSuchMethodException e) {
+                        throw new RuntimeException(e);
+                    } catch (InvocationTargetException e) {
+                        throw new RuntimeException(e);
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                }else {
+                    System.out.println("Invalid input");
+                }
+            }
+            case "open" ->{
+                if(inputArray.length==1){
+                    try {
+                        networkHandler.onVCEvent(new OpenChat());
+                    } catch (NoSuchMethodException e) {
+                        throw new RuntimeException(e);
+                    } catch (InvocationTargetException e) {
+                        throw new RuntimeException(e);
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                }else {
+                    System.out.println("Invalid input");
+                }
+            }
+            case "close" ->{
+                if(inputArray.length==1){
+                    try {
+                        networkHandler.onVCEvent(new CloseChat());
+                    } catch (NoSuchMethodException e) {
+                        throw new RuntimeException(e);
+                    } catch (InvocationTargetException e) {
+                        throw new RuntimeException(e);
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                }else {
+                    System.out.println("Invalid input");
+                }
+            }
+            case "send" ->{
+                if(inputArray.length>=3){
+                    try {
+                        String message = new String("");
+                        for(int i = 2; i < inputArray.length; i++){
+                            message = message + inputArray[i] + " ";
+                        }
+                        Message messageToSend=null;
+                        if(inputArray[1].equals("@All")) {
+                            messageToSend=new Message(this.me,message,new Time(60));
+                        }else{
+                            for(Integer i: this.players.keySet()){
+                                if(this.players.get(i).getPlayerNickName().equals(inputArray[1])){
+                                    messageToSend=new Message(this.me,message,new Time(60), this.players.get(i));
+                                }
+                            }
+                        }
+                        networkHandler.onVCEvent(new SendMessage(messageToSend));
+                    } catch (NoSuchMethodException e) {
+                        throw new RuntimeException(e);
+                    } catch (InvocationTargetException e) {
+                        throw new RuntimeException(e);
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                }else {
+                    System.out.println("Invalid input");
+                }
+            }
         }
+
     }
 
 
