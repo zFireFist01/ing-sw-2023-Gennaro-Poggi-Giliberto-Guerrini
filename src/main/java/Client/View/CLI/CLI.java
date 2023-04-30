@@ -8,6 +8,7 @@ import Client.NetworkRMIHandler;
 import Client.NetworkSocketHandler;
 import Client.View.View;
 import Server.Events.MVEvents.MVEvent;
+import Server.Events.SelectViewEvents.InsertingTilesGameView;
 import Server.Events.SelectViewEvents.SelectViewEvent;
 import Server.Events.SelectViewEvents.ViewType;
 import Server.Events.VCEvents.*;
@@ -515,6 +516,25 @@ public class CLI implements Runnable , View {
         return s;
 
     }
+
+    private void printHelp(){
+        if(currentView.getType().equals("LoginView")){
+            System.out.println("info play \n quit");
+        }else if(currentView.getType().equals("PickingTileView")) {
+            System.out.println("info pick \n checkout open \n close send \n quit");
+        }else if(currentView.getType().equals("InsertingTilesGameView")){
+            System.out.println("info select \n open close \n send quit");
+        }else if(currentView.getType().equals("EndedMatchView")) {
+            System.out.println("info open \n close send \n quit");
+        }else if(currentView.getType().equals("GameView")) {
+            System.out.println("info open \n close send \n quit");
+        }else if(currentView.getType().equals("ChatONView")) {
+            System.out.println("info close \n send quit");
+        }else if(currentView.getType().equals("ChatOFFView")) {
+            System.out.println("info open \n quit");
+        }
+    }
+
     private void parseInput(String input){
         String[] inputArray = input.split(" ");
         if(currentView.getType().equals("LoginView")) {
