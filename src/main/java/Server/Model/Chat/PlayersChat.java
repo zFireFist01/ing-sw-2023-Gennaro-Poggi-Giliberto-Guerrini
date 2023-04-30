@@ -1,6 +1,8 @@
 package Server.Model.Chat;
 
+import Server.Events.MVEvents.ModifiedChatEvent;
 import Server.Model.Player.Player;
+import Server.Network.VirtualView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +22,11 @@ public class PlayersChat {
      * We store the message every message sent in an ArrayList
      * @param message is the message we want to add in the ArrayList
      */
-    public void addMessage(Message message){
+    public void addMessage(Message message, VirtualView... virtualViews){
         this.messages.add(message);
+        for(VirtualView virtualView : virtualViews){
+            virtualView.onMVEvent(new ModifiedChatEvent(message));
+        }
     }
 
     /**

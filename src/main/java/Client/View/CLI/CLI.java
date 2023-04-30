@@ -10,8 +10,19 @@ import Client.View.View;
 import Server.Events.MVEvents.MVEvent;
 import Server.Events.SelectViewEvents.InsertingTilesGameView;
 import Server.Events.SelectViewEvents.SelectViewEvent;
+
+
+
+import Server.Events.SelectViewEvents.ViewType;
+
+
+import Server.Events.VCEvents.ClickOnTile;
+import Server.Events.VCEvents.LoginEvent;
+
+
 import Server.Events.SelectViewEvents.ViewType;
 import Server.Events.VCEvents.*;
+
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Chat.Message;
 import Server.Model.LightMatch;
@@ -516,6 +527,7 @@ public class CLI implements Runnable , View {
         return s;
 
     }
+
 
     private void printHelp(){
         if(currentView.getType().equals("LoginView")){

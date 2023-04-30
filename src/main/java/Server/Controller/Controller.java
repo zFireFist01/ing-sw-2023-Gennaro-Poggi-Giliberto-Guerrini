@@ -6,6 +6,7 @@ import Server.Listeners.SelectViewEventListener;
 
 import Server.Listeners.VCEventListener;
 import Server.Model.Chat.Message;
+import Server.Model.Chat.PlayersChat;
 import Server.Model.GameItems.LivingRoom;
 import Server.Model.GameItems.LivingRoomTileSpot;
 
@@ -93,7 +94,18 @@ public class Controller implements VCEventListener {
      * @author ValentinoGuerrini
      */
     private void onSendMessageEvent(Message message){
-        match.getGameChat().addMessage(message);
+        Player sender = message.getSender();
+        Player receiver = message.getReceiver();
+        if(receiver == null) {
+            VirtualView[] views = new VirtualView[PlayerViews.size()];
+            for(Integer i : PlayerViews.keySet()){
+                views[i] = PlayerViews.get(i);
+            }
+            match.getGameChat().addMessage(message, views);
+        }else{
+            match.getGameChat().addMessage(message, PlayerViews.get(sender.getPlayerID()),
+                    PlayerViews.get(receiver.getPlayerID()));
+        }
     }
 
     /**
