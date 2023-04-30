@@ -140,16 +140,19 @@ public class CommonGoalCard7 extends CommonGoalCard {
 
         return description;
     }
-
+    /*
     /**
      * @return a string that describes the 7th common goal
      * @author patrickpoggi
      */
+
+    /*
     @Override
     public String getDescription() {
         return "Four lines each formed by 5 tiles of maximum three different types. One line can show the same or " +
                 "a different combination of another line";
     }
+    */
 
     /**
      * This method returns the ID of the common goal card

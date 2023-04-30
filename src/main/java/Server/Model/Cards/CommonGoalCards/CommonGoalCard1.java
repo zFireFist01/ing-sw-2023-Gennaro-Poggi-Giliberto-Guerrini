@@ -120,10 +120,10 @@ public class CommonGoalCard1 extends CommonGoalCard {
         return description;
     }
 
-    @Override
-    public String getDescription(){
-        return "Two groups each containing at least 4 tiles of the same type in a 2x2 square. The tiles of one square can be different from those of the other square";
-    }
+    //@Override
+    //public String getDescription(){
+    //    return "Two groups each containing at least 4 tiles of the same type in a 2x2 square. The tiles of one square can be different from those of the other square";
+    //}
 
     /**
      * This method returns the ID of the common goal card

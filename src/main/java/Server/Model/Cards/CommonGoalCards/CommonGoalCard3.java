@@ -132,11 +132,12 @@ public class CommonGoalCard3 extends CommonGoalCard {
         description[7] = "                           ";
         return description;
     }
-
+    /*
     @Override
     public String getDescription(){
         return "Four groups each containing at least 4 tiles of the same type (not necessarily in the depicted shape). The tiles of one group can be different from those of another group.";
     }
+    */
 
     /**
      * this method counts the number of adjacent tiles with the same tile type

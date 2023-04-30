@@ -80,6 +80,12 @@ public class CLI implements Runnable , View {
             {'|',' ',' ',' ',' ',' ',' ',' ','|'},
             {'+','-','-','-','-','-','-','-','+'}};
 
+    private final static char[][] ENDTILE= {{'+','-','-','-','-','-','-','-','+'},
+            {'|',' ',' ','#','1',' ',' ',' ','|'},
+            {'|',' ','P','o','i','n','t',' ','|'},
+            {'|',' ',' ',' ',' ',' ',' ',' ','|'},
+            {'+','-','-','-','-','-','-','-','+'}};
+
     private NetworkHandler networkHandler;
     private Environment board = new Environment();
     private ArrayList<String> chat = new ArrayList<>();

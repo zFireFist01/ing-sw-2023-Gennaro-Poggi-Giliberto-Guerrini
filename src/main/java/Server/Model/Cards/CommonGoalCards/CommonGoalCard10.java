@@ -85,15 +85,18 @@ public class CommonGoalCard10 extends CommonGoalCard {
 
         return res;
     }
-
+    /*
     /**
      * @return a string that describes CommonGoalCard10
      * @author martagiliberto
      */
+
+    /*
     @Override
     public String getDescription() {
         return "Five tiles of the same type forming an X.";
     }
+    */
 
     /**
      * this method returns a CLI representation of CommonGoalCard10's description

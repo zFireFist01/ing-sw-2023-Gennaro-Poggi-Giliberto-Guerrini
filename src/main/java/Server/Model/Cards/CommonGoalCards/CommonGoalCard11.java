@@ -4,7 +4,7 @@ import Server.Model.Cards.CommonGoalCard;
 import Server.Model.GameItems.Bookshelf;
 import Server.Model.GameItems.BookshelfTileSpot;
 
-public class CommonGoalCard11 extends CommonGoalCard {
+public class    CommonGoalCard11 extends CommonGoalCard {
     public CommonGoalCard11(int playersNum, boolean secondIstance) {
         super(playersNum, secondIstance);
     }
@@ -115,11 +115,12 @@ public class CommonGoalCard11 extends CommonGoalCard {
      * @return a string that describes CommonGoalCard11
      * @author martagiliberto
      */
+    /*
     @Override
     public String getDescription() {
         return "Five tiles of the same type forming a diagonal. ";
     }
-
+    */
     /**
      * this method returns a CLI representation of CommonGoalCard11's description
      * @return the String[] "matrix" of the representation

@@ -85,15 +85,19 @@ public class CommonGoalCard8 extends CommonGoalCard {
 
         return description;
     }
-
+    /*
     /**
      * @return a string that describes the 8th common goal
      * @author patrickpoggi
      */
+
+    /*
     @Override
     public String getDescription() {
         return "Four tiles of the same type in the four corners of the bookshelf";
     }
+
+    */
 
     /**
      * This method returns the ID of the common goal card
