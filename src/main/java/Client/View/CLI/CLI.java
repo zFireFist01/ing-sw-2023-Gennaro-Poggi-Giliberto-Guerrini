@@ -23,7 +23,10 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 
-
+/**
+ * This class is used to manage the CLI view of the game
+ * @author Valentino Guerrini & Patrick Poggi & Marta Giliberto & Paolo Gennaro
+ */
 public class CLI implements Runnable , View {
 
     //draw coordinates
@@ -65,8 +68,6 @@ public class CLI implements Runnable , View {
             {'|',' ',' ',' ',' ',' ',' ',' ','|'},
             {'+','-','-','-','-','-','-','-','+'}};
 
-
-
     private NetworkHandler networkHandler;
     private Environment board = new Environment();
     private ArrayList<String> chat = new ArrayList<>();
@@ -82,13 +83,8 @@ public class CLI implements Runnable , View {
     private ViewType currentView;
 
     private boolean myTurn = false;
-
-
-
-
-
-
     private Scanner scanner;
+
 
     public CLI(){
         scanner = new Scanner(System.in);
@@ -117,6 +113,11 @@ public class CLI implements Runnable , View {
 
     //connect to the server
 
+
+    /**
+     * This method is used to connect to the server
+     * @author Valentino Guerrini & Paolo Gennaro & Patrick Poggi
+     */
     private void connect(){
         boolean flag = true;
         ConnectionType connectionType = null;
@@ -162,11 +163,10 @@ public class CLI implements Runnable , View {
     }
 
     /**
-     * This method is used to manage the MVEvents sended by the model
+     * This method is used to manage the MVEvents sent by the model
      * @param event is the event sended by the model
      * @author ValentinoGuerrini
      */
-
     @Override
     public void onMVEvent (MVEvent event){
         String methodName = event.getMethodName();
@@ -206,7 +206,6 @@ public class CLI implements Runnable , View {
      * This method is used to setup the board at the start of the match
      * @param match
      */
-
     private void onMatchStartedEvent(LightMatch match){
         matchStarted = true;
         numberPlayers = match.getPlayers().size();
@@ -281,11 +280,10 @@ public class CLI implements Runnable , View {
     }
 
     /**
-     * This method is used to updete the points tiles of the players
-     * @param match
-     *
+     * This method is used to update the points tiles of the players
+     * @param match is the light version of the match
+     * @author Valentino Guerrini & Paolo Gennaro
      */
-
     private void onModifiedPointsEvent(LightMatch match){
         switch(numberPlayers) {
             case 2 -> {
@@ -294,56 +292,56 @@ public class CLI implements Runnable , View {
                 }else if(match.getPlayers().get(0).getPointsTiles().size() == 2){
                     printPlayer1Points(match.getPlayers().get(0).getPointsTiles().get(0).getCLIRepresentation(),match.getPlayers().get(0).getPointsTiles().get(1).getCLIRepresentation());
                 }
-                if(match.getPlayers()[1].getPointsTiles().size() == 1) {
-                    printPlayer2Points(match.getPlayers()[1].getPointsTiles()[0], EMPTYSPOT);
-                }else if(match.getPlayers()[1].getPointsTiles().size() == 2){
-                    printPlayer2Points(match.getPlayers()[1].getPointsTiles()[0], match.getPlayers()[1].getPointsTiles()[1]);
+                if(match.getPlayers().get(1).getPointsTiles().size() == 1) {
+                    printPlayer2Points(match.getPlayers().get(1).getPointsTiles().get(0).getCLIRepresentation(), EMPTYSPOT);
+                }else if(match.getPlayers().get(1).getPointsTiles().size() == 2){
+                    printPlayer2Points(match.getPlayers().get(1).getPointsTiles().get(0).getCLIRepresentation(), match.getPlayers().get(1).getPointsTiles().get(1).getCLIRepresentation());
                 }
             }
             case 3->{
-                if(match.getPlayers()[0].getPointsTiles().size() == 1) {
-                    printPlayer1Points(match.getPlayers()[0].getPointsTiles()[0], EMPTYSPOT);
-                }else if(match.getPlayers()[0].getPointsTiles().size() == 2){
-                    printPlayer1Points(match.getPlayers()[0].getPointsTiles()[0], match.getPlayers()[0].getPointsTiles()[1]);
+                if(match.getPlayers().get(0).getPointsTiles().size() == 1) {
+                    printPlayer1Points(match.getPlayers().get(0).getPointsTiles().get(0).getCLIRepresentation(), EMPTYSPOT);
+                }else if(match.getPlayers().get(0).getPointsTiles().size() == 2){
+                    printPlayer1Points(match.getPlayers().get(0).getPointsTiles().get(0).getCLIRepresentation(), match.getPlayers().get(0).getPointsTiles().get(1).getCLIRepresentation());
 
                 }
 
-                if(match.getPlayers()[1].getPointsTiles().size() == 1) {
-                    printPlayer2Points(match.getPlayers()[1].getPointsTiles()[0], EMPTYSPOT);
-                }else if(match.getPlayers()[1].getPointsTiles().size() == 2){
-                    printPlayer2Points(match.getPlayers()[1].getPointsTiles()[0], match.getPlayers()[1].getPointsTiles()[1]);
+                if(match.getPlayers().get(1).getPointsTiles().size() == 1) {
+                    printPlayer2Points(match.getPlayers().get(1).getPointsTiles().get(0).getCLIRepresentation(), EMPTYSPOT);
+                }else if(match.getPlayers().get(1).getPointsTiles().size() == 2){
+                    printPlayer2Points(match.getPlayers().get(1).getPointsTiles().get(0).getCLIRepresentation(), match.getPlayers().get(1).getPointsTiles().get(1).getCLIRepresentation());
                 }
 
-                if(match.getPlayers()[2].getPointsTiles().size() == 1) {
-                    printPlayer3Points(match.getPlayers()[2].getPointsTiles()[0], EMPTYSPOT);
-                }else if(match.getPlayers()[2].getPointsTiles().size() == 2){
-                    printPlayer3Points(match.getPlayers()[2].getPointsTiles()[0], match.getPlayers()[2].getPointsTiles()[1]);
+                if(match.getPlayers().get(2).getPointsTiles().size() == 1) {
+                    printPlayer3Points(match.getPlayers().get(2).getPointsTiles().get(0).getCLIRepresentation(), EMPTYSPOT);
+                }else if(match.getPlayers().get(2).getPointsTiles().size() == 2){
+                    printPlayer3Points(match.getPlayers().get(2).getPointsTiles().get(0).getCLIRepresentation(), match.getPlayers().get(2).getPointsTiles().get(1).getCLIRepresentation());
 
                 }
             }case 4->{
-                if(match.getPlayers()[0].getPointsTiles().size() == 1) {
-                    printPlayer1Points(match.getPlayers()[0].getPointsTiles()[0], EMPTYSPOT);
-                }else if(match.getPlayers()[0].getPointsTiles().size() == 2){
-                    printPlayer1Points(match.getPlayers()[0].getPointsTiles()[0], match.getPlayers()[0].getPointsTiles()[1]);
+                if(match.getPlayers().get(0).getPointsTiles().size() == 1) {
+                    printPlayer1Points(match.getPlayers().get(0).getPointsTiles().get(0).getCLIRepresentation(), EMPTYSPOT);
+                }else if(match.getPlayers().get(0).getPointsTiles().size() == 2){
+                    printPlayer1Points(match.getPlayers().get(0).getPointsTiles().get(0).getCLIRepresentation(), match.getPlayers().get(0).getPointsTiles().get(1).getCLIRepresentation());
 
                 }
 
-                if(match.getPlayers()[1].getPointsTiles().size() == 1) {
-                    printPlayer2Points(match.getPlayers()[1].getPointsTiles()[0], EMPTYSPOT);
-                }else if(match.getPlayers()[1].getPointsTiles().size() == 2){
-                    printPlayer2Points(match.getPlayers()[1].getPointsTiles()[0], match.getPlayers()[1].getPointsTiles()[1]);
+                if(match.getPlayers().get(1).getPointsTiles().size() == 1) {
+                    printPlayer2Points(match.getPlayers().get(1).getPointsTiles().get(0).getCLIRepresentation(), EMPTYSPOT);
+                }else if(match.getPlayers().get(1).getPointsTiles().size() == 2){
+                    printPlayer2Points(match.getPlayers().get(1).getPointsTiles().get(0).getCLIRepresentation(), match.getPlayers().get(1).getPointsTiles().get(1).getCLIRepresentation());
                 }
 
-                if(match.getPlayers()[2].getPointsTiles().size() == 1) {
-                    printPlayer3Points(match.getPlayers()[2].getPointsTiles()[0], EMPTYSPOT);
-                }else if(match.getPlayers()[2].getPointsTiles().size() == 2) {
-                    printPlayer3Points(match.getPlayers()[2].getPointsTiles()[0], match.getPlayers()[2].getPointsTiles()[1]);
+                if(match.getPlayers().get(2).getPointsTiles().size() == 1) {
+                    printPlayer3Points(match.getPlayers().get(2).getPointsTiles().get(0).getCLIRepresentation(), EMPTYSPOT);
+                }else if(match.getPlayers().get(2).getPointsTiles().size() == 2) {
+                    printPlayer3Points(match.getPlayers().get(2).getPointsTiles().get(0).getCLIRepresentation(), match.getPlayers().get(2).getPointsTiles().get(1).getCLIRepresentation());
                 }
 
-                if(match.getPlayers()[3].getPointsTiles().size() == 1) {
-                    printPlayer4Points(match.getPlayers()[3].getPointsTiles()[0], EMPTYSPOT);
-                }else if(match.getPlayers()[3].getPointsTiles().size() == 2){
-                    printPlayer4Points(match.getPlayers()[3].getPointsTiles()[0], match.getPlayers()[3].getPointsTiles()[1]);
+                if(match.getPlayers().get(3).getPointsTiles().size() == 1) {
+                    printPlayer4Points(match.getPlayers().get(3).getPointsTiles().get(0).getCLIRepresentation(), EMPTYSPOT);
+                }else if(match.getPlayers().get(3).getPointsTiles().size() == 2){
+                    printPlayer4Points(match.getPlayers().get(3).getPointsTiles().get(0).getCLIRepresentation(), match.getPlayers().get(3).getPointsTiles().get(1).getCLIRepresentation());
                 }
             }
 
@@ -366,34 +364,47 @@ public class CLI implements Runnable , View {
         }
     }
 
+    /**
+     * This method is used to update the bookshelf of the players
+     * @param match is the light version of the match
+     * @author Valentino Guerrini & Paolo Gennaro
+     */
     private void onModifiedBookshelfEvent(LightMatch match){
         switch(numberPlayers) {
             case 2 -> {
-                printBookshelf1(match.getPlayers()[0].getBookshelf().getCLIRepresentation());
-                printBookshelf2(match.getPlayers()[1].getBookshelf().getCLIRepresentation());
+                printBookshelf1(match.getPlayers().get(0).getBookshelf().getCLIRepresentation());
+                printBookshelf2(match.getPlayers().get(1).getBookshelf().getCLIRepresentation());
             }
             case 3->{
-                printBookshelf1(match.getPlayers()[0].getBookshelf().getCLIRepresentation());
-                printBookshelf2(match.getPlayers()[1].getBookshelf().getCLIRepresentation());
-                printBookshelf3(match.getPlayers()[2].getBookshelf().getCLIRepresentation());
+                printBookshelf1(match.getPlayers().get(0).getBookshelf().getCLIRepresentation());
+                printBookshelf2(match.getPlayers().get(1).getBookshelf().getCLIRepresentation());
+                printBookshelf3(match.getPlayers().get(2).getBookshelf().getCLIRepresentation());
             }case 4->{
-                printBookshelf1(match.getPlayers()[0].getBookshelf().getCLIRepresentation());
-                printBookshelf2(match.getPlayers()[1].getBookshelf().getCLIRepresentation());
-                printBookshelf3(match.getPlayers()[2].getBookshelf().getCLIRepresentation());
-                printBookshelf4(match.getPlayers()[3].getBookshelf().getCLIRepresentation());
+                printBookshelf1(match.getPlayers().get(0).getBookshelf().getCLIRepresentation());
+                printBookshelf2(match.getPlayers().get(1).getBookshelf().getCLIRepresentation());
+                printBookshelf3(match.getPlayers().get(2).getBookshelf().getCLIRepresentation());
+                printBookshelf4(match.getPlayers().get(3).getBookshelf().getCLIRepresentation());
             }
 
         }
     }
 
+    /**
+     * This method is used to update the LivingRoom
+     * @param match is the light version of the match
+     * @author Valentino Guerrini
+     */
     private void onModifiedLivingRoomEvent(LightMatch match){
         printLivingRoom(match.getLivingRoom().getCLIRepresentation());
     }
 
+    /**
+     * This method is used to notify players that a player completed his bookshelf and took the "MatchEnded" tile
+     * @param match is the light version of the match
+     */
     private void onModifiedMatchEndedEvent(LightMatch match){
         finalScores= (HashMap<Player, Integer>) match.getScores();
         winner = match.getWinner();
-
     }
 
     @Override
@@ -438,8 +449,6 @@ public class CLI implements Runnable , View {
         print();
 
     }
-
-
 
     private void onEndedMatchViewEvent(SelectViewEvent event){
         MatchEnded = true;
@@ -507,7 +516,6 @@ public class CLI implements Runnable , View {
 
     }
 
-
     private void parseInput(String input){
         switch (input){
             case "info" -> {
@@ -524,20 +532,6 @@ public class CLI implements Runnable , View {
             }
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
