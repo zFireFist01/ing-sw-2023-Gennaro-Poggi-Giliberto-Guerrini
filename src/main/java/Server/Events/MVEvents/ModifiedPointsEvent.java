@@ -7,7 +7,7 @@ import Server.Model.LightMatch;
  * @author Paolo Gennaro
  */
 public class ModifiedPointsEvent extends MVEvent{
-    private final String primaryType = "MVEvent";
+    //private final String primaryType = "MVEvent";
     private final String secondaryType = "ModifiedPointsEvent";
     private final String methodName;
     private final LightMatch match;
@@ -15,6 +15,10 @@ public class ModifiedPointsEvent extends MVEvent{
     public ModifiedPointsEvent(LightMatch match){
         this.methodName = "onModifiedPointsEvent";
         this.match = match;
+    }
+
+    public LightMatch getMatch() {
+        return this.match;
     }
 
     public String getMethodName(){

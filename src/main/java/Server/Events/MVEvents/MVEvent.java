@@ -9,12 +9,10 @@ import Server.Model.LightMatch;
  */
 public abstract class MVEvent extends Event {
     private final String primaryType = "MVEvent";
-    private String methodName;
-    private LightMatch match;
+    //private String methodName;
+    //private LightMatch match;
 
-    public String getMethodName() {
-        return this.methodName;
-    }
+    public abstract String getMethodName();
 
     /**
      * Getter for the type of event
@@ -26,9 +24,7 @@ public abstract class MVEvent extends Event {
         return null;
     }
 
-    public LightMatch getMatch() {
-        return this.match;
-    }
+    public abstract LightMatch getMatch();
 
     public String getPrimaryType() {
         return "MVEvent";
