@@ -32,7 +32,7 @@ public class Match {
     private ArrayList<Integer> selectedTiles;
     private int width;
     private int height;
-    private final int numberOfPlayers;
+    private int numberOfPlayers;
     private final CommonGoalCard[] commonGoals;
     private MatchStatus matchStatus;
     private final Player matchOpener;
@@ -353,6 +353,10 @@ public class Match {
         }
         matchStatus.evolve();
         notifyMVEventListeners(new ModifiedMatchEndedEvent(new LightMatch(this)));
+    }
+
+    public void setNumberOfPlayers(int numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
     }
 
     /**

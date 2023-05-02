@@ -24,10 +24,12 @@ public class MatchTest {
      */
     @Test
     public void addContestant_test1(){
-        Match match= new Match(2, new Player(1, "pluto23"));
-        Player player= new Player(2, "pippo25");
-
-        match.addContestant(player);
+        Match match= new Match();
+        Player player1= new Player(match, 2, "pluto23");
+        match.addContestant(player1);
+        match.setNumberOfPlayers(2);
+        Player player2= new Player(match,2, "pippo25");
+        match.addContestant(player2);
         assertTrue(match.getMatchStatus() instanceof Running);
     }
 
@@ -38,9 +40,9 @@ public class MatchTest {
      */
     @Test
     public void addContestant_test2(){
-        Match match= new Match(4, new Player(1, "pluto23"));
-        Player player= new Player(2, "pippo25");
-
+        Match match= new Match();
+        Player player= new Player(match, 2, "pippo25");
+        match.setNumberOfPlayers(2);
         assertThrows(UnsupportedOperationException.class,()->  match.addContestant(player));
     }
 
@@ -51,9 +53,12 @@ public class MatchTest {
      */
     @Test
     public void addContestant_test3(){
-        Match match= new Match(2, new Player(1, "pluto23"));
-        Player player= new Player(1, "pippo25");
-        assertThrows(UnsupportedOperationException.class,()->  match.addContestant(player));
+        Match match= new Match();
+        Player player1= new Player(match, 2, "pippo25");
+        match.setNumberOfPlayers(2);
+        match.addContestant(player1);
+        Player player2= new Player(match,2, "pippo25");
+        assertThrows(UnsupportedOperationException.class,()->  match.addContestant(player2));
     }
 
     //checkIfBookshelfIsFull test
@@ -64,8 +69,12 @@ public class MatchTest {
      */
     @Test
     public void checkIfBookshelfIsFull_test1(){
-        Player player= new Player(1, "pluto23");
-        Match match = new Match(2, player);
+        Match match = new Match();
+        Player player= new Player(match,1, "pluto23");
+        match.setNumberOfPlayers(2);
+        match.addContestant(player);
+        Player player2= new Player(match,2, "pippo25");
+        match.addContestant(player2);
 
         Bookshelf bookshelf;
         bookshelf=player.getBookshelf();
@@ -86,8 +95,12 @@ public class MatchTest {
 
     @Test
     public void checkIfBookshelfIsFull_test2(){
-        Player player= new Player(1, "pluto23");
-        Match match = new Match(2, player);
+        Match match = new Match();
+        Player player= new Player(match,1, "pluto23");
+        match.setNumberOfPlayers(2);
+        match.addContestant(player);
+        Player player2= new Player(match,2, "pippo25");
+        match.addContestant(player2);
 
         for(int j=0; j<4; j++){
             for(int i=5; i>=0; i--){
@@ -110,8 +123,12 @@ public class MatchTest {
 
     @Test
     public void checkIfBookshelfIsFull_test3(){
-        Player player= new Player(1, "pluto23");
-        Match match = new Match(2, player);
+        Match match = new Match();
+        Player player= new Player(match,1, "pluto23");
+        match.setNumberOfPlayers(2);
+        match.addContestant(player);
+        Player player2= new Player(match,2, "pippo25");
+        match.addContestant(player2);
 
         assertFalse(match.checkIfBookshelfIsFull(player));
     }
@@ -122,8 +139,12 @@ public class MatchTest {
      */
     @Test
     public void checkAdjacentTiles_test(){
-        Player player= new Player(1, "pluto23");
-        Match match = new Match(2, player);
+        Match match = new Match();
+        Player player= new Player(match,1, "pluto23");
+        match.setNumberOfPlayers(2);
+        match.addContestant(player);
+        Player player2= new Player(match,2, "pippo25");
+        match.addContestant(player2);
 
         player.getBookshelf().insertTile(0, TileType.TROPHIES);
         player.getBookshelf().insertTile(0, TileType.FRAMES);
