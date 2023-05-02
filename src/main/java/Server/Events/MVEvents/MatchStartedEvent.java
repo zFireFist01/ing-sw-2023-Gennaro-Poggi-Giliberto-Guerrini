@@ -7,6 +7,8 @@ import Server.Model.LightMatch;
  * @author Valentino Guerrini
  */
 public class MatchStartedEvent extends MVEvent{
+    private final String primaryType = "MVEvent";
+    private final String secondaryType = "MatchStartedEvent";
 
     private final String methodName;
     private final LightMatch match;

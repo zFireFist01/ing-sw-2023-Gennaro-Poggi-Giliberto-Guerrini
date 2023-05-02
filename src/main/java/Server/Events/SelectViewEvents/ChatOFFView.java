@@ -1,6 +1,8 @@
 package Server.Events.SelectViewEvents;
 
-public class ChatOFFView extends ViewType{
+public class ChatOFFView extends SelectViewEvent{
+    //private final String primaryType = "SelectViewEvent";
+    private final String secondaryType = "ChatOFFView";
 
     private final String message;
 

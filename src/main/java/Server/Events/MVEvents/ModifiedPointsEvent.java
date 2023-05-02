@@ -7,6 +7,8 @@ import Server.Model.LightMatch;
  * @author Paolo Gennaro
  */
 public class ModifiedPointsEvent extends MVEvent{
+    private final String primaryType = "MVEvent";
+    private final String secondaryType = "ModifiedPointsEvent";
     private final String methodName;
     private final LightMatch match;
 

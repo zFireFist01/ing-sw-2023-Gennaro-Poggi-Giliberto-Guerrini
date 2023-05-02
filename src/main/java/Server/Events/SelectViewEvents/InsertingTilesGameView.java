@@ -2,11 +2,12 @@ package Server.Events.SelectViewEvents;
 
 /**
  * This class is used to send the InsertingTiles GameView type to the client
- * @see ViewType for the Methods
  * @Author ValentinoGuerrini
  */
 
 public class InsertingTilesGameView extends GameView{
+    //private final String primaryType = "SelectViewEvent";
+    private final String secondaryType = "InsertingTilesGameView";
 
     private final String message;
 

@@ -2,11 +2,12 @@ package Server.Events.SelectViewEvents;
 
 /**
  * This class is used to send the Login View to the client
- * @see ViewType for the Methods
  * @Author ValentinoGuerrini
  */
 
-public class LoginView extends ViewType{
+public class LoginView extends SelectViewEvent{
+    //private final String primaryType = "SelectViewEvent";
+    private final String secondaryType = "LoginView";
     private final boolean firstAttempt;
     private final String Message;
 

@@ -2,13 +2,18 @@ package Server.Events.SelectViewEvents;
 
 /**
  * This class is used to send the PickingTiles GameView type to the client
- * @see ViewType for the Methods
+
  * @Author ValentinoGuerrini
  */
 
 public class PickingTilesGameView extends GameView{
+    //private final String primaryType = "SelectViewEvent";
+    private final String secondaryType = "PickingTilesGameView";
 
     private final String message;
+
+
+
 
 
     public PickingTilesGameView( ){

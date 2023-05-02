@@ -3,6 +3,7 @@ package Server.Events.VCEvents;
 import Server.Model.Chat.Message;
 
 public class SendMessage extends VCEvent{
+    private final String secondaryType = "SendMessage";
     private final String methodname;
     private final Message message;
 

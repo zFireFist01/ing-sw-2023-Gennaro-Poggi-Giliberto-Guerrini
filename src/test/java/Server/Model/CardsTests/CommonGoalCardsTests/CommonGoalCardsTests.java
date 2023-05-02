@@ -171,6 +171,7 @@ public class CommonGoalCardsTests {
      */
     @Test
     public void CommonGoalCard1_expectedFalse_Test() {
+
         testCard = new CommonGoalCard1(4, false);
         testBookshelf = new Bookshelf();
         boolean flag = false;

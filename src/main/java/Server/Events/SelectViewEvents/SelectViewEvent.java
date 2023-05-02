@@ -7,41 +7,45 @@ package Server.Events.SelectViewEvents;
 
 import Server.Events.Event;
 
-public class SelectViewEvent extends Event {
+public abstract class SelectViewEvent extends Event {
+    private final String primaryType = "SelectViewEvent";
 
-    private final ViewType viewType;
+    //private final String message;
+
+
+
+    /**
+     * Constructor for the SelectViewEvent
+     * @param message the message to show in the view
+     */
+
+
+
 
     /**
      * Constructor for the SelectViewEvent
      * @param viewType the type of view to send to the client
      */
 
-    public SelectViewEvent(ViewType viewType) {
-        this.viewType = viewType;
-    }
+
 
     /**
      * Getter for the type of view
      * @return the type of view
      */
 
-    public String getType(){
-        return this.viewType.getType();
-    }
+    public abstract String getType();
 
 
-    public ViewType getViewType() {
-    	return this.viewType;
-    }
+
+
 
     /**
      * Getter for the message to show in the view
      * @return the message of the view
      */
 
-    public String getMessage(){
-        return this.viewType.getMessage();
-    }
+    public abstract String getMessage();
 
 
     @Override

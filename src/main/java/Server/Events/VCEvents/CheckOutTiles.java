@@ -1,6 +1,7 @@
 package Server.Events.VCEvents;
 
 public class CheckOutTiles extends VCEvent{
+    private final String secondaryType = "CheckOutTiles";
     private final String methodName;
 
     public CheckOutTiles(){

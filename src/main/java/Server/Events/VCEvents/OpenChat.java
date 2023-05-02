@@ -1,6 +1,7 @@
 package Server.Events.VCEvents;
 
 public class OpenChat extends VCEvent{
+    private final String secondaryType = "OpenChat";
     private final String methodname;
 
     public OpenChat(){

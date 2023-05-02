@@ -1,6 +1,7 @@
 package Server.Events.VCEvents;
 
 public class LoginEvent extends VCEvent{
+    private final String secondaryType = "LoginEvent";
     private final String methodName;
     private final String nickname;
 

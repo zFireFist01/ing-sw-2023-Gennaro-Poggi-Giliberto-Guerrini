@@ -53,7 +53,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
         try {
             client.sendSelectViewEvent(
                     new Gson().toJson(
-                            new SelectViewEvent(new LoginView())
+                            new LoginView()
                     )
             );
         } catch (RemoteException e) {

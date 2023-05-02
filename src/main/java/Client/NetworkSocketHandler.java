@@ -3,11 +3,13 @@ package Client;
 import java.net.ServerSocket;
 import Client.View.View;
 import Server.Events.Event;
+import Server.Events.EventTypeAdapterFactory;
 import Server.Events.MVEvents.MVEvent;
 import Server.Events.SelectViewEvents.SelectViewEvent;
 import Server.Events.VCEvents.VCEvent;
 import Server.Network.VirtualView;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -43,14 +45,18 @@ public class NetworkSocketHandler implements NetworkHandler{
 
     @Override
     public void sendMVEvent(String json) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapterFactory(new EventTypeAdapterFactory())
+                .create();
         MVEvent event = gson.fromJson(json, MVEvent.class);
         view.onMVEvent(event);
     }
 
     @Override
     public void sendSelectViewEvent(String json){
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapterFactory(new EventTypeAdapterFactory())
+                .create();
         SelectViewEvent event = gson.fromJson(json, SelectViewEvent.class);
         view.onSelectViewEvent(event);
     }
@@ -64,9 +70,11 @@ public class NetworkSocketHandler implements NetworkHandler{
     public void onVCEvent(VCEvent event) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Gson gson = new Gson();
         String json = gson.toJson(event);
+        json+="\n";
         try {
             out.write(json.getBytes());
             out.flush();
+            System.out.println("Message sent: " + json);
         } catch (IOException e) {
             throw new RuntimeException("Error while sending event to server");
         }
@@ -80,18 +88,25 @@ public class NetworkSocketHandler implements NetworkHandler{
 
         try {
             this.socket = new Socket(host, port);
-            this.in = new Scanner(socket.getInputStream());
+            this.in = new Scanner(socket.getInputStream()); //message from server
             this.out = socket.getOutputStream();
+            System.out.println("Connected to the socket server!");
+            String welcomeMessage = in.nextLine();
+            System.out.println("Ricevuto messaggio di benvenuto: " + welcomeMessage);
         } catch (IOException e) {
             System.err.println(e.getStackTrace());
             throw new RuntimeException(e);
         }
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapterFactory(new EventTypeAdapterFactory())
+                .create();
 
 
         while (true) {
             message = in.nextLine();
+            System.out.println("Received message: " + message);
 
-            Gson gson = new Gson();
+
             event = gson.fromJson(message, Event.class);
             primaryType = event.getPrimaryType();
 

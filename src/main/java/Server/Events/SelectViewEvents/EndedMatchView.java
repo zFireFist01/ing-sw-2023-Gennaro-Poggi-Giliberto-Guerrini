@@ -1,6 +1,8 @@
 package Server.Events.SelectViewEvents;
 
-public class EndedMatchView extends ViewType{
+public class EndedMatchView extends SelectViewEvent{
+    //private final String primaryType = "SelectViewEvent";
+    private final String secondaryType = "EndedMatchView";
     private final String message;
 
     public EndedMatchView(){

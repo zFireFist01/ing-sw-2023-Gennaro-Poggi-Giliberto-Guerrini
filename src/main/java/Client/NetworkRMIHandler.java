@@ -6,6 +6,7 @@ import Server.Events.MVEvents.MVEvent;
 import Server.Events.SelectViewEvents.SelectViewEvent;
 import Server.Events.VCEvents.VCEvent;
 import Server.Network.RMIWaiter;
+import Server.Network.RMIWaiterInterface;
 import Server.Network.VirtualRMIView;
 import Server.Network.VirtualView;
 import com.google.gson.Gson;
@@ -31,7 +32,7 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements NetworkHan
     @Override
     public void run() {
         Registry registry;
-        RMIWaiter rmiWaiter;
+        RMIWaiterInterface rmiWaiter;
         try {
             registry = LocateRegistry.getRegistry();
         } catch (RemoteException e) {
@@ -95,6 +96,7 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements NetworkHan
     public void onVCEvent(VCEvent event) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Gson gson = new Gson();
         String json = gson.toJson(event);
+        json+="\n";
         virtualRMIView.sendVCEvent(json);
     }
 

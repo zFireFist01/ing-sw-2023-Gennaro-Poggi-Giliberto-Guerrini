@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * @see Server.Network.Server
  * @author patrickpoggi
  */
-public class RMIWaiter extends UnicastRemoteObject implements Remote {
+public class RMIWaiter extends UnicastRemoteObject implements RMIWaiterInterface {
     Server server;
     public RMIWaiter(Server server) throws RemoteException {
         super();

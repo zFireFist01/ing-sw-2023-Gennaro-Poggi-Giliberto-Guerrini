@@ -47,12 +47,12 @@ public class Match {
     private Player firstToFinish;
     private int count=0;
 
-    private List<MVEventListener> mvEventListeners;
+    private List<MVEventListener> mvEventListeners=new ArrayList<>();
 
     public Match(){
         this.matchStatus= new NotRunning(this);
         this.gameChat = null;
-        this.numberOfPlayers = 0;
+        this.numberOfPlayers = 2;
         this.matchOpener = null;
         this.livingRoom = null;
         this.commonGoalDeck = null;
@@ -61,6 +61,7 @@ public class Match {
         this.commonGoals=new CommonGoalCard[2];
         this.scores= new HashMap<>() ;
         this.firstToFinish = null;
+
     }
 
     public Match(int numberOfPlayers, Player matchOpener) {

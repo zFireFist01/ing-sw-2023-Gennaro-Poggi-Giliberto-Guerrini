@@ -8,19 +8,13 @@ import Client.NetworkRMIHandler;
 import Client.NetworkSocketHandler;
 import Client.View.View;
 import Server.Events.MVEvents.MVEvent;
-import Server.Events.SelectViewEvents.InsertingTilesGameView;
 import Server.Events.SelectViewEvents.SelectViewEvent;
-
-
-
-import Server.Events.SelectViewEvents.ViewType;
 
 
 import Server.Events.VCEvents.ClickOnTile;
 import Server.Events.VCEvents.LoginEvent;
 
 
-import Server.Events.SelectViewEvents.ViewType;
 import Server.Events.VCEvents.*;
 
 import Server.Model.Cards.CommonGoalCard;
@@ -98,7 +92,7 @@ public class CLI implements Runnable , View {
     private String myNick;
     private boolean matchStarted = false;
     private boolean MatchEnded = false;
-    private ViewType currentView;
+    private SelectViewEvent currentView;
 
     private boolean myTurn = false;
     private Scanner scanner;
@@ -437,7 +431,7 @@ public class CLI implements Runnable , View {
              case "EndedMatchView" -> onEndedMatchViewEvent(event);
 
              default -> {
-                 currentView = event.getViewType();
+                 currentView = event;
                  print();
              }
 
@@ -448,7 +442,7 @@ public class CLI implements Runnable , View {
     }
 
     private void onLoginViewEvent(SelectViewEvent event){
-        currentView = event.getViewType();
+        currentView = event;
         System.out.print(ANSIParameters.CLEAR_SCREEN + ANSIParameters.CURSOR_HOME);
         System.out.flush();
         System.out.println("Welcome to MyShelfie!");
@@ -457,7 +451,7 @@ public class CLI implements Runnable , View {
     }
 
     private void onGameViewEvent(SelectViewEvent event){
-        currentView = event.getViewType();
+        currentView = event;
         if (!matchStarted) {
             System.out.print(ANSIParameters.CLEAR_SCREEN + ANSIParameters.CURSOR_HOME);
             System.out.flush();
@@ -470,7 +464,7 @@ public class CLI implements Runnable , View {
 
     private void onEndedMatchViewEvent(SelectViewEvent event){
         MatchEnded = true;
-        currentView = event.getViewType();
+        currentView = event;
 
         System.out.print(ANSIParameters.CLEAR_SCREEN + ANSIParameters.CURSOR_HOME);
         System.out.flush();
@@ -555,7 +549,7 @@ public class CLI implements Runnable , View {
 
     private void parseInput(String input){
         String[] inputArray = input.split(" ");
-        if(currentView.getType().equals("LoginView")) {
+        if(currentView!=null && currentView.getType().equals("LoginView")) {
             if (inputArray.length == 1) {
                 myNick = inputArray[0];
                 try {
@@ -576,7 +570,8 @@ public class CLI implements Runnable , View {
                 printHelp();
             }
             case "play" -> {
-                networkHandler.run();
+                new Thread(networkHandler).start();
+
             }
 
             case "quit" -> {

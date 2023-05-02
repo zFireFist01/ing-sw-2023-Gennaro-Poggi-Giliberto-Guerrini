@@ -1,6 +1,7 @@
 package Server.Events.VCEvents;
 
 public class ClickOnTile extends VCEvent{
+    private final String secondaryType = "ClickOnTile";
 
     private final int[] coordinates;
     private final String methodName;

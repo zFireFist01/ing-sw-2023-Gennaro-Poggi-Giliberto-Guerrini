@@ -21,7 +21,7 @@ public class SocketWaiter implements Runnable{
 
     public SocketWaiter(Server server, int port) throws IOException {
         this.server = server;
-        this.serverSocket=new ServerSocket(port);
+        this.serverSocket=new ServerSocket(1098);
     }
 
     @Override

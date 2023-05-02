@@ -1,11 +1,13 @@
 package Server.Network;
 
 
+import Server.Events.EventTypeAdapterFactory;
 import Server.Events.MVEvents.MVEvent;
+import Server.Events.SelectViewEvents.LoginView;
 import Server.Events.SelectViewEvents.SelectViewEvent;
 import Server.Events.VCEvents.VCEvent;
 import Server.Listeners.VCEventListener;
-import com.google.gson.Gson;
+import com.google.gson.*;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -37,14 +39,39 @@ public class VirtualSocketView implements VirtualView{
 
     @Override
     public void run(){
+
+        String welcomeMessage = "Benvenuto nel server!\n";
+        try {
+            out.write(welcomeMessage.getBytes());
+            out.flush();
+            System.out.println("Messaggio di benvenuto inviato");
+        } catch (IOException e) {
+            System.err.println(e.getStackTrace());
+            throw new RuntimeException(e);
+        }
+
+        Gson gson = new Gson();
+        String mess = gson.toJson(new LoginView());
+        mess += "\n";
+        try {
+            out.write(mess.getBytes());
+            out.flush();
+            System.out.println("Message sent"+mess);
+        } catch (IOException e) {
+            System.err.println(e.getStackTrace());
+            throw new RuntimeException(e);
+        }
         while (true){
             String message = in.nextLine();
+            System.out.println("Message received: "+message);
             manageMessage(message);
         }
     }
 
     private void manageMessage(String message){
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapterFactory(new EventTypeAdapterFactory())
+                .create();
         VCEvent vcEvent = gson.fromJson(message, VCEvent.class);
         sendVCEvent(vcEvent);
     }
@@ -52,6 +79,7 @@ public class VirtualSocketView implements VirtualView{
     public void onMVEvent(MVEvent mvEvent){
         Gson gson = new Gson();
         String message = gson.toJson(mvEvent);
+        message+="\n";
         try {
             out.write(message.getBytes());
             out.flush();
@@ -65,6 +93,7 @@ public class VirtualSocketView implements VirtualView{
     public void onSelectViewEvent(SelectViewEvent selectViewEvent){
         Gson gson = new Gson();
         String message = gson.toJson(selectViewEvent);
+        message+="\n";
         try {
             out.write(message.getBytes());
             out.flush();
@@ -79,7 +108,7 @@ public class VirtualSocketView implements VirtualView{
     public void sendVCEvent(VCEvent vcEvent){
         for(VCEventListener listener: vcEventListeners){
             try {
-                listener.onVCEvent(vcEvent);
+                listener.onVCEvent(vcEvent,this);
             } catch (NoSuchMethodException e) {
                 throw new RuntimeException(e);
             } catch (InvocationTargetException e) {

@@ -2,11 +2,12 @@ package Server.Events.SelectViewEvents;
 
 /**
  * This class is used to send the basic GameView type to the client. It is used when the player is waiting for his turn
- * @see ViewType for the Methods
  * @Author ValentinoGuerrini
  */
 
-public class GameView extends ViewType{
+public class GameView extends SelectViewEvent{
+    //private final String primaryType = "SelectViewEvent";
+    private final String secondaryType = "GameView";
     private final String message;
 
 

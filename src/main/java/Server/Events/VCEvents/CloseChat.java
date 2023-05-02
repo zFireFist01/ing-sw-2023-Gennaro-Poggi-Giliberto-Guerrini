@@ -1,6 +1,7 @@
 package Server.Events.VCEvents;
 
 public class CloseChat extends VCEvent{
+    private final String secondaryType = "CloseChat";
     private final String methodName;
 
     public CloseChat() {

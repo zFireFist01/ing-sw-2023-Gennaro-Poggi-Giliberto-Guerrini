@@ -1,6 +1,7 @@
 package Server.Events.VCEvents;
 
 public class SelectColumn extends VCEvent{
+    private final String secondaryType = "SelectColumn";
     private final int column;
     private final String methodName;
 

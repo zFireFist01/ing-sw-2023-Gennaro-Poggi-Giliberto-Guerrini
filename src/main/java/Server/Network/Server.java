@@ -2,6 +2,7 @@ package Server.Network;
 
 import Server.Controller.Controller;
 import Server.Model.Match;
+import Server.Model.MatchStatus.NotRunning;
 import Server.Model.MatchStatus.WaitingForPlayers;
 
 import java.io.IOException;
@@ -29,14 +30,14 @@ public class Server implements Runnable{
     Registry rmiRegistry;
     List<Match> matches;
     Map<Match, Controller> macthesControllers;
-    Map<Match, VirtualView> matchesViews;
+    Map<Match, VirtualView> matchesViews = new HashMap<>();
 
 
     public Server() throws IOException{
         boolean done = false;
         this.matches = new ArrayList<>();
         this.macthesControllers = new HashMap<>();
-        this.socketWaiter = new SocketWaiter(this,1234);
+        this.socketWaiter = new SocketWaiter(this,1098);
         while(!done){
             try{
                 this.rmiWaiter = new RMIWaiter(this);
@@ -71,7 +72,8 @@ public class Server implements Runnable{
         done = false;
         while(!done){
             try{
-                this.rmiRegistry = LocateRegistry.getRegistry();
+                this.rmiRegistry = LocateRegistry.createRegistry(1099);
+                System.setProperty("java.rmi.server.hostname","localhost");
                 done = true;
             }catch (RemoteException e){
                 System.err.println(e.getStackTrace());
@@ -101,7 +103,9 @@ public class Server implements Runnable{
      * the last match in the list of matches.
      */
     protected synchronized boolean waitingMatch(){
-        return matches.get(matches.size()-1).getMatchStatus() instanceof WaitingForPlayers;
+        if(matches.size() == 0)
+            return false;
+        return (matches.get(matches.size()-1).getMatchStatus() instanceof WaitingForPlayers) || (matches.get(matches.size()-1).getMatchStatus() instanceof NotRunning) ;
     }
 
     /**

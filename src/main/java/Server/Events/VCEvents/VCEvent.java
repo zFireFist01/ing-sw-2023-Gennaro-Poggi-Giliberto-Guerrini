@@ -3,12 +3,11 @@ package Server.Events.VCEvents;
 import Server.Events.Event;
 
 public abstract class VCEvent extends Event {
+    private final String primaryType = "VCEvent";
 
-    private String methodName;
 
-    public String getMethodName() {
-        return this.methodName;
-    }
+
+    public abstract String getMethodName();
 
     public Object getValue() {
         return null;
