@@ -35,13 +35,13 @@ public class Match {
     private final int numberOfPlayers;
     private final CommonGoalCard[] commonGoals;
     private MatchStatus matchStatus;
-    private final Player matchOpener;
+    private Player matchOpener;
     private Player firstPlayer;
     private Player currentPlayer;
     private Player winner;
-    private final LivingRoom livingRoom;
-    private final CommonGoalCardsDeck commonGoalDeck;
-    private final PersonalGoalCardsDeck personalGoalDeck;
+    private LivingRoom livingRoom;
+    private  CommonGoalCardsDeck commonGoalDeck;
+    private  PersonalGoalCardsDeck personalGoalDeck;
     private Map<Player, Integer> scores;
     private Time matchDuration;
     private Player firstToFinish;
@@ -165,6 +165,26 @@ public class Match {
      * @author Marta Giliberto
      */
     public void addContestant(Player newPlayer) throws UnsupportedOperationException{
+        if(players.size()==0){
+            players.add(newPlayer);
+            scores.put(newPlayer, 0);
+            try {
+                matchStatus = matchStatus.evolve();
+                this.commonGoalDeck = new CommonGoalCardsDeck(numberOfPlayers);
+                this.personalGoalDeck = new PersonalGoalCardsDeck(numberOfPlayers);
+                this.gameChat = new PlayersChat();
+                this.matchOpener = newPlayer;
+                this.livingRoom = new LivingRoom(this);
+                this.width= matchOpener.getBookshelf().getBookshelfWidth();
+                this.height=matchOpener.getBookshelf().getBookshelfHeight();
+                this.mvEventListeners = new ArrayList<>();
+                //setup();
+                //notifyMVEventListeners(new MatchStartedEvent(new LightMatch(this)));
+                return;
+            } catch (UnsupportedOperationException e) {
+                System.err.println(e.getMessage());
+            }
+        }
         for(int i=0; i<players.size(); i++) {
             if ((newPlayer.getPlayerID() != players.get(i).getPlayerID()) &&
                     !(newPlayer.getPlayerNickName().equals(players.get(i).getPlayerNickName()))) {

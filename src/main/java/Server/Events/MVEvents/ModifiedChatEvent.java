@@ -9,7 +9,7 @@ import Server.Model.LightMatch;
  * @author Paolo Gennaro
  */
 public class ModifiedChatEvent extends MVEvent{
-    private final String primaryType = "MVEvent";
+    //private final String primaryType = "MVEvent";
     private final String secondaryType = "ModifiedChatEvent";
     private final String methodName;
     private final Message message;
@@ -18,6 +18,11 @@ public class ModifiedChatEvent extends MVEvent{
         this.methodName = "onModifiedChatEvent";
         this.message = message;
     }
+
+    public LightMatch getMatch() {
+        return null;
+    }
+
 
     public String getMethodName(){
         return this.methodName;
