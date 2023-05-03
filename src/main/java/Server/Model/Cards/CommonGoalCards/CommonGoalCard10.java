@@ -7,6 +7,10 @@ import Server.Model.GameItems.TileType;
 
 public class CommonGoalCard10 extends CommonGoalCard {
 
+    public CommonGoalCard10() {
+        super();
+    }
+
     public CommonGoalCard10(int playersNum, boolean secondIstance) {
         super(playersNum, secondIstance);
     }

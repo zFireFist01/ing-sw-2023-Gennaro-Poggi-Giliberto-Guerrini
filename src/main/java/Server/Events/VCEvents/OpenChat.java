@@ -5,7 +5,7 @@ public class OpenChat extends VCEvent{
     private final String methodname;
 
     public OpenChat(){
-        this.methodname = "onOpenChat";
+        this.methodname = "onOpenChatEvent";
     }
 
     public String getMethodName(){

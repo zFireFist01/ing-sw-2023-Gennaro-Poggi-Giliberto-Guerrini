@@ -1,6 +1,7 @@
 package Server.Model.Chat;
 
 import Server.Model.Player.Player;
+import com.google.gson.annotations.Expose;
 
 import java.sql.Time;
 
@@ -10,9 +11,13 @@ import java.sql.Time;
  * @author Paolo Gennaro
  */
 public class Message {
+    @Expose
     private final Player sender;
+    @Expose
     private final String content;
+    @Expose
     private final Time timeSent;
+    @Expose
     private final Player receiver;
 
     /**

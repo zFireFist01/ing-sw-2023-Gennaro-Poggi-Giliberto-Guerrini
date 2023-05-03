@@ -1,6 +1,7 @@
 package Server.Events.MVEvents;
 
 import Server.Model.LightMatch;
+import com.google.gson.annotations.Expose;
 
 /**
  * This event is used to notify the client that the living room has been modified.
@@ -8,8 +9,11 @@ import Server.Model.LightMatch;
  */
 public class ModifiedLivingRoomEvent extends MVEvent{
     //private final String primaryType = "MVEvent";
+    @Expose
     private final String secondaryType = "ModifiedLivingRoomEvent";
+    @Expose
     private final String methodName;
+    @Expose
     private final LightMatch match;
 
     public ModifiedLivingRoomEvent(LightMatch match){

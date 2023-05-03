@@ -61,6 +61,7 @@ public class Match {
         this.commonGoals=new CommonGoalCard[2];
         this.scores= new HashMap<>() ;
         this.firstToFinish = null;
+        this.mvEventListeners = new ArrayList<>();
 
     }
 
@@ -177,7 +178,8 @@ public class Match {
                 this.livingRoom = new LivingRoom(this);
                 this.width= matchOpener.getBookshelf().getBookshelfWidth();
                 this.height=matchOpener.getBookshelf().getBookshelfHeight();
-                this.mvEventListeners = new ArrayList<>();
+                //this.mvEventListeners = new ArrayList<>();
+
                 //setup();
                 //notifyMVEventListeners(new MatchStartedEvent(new LightMatch(this)));
                 return;
@@ -433,6 +435,14 @@ public class Match {
     }
     public Map<Player, Integer> getScores() {
         return scores;
+    }
+
+    public Map<Integer,Integer>getIDScores(){
+        Map<Integer,Integer> idScores=new HashMap<>();
+        for(Player p: scores.keySet()){
+            idScores.put(p.getPlayerID(),scores.get(p));
+        }
+        return idScores;
     }
     public Time getMatchDuration() {
         return matchDuration;

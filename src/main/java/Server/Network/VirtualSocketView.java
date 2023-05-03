@@ -7,6 +7,8 @@ import Server.Events.SelectViewEvents.LoginView;
 import Server.Events.SelectViewEvents.SelectViewEvent;
 import Server.Events.VCEvents.VCEvent;
 import Server.Listeners.VCEventListener;
+import Server.Model.Cards.CommonGoalCard;
+import Server.Model.Cards.CommonGoalCardAdapter;
 import com.google.gson.*;
 
 import java.io.IOException;
@@ -77,7 +79,9 @@ public class VirtualSocketView implements VirtualView{
     }
     @Override
     public void onMVEvent(MVEvent mvEvent){
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation().registerTypeAdapter(CommonGoalCard.class, new CommonGoalCardAdapter())
+                .create();
         String message = gson.toJson(mvEvent);
         message+="\n";
         try {

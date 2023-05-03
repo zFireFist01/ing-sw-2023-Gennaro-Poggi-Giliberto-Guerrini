@@ -1,12 +1,15 @@
 package Server.Model.GameItems;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.Objects;
 
 /**
  * This class defines the tile spot
  */
 public class TileSpot {
-    private TileType tile;
+    @Expose
+    private TileType tile; //ok
 
     public TileSpot() {
         this.tile=null;

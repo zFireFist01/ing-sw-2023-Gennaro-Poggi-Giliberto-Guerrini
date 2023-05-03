@@ -6,6 +6,10 @@ import Server.Model.GameItems.BookshelfTileSpot;
 
 public class CommonGoalCard8 extends CommonGoalCard {
 
+    public CommonGoalCard8() {
+        super();
+    }
+
     public CommonGoalCard8(int playersNum, boolean secondIstance) {
         super(playersNum, secondIstance);
     }

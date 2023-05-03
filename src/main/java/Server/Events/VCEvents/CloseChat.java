@@ -5,7 +5,7 @@ public class CloseChat extends VCEvent{
     private final String methodName;
 
     public CloseChat() {
-        this.methodName = "onCloseChat";
+        this.methodName = "onCloseChatEvent";
     }
 
     public String getMethodName() {

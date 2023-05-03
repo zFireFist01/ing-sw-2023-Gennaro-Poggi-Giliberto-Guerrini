@@ -1,6 +1,7 @@
 package Server.Events.MVEvents;
 
 import Server.Model.LightMatch;
+import com.google.gson.annotations.Expose;
 
 /**
  * This event is used to notify the client that someone has got new points.
@@ -8,8 +9,11 @@ import Server.Model.LightMatch;
  */
 public class ModifiedPointsEvent extends MVEvent{
     //private final String primaryType = "MVEvent";
+    @Expose
     private final String secondaryType = "ModifiedPointsEvent";
+    @Expose
     private final String methodName;
+    @Expose
     private final LightMatch match;
 
     public ModifiedPointsEvent(LightMatch match){

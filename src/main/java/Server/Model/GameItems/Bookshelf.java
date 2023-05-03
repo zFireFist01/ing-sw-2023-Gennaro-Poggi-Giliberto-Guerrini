@@ -5,6 +5,7 @@ import Server.Events.MVEvents.ModifiedBookshelfEvent;
 import Server.Listeners.MVEventListener;
 import Server.Model.LightMatch;
 import Server.Model.Match;
+import com.google.gson.annotations.Expose;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -13,12 +14,13 @@ import java.util.*;
  * This class represents the bookshelf that every player has for the game
  */
 public class Bookshelf {
-    private Match m;
-    private BookshelfTileSpot[][] tileMatrix;
-    private final static int BOOKSHELFHEIGHT = 6;
-    private final static int BOOKSHELFWIDTH = 5;
-
-    private Map<Integer, Integer> lastIndexes = null; //map<column_index, last_row_index
+    private Match m; //ok
+    @Expose
+    private BookshelfTileSpot[][] tileMatrix; //ok
+    private final static int BOOKSHELFHEIGHT = 6; //ok
+    private final static int BOOKSHELFWIDTH = 5;//ok
+    @Expose
+    private Map<Integer, Integer> lastIndexes = null; //map<column_index, last_row_index //ok
 
     public Bookshelf(Match m) {
         this.m = m;
