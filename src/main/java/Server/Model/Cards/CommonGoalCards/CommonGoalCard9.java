@@ -28,12 +28,14 @@ public class CommonGoalCard9 extends CommonGoalCard {
         }
         for(int i=0;i< bookshelf.getBookshelfHeight();i++){
             for(int j=0;j< bookshelf.getBookshelfWidth();j++){
-                TileType tt = bsmat[i][j].getTileType();
-                if(count.get(tt) >= 7){
-                    return true;
+                if(bsmat[i][j].isEmpty() == false){
+                    TileType tt = bsmat[i][j].getTileType();
+                    if (count.get(tt) >= 8) {
+                        return true;
+                    }
+                    int temp = count.get(tt);
+                    count.put(tt, ++temp);
                 }
-                int temp = count.get(tt);
-                count.put(tt, ++temp);
             }
         }
 

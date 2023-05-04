@@ -2,6 +2,7 @@ package Server.Model.GameItemsTests;
 
 import Server.Model.GameItems.*;
 import Server.Model.Match;
+import Server.Model.Player.Player;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
@@ -14,9 +15,13 @@ import static org.junit.Assert.*;
 public class LivingRoomTest {
     LivingRoom uut = null;
     Match m = null;
-    @Before
+    /*@Before
     public void setup(int numberOfPlayers){
         m = new Match(numberOfPlayers, null);
+    }*/
+    @Before
+    public void setup(){
+        m = new Match(4, new Player(m, 0, "pippo"));
     }
 
     @After
@@ -95,12 +100,14 @@ public class LivingRoomTest {
 
         //We've also got to check the tile sack
         Map<TileType, Integer> ts = null;
+        ts = uut.getTileSack();
         assert (ts.equals(uut.getTileSack())); //Using the equals method of class HashMap
 
     }
 
     @Test
     public void refreshLivingRoomTest(){
+        uut = new LivingRoom(m);
         uut.refreshLivingRoom();
 
         //Checking that "fake" spots are still fake
@@ -115,6 +122,7 @@ public class LivingRoomTest {
                             default:
                                 assert(uut.getTileMatrix()[i][j].getTileType() != null);
                         }
+                        break;
                     case 1:
                         switch (j){
                             case 0, 1, 2, 6, 7, 8:
@@ -123,6 +131,7 @@ public class LivingRoomTest {
                             default:
                                 assert(uut.getTileMatrix()[i][j].getTileType() != null);
                         }
+                        break;
                     case 2:
                         switch (j){
                             case 0, 1, 7, 8:
@@ -131,6 +140,7 @@ public class LivingRoomTest {
                             default:
                                 assert(uut.getTileMatrix()[i][j].getTileType() != null);
                         }
+                        break;
                     case 3:
                         switch (j){
                             case 0:
@@ -139,6 +149,7 @@ public class LivingRoomTest {
                             default:
                                 assert(uut.getTileMatrix()[i][j].getTileType() != null);
                         }
+                        break;
                     case 6:
                         switch (j){
                             case 0, 1, 7, 8:
@@ -147,6 +158,7 @@ public class LivingRoomTest {
                             default:
                                 assert(uut.getTileMatrix()[i][j].getTileType() != null);
                         }
+                        break;
                     case 7:
                         switch (j){
                             case 0, 1, 2, 6, 7, 8:
@@ -155,6 +167,7 @@ public class LivingRoomTest {
                             default:
                                 assert(uut.getTileMatrix()[i][j].getTileType() != null);
                         }
+                        break;
                     case 8:
                         switch (j){
                             case 0, 1, 2, 3, 6, 7, 8:
@@ -163,6 +176,7 @@ public class LivingRoomTest {
                             default:
                                 assert(uut.getTileMatrix()[i][j].getTileType() != null);
                         }
+                        break;
                     default: assert(uut.getTileMatrix()[i][j] != null);
                 }
             }
@@ -209,6 +223,7 @@ public class LivingRoomTest {
 
     @Test
     public void getTileSackTest(){
+        uut = new LivingRoom(m);
         Map<TileType, Integer> ts = uut.getTileSack();
         for(TileType tt : TileType.values()){
             assert (ts.get(tt)<=22 && ts.get(tt)>=0);
@@ -218,6 +233,8 @@ public class LivingRoomTest {
 
     @Test
     public void takeTile_expectedException_Test(){
+        uut = new LivingRoom(m);
+        uut.refreshLivingRoom();
         assertThrows(UnsupportedOperationException.class, ()->{uut.takeTile(0,0);});
         assertThrows(UnsupportedOperationException.class, ()->{uut.takeTile(4,4);}); //Should throw the exception
                                                                                             //only in the test, not in general
@@ -231,7 +248,9 @@ public class LivingRoomTest {
 
     @Test
     public void takeTile_expectedTile_Test(){
+        uut = new LivingRoom(m);
+        uut.refreshLivingRoom();
         assert(uut.takeTile(1,3) instanceof TileType );
-        assertNotNull(uut.takeTile(1,3));
+        assertNotNull(uut.takeTile(1,4));
     }
 }

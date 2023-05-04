@@ -187,6 +187,7 @@ public class Match {
                 System.err.println(e.getMessage());
             }
         }
+        /*
         for(int i=0; i<players.size(); i++) {
             if ((newPlayer.getPlayerID() != players.get(i).getPlayerID()) &&
                     !(newPlayer.getPlayerNickName().equals(players.get(i).getPlayerNickName()))) {
@@ -201,6 +202,25 @@ public class Match {
                 }
             }else{ throw new UnsupportedOperationException("Id or nickname already existing!");
             }
+        }*/
+        boolean contains = false;
+        for(Player p: this.players){
+            if(p.equals(newPlayer)){
+                contains = true;
+            }
+        }
+        if(!contains){
+            players.add(newPlayer);
+            scores.put(newPlayer, 0);
+            try {
+                matchStatus = matchStatus.evolve();
+                setup();
+                notifyMVEventListeners(new MatchStartedEvent(new LightMatch(this)));
+            } catch (UnsupportedOperationException e) {
+                System.err.println(e.getMessage());
+            }
+        }else{
+            throw new UnsupportedOperationException("Id or nickname already existing!");
         }
     }
 

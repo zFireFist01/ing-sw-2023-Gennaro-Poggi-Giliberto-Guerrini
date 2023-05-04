@@ -1,5 +1,6 @@
 package Server.Model.Chat;
 
+import Server.Model.Match;
 import Server.Model.Player.Player;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,16 +16,17 @@ public class PlayersChatTest {
 
     @Test
     public void getMessages() {
+        Match m = new Match();
         tester = new PlayersChat();
         String otherName = "Other";
         int otherID = 1;
-        Player other = new Player(otherID, otherName);
+        Player other = new Player(m, otherID, otherName);
         String receiverName = "Receiver";
         int receiverID = 2;
-        Player receiver = new Player(receiverID, receiverName);
+        Player receiver = new Player(m, receiverID, receiverName);
         String senderName = "Sender";
         int senderID = 3;
-        Player sender = new Player(senderID, senderName);
+        Player sender = new Player(m, senderID, senderName);
         Time timeSent = new Time(60);
         String content = "Test for message";
         Message message1 = new Message(sender, content, timeSent, receiver);

@@ -1,6 +1,7 @@
 package Server.Model.GameItemsTests;
 
 import Server.Model.GameItems.*;
+import Server.Model.Match;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
@@ -17,7 +18,8 @@ public class BookshelfTest {
 
     @Before
     public void setup(){
-        uut = new Bookshelf();
+        Match m = new Match();
+        uut = new Bookshelf(m);
         r = new Random();
     }
 
@@ -56,7 +58,7 @@ public class BookshelfTest {
         int temp;
         Map<Integer, Integer> columnTimesSelected = new HashMap<>();
         for(int i = 0; i<5;i++){
-            columnTimesSelected.put(0, 0);
+            columnTimesSelected.put(i, 0);
         }
 
         int numberOfInsertions = 1+r.nextInt(29);

@@ -24,6 +24,12 @@ public class CommonGoalCard10 extends CommonGoalCard {
             for(int j=0; j< bookshelf.getBookshelfWidth()-2;j++){
                 TileType tt = bsmat[i][j].getTileType();
                 if(
+                        bsmat[i][j].isEmpty() == false
+                        && bsmat[i+1][j+1].isEmpty() == false
+                        && bsmat[i][j+2].isEmpty() == false
+                        && bsmat[i+2][j].isEmpty() == false
+                        && bsmat[i+2][j+2].isEmpty() == false
+                        &&
                         bsmat[i+1][j+1].getTileType() == tt
                         && bsmat[i][j+2].getTileType() == tt
                         && bsmat[i+2][j].getTileType() == tt

@@ -30,12 +30,13 @@ public class Server implements Runnable{
     Registry rmiRegistry;
     List<Match> matches;
     Map<Match, Controller> macthesControllers;
-    Map<Match, VirtualView> matchesViews = new HashMap<>();
+    Map<Match, List<VirtualView>> matchesViews;
 
 
     public Server() throws IOException{
         boolean done = false;
         this.matches = new ArrayList<>();
+        matchesViews = new HashMap<>();
         this.macthesControllers = new HashMap<>();
         this.socketWaiter = new SocketWaiter(this,1098);
         while(!done){
@@ -135,11 +136,13 @@ public class Server implements Runnable{
     protected synchronized void subscribeNewMatch(Match m, Controller c, VirtualView vv){
         matches.add(m);
         macthesControllers.put(m,c);
-        matchesViews.put(m, vv);
+        matchesViews.put(m, new ArrayList<>());
+        matchesViews.get(m).add(vv);
     }
 
     protected synchronized void subscribeNewViewToExistingMatch(Match m, VirtualView vv){
-        matchesViews.put(m,vv);
+        //matchesViews.put(m,vv);
+        matchesViews.get(m).add(vv);
     }
 
 }

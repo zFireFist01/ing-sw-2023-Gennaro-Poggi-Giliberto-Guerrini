@@ -49,6 +49,14 @@ public class Bookshelf {
         return copy;
     }
 
+    /**
+     * For test usage only
+     * @return
+     */
+    public BookshelfTileSpot[][] getPrivateTileMatrix(){
+        return tileMatrix;
+    }
+
     /*
         0: X
         1:    X

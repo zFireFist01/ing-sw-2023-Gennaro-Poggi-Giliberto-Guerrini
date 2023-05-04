@@ -174,7 +174,7 @@ public class CommonGoalCardsTests {
     public void CommonGoalCard1_expectedFalse_Test() {
 
         testCard = new CommonGoalCard1(4, false);
-        testBookshelf = new Bookshelf();
+        testBookshelf = new Bookshelf(new Match());
         boolean flag = false;
         int index;
         BookshelfTileSpot precedentTile = null;
@@ -201,7 +201,7 @@ public class CommonGoalCardsTests {
         assertFalse(testCard.check(testBookshelf));
 
         //test with a bookshelf with only 1 2x2 submatrix of the same tile type
-        testBookshelf = new Bookshelf();
+        testBookshelf = new Bookshelf(new Match());
 
         for (int i = 5; i >= 0; i--) {
             for (int j = 0; j < 5; j++) {
@@ -255,7 +255,7 @@ public class CommonGoalCardsTests {
     @Test
     public void CommonGoalCard1_expectedTrue_Test(){
         testCard = new CommonGoalCard1(4, false);
-        testBookshelf = new Bookshelf();
+        testBookshelf = new Bookshelf(new Match());
         boolean flag = false;
         int index;
         BookshelfTileSpot precedentTile = null;
@@ -310,7 +310,7 @@ public class CommonGoalCardsTests {
         }
         assertTrue(testCard.check(testBookshelf));
         //test with a bookshelf with at least 2 2x2 submatrix of the same tile type
-        testBookshelf = new Bookshelf();
+        testBookshelf = new Bookshelf(new Match());
         flag = false;
         index=-1;
 
@@ -367,7 +367,7 @@ public class CommonGoalCardsTests {
     @Test
     public void CommonGoalCard2_expectedFalse_Test() {
         testCard = new CommonGoalCard2(4, false);
-        testBookshelf = new Bookshelf();
+        testBookshelf = new Bookshelf(new Match());
         boolean[] flag = {false, false, false, false, false, false};
         int index1, index2;
         BookshelfTileSpot[] precedentTile = new BookshelfTileSpot[6];
@@ -394,7 +394,7 @@ public class CommonGoalCardsTests {
         }
         assertFalse(testCard.check(testBookshelf));
         //test with a bookshelf with only one row of different tile types
-        testBookshelf = new Bookshelf();
+        testBookshelf = new Bookshelf(new Match());
         flag = new boolean[]{false, false, false, false, false, false};
         index1 = (int) (Math.random() * 4);
         for (int i = 0; i < 6; i++) {
@@ -425,7 +425,7 @@ public class CommonGoalCardsTests {
     @Test
     public void CommonGoalCard2_expectedTrue_Test(){
         testCard = new CommonGoalCard2(4, false);
-        testBookshelf = new Bookshelf();
+        testBookshelf = new Bookshelf(new Match());
         boolean[] flag = new boolean[]{false,false,false,false,false,false};
         int index1, index2;
         BookshelfTileSpot[] precedentTile = new BookshelfTileSpot[6];
@@ -470,7 +470,7 @@ public class CommonGoalCardsTests {
     @Test
     public void CommonGoalCard3_expectedFalse_Test(){
         testCard = new CommonGoalCard3(4, false);
-        testBookshelf = new Bookshelf();
+        testBookshelf = new Bookshelf(new Match());
         int[] j_index = {0,0,0};
         int[] i_index = {0,0,0};
         boolean flag1 = false;
@@ -513,7 +513,7 @@ public class CommonGoalCardsTests {
         assertFalse(testCard.check(testBookshelf));
 
         //test with a bookshelf with at least one coloumn of four tiles of same type bune never more than three
-        testBookshelf = new Bookshelf();
+        testBookshelf = new Bookshelf(new Match());
 
         times=(int)(Math.random()*2)+1; //number of times to change the coloumn
         testTile.setTile(TileType.randomTileType());
@@ -590,7 +590,7 @@ public class CommonGoalCardsTests {
     @Test
     public void CommonGoalCard3_expectedTrue_Test(){
         testCard = new CommonGoalCard3(4, false);
-        testBookshelf = new Bookshelf();
+        testBookshelf = new Bookshelf(new Match());
         int[] j_index = {0,0,0,0};
         int[] i_index = {0,0,0,0};
         int count;
@@ -652,7 +652,7 @@ public class CommonGoalCardsTests {
 
         //tests with 4 group of 4 tiles of the same type
 
-        testBookshelf = new Bookshelf();
+        testBookshelf = new Bookshelf(new Match());
         int [][] Tiles={
                 {0,1,1,2,5},
                 {2,1,1,3,5},
@@ -682,7 +682,7 @@ public class CommonGoalCardsTests {
     @Test
     public void CommonGoalCard4_expectedFalse_Test(){
         testCard = new CommonGoalCard3(4, false);
-        testBookshelf = new Bookshelf();
+        testBookshelf = new Bookshelf(new Match());
         BookshelfTileSpot[] precedentTile = new BookshelfTileSpot[5];
         BookshelfTileSpot[] currentTile = new BookshelfTileSpot[5];
         int count=0,rnd1,index=7,rnd2;
@@ -728,7 +728,7 @@ public class CommonGoalCardsTests {
     @Test
     public void CommonGoalCard4_expectedTrue_Test(){
         testCard = new CommonGoalCard4(4, false);
-        testBookshelf = new Bookshelf();
+        testBookshelf = new Bookshelf(new Match());
         BookshelfTileSpot[] precedentTile = new BookshelfTileSpot[5];
         BookshelfTileSpot[] currentTile = new BookshelfTileSpot[5];
         int count=0,index=7,rnd2,rnd1;
@@ -775,7 +775,7 @@ public class CommonGoalCardsTests {
     @Test
     public void CommonGoalCard5_expectedFalse_Test(){
         testCard = new CommonGoalCard5(4, false);
-        testBookshelf = new Bookshelf();
+        testBookshelf = new Bookshelf(new Match());
 
 
         BookshelfTileSpot[] column1 = new BookshelfTileSpot[6];
@@ -861,7 +861,7 @@ public class CommonGoalCardsTests {
     @Test
     public void CommonGoalCard5_expectedTrue_Test() {
         testCard = new CommonGoalCard5(4, false);
-        testBookshelf = new Bookshelf();
+        testBookshelf = new Bookshelf(new Match());
         BookshelfTileSpot[] column1 = new BookshelfTileSpot[6];
         BookshelfTileSpot[] column2 = new BookshelfTileSpot[6];
         BookshelfTileSpot[] column3 = new BookshelfTileSpot[6];
@@ -933,7 +933,7 @@ public class CommonGoalCardsTests {
     @Test
     public void CommonGoalCard6_expectedFalse_Test() {
         testCard = new CommonGoalCard6(4, false);
-        testBookshelf = new Bookshelf();
+        testBookshelf = new Bookshelf(new Match());
         BookshelfTileSpot[] row = new BookshelfTileSpot[5];
         int[] rnd = new int[5];
         int rnd1,rnd2;
@@ -987,7 +987,7 @@ public class CommonGoalCardsTests {
     @Test
 public void CommonGoalCard6_expectedTrue_Test() {
         testCard = new CommonGoalCard6(4, false);
-        testBookshelf = new Bookshelf();
+        testBookshelf = new Bookshelf(new Match());
         BookshelfTileSpot[] row1 = new BookshelfTileSpot[5];
         BookshelfTileSpot[] row2 = new BookshelfTileSpot[5];
         int[] arnd1 = new int[5], arnd2 = new int[5];
@@ -1051,8 +1051,10 @@ public void CommonGoalCard6_expectedTrue_Test() {
      */
     @Test
     public void CommonGoalCard7_expectedTrue_Test(){
+        //Four rows of tiles of at most three different types
         testCard = new CommonGoalCard7(4, false);
-        testBookshelf = new Bookshelf();
+        Match m = new Match();
+        testBookshelf = new Bookshelf(m);
         Random r = new Random();
         TileType rtt = TileType.randomTileType();
         TileType rtt2, rtt3;
@@ -1109,7 +1111,6 @@ public void CommonGoalCard6_expectedTrue_Test() {
             if(j!=3) {testBookshelf.insertTile(j,rtt);} // leaving a blank
         }
 
-        //Bookshelf is now loaded, let's assert
         assertTrue(testCard.check(testBookshelf));
     }
 
@@ -1121,7 +1122,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
     @Test
     public void CommonGoalCard7_expectedFalse_Test(){
         testCard = new CommonGoalCard7(4, false);
-        testBookshelf = new Bookshelf();
+        testBookshelf = new Bookshelf(new Match());
         TileType rtt = TileType.randomTileType();
         Random r = new Random();
 
@@ -1155,7 +1156,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
 
         //SECOND CASE: 6 rows full, the first three with all equal tiles,
         // but the last three have all different tiles
-        testBookshelf = new Bookshelf();
+        testBookshelf = new Bookshelf(new Match());
         for(int j=0;j<testBookshelf.getBookshelfWidth();j++){ //inserting the last row
             testBookshelf.insertTile(j,TileType.values()[j]); //Every col. will have a different type
         }
@@ -1184,7 +1185,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
         assertFalse(testCard.check(testBookshelf));
 
         //THIRD CASE: Every row has more than three different kinds
-        testBookshelf = new Bookshelf();
+        testBookshelf = new Bookshelf(new Match());
         for(int j=0;j<testBookshelf.getBookshelfWidth();j++){ //inserting the last row
             testBookshelf.insertTile(j,TileType.values()[j]); //Every col. will have a different type
         }
@@ -1212,7 +1213,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
 
 
         //FOURTH CASE: Every row has at least a blank, but all the tiles are equal
-        testBookshelf = new Bookshelf();
+        testBookshelf = new Bookshelf(new Match());
         for(int j=0;j<testBookshelf.getBookshelfWidth();j++){ //inserting in the 2nd row
             int c = r.nextInt(5);
             if(j!= c) {testBookshelf.insertTile(j,rtt);}                //every tile same type
@@ -1253,7 +1254,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
     @Test
     public void CommonGoalCard8_expectedTrue_Test(){
         testCard = new CommonGoalCard8(4, false);
-        testBookshelf = new Bookshelf();
+        testBookshelf = new Bookshelf(new Match());
 
         TileType rtt = TileType.randomTileType();
 
@@ -1296,7 +1297,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
     @Test
     public void CommonGoalCard8_expectedFalse_Test(){
         testCard = new CommonGoalCard8(4, false);
-        testBookshelf = new Bookshelf();
+        testBookshelf = new Bookshelf(new Match());
         TileType tt = TileType.randomTileType();
 
         //Checking the empty bookshelf
@@ -1340,6 +1341,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
         assertFalse(testCard.check(testBookshelf));
 
         //Only (0,testBookshelf.getWidth()-1) is different from the others 3 corners
+        testBookshelf = new Bookshelf(new Match());
         for(int i=0;i<testBookshelf.getBookshelfWidth();i++){                   //las row
             if(i==0 || i == testBookshelf.getBookshelfWidth()-1){
                 testBookshelf.insertTile(i, tt);
@@ -1375,6 +1377,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
         assertFalse(testCard.check(testBookshelf));
 
         //Only (testBookShelf.getHeight()-1,0) is different from the others 3 corners
+        testBookshelf = new Bookshelf(new Match());
         for(int i=0;i<testBookshelf.getBookshelfWidth();i++){                   //las row
             TileType wrongtt;
             do{
@@ -1410,6 +1413,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
         assertFalse(testCard.check(testBookshelf));
 
         //Only (testBookShelf.getHeight()-1,testBookShelf.getHeight()-1) is different from the others 3 corners
+        testBookshelf = new Bookshelf(new Match());
         for(int i=0;i<testBookshelf.getBookshelfWidth();i++){                   //las row
             TileType wrongtt;
             do{
@@ -1456,19 +1460,25 @@ public void CommonGoalCard6_expectedTrue_Test() {
     @Test
     public void CommonGoalCard9_expectedTrue_Test(){
         testCard = new CommonGoalCard9(4, false);
-        testBookshelf = new Bookshelf();
-        Set<Couple<Integer, Integer>> positions = new HashSet<>();
+        testBookshelf = new Bookshelf(new Match());
+        //Set<Couple<Integer, Integer>> positions = new HashSet<>();
+        List<Couple<Integer, Integer>> positions = new ArrayList<>();
         //Set<Couple> donePositions = new HashSet<>();
         Random r = new Random();
         for(TileType tt : TileType.values()){
             //Select random positions where this type should go
             for(int i=0;i<8;i++){
-                positions.add(new Couple<Integer, Integer>(r.nextInt(6), r.nextInt(5)));
+                Couple chosen = null;
+                do{
+                    chosen = new Couple<Integer, Integer>(r.nextInt(6), r.nextInt(5));
+                }while(positions.contains(chosen));
+                positions.add(chosen);
             }
-            for(int i=testBookshelf.getBookshelfHeight();i>=0;i--){
+            for(int i=(testBookshelf.getBookshelfHeight()-1);i>=0;i--){
                 for(int j=0;j<testBookshelf.getBookshelfWidth();j++){
                     if(positions.contains(new Couple<Integer, Integer>(i,j))){
                         //donePositions.add(new Couple(i,j));
+                        //if(positions.contains(new Couple<Integer, Integer>(i,j))
                         testBookshelf.insertTile(j,tt);
                         positions.remove(new Couple<Integer, Integer>(i,j));
                     }else{
@@ -1482,6 +1492,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
                 }
             }
             assertTrue(testCard.check(testBookshelf));
+            testBookshelf = new Bookshelf(new Match());
         }
     }
 
@@ -1493,55 +1504,45 @@ public void CommonGoalCard6_expectedTrue_Test() {
     @Test
     public void CommonGoalCard9_expectedFalse_Test(){
         testCard = new CommonGoalCard9(4, false);
-        testBookshelf = new Bookshelf();
+        testBookshelf = new Bookshelf(new Match());
 
         //Check the empty bookshelf
         assertFalse(testCard.check(testBookshelf));
 
-        //Corner cases: I want the bookshelf to have 7 (case 1) and 0 (case 2) tiles of a given type
-        Set<Couple<Integer, Integer>> positions = new HashSet<>();
+        //Corner cases: I want the bookshelf to have 7 (case 1) and 0 (case 2) tiles of every given type
+        //Set<Couple<Integer, Integer>> positions = new HashSet<>();
+        //List<Couple<Integer, Integer>> positions = new ArrayList<>();
+        Map<Couple<Integer,Integer>, TileType> positions = new HashMap<>();
         //Set<Couple> donePositions = new HashSet<>();
         Random r = new Random();
 
         //Case 1:
-        for(TileType tt : TileType.values()){
-            //Select random positions where this type should go
+        for(TileType tt: TileType.values()){
             for(int i=0;i<7;i++){
-                positions.add(new Couple<Integer, Integer>(r.nextInt(6), r.nextInt(5)));
+                Couple c;
+                do{
+                    c = new Couple<>(r.nextInt(6), r.nextInt(5));
+                }while(positions.containsKey(c));
+                positions.put(c, tt);
             }
-            for(int i=testBookshelf.getBookshelfHeight();i>=0;i--){
-                for(int j=0;j<testBookshelf.getBookshelfWidth();j++){
-                    if(positions.contains(new Couple<Integer, Integer>(i,j))){
-                        //donePositions.add(new Couple(i,j));
-                        testBookshelf.insertTile(j,tt);
-                        positions.remove(new Couple<Integer, Integer>(i,j));
-                    }else{
-                        TileType othertt;
-                        do{
-                            othertt = TileType.randomTileType();
-                        }while(othertt == tt);
-                        testBookshelf.insertTile(j,othertt);    //This way I'm ensuring that there are only those 8
-                        // positions with the type tt
-                    }
+        }                           //Every type may appear at most 7 times, but 6*7 = 42 and we have only 30 spots..
+        for(int i=(testBookshelf.getBookshelfHeight()-1);i>=0;i--){
+            for(int j=0;j<testBookshelf.getBookshelfWidth();j++){
+                Couple c = new Couple(i,j);
+                if(positions.containsKey(c)){
+                    //donePositions.add(new Couple(i,j));
+                    testBookshelf.insertTile(j, positions.get(c));
+                    positions.remove(c);
                 }
             }
-            assertFalse(testCard.check(testBookshelf));
         }
+        assertFalse(testCard.check(testBookshelf));
+        testBookshelf = new Bookshelf(new Match());
+        positions.clear();
 
-        //Case 2:
-        for(TileType tt : TileType.values()){
-            for(int i=testBookshelf.getBookshelfHeight();i>=0;i--){
-                for(int j=0;j<testBookshelf.getBookshelfWidth();j++){
-                    TileType othertt;
-                    do{
-                        othertt = TileType.randomTileType();
-                    }while(othertt == tt);
-                    testBookshelf.insertTile(j,othertt);    //This way I'm ensuring that there are only those 8
-                    // positions with the type tt
-                }
-            }
-            assertFalse(testCard.check(testBookshelf));
-        }
+
+        //Case 2: the empty bookshelf has already been tested...
+
     }
 
     /**
@@ -1552,7 +1553,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
     @Test
     public void CommonGoalCard10_expectedTrue_Test(){
         testCard = new CommonGoalCard10(4, false);
-        testBookshelf = new Bookshelf();
+        testBookshelf = new Bookshelf(new Match());
         Random r = new Random();
 
         for(TileType tt : TileType.values()){
@@ -1576,6 +1577,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
                     }
                 }
                 assertTrue(testCard.check(testBookshelf));
+                testBookshelf = new Bookshelf(new Match());
             }
         }
     }
@@ -1588,7 +1590,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
     @Test
     public void CommonGoalCard10_expectedFalse_Test(){
         testCard = new CommonGoalCard10(4, false);
-        testBookshelf = new Bookshelf();
+        testBookshelf = new Bookshelf(new Match());
         Random r = new Random();
 
         //check the empty bookshelf
@@ -1618,6 +1620,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
                     }
                 }
                 assertFalse(testCard.check(testBookshelf));
+                testBookshelf = new Bookshelf(new Match());
             }
         }
 
@@ -1643,6 +1646,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
                     }
                 }
                 assertFalse(testCard.check(testBookshelf));
+                testBookshelf = new Bookshelf(new Match());
             }
         }
 
@@ -1668,6 +1672,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
                     }
                 }
                 assertFalse(testCard.check(testBookshelf));
+                testBookshelf = new Bookshelf(new Match());
             }
         }
 
@@ -1693,6 +1698,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
                     }
                 }
                 assertFalse(testCard.check(testBookshelf));
+                testBookshelf = new Bookshelf(new Match());
             }
         }
 
@@ -1718,6 +1724,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
                     }
                 }
                 assertFalse(testCard.check(testBookshelf));
+                testBookshelf = new Bookshelf(new Match());
             }
         }
 
@@ -1731,50 +1738,54 @@ public void CommonGoalCard6_expectedTrue_Test() {
     @Test
     public void CommonGoalCard11_ExpectedTrue_test(){
         testCard = new CommonGoalCard11(4, false);
-        testBookshelf = new Bookshelf();
+        testBookshelf = new Bookshelf(new Match());
 
-        BookshelfTileSpot[][] tbsmat = testBookshelf.getTileMatrix();
+        BookshelfTileSpot[][] tbsmat = testBookshelf.getPrivateTileMatrix();
         for(TileType tt : TileType.values()){
             tbsmat[0][0].setTile(tt);
             tbsmat[1][1].setTile(tt);
             tbsmat[2][2].setTile(tt);
             tbsmat[3][3].setTile(tt);
             tbsmat[4][4].setTile(tt);
+            assertTrue(testCard.check(testBookshelf));
         }
-        assertTrue(testCard.check(testBookshelf));
 
-        testBookshelf = new Bookshelf();
-        tbsmat = testBookshelf.getTileMatrix();
+
+        testBookshelf = new Bookshelf(new Match());
+        tbsmat = testBookshelf.getPrivateTileMatrix();
         for(TileType tt : TileType.values()){
             tbsmat[1][0].setTile(tt);
             tbsmat[2][1].setTile(tt);
             tbsmat[3][2].setTile(tt);
             tbsmat[4][3].setTile(tt);
             tbsmat[5][4].setTile(tt);
+            assertTrue(testCard.check(testBookshelf));
         }
-        assertTrue(testCard.check(testBookshelf));
 
-        testBookshelf = new Bookshelf();
-        tbsmat = testBookshelf.getTileMatrix();
+
+        testBookshelf = new Bookshelf(new Match());
+        tbsmat = testBookshelf.getPrivateTileMatrix();
         for(TileType tt : TileType.values()){
             tbsmat[0][4].setTile(tt);
             tbsmat[1][3].setTile(tt);
             tbsmat[2][2].setTile(tt);
             tbsmat[3][1].setTile(tt);
             tbsmat[4][0].setTile(tt);
+            assertTrue(testCard.check(testBookshelf));
         }
-        assertTrue(testCard.check(testBookshelf));
 
-        testBookshelf = new Bookshelf();
-        tbsmat = testBookshelf.getTileMatrix();
+
+        testBookshelf = new Bookshelf(new Match());
+        tbsmat = testBookshelf.getPrivateTileMatrix();
         for(TileType tt : TileType.values()){
             tbsmat[1][4].setTile(tt);
             tbsmat[2][3].setTile(tt);
             tbsmat[3][2].setTile(tt);
             tbsmat[4][1].setTile(tt);
             tbsmat[5][0].setTile(tt);
+            assertTrue(testCard.check(testBookshelf));
         }
-        assertTrue(testCard.check(testBookshelf));
+
     }
 
     /**
@@ -1784,8 +1795,8 @@ public void CommonGoalCard6_expectedTrue_Test() {
     @Test
     public void CommonGoalCard11_expectedFalse_Test(){
         testCard = new CommonGoalCard11(4, false);
-        testBookshelf = new Bookshelf();
-        BookshelfTileSpot[][] tbsmat = testBookshelf.getTileMatrix();
+        testBookshelf = new Bookshelf(new Match());
+        BookshelfTileSpot[][] tbsmat = testBookshelf.getPrivateTileMatrix();
 
         for(TileType tt: TileType.values()){
             TileType tt2;
@@ -1865,6 +1876,8 @@ public void CommonGoalCard6_expectedTrue_Test() {
             assertFalse(testCard.check(testBookshelf));
 
             //Second diagonal -- different types
+            testBookshelf = new Bookshelf(new Match());
+            tbsmat = testBookshelf.getPrivateTileMatrix();
             tbsmat[1][0].setTile(tt);
             tbsmat[2][1].setTile(tt2);
             tbsmat[3][2].setTile(tt2);
@@ -1937,6 +1950,8 @@ public void CommonGoalCard6_expectedTrue_Test() {
             assertFalse(testCard.check(testBookshelf));
 
             //Third diagonal -- different types
+            testBookshelf = new Bookshelf(new Match());
+            tbsmat = testBookshelf.getPrivateTileMatrix();
             tbsmat[0][4].setTile(tt);
             tbsmat[1][3].setTile(tt2);
             tbsmat[2][2].setTile(tt2);
@@ -2009,6 +2024,8 @@ public void CommonGoalCard6_expectedTrue_Test() {
             assertFalse(testCard.check(testBookshelf));
 
             //Fourth diagonal -- different types
+            testBookshelf = new Bookshelf(new Match());
+            tbsmat = testBookshelf.getPrivateTileMatrix();
             tbsmat[1][4].setTile(tt);
             tbsmat[2][3].setTile(tt2);
             tbsmat[3][2].setTile(tt2);
