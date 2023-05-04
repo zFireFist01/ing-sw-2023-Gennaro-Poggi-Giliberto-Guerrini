@@ -2,6 +2,7 @@ package Server.Model.Player;
 
 import Server.Model.GameItems.Bookshelf;
 import Server.Model.GameItems.PointsTile;
+import Server.Model.Match;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,9 +15,10 @@ public class PlayerTest {
 
     @Before
     public void setUp() throws Exception {
+        Match m = new Match();
         String nickName = "nickName";
         int playerID = 4;
-        this.tester = new Player(playerID, nickName);
+        this.tester = new Player(m, playerID, nickName);
     }
 
 
