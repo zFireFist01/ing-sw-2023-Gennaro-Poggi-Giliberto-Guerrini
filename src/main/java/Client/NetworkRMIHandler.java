@@ -44,7 +44,7 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements NetworkHan
         }
 
         try {
-            rmiWaiter = (RMIWaiter) registry.lookup("RMIWaiter");
+            rmiWaiter = (RMIWaiterInterface) registry.lookup("RMIWaiter");
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         } catch (NotBoundException e) {
