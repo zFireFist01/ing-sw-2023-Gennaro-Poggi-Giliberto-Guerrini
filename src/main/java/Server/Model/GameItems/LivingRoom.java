@@ -199,6 +199,9 @@ public class LivingRoom {
         if(oneFreeEdge(i,j)){
             //The tile can be picked
             TileType tt = tileMatrix[i][j].getTileType();
+            if(tt==null){
+                throw new UnsupportedOperationException("The tile you want to pick is empty!");
+            }
             tileMatrix[i][j].setEmpty();
             return tt;
         }else{

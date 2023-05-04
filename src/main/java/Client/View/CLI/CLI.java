@@ -706,16 +706,26 @@ public class CLI implements Runnable , View {
                             message = message + inputArray[i] + " ";
                         }
                         Message messageToSend=null;
+                        boolean flag=false;
                         if(inputArray[1].equals("@All")) {
                             messageToSend=new Message(this.me,message,new Time(60));
+                            flag=true;
                         }else{
+
                             for(Integer i: this.players.keySet()){
-                                if(this.players.get(i).getPlayerNickName().equals(inputArray[1])){
+                                if(("@"+this.players.get(i).getPlayerNickName()).equals(inputArray[1])){
                                     messageToSend=new Message(this.me,message,new Time(60), this.players.get(i));
+                                    flag=true;
                                 }
                             }
+                            if(!flag){
+                                System.out.println("nickname does not exists");
+                                break;
+                            }
                         }
-                        networkHandler.onVCEvent(new SendMessage(messageToSend));
+                     if(flag) {
+                         networkHandler.onVCEvent(new SendMessage(messageToSend));
+                     }
                     } catch (NoSuchMethodException e) {
                         throw new RuntimeException(e);
                     } catch (InvocationTargetException e) {

@@ -96,6 +96,7 @@ public class Match {
         this.selectedTiles = null;
     }
     public int[] getSelectedTiles() {
+        if(this.selectedTiles == null) return null;
         int [] selectedTiles = new int[this.selectedTiles.size()];
         for (int i = 0; i < this.selectedTiles.size(); i++) {
             selectedTiles[i] = this.selectedTiles.get(i);
