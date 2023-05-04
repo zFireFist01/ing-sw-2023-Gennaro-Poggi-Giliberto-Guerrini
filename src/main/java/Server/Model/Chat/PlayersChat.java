@@ -3,6 +3,7 @@ package Server.Model.Chat;
 import Server.Events.MVEvents.ModifiedChatEvent;
 import Server.Model.Player.Player;
 import Server.Network.VirtualView;
+import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
  * @author Paolo Gennaro
  */
 public class PlayersChat {
+    @Expose
     private final List<Message> messages;
 
     public PlayersChat() {

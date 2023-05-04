@@ -9,18 +9,23 @@ public class MathUtils {
      * @param mat is the given matrix, the one we want to rotate by 90°. It is assumed to be a square matrix
      * This method modifies the matrix mat so that at the end of its execution it's rotated rightwards of 90°
      */
-    public static void rotateMatrix(@NotNull LivingRoomTileSpot[][] mat){
-        for(int i=0; i< mat[i].length;i++){
-            for(int j=0; j< mat[j].length; j++){
+    public static void rotateMatrix(@NotNull LivingRoomTileSpot[][] mat, int width, int height) {
+        // Transpose the matrix
+        for (int i = 0; i < height; i++) {
+            for (int j = i + 1; j < width; j++) {
                 LivingRoomTileSpot temp = new LivingRoomTileSpot(mat[i][j]);
                 mat[i][j] = mat[j][i];
                 mat[j][i] = temp;
             }
         }
-        for(int i=0; i<mat[i].length;i++){
-            LivingRoomTileSpot temp = new LivingRoomTileSpot(mat[i][0]);
-            mat[i][0] = mat[i][mat[i].length];
-            mat[i][mat[i].length] = temp;
+
+        // Reverse each row
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width / 2; j++) {
+                LivingRoomTileSpot temp = new LivingRoomTileSpot(mat[i][j]);
+                mat[i][j] = mat[i][width - j - 1];
+                mat[i][width - j - 1] = temp;
+            }
         }
     }
 
@@ -32,10 +37,13 @@ public class MathUtils {
      * @param si is the line-index of matDest where the copy will start
      * @param sj is the column-index where the copy will start
      */
-    public static void copy(LivingRoomTileSpot[][] matSource, LivingRoomTileSpot[][] matDest, int si, int sj){
-        for(int i=si;i<matSource[0].length;i++){
-            for(int j = sj; j< matSource[0].length;j++){
-                matDest[i][j] = new LivingRoomTileSpot(matSource[i-si][j-sj]);
+    public static void copy(LivingRoomTileSpot[][] matSource, LivingRoomTileSpot[][] matDest, int si, int sj) {
+        int height = matSource.length;
+        int width = matSource[0].length;
+
+        for (int i = si; i < si + height; i++) {
+            for (int j = sj; j < sj + width; j++) {
+                matDest[i][j] = new LivingRoomTileSpot(matSource[i - si][j - sj]);
             }
         }
     }

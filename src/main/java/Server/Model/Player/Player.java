@@ -7,6 +7,7 @@ import Server.Model.GameItems.PointsTile;
 import Server.Model.GameItems.TileSpot;
 import Server.Model.GameItems.TileType;
 import Server.Model.Match;
+import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -16,14 +17,21 @@ import java.util.Map;
  * @author Paolo Gennaro
  */
 public class Player {
-    private final int playerID;
-    private final Bookshelf bookshelf;
-    private final String playerNickName;
-    private PersonalGoalCard personalGoalCard;
-    private PlayerStatus playerStatus;
-    private final ArrayList<PointsTile> pointsTiles;
-    private Player nextPlayer;
-    private TileType[] takenTiles;
+    @Expose
+    private final int playerID; //ok
+    @Expose
+    private final Bookshelf bookshelf; //ok
+    @Expose
+    private final String playerNickName; //ok
+    @Expose
+    private PersonalGoalCard personalGoalCard;//ok
+    private PlayerStatus playerStatus; //ok
+    @Expose
+    private final ArrayList<PointsTile> pointsTiles; //ok
+    //@Expose
+    private Player nextPlayer; //ok
+    @Expose
+    private TileType[] takenTiles;//ok
 
     private Match m;
 

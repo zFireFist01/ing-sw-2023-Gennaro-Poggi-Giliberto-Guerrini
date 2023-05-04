@@ -1,5 +1,7 @@
 package Server.Model;
 
+import com.google.gson.annotations.Expose;
+
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Chat.PlayersChat;
 import Server.Model.GameItems.LivingRoom;
@@ -14,18 +16,27 @@ import java.util.Map;
  * @author Paolo Gennaro
  */
 public class LightMatch {
-    private final PlayersChat gameChat;
+
+    private final PlayersChat gameChat; //ok
     private final int width;
     private final int height;
-    private final Player currentPlayer;
-    private final Player winner;
-    private final LivingRoom livingRoom;
-    private final Player firstToFinish;
-    private ArrayList<Player> players;
-    private final int numberOfPlayers;
+    @Expose
+    private final Player currentPlayer; //ok
+    @Expose
+    private final Player winner; //ok
+    @Expose
+    private final LivingRoom livingRoom; //ok
+    @Expose
+    private final Player firstToFinish;//ok
+    @Expose
+    private ArrayList<Player> players;//ok
+    @Expose
+    private final int numberOfPlayers; //ok
+    @Expose
     private final CommonGoalCard[] commonGoals;
     private MatchStatus matchStatus;
-    private Map<Player, Integer> scores;
+    @Expose
+    private Map<Integer, Integer> scores; //PlayerID, score
 
 
     public LightMatch(Match match){
@@ -40,14 +51,14 @@ public class LightMatch {
         this.numberOfPlayers = match.getNumberOfPlayers();
         this.commonGoals = match.getCommonGoals();
         this.matchStatus = match.getMatchStatus();
-        this.scores = match.getScores();
+        this.scores = match.getIDScores();
     }
 
     public MatchStatus getMatchStatus() {
         return matchStatus;
     }
 
-    public Map<Player, Integer> getScores() {
+    public Map<Integer, Integer> getScores() {
         return scores;
     }
 

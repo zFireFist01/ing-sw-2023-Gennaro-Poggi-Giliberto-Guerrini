@@ -4,6 +4,7 @@ import Server.Events.MVEvents.MVEvent;
 import Server.Events.MVEvents.ModifiedLivingRoomEvent;
 import Server.Model.LightMatch;
 import Server.Model.Match;
+import com.google.gson.annotations.Expose;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +22,9 @@ public class LivingRoom {
     private final static int LIVINGROOOMWIDTH = 9;
     private final static int LIVINGROOMHEIGHT = 9;
 
-    private LivingRoomTileSpot[][] tileMatrix;
+    @Expose
+    private LivingRoomTileSpot[][] tileMatrix; //ok
+
     private Map<TileType, Integer> tileSack;
 
 
@@ -42,7 +45,7 @@ public class LivingRoom {
 
         //Build the first corner square
         for(int i=0; i<LIVINGROOMHEIGHT/3; i++){
-            for(int j=0; j<LIVINGROOOMWIDTH;j++){
+            for(int j=0; j<LIVINGROOOMWIDTH/3;j++){
                 if(i == j && i == 2){
                     cornerSquare[i][j] = new LivingRoomTileSpot(m,3);
                 }else{
@@ -55,15 +58,15 @@ public class LivingRoom {
         copy(cornerSquare, tileMatrix, 0, 0);
 
         //Now rotate this matrix and put it into the top-right corner
-        rotateMatrix(cornerSquare);
+        rotateMatrix(cornerSquare,3,3);
         copy(cornerSquare, tileMatrix, 0,6);
 
         //Now rotate it again and put it into the bottom-right corner
-        rotateMatrix(cornerSquare);
+        rotateMatrix(cornerSquare,3,3);
         copy(cornerSquare, tileMatrix, 6,6);
 
         //Now rotate it again and put it into the bottom-left corner
-        rotateMatrix(cornerSquare);
+        rotateMatrix(cornerSquare,3,3);
         copy(cornerSquare, tileMatrix, 6,0);
 
         //Build the first edge square
@@ -81,20 +84,20 @@ public class LivingRoom {
         copy(edgeSquare, tileMatrix, 0,3);
 
         //Now rotate it and copy it into the right edge
-        rotateMatrix(edgeSquare);
+        rotateMatrix(edgeSquare,3,3);
         copy(edgeSquare, tileMatrix, 3,6);
 
         //Now rotate it again and put it into the bottom edge
-        rotateMatrix(edgeSquare);
+        rotateMatrix(edgeSquare,3,3);
         copy(edgeSquare, tileMatrix, 6,3);
 
         //Now rotate it again and put it into the left edge
-        rotateMatrix(edgeSquare);
+        rotateMatrix(edgeSquare,3,3);
         copy(edgeSquare, tileMatrix, 3,0);
 
         //Edges and corners are done, we still have the central square
         for(int i = LIVINGROOMHEIGHT/3; i < 2*LIVINGROOMHEIGHT/3; i++){
-            for( int j = LIVINGROOOMWIDTH/3; j< 2*LIVINGROOOMWIDTH; j++){
+            for( int j = LIVINGROOOMWIDTH/3; j< 2*LIVINGROOOMWIDTH/3; j++){
                 tileMatrix[i][j] = new LivingRoomTileSpot(m, 0);
             }
         }

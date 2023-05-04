@@ -31,7 +31,7 @@ public class WaitingForPlayers extends MatchStatus {
     }
 
     @Override
-    public  MatchStatus devolve(){
+    public MatchStatus devolve(){
         numberMissingPlayers++;
         if(match.getNumberOfPlayers()==numberMissingPlayers){
           return null;

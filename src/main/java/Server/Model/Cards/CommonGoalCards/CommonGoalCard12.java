@@ -9,6 +9,10 @@ import Server.Model.GameItems.Bookshelf;
  */
 public class CommonGoalCard12 extends CommonGoalCard {
 
+    public CommonGoalCard12() {
+        super();
+    }
+
     /**
      * constructor of the class CommonGoalCard12 that calls the constructor of the superclass
      * @param playersNum the number of players in the game

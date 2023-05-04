@@ -2,6 +2,7 @@ package Server.Model.Cards;
 
 import Server.Model.GameItems.Bookshelf;
 import Server.Model.GameItems.PointsTile;
+import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,15 +13,20 @@ import java.util.List;
  */
 
 public abstract class CommonGoalCard implements Card {
+    @Expose
+    private List<PointsTile> pointsTiles = new ArrayList<>();
+    //USED FOR SERIALIZATION
+    public CommonGoalCard(){
 
-
-   private List<PointsTile> pointsTiles = new ArrayList<>();
+    }
 
    /**
     * constructor of the class, it sets the points tiles based on the number of players
     * @param playersNum the number of players
     * @param secondIstance true if it is the second card, false otherwise in order to know if the card has to be created with the second instance of the points tiles
     */
+
+
     public CommonGoalCard(int playersNum,boolean secondIstance) {
         if (playersNum == 2) {
            if(!secondIstance) {
@@ -93,6 +99,12 @@ public abstract class CommonGoalCard implements Card {
      */
     public int getCardID(){
         return 0;
+    }
+
+    //USED FOR DESERIALIZATION
+
+    public void setPointsTiles(List<PointsTile> pointsTiles) {
+        this.pointsTiles = pointsTiles;
     }
 
 

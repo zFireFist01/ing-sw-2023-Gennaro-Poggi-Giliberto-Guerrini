@@ -4,6 +4,8 @@ import Server.Events.MVEvents.MatchStartedEvent;
 import Server.Events.MVEvents.*;
 import Server.Events.VCEvents.*;
 import Server.Events.SelectViewEvents.*;
+import Server.Model.Cards.CommonGoalCard;
+import Server.Model.Cards.CommonGoalCardAdapter;
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
@@ -24,7 +26,9 @@ public class EventAdapter extends TypeAdapter<Event> {
 
     @Override
     public Event read(JsonReader in) throws IOException {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(CommonGoalCard.class, new CommonGoalCardAdapter())
+                .create();
         JsonParser jsonParser = new JsonParser();
 
         JsonElement fullElement = jsonParser.parse(in);

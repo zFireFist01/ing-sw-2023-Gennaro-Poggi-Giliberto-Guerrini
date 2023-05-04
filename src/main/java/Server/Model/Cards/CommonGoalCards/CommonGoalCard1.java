@@ -12,6 +12,10 @@ import Server.Model.GameItems.TileType;
 
 public class CommonGoalCard1 extends CommonGoalCard {
 
+    public CommonGoalCard1(){
+        super();
+    }
+
     /**
      * constructor of the class CommonGoalCard1 that calls the constructor of the superclass
      * @param playersNum the number of players in the game

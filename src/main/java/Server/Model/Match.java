@@ -32,16 +32,16 @@ public class Match {
     private ArrayList<Integer> selectedTiles;
     private int width;
     private int height;
-    private final int numberOfPlayers;
+    private int numberOfPlayers;
     private final CommonGoalCard[] commonGoals;
     private MatchStatus matchStatus;
-    private final Player matchOpener;
+    private Player matchOpener;
     private Player firstPlayer;
     private Player currentPlayer;
     private Player winner;
-    private final LivingRoom livingRoom;
-    private final CommonGoalCardsDeck commonGoalDeck;
-    private final PersonalGoalCardsDeck personalGoalDeck;
+    private LivingRoom livingRoom;
+    private  CommonGoalCardsDeck commonGoalDeck;
+    private  PersonalGoalCardsDeck personalGoalDeck;
     private Map<Player, Integer> scores;
     private Time matchDuration;
     private Player firstToFinish;
@@ -61,6 +61,7 @@ public class Match {
         this.commonGoals=new CommonGoalCard[2];
         this.scores= new HashMap<>() ;
         this.firstToFinish = null;
+        this.mvEventListeners = new ArrayList<>();
 
     }
 
@@ -165,6 +166,27 @@ public class Match {
      * @author Marta Giliberto
      */
     public void addContestant(Player newPlayer) throws UnsupportedOperationException{
+        if(players.size()==0){
+            players.add(newPlayer);
+            scores.put(newPlayer, 0);
+            try {
+                matchStatus = matchStatus.evolve();
+                this.commonGoalDeck = new CommonGoalCardsDeck(numberOfPlayers);
+                this.personalGoalDeck = new PersonalGoalCardsDeck(numberOfPlayers);
+                this.gameChat = new PlayersChat();
+                this.matchOpener = newPlayer;
+                this.livingRoom = new LivingRoom(this);
+                this.width= matchOpener.getBookshelf().getBookshelfWidth();
+                this.height=matchOpener.getBookshelf().getBookshelfHeight();
+                //this.mvEventListeners = new ArrayList<>();
+
+                //setup();
+                //notifyMVEventListeners(new MatchStartedEvent(new LightMatch(this)));
+                return;
+            } catch (UnsupportedOperationException e) {
+                System.err.println(e.getMessage());
+            }
+        }
         for(int i=0; i<players.size(); i++) {
             if ((newPlayer.getPlayerID() != players.get(i).getPlayerID()) &&
                     !(newPlayer.getPlayerNickName().equals(players.get(i).getPlayerNickName()))) {
@@ -355,6 +377,10 @@ public class Match {
         notifyMVEventListeners(new ModifiedMatchEndedEvent(new LightMatch(this)));
     }
 
+    public void setNumberOfPlayers(int numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
+    }
+
     /**
      * this method sets current player
      * @author Marta Giliberto
@@ -409,6 +435,14 @@ public class Match {
     }
     public Map<Player, Integer> getScores() {
         return scores;
+    }
+
+    public Map<Integer,Integer>getIDScores(){
+        Map<Integer,Integer> idScores=new HashMap<>();
+        for(Player p: scores.keySet()){
+            idScores.put(p.getPlayerID(),scores.get(p));
+        }
+        return idScores;
     }
     public Time getMatchDuration() {
         return matchDuration;

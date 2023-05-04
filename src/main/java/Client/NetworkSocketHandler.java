@@ -7,6 +7,8 @@ import Server.Events.EventTypeAdapterFactory;
 import Server.Events.MVEvents.MVEvent;
 import Server.Events.SelectViewEvents.SelectViewEvent;
 import Server.Events.VCEvents.VCEvent;
+import Server.Model.Cards.CommonGoalCard;
+import Server.Model.Cards.CommonGoalCardAdapter;
 import Server.Network.VirtualView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
