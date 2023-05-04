@@ -7,7 +7,7 @@ public class SelectColumn extends VCEvent{
 
     public SelectColumn(int column){
         this.column = column;
-        this.methodName = "onSelectColumn";
+        this.methodName = "onSelectColumnEvent";
 
     }
     public String getMethodName(){

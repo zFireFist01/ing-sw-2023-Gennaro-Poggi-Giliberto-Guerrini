@@ -455,9 +455,11 @@ public class CLI implements Runnable , View {
             System.out.println("Please insert your nickname and the number of players for the match: ");
 
 
+        }else{
+            System.out.println("Please insert your nickname: ");
+
         }
 
-        System.out.println("Please insert your nickname: ");
     }
 
     private void onGameViewEvent(SelectViewEvent event){

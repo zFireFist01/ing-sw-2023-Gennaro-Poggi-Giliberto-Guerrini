@@ -52,7 +52,7 @@ public class Match {
     public Match(){
         this.matchStatus= new NotRunning(this);
         this.gameChat = null;
-        this.numberOfPlayers = 2;
+
         this.matchOpener = null;
         this.livingRoom = null;
         this.commonGoalDeck = null;

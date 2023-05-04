@@ -7,23 +7,20 @@ package Server.Events.SelectViewEvents;
 
 public class InsertingTilesGameView extends GameView{
     //private final String primaryType = "SelectViewEvent";
-    private final String secondaryType = "InsertingTilesGameView";
+    private final String thirdType = "InsertingTilesGameView";
 
-    private final String message;
+
 
 
     public InsertingTilesGameView(){
-        super();
-        this.message="please, select the coloumn where you want to insert the tiles";
+        super("please, select the coloumn where you want to insert the tiles");
     }
     public InsertingTilesGameView(String message){
-        super();
-        this.message = message;
+        super(message);
+
     }
 
-    public String getMessage(){
-        return this.message;
-    }
+
 
     @Override
     public String getType() {

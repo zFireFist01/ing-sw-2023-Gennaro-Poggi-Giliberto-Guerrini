@@ -8,7 +8,7 @@ public class ClickOnTile extends VCEvent{
 
     public ClickOnTile(int[] coordinates){
         this.coordinates = coordinates;
-        this.methodName = "onClickOnTile";
+        this.methodName = "onClickOnTileEvent";
     }
 
     public String getMethodName(){

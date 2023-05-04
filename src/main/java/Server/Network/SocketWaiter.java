@@ -32,9 +32,10 @@ public class SocketWaiter implements Runnable{
             try {
                 socket = this.serverSocket.accept();
                 //clients.add(client);
-                clientVV = new VirtualSocketView(socket);
-                new Thread(clientVV).start();
+
                 if(server.waitingMatch()){
+                    clientVV = new VirtualSocketView(socket,false);
+                    new Thread(clientVV).start();
                     Match m = server.getWaitingMatch();
                     m.addMVEventListener(clientVV);
                     Controller c = server.getMatchsController(m);
@@ -42,6 +43,8 @@ public class SocketWaiter implements Runnable{
                     c.addSelectViewEventListener(clientVV);
                     server.subscribeNewViewToExistingMatch(m, clientVV);
                 }else{
+                    clientVV = new VirtualSocketView(socket,true);
+                    new Thread(clientVV).start();
                     Match m = new Match();
                     Controller c = new Controller(m);
                     m.addMVEventListener(clientVV);

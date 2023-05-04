@@ -24,10 +24,12 @@ public class VirtualSocketView implements VirtualView{
     Socket socket;
     Scanner in;
     OutputStream out;
+    boolean isFirstToJoin;
+
 
     List<VCEventListener> vcEventListeners;
 
-    public VirtualSocketView(Socket socket) {
+    public VirtualSocketView(Socket socket , boolean isFirstToJoin) {
         this.socket = socket;
         this.vcEventListeners= new ArrayList<>();
         try {
@@ -37,6 +39,7 @@ public class VirtualSocketView implements VirtualView{
             System.err.println(e.getStackTrace());
             throw new RuntimeException(e);
         }
+        this.isFirstToJoin = isFirstToJoin;
     }
 
     @Override
@@ -53,7 +56,7 @@ public class VirtualSocketView implements VirtualView{
         }
 
         Gson gson = new Gson();
-        String mess = gson.toJson(new LoginView());
+        String mess = gson.toJson(new LoginView(isFirstToJoin));
         mess += "\n";
         try {
             out.write(mess.getBytes());

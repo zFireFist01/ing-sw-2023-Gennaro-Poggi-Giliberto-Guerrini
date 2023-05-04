@@ -56,7 +56,7 @@ public class Controller implements VCEventListener {
 
         ArrayList<Player> players = match.getPlayers();
 
-        if(players.size()==0 && numberofPlayers==0){
+        if(players.size()==0 && numberofPlayers!=0){
             match.setNumberOfPlayers(numberofPlayers);
             match.addContestant(new Player(match, nickname.hashCode(),nickname));
             PlayerViews.put(nickname.hashCode(),caller);
@@ -380,7 +380,7 @@ public class Controller implements VCEventListener {
         switch(methodName){
             case"onLoginEvent" -> {
                 LoginEvent loginEvent = (LoginEvent) event;
-                Method method = Controller.class.getDeclaredMethod("onLoginEvent", String.class);
+                Method method = Controller.class.getDeclaredMethod("onLoginEvent", String.class,int.class);
                 try {
                     method.invoke(this, (String)event.getValue(),loginEvent.getNumberOfPlayers());
                 } catch (InvocationTargetException e) {

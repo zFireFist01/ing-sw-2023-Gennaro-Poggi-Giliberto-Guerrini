@@ -9,7 +9,7 @@ public class SendMessage extends VCEvent{
 
     public SendMessage(Message message){
         this.message = message;
-        this.methodname = "onSendMessage";
+        this.methodname = "onSendMessageEvent";
     }
 
     public String getMethodName(){

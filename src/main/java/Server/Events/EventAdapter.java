@@ -36,6 +36,7 @@ public class EventAdapter extends TypeAdapter<Event> {
 
         String primaryType = null;
         String secondaryType = null;
+        String thirdType = null;
         if (jsonObject.has("primaryType")) {
             primaryType = jsonObject.get("primaryType").getAsString();
         } else {
@@ -47,6 +48,9 @@ public class EventAdapter extends TypeAdapter<Event> {
         } else {
             throw new IOException("Il campo 'secondaryType' non è stato trovato");
         }
+
+        if (jsonObject.has("thirdType"))
+            thirdType = jsonObject.get("thirdType").getAsString();
 
         Class<?> eventClass = null;
 
@@ -88,17 +92,24 @@ public class EventAdapter extends TypeAdapter<Event> {
                         eventClass = EndedMatchView.class;
                         break;
                     case "GameView":
-                        eventClass = GameView.class;
+                        if(thirdType!=null){
+                            switch(thirdType){
+                                case "InsertingTilesGameView":
+                                    eventClass = InsertingTilesGameView.class;
+                                    break;
+                                case "PickingTilesGameView":
+                                    eventClass = PickingTilesGameView.class;
+                                    break;
+                            }
+                        }else{
+                            eventClass = GameView.class;
+                        }
                         break;
-                    case "InsertingTilesGameView":
-                        eventClass = InsertingTilesGameView.class;
-                        break;
+
                     case "LoginView":
                         eventClass = LoginView.class;
                         break;
-                    case "PickingTilesGameView":
-                        eventClass = PickingTilesGameView.class;
-                        break;
+
                     default:
                         throw new IOException("Unknown secondary event type: " + secondaryType);
 

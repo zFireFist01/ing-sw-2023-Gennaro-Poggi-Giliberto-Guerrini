@@ -5,7 +5,7 @@ public class CheckOutTiles extends VCEvent{
     private final String methodName;
 
     public CheckOutTiles(){
-        this.methodName = "onCheckOutTiles";
+        this.methodName = "onCheckOutTilesEvent";
     }
 
     public String getMethodName(){
