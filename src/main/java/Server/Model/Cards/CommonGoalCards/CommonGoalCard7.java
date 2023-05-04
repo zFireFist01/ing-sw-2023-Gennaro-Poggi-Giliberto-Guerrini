@@ -21,7 +21,7 @@ public class CommonGoalCard7 extends CommonGoalCard {
         BookshelfTileSpot[][] bsmat = bookshelf.getTileMatrix();
         boolean isRowOk = false; //Meaning: the row has satisfied the criteria SO FAR. I'll check its
                                     // value only at the end of the row
-        boolean goOn = false;
+        boolean goOn = true;
         for(int i=0; i<6 && goOn; i++){
             for(int j=0;j<5;j++){
                 if(bsmat[i][j].isEmpty()){
@@ -31,7 +31,7 @@ public class CommonGoalCard7 extends CommonGoalCard {
                 }else{
                     if(!rowTypes.contains(bsmat[i][j].getTileType())){
                         //It's  a new type inside the row;
-                        if(rowTypes.size()+1>3){//If I add this new type it will be the 4th, which doesn't satisfy the criteria
+                        if(rowTypes.size()+1>3){//If I add this new type it will be the 4th: that doesn't satisfy the criteria
                             rowTypes.clear();
                             isRowOk = false;
                             break; //This rows has too many types
@@ -41,6 +41,7 @@ public class CommonGoalCard7 extends CommonGoalCard {
                     isRowOk = true;
                 }
             }
+            rowTypes.clear();
             rowsFitting = (isRowOk ? rowsFitting+1:rowsFitting);
             goOn = ((rowsFitting >= 4-(6-(i+1)))&&rowsFitting<4 ? true:false);
         }
