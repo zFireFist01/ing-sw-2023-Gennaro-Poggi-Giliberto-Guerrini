@@ -108,6 +108,7 @@ public class LivingRoomTest {
     @Test
     public void refreshLivingRoomTest(){
         uut = new LivingRoom(m);
+        m.setNumberOfPlayers(4);
         uut.refreshLivingRoom();
 
         //Checking that "fake" spots are still fake

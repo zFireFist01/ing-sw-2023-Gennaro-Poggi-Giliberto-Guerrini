@@ -18,6 +18,7 @@ import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.rmi.RemoteException;
 import java.util.Scanner;
 
 
@@ -46,7 +47,7 @@ public class NetworkSocketHandler implements NetworkHandler{
     }
 
     @Override
-    public void sendMVEvent(String json) {
+    public void receiveMVEvent(String json) {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapterFactory(new EventTypeAdapterFactory())
                 .create();
@@ -55,7 +56,7 @@ public class NetworkSocketHandler implements NetworkHandler{
     }
 
     @Override
-    public void sendSelectViewEvent(String json){
+    public void receiveSelectViewEvent(String json){
         Gson gson = new GsonBuilder()
                 .registerTypeAdapterFactory(new EventTypeAdapterFactory())
                 .create();
@@ -83,7 +84,7 @@ public class NetworkSocketHandler implements NetworkHandler{
     }
 
     @Override
-    public void run() {
+    public void run()  {
         String message;
         String primaryType;
         Event event;
@@ -114,10 +115,10 @@ public class NetworkSocketHandler implements NetworkHandler{
 
             switch (primaryType) {
                 case "MVEvent":
-                    sendMVEvent(message);
+                    receiveMVEvent(message);
                     break;
                 case "SelectViewEvent":
-                    sendSelectViewEvent(message);
+                    receiveSelectViewEvent(message);
                     break;
                 default:
                     throw new RuntimeException("Unknown event type");

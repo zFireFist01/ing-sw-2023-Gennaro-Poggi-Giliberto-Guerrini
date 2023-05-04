@@ -1,7 +1,9 @@
 package Server.Network;
 
 import Client.NetworkRMIHandler;
+import Client.View.RemoteNetworkHandler;
 import Server.Events.Event;
+import Server.Events.EventTypeAdapterFactory;
 import Server.Events.MVEvents.MVEvent;
 import Server.Events.SelectViewEvents.LoginView;
 import Server.Events.SelectViewEvents.SelectViewEvent;
@@ -28,18 +30,20 @@ import java.util.List;
  * @see NetworkRMIHandler
  * @author patrickpoggi
  */
-public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, Remote {
-    NetworkRMIHandler client;
+public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, RemoteVirtualView {
+    RemoteNetworkHandler client;
+    boolean isFirsToJoin;
 
     /**
      * This list contains all the VCEventListeners that are listening to this VirtualRMIView, which in fact is the only
      * controller of the match this view belongs to.
      */
     List<VCEventListener> vcEventListeners;
-    public VirtualRMIView(NetworkRMIHandler networkHandler) throws RemoteException {
+    public VirtualRMIView(RemoteNetworkHandler networkHandler, boolean isFirsToJoin) throws RemoteException {
         super();
         client = networkHandler;
         vcEventListeners = new ArrayList<>();
+        this.isFirsToJoin = isFirsToJoin;
     }
 
     @Override
@@ -54,9 +58,9 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
             }
         }*/
         try {
-            client.sendSelectViewEvent(
+            client.receiveSelectViewEvent(
                     new Gson().toJson(
-                            new LoginView()
+                            new LoginView(isFirsToJoin)
                     )
             );
         } catch (RemoteException e) {
@@ -75,6 +79,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
     }
     */
 
+    @Override
     /**
      * This method is used from the client to send a VCEvent to the server.
      * @param json the json representation of the VCEvent.
@@ -82,9 +87,16 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
      * @throws InvocationTargetException when one of the listeners throws it.
      * @throws IllegalAccessException  when the event we receive is not a VCEvent.
      */
-    public void sendVCEvent(String json) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        Gson gson = new Gson();
-        Event event = gson.fromJson(json,Event.class);
+    public void receiveVCEvent(String json) throws NoSuchMethodException, InvocationTargetException,
+            IllegalAccessException, RemoteException{
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapterFactory(new EventTypeAdapterFactory())
+                .create();
+        VCEvent vcEvent = gson.fromJson(json,VCEvent.class);
+        for(VCEventListener listener : vcEventListeners){
+            listener.onVCEvent(vcEvent,this);
+        }
+        /*
         switch (event.getPrimaryType()){
             case "VCEvent":
                 event = gson.fromJson(json,VCEvent.class);
@@ -96,7 +108,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
                 throw new IllegalAccessException("MVEvent not allowed in this context");
             case "SelectViewEvent":
                 throw new IllegalAccessException("SelectViewEvent not allowed in this context");
-        }
+        }*/
     }
 
     /**
@@ -111,7 +123,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
                 .create();
         String json = gson.toJson(event);
         try {
-            client.sendMVEvent(json);
+            client.receiveMVEvent(json);
         } catch (RemoteException e) {
             //We could say that the method invocation went wrong and so may be that the client lost connection
             System.err.println(e.getStackTrace());
@@ -127,8 +139,9 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
     public void onSelectViewEvent(SelectViewEvent event) {
         Gson gson = new Gson();
         String json = gson.toJson(event);
+        json += "\n";
         try {
-            client.sendSelectViewEvent(json);
+            client.receiveSelectViewEvent(json);
         } catch (RemoteException e) {
             //We could say that the method invocation went wrong and so may be that the client lost connection
             System.err.println(e.getStackTrace());
