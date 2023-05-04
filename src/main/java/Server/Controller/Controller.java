@@ -334,8 +334,10 @@ public class Controller implements VCEventListener {
             }
             case 2 -> {
                 try{
-                    tiles=new TileType[1];
-                    tiles[0]=livingRoom.takeTile(selectedTiles[0],selectedTiles[1]);
+                    Couple<Integer, Integer>[] coordinates = new Couple[1];
+                    coordinates[0]=new Couple<>(selectedTiles[0],selectedTiles[1]);
+
+                    tiles = livingRoom.takeTiles(coordinates);
                     currentPlayer.setTakenTiles(tiles);
                     match.clearSelectedTiles();
                     currentPlayerView.onSelectViewEvent(new InsertingTilesGameView());

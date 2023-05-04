@@ -187,10 +187,9 @@ public class CLI implements Runnable , View {
 
         switch(methodName) {
             case "onModifiedChatEvent" -> {
-
                 onModifiedChatEvent((Message)event.getValue());
             }
-            case "onModiefiedBookshelfEvent" -> {
+            case "onModifiedBookshelfEvent" -> {
                 onModifiedBookshelfEvent(event.getMatch());
             }
             case "onModifiedLivingRoomEvent" -> {
@@ -201,7 +200,6 @@ public class CLI implements Runnable , View {
             }
             case "onModifiedPointsEvent" -> {
                 onModifiedPointsEvent(event.getMatch());
-
             }
             case "onMatchStartedEvent" -> {
                 onMatchStartedEvent(event.getMatch());
