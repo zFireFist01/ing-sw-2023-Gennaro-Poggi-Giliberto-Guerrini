@@ -84,6 +84,8 @@ public class CommonGoalCard6 extends CommonGoalCard {
             for(int j = 0; j<15; j++){
                 if(j ==0 || j == 14){
                     res[i][j] = '|';
+                }else{
+                    res[i][j] = ' ';
                 }
             }
         }

@@ -281,10 +281,61 @@ public class LivingRoom {
     /**
      * this method returns CLIRepresentation of the LivingRoom
      * @return a matrix of char that represents the LivingRoom
-     * @author martagiliberto
+     * @author Marta Giliberto
      */
     public char[][] getCLIRepresentation(){
         char[][] res= new char[20][39];
+
+        for(int i=0; i<19; i++){
+            if(i%2==0) {
+                res[i][0]=' ';
+            }else{
+                res[i][3]=' ';
+                res[i][4]=' ';
+                res[i][5]=' ';
+
+                res[i][7]=' ';
+                res[i][8]=' ';
+                res[i][9]=' ';
+
+                res[i][11]=' ';
+                res[i][12]=' ';
+                res[i][13]=' ';
+
+                res[i][15]=' ';
+                res[i][16]=' ';
+                res[i][17]=' ';
+
+                res[i][19]=' ';
+                res[i][20]=' ';
+                res[i][21]=' ';
+
+                res[i][23]=' ';
+                res[i][24]=' ';
+                res[i][25]=' ';
+
+                res[i][27]=' ';
+                res[i][28]=' ';
+                res[i][29]=' ';
+
+                res[i][31]=' ';
+                res[i][32]=' ';
+                res[i][33]=' ';
+
+                res[i][35]=' ';
+                res[i][36]=' ';
+                res[i][37]=' ';
+
+            }
+            res[i][1]=' ';
+        }
+
+        for(int j=0; j<39;j++){
+            if(j%4!=0){
+                res[19][j]=' ';
+            }
+        }
+
 
         res[1][0]='a';
         res[3][0]='b';
