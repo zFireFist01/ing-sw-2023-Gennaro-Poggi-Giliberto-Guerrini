@@ -8,6 +8,7 @@ import Client.NetworkRMIHandler;
 import Client.NetworkSocketHandler;
 import Client.View.View;
 import Server.Events.MVEvents.MVEvent;
+import Server.Events.SelectViewEvents.LoginView;
 import Server.Events.SelectViewEvents.SelectViewEvent;
 
 
@@ -444,9 +445,17 @@ public class CLI implements Runnable , View {
 
     private void onLoginViewEvent(SelectViewEvent event){
         currentView = event;
+        LoginView loginEvent = (LoginView) event;
         System.out.print(ANSIParameters.CLEAR_SCREEN + ANSIParameters.CURSOR_HOME);
         System.out.flush();
         System.out.println("Welcome to MyShelfie!");
+
+        if(loginEvent.isFirstToJoin()) {
+            System.out.println("You are the first player to join the match");
+            System.out.println("Please insert your nickname and the number of players for the match: ");
+
+
+        }
 
         System.out.println("Please insert your nickname: ");
     }
@@ -551,20 +560,42 @@ public class CLI implements Runnable , View {
     private void parseInput(String input){
         String[] inputArray = input.split(" ");
         if(currentView!=null && currentView.getType().equals("LoginView")) {
-            if (inputArray.length == 1) {
-                myNick = inputArray[0];
-                try {
-                    networkHandler.onVCEvent(new LoginEvent(myNick));
-                } catch (NoSuchMethodException e) {
-                    throw new RuntimeException(e);
-                } catch (InvocationTargetException e) {
-                    throw new RuntimeException(e);
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
+
+            LoginView loginview = (LoginView) currentView;
+
+            if(loginview.isFirstToJoin()){
+                if(inputArray.length == 2){
+                    myNick = inputArray[0];
+                    numberPlayers = Integer.parseInt(inputArray[1]);
+                    try {
+                        networkHandler.onVCEvent(new LoginEvent(myNick, numberPlayers));
+                    } catch (NoSuchMethodException e) {
+                        throw new RuntimeException(e);
+                    } catch (InvocationTargetException e) {
+                        throw new RuntimeException(e);
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                }else {
+                    System.out.println("Please insert your nickname and the number of players for the match: ");
                 }
-            } else {
-                System.out.println("Nickname must be one word");
+            }else{
+                if (inputArray.length == 1) {
+                    myNick = inputArray[0];
+                    try {
+                        networkHandler.onVCEvent(new LoginEvent(myNick));
+                    } catch (NoSuchMethodException e) {
+                        throw new RuntimeException(e);
+                    } catch (InvocationTargetException e) {
+                        throw new RuntimeException(e);
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    System.out.println("Nickname must be one word");
+                }
             }
+
         }
         switch (inputArray[0]){
             case "info" -> {
