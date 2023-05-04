@@ -199,6 +199,9 @@ public class LivingRoom {
         if(oneFreeEdge(i,j)){
             //The tile can be picked
             TileType tt = tileMatrix[i][j].getTileType();
+            if(tt==null){
+                throw new UnsupportedOperationException("The tile you want to pick is empty!");
+            }
             tileMatrix[i][j].setEmpty();
             return tt;
         }else{
@@ -281,10 +284,109 @@ public class LivingRoom {
     /**
      * this method returns CLIRepresentation of the LivingRoom
      * @return a matrix of char that represents the LivingRoom
-     * @author martagiliberto
+     * @author Marta Giliberto
      */
     public char[][] getCLIRepresentation(){
         char[][] res= new char[20][39];
+
+        for(int i=0; i<19; i++) {
+            if (i % 2 == 0) {
+                if (this.getTileMatrix()[i][0].isEmpty()) {
+                    res[i][0] = ' ';
+                } else {
+                    res[i][0] = this.getTileMatrix()[i][0].getTileType().getCLIRepresentation()[0][0];
+                }
+            } else {
+                res[i][3] = ' ';
+
+                if (this.getTileMatrix()[i][4].isEmpty()) {
+                    res[i][4] = ' ';
+                } else {
+                    res[i][4] = this.getTileMatrix()[i][4].getTileType().getCLIRepresentation()[0][0];
+                }
+
+                res[i][5] = ' ';
+                res[i][7] = ' ';
+
+                if (this.getTileMatrix()[i][8].isEmpty()) {
+                    res[i][8] = ' ';
+                } else {
+                    res[i][8] = this.getTileMatrix()[i][8].getTileType().getCLIRepresentation()[0][0];
+                }
+
+                res[i][9] = ' ';
+                res[i][11] = ' ';
+
+                if (this.getTileMatrix()[i][12].isEmpty()) {
+                    res[i][12] = ' ';
+                } else {
+                    res[i][12] = this.getTileMatrix()[i][12].getTileType().getCLIRepresentation()[0][0];
+                }
+
+                res[i][13] = ' ';
+                res[i][15] = ' ';
+
+                if (this.getTileMatrix()[i][16].isEmpty()) {
+                    res[i][16] = ' ';
+                } else {
+                    res[i][16] = this.getTileMatrix()[i][16].getTileType().getCLIRepresentation()[0][0];
+                }
+
+                res[i][17] = ' ';
+                res[i][19] = ' ';
+
+                if (this.getTileMatrix()[i][20].isEmpty()) {
+                    res[i][20] = ' ';
+                } else {
+                    res[i][20] = this.getTileMatrix()[i][20].getTileType().getCLIRepresentation()[0][0];
+                }
+
+                res[i][21] = ' ';
+                res[i][23] = ' ';
+
+                if (this.getTileMatrix()[i][24].isEmpty()) {
+                    res[i][24] = ' ';
+                } else {
+                    res[i][24] = this.getTileMatrix()[i][24].getTileType().getCLIRepresentation()[0][0];
+                }
+
+                res[i][25] = ' ';
+                res[i][27] = ' ';
+
+                if (this.getTileMatrix()[i][28].isEmpty()) {
+                    res[i][28] = ' ';
+                } else {
+                    res[i][28] = this.getTileMatrix()[i][28].getTileType().getCLIRepresentation()[0][0];
+                }
+
+                res[i][29] = ' ';
+                res[i][31] = ' ';
+
+                if (this.getTileMatrix()[i][32].isEmpty()) {
+                    res[i][32] = ' ';
+                } else {
+                    res[i][32] = this.getTileMatrix()[i][32].getTileType().getCLIRepresentation()[0][0];
+                }
+
+                res[i][33] = ' ';
+                res[i][35] = ' ';
+
+                if (this.getTileMatrix()[i][36].isEmpty()) {
+                    res[i][36] = ' ';
+                } else {
+                    res[i][36] = this.getTileMatrix()[i][0].getTileType().getCLIRepresentation()[0][0];
+                }
+
+                res[i][37] = ' ';
+            }
+        }
+
+        for(int j=0; j<39;j++){
+            if(j%4!=0){
+                res[19][j]=' ';
+            }
+        }
+
 
         res[1][0]='a';
         res[3][0]='b';

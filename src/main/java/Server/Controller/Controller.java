@@ -107,7 +107,7 @@ public class Controller implements VCEventListener {
      * @author ValentinoGuerrini
      */
     private void onOpenChatEvent() throws RemoteException{
-        currentPlayerView.onSelectViewEvent(new ChatONView());
+        caller.onSelectViewEvent(new ChatONView());
     }
 
     /**
@@ -115,7 +115,7 @@ public class Controller implements VCEventListener {
      * @author ValentinoGuerrini
      */
     private void onCloseChatEvent() throws RemoteException {
-        currentPlayerView.onSelectViewEvent( new ChatOFFView());
+        caller.onSelectViewEvent( new ChatOFFView());
     }
 
     /**
@@ -128,8 +128,10 @@ public class Controller implements VCEventListener {
         Player receiver = message.getReceiver();
         if(receiver == null) {
             VirtualView[] views = new VirtualView[PlayerViews.size()];
-            for(Integer i : PlayerViews.keySet()){
-                views[i] = PlayerViews.get(i);
+            int i=0;
+            for(VirtualView vv : PlayerViews.values()){
+                views[i] = vv;
+                i++;
             }
             match.getGameChat().addMessage(message, views);
         }else{
@@ -268,6 +270,15 @@ public class Controller implements VCEventListener {
             caller.onSelectViewEvent(new PickingTilesGameView("This tile is not selectable!"));
         }
 
+        if(tmp==null){
+            selectedTiles=new int[2];
+
+            selectedTiles[0]=coordinates[0];
+            selectedTiles[1]=coordinates[1];
+            match.setSelectedTiles(selectedTiles);
+            return;
+        }
+
         //check if the tile is already selected in if it is the coordinates are setted to -1
 
 
@@ -307,7 +318,7 @@ public class Controller implements VCEventListener {
      * If the tiles are not pickable the method returns a PickingTilesGameView event, otherwise it returns a InsertingTilesGameView event
      * @author ValentinoGuerrini
      */
-    private void onCheckoutTilesEvent() throws RemoteException{
+    private void onCheckOutTilesEvent() throws RemoteException{
         Player currentPlayer = match.getCurrentPlayer();
         int[] selectedTiles = match.getSelectedTiles();
         LivingRoom livingRoom = match.getLivingRoom();

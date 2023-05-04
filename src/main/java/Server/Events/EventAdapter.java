@@ -60,7 +60,7 @@ public class EventAdapter extends TypeAdapter<Event> {
                     case "MatchStartedEvent":
                         eventClass = MatchStartedEvent.class;
                         break;
-                    case "ModifiedBookshefEvent":
+                    case "ModifiedBookshelfEvent":
                         eventClass = ModifiedBookshelfEvent.class;
                         break;
                     case "ModifiedChatEvent":
