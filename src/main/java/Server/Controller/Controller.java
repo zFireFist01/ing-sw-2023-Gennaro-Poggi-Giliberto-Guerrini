@@ -2,6 +2,7 @@ package Server.Controller;
 
 import Server.Events.SelectViewEvents.*;
 
+import Server.Events.VCEvents.LoginEvent;
 import Server.Listeners.SelectViewEventListener;
 
 import Server.Listeners.VCEventListener;
@@ -13,6 +14,8 @@ import Server.Model.GameItems.LivingRoomTileSpot;
 import Server.Model.GameItems.TileType;
 import Server.Model.Match;
 import Server.Events.VCEvents.VCEvent;
+import Server.Model.MatchStatus.Running;
+import Server.Model.MatchStatus.WaitingForPlayers;
 import Server.Model.Player.Player;
 import Server.Network.VirtualView;
 import Utils.MathUtils.*;
@@ -49,26 +52,50 @@ public class Controller implements VCEventListener {
      * @author ValentinoGuerrini
      */
 
-    private void onLoginEvent(String nickname) throws RemoteException{
+    private void onLoginEvent(String nickname,int numberofPlayers) throws RemoteException{
 
         ArrayList<Player> players = match.getPlayers();
-        for(Player player : players){
-            if(player.getPlayerID()==nickname.hashCode()) {
-                caller.onSelectViewEvent(new LoginView("Nickname already taken"));
-                return;
-            }
-        }
-        if(nickname.length() > 20) {
-            caller.onSelectViewEvent(new LoginView("Nickname too long, max 20 characters"));
-        }else if(nickname.length() < 3) {
-            caller.onSelectViewEvent(new LoginView("Nickname too short, min 3 characters"));
-        }else if(nickname.contains(" ")) {
-            caller.onSelectViewEvent(new LoginView("Nickname cannot contain spaces"));
-        }else{
+
+        if(players.size()==0 && numberofPlayers==0){
+            match.setNumberOfPlayers(numberofPlayers);
             match.addContestant(new Player(match, nickname.hashCode(),nickname));
             PlayerViews.put(nickname.hashCode(),caller);
             caller.onSelectViewEvent(new GameView());
+
+        }else{
+            for(Player player : players){
+                if(player.getPlayerID()==nickname.hashCode()) {
+                    caller.onSelectViewEvent(new LoginView("Nickname already taken"));
+                    return;
+                }
+            }
+            if(nickname.length() > 20) {
+                caller.onSelectViewEvent(new LoginView("Nickname too long, max 20 characters"));
+            }else if(nickname.length() < 3) {
+                caller.onSelectViewEvent(new LoginView("Nickname too short, min 3 characters"));
+            }else if(nickname.contains(" ")) {
+                caller.onSelectViewEvent(new LoginView("Nickname cannot contain spaces"));
+            }else{
+                match.addContestant(new Player(match, nickname.hashCode(),nickname));
+                PlayerViews.put(nickname.hashCode(),caller);
+
+                if(match.getMatchStatus() instanceof WaitingForPlayers){
+                    caller.onSelectViewEvent(new GameView());
+                }else if (match.getMatchStatus() instanceof Running){
+                    Player firstPlayer = match.getFirstPlayer();
+                    currentPlayerView = PlayerViews.get(firstPlayer.getPlayerID());
+                    currentPlayerView.onSelectViewEvent(new PickingTilesGameView());
+                    for(VirtualView vv : PlayerViews.values()){
+                        if(vv != currentPlayerView){
+                            vv.onSelectViewEvent(new GameView("Match started "+ firstPlayer.getPlayerNickName() + " is the first player"));
+                        }
+                    }
+
+                }
+
+            }
         }
+
 
 
 
@@ -352,9 +379,10 @@ public class Controller implements VCEventListener {
 
         switch(methodName){
             case"onLoginEvent" -> {
+                LoginEvent loginEvent = (LoginEvent) event;
                 Method method = Controller.class.getDeclaredMethod("onLoginEvent", String.class);
                 try {
-                    method.invoke(this, (String)event.getValue());
+                    method.invoke(this, (String)event.getValue(),loginEvent.getNumberOfPlayers());
                 } catch (InvocationTargetException e) {
                     e.printStackTrace();
                 }
