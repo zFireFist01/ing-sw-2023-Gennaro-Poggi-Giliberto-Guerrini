@@ -104,7 +104,7 @@ public class CLI implements Runnable , View {
         connect();
 
         System.out.println("info        : show this message\n"+
-                           "login       : login to the server\n"+
+                           "play        : login to the server\n"+
                            "quit        : quit the game\n");
         new Thread(this::run).start();
         //refresh();
@@ -137,7 +137,7 @@ public class CLI implements Runnable , View {
         System.out.println("Select connection type: ");
         System.out.println("1) Socket 2) RMI");
         String connection =scanner.nextLine();
-        System.out.println("Server Adress:");
+        System.out.println("Server Address:");
         String host = scanner.nextLine();
 
         System.out.println("ServerPort:");
