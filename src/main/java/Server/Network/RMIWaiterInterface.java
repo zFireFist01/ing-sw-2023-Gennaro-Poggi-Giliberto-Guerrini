@@ -1,10 +1,10 @@
 package Server.Network;
 
-import Client.NetworkHandler;
+import Client.View.RemoteNetworkHandler;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface RMIWaiterInterface extends Remote {
-    public VirtualView giveConnection(NetworkHandler requestingClient) throws RemoteException;
+    public RemoteVirtualView giveConnection(RemoteNetworkHandler requestingClient) throws RemoteException;
 }

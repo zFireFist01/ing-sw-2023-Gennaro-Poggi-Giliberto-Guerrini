@@ -74,11 +74,20 @@ public class VirtualSocketView implements VirtualView{
     }
 
     private void manageMessage(String message){
-        Gson gson = new GsonBuilder()
+        /*Gson gson = new GsonBuilder()
                 .registerTypeAdapterFactory(new EventTypeAdapterFactory())
                 .create();
         VCEvent vcEvent = gson.fromJson(message, VCEvent.class);
-        sendVCEvent(vcEvent);
+        sendVCEvent(vcEvent);*/
+        try {
+            receiveVCEvent(message);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
     @Override
     public void onMVEvent(MVEvent mvEvent){
@@ -90,6 +99,7 @@ public class VirtualSocketView implements VirtualView{
         try {
             out.write(message.getBytes());
             out.flush();
+            System.out.println("Message sent: "+message);
         } catch (IOException e) {
             System.err.println(e.getStackTrace());
             throw new RuntimeException(e);
@@ -104,6 +114,7 @@ public class VirtualSocketView implements VirtualView{
         try {
             out.write(message.getBytes());
             out.flush();
+            System.out.println("Message sent "+ message);
         } catch (IOException e) {
             System.err.println(e.getStackTrace());
             throw new RuntimeException(e);
@@ -111,8 +122,28 @@ public class VirtualSocketView implements VirtualView{
 
     }
 
-
+    /*
     public void sendVCEvent(VCEvent vcEvent){
+        for(VCEventListener listener: vcEventListeners){
+            try {
+                listener.onVCEvent(vcEvent,this);
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException(e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }*/
+
+    @Override
+    public void receiveVCEvent(String json) throws NoSuchMethodException, InvocationTargetException,
+            IllegalAccessException {
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapterFactory(new EventTypeAdapterFactory())
+                .create();
+        VCEvent vcEvent = gson.fromJson(json, VCEvent.class);
         for(VCEventListener listener: vcEventListeners){
             try {
                 listener.onVCEvent(vcEvent,this);

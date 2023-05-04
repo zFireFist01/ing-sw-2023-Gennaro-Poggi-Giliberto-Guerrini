@@ -169,6 +169,7 @@ public class CLI implements Runnable , View {
             }
         }catch (Exception e){
             System.out.println("Connection failed");
+            System.err.println(e.getMessage()+"\n"+e.getStackTrace());
             System.exit(1);
         }
         System.out.println("Connection successful");

@@ -1,15 +1,11 @@
 package Server.Network;
 
-import Client.NetworkHandler;
-import Client.NetworkRMIHandler;
+import Client.View.RemoteNetworkHandler;
 import Server.Controller.Controller;
 import Server.Model.Match;
-import com.beust.ah.A;
 
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 
 /**
  * This class is used to give a connection to a client that is waiting for one
@@ -26,14 +22,15 @@ public class RMIWaiter extends UnicastRemoteObject implements RMIWaiterInterface
 
     /**
      * This method is used to give a connection to a client that is waiting for one
+     *
      * @param requestingClient the NetworkHandler interface, which we know to be a NetworkRMIHandler, that we will
      *                         use to communicate with the client
      * @return the VirtualView that we have istantiated for the client
      * @throws RemoteException if the connection with the client goes wrong, see {@link RemoteException}
      */
-    public synchronized VirtualView giveConnection(NetworkHandler requestingClient) throws RemoteException{
+    public synchronized RemoteVirtualView giveConnection(RemoteNetworkHandler requestingClient) throws RemoteException{
         //VirtualView clientsVV = new VirtualRMIView((NetworkRMIHandler) requestingClient);
-        VirtualView clientsVV = new VirtualRMIView((NetworkRMIHandler) requestingClient);
+        VirtualView clientsVV = new VirtualRMIView(requestingClient);
         if(server.waitingMatch()){
             //We don't need to istantiate a new match
             Match m = server.getWaitingMatch();
@@ -53,6 +50,6 @@ public class RMIWaiter extends UnicastRemoteObject implements RMIWaiterInterface
             c.addSelectViewEventListener(clientsVV);
             server.subscribeNewMatch(m,c, clientsVV);
         }
-        return clientsVV;
+        return (RemoteVirtualView)clientsVV;
     }
 }

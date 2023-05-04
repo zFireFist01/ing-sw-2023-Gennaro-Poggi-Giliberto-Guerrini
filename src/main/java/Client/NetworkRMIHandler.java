@@ -1,16 +1,15 @@
 package Client;
 
+import Client.View.RemoteNetworkHandler;
 import Client.View.View;
 import Server.Events.Event;
+import Server.Events.EventTypeAdapterFactory;
 import Server.Events.MVEvents.MVEvent;
 import Server.Events.SelectViewEvents.SelectViewEvent;
 import Server.Events.VCEvents.VCEvent;
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Cards.CommonGoalCardAdapter;
-import Server.Network.RMIWaiter;
-import Server.Network.RMIWaiterInterface;
-import Server.Network.VirtualRMIView;
-import Server.Network.VirtualView;
+import Server.Network.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -22,10 +21,10 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-public class NetworkRMIHandler extends UnicastRemoteObject implements NetworkHandler, Remote {
+public class NetworkRMIHandler extends UnicastRemoteObject implements RemoteNetworkHandler, NetworkHandler {
 
     View view;
-    VirtualRMIView virtualRMIView;
+    RemoteVirtualView virtualRMIView;
 
     public NetworkRMIHandler(View view) throws RemoteException {
         super();
@@ -33,7 +32,7 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements NetworkHan
     }
 
     @Override
-    public void run() {
+    public void run(){
         Registry registry;
         RMIWaiterInterface rmiWaiter;
         try {
@@ -53,7 +52,7 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements NetworkHan
         }
 
         try {
-            virtualRMIView = (VirtualRMIView) rmiWaiter.giveConnection(this);
+            virtualRMIView = rmiWaiter.giveConnection(this);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -61,9 +60,10 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements NetworkHan
 
 
     @Override
-    public void sendMVEvent(String json) throws RemoteException{
+    public void receiveMVEvent(String json) throws RemoteException{
         Gson gson = new GsonBuilder()
-                .excludeFieldsWithoutExposeAnnotation().registerTypeAdapter(CommonGoalCard.class, new CommonGoalCardAdapter())
+                .excludeFieldsWithoutExposeAnnotation()
+                .registerTypeAdapter(CommonGoalCard.class, new CommonGoalCardAdapter())
                 .create();
         Event event = gson.fromJson(json, Event.class);
         String type = event.getPrimaryType();
@@ -80,9 +80,12 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements NetworkHan
 
 
     @Override
-    public void sendSelectViewEvent(String json) throws RemoteException{
-        Gson gson = new Gson();
-        Event event = gson.fromJson(json, Event.class);
+    public void receiveSelectViewEvent(String json) throws RemoteException{
+        /*Gson gson = new Gson();*/
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapterFactory(new EventTypeAdapterFactory())
+                .create();
+        Event event = gson.fromJson(json,Event.class);
         String type = event.getPrimaryType();
         switch (type) {
             case "MVEvent":
@@ -102,7 +105,11 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements NetworkHan
         Gson gson = new Gson();
         String json = gson.toJson(event);
         json+="\n";
-        virtualRMIView.sendVCEvent(json);
+        try {
+            virtualRMIView.receiveVCEvent(json);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
