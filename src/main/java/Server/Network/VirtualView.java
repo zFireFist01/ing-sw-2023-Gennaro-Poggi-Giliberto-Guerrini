@@ -1,8 +1,13 @@
 package Server.Network;
 
+import Server.Events.MVEvents.MVEvent;
+import Server.Events.SelectViewEvents.SelectViewEvent;
 import Server.Listeners.MVEventListener;
 import Server.Listeners.SelectViewEventListener;
 import Server.Listeners.VCEventListener;
+
+import java.lang.reflect.InvocationTargetException;
+import java.rmi.RemoteException;
 
 /**
  * This interface is used to generalize the VirtualView
@@ -21,4 +26,16 @@ public interface VirtualView extends Runnable, MVEventListener, SelectViewEventL
      * @param listener
      */
     public void removeVCEventListener(VCEventListener listener);
+
+    public void receiveVCEvent(String json) throws NoSuchMethodException, InvocationTargetException,
+            IllegalAccessException, RemoteException;
+
+    @Override
+    void onMVEvent(MVEvent event);
+
+    @Override
+    void onSelectViewEvent(SelectViewEvent event);
+
+    @Override
+    void run();
 }

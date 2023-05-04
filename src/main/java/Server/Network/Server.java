@@ -26,7 +26,7 @@ import java.util.Map;
  */
 public class Server implements Runnable{
     SocketWaiter socketWaiter;
-    RMIWaiter rmiWaiter;
+    RMIWaiterInterface rmiWaiter;
     Registry rmiRegistry;
     List<Match> matches;
     Map<Match, Controller> macthesControllers;

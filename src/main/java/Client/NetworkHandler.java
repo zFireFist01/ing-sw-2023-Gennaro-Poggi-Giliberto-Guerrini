@@ -1,7 +1,10 @@
 package Client;
 
+import Server.Events.VCEvents.VCEvent;
 import Server.Listeners.VCEventListener;
+import Server.Network.VirtualView;
 
+import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
 
 /**
@@ -9,7 +12,17 @@ import java.rmi.RemoteException;
  * @author Patrick Poggi
  */
 public interface NetworkHandler extends VCEventListener, Runnable{
-    public void sendMVEvent(String json) throws RemoteException;
-    public void sendSelectViewEvent(String json) throws RemoteException;
+    public void receiveMVEvent(String json) throws RemoteException;
+    public void receiveSelectViewEvent(String json) throws RemoteException;
 
+    @Override
+    void onVCEvent(VCEvent event, VirtualView view) throws NoSuchMethodException,
+            InvocationTargetException, IllegalAccessException;
+
+    @Override
+    void onVCEvent(VCEvent event) throws NoSuchMethodException, InvocationTargetException,
+            IllegalAccessException;
+
+    @Override
+    void run();
 }

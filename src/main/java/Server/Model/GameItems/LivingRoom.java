@@ -217,9 +217,11 @@ public class LivingRoom {
      */
     public TileType[] takeTiles(Couple<Integer, Integer>[] couples) throws UnsupportedOperationException{
         TileType[] resultTypes = new TileType[3];
+        Map<Couple<Integer,Integer>, TileType> positions = new HashMap<>();
         int len = couples.length;
         boolean inRow = true;
         boolean inCol = true;
+        boolean insertedAll = true;
         int i=0;
         //I have to check if all the desired tiles have at least one free edge BEFORE picking the first one of them
         for(Couple c: couples){
@@ -245,13 +247,21 @@ public class LivingRoom {
             for(Couple c : couples){
                 try{
                     resultTypes[i] = takeTile(c.getA(), c.getB());
+                    positions.put(c, resultTypes[i]);
                     i++;
                 }catch(UnsupportedOperationException e){
+                    insertedAll = false;
                     System.err.println("Error occurred when picking tile in position "+c.toString()+": "+ e.getMessage());
                     break;      //I want to break if at least one tile is not pick-able
-                }               //NOTE that I don't have to revert the "taking" beacuse the method takeTile checks
-                                //before applying changes
+                }
             }
+        }
+        if(!insertedAll){
+            //I have to revert the changes
+            for(Couple c : positions.keySet()){
+                tileMatrix[c.getA()][c.getB()].setTile(positions.get(c));
+            }
+            throw new UnsupportedOperationException("At least one of the tiles you selected is not pick-able!");
         }
         notifyMVEventListeners(new ModifiedLivingRoomEvent(new LightMatch(this.m)));
         return resultTypes;
@@ -288,10 +298,73 @@ public class LivingRoom {
      */
     public char[][] getCLIRepresentation(){
         char[][] res= new char[20][39];
+        int k=0;
+        for(int i=0; i<19; i++){
+            for(int j=2; j<39; j++){
+                if(i%2==0){
+                    if(j%4!=0 && j%2==0){
+                        res[i][j]='+';
+                    }else{
+                        res[i][j]='-';
+                    }
+                }else{
+                    if(j%4!=0 && j%2==0){
+                        res[i][j]='|';
+                    }else if(j%2!=0){
+                        res[i][j]=' ';
+                    }else{
+                        if(this.getTileMatrix()[k][j/4-1].isEmpty()){
+                            res[i][j]=' ';
+                        }else{
+                            res[i][j] = this.getTileMatrix()[k][j/4 -1].getTileType().getCLIRepresentation()[0][0];
+                        }
+                    }
 
+                    if(j==38){
+                        k++;
+                    }
+                }
+            }
+
+        }
+
+        for(int j=0; j<39;j++){
+            if(j%4!=0 || j==0){
+                res[19][j]=' ';
+            }
+        }
+        for(int i=0; i<20; i++){
+            if(i%2==0){
+                res[i][0]=' ';
+            }
+            res[i][1]=' ';
+        }
+
+        res[1][0]='a';
+        res[3][0]='b';
+        res[5][0]='c';
+        res[7][0]='d';
+        res[9][0]='e';
+        res[11][0]='f';
+        res[13][0]='g';
+        res[15][0]='h';
+        res[17][0]='i';
+
+        res[19][4]='0';
+        res[19][8]='1';
+        res[19][12]='2';
+        res[19][16]='3';
+        res[19][20]='4';
+        res[19][24]='5';
+        res[19][28]='6';
+        res[19][32]='7';
+        res[19][36]='8';
 
         return res;
+
+        //return new char[20][38];
     }
+
 
     public void notifyMVEventListeners(MVEvent event){
         this.m.notifyMVEventListeners(event);
