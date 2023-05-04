@@ -2,6 +2,7 @@ package Server.Model.Cards;
 
 import Server.Model.GameItems.BookshelfTileSpot;
 import Server.Model.GameItems.TileType;
+import com.google.gson.annotations.Expose;
 
 /**
  * PersonalGoalCard defines all the type of personal goal cards that exists in the actual game
@@ -102,8 +103,8 @@ public enum PersonalGoalCard implements Card {
 
 
 
-
-    private BookshelfTileSpot[][] tileMatrix;
+    @Expose
+    private BookshelfTileSpot[][] tileMatrix; //ok
 
     /**
      * Constructor for the PersonalGoalCard class

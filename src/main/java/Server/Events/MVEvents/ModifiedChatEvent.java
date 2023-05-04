@@ -2,6 +2,7 @@ package Server.Events.MVEvents;
 
 import Server.Model.Chat.Message;
 import Server.Model.LightMatch;
+import com.google.gson.annotations.Expose;
 
 
 /**
@@ -10,8 +11,11 @@ import Server.Model.LightMatch;
  */
 public class ModifiedChatEvent extends MVEvent{
     //private final String primaryType = "MVEvent";
+    @Expose
     private final String secondaryType = "ModifiedChatEvent";
+    @Expose
     private final String methodName;
+    @Expose
     private final Message message;
 
     public ModifiedChatEvent(Message message){

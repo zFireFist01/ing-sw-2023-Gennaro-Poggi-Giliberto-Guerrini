@@ -7,7 +7,10 @@ import Server.Events.SelectViewEvents.LoginView;
 import Server.Events.SelectViewEvents.SelectViewEvent;
 import Server.Events.VCEvents.VCEvent;
 import Server.Listeners.VCEventListener;
+import Server.Model.Cards.CommonGoalCard;
+import Server.Model.Cards.CommonGoalCardAdapter;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.Remote;
@@ -103,7 +106,9 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
      * @see Gson
      */
     public void onMVEvent(MVEvent event) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation().registerTypeAdapter(CommonGoalCard.class, new CommonGoalCardAdapter())
+                .create();
         String json = gson.toJson(event);
         try {
             client.sendMVEvent(json);

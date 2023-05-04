@@ -1,13 +1,16 @@
 package Server.Model.GameItems;
 
 import Server.Model.Match;
+import com.google.gson.annotations.Expose;
 
 /**
  * @Class LivingRoomTileSpot
  * @author patrickpoggi
  */
 public class LivingRoomTileSpot extends TileSpot {
+    @Expose
     private final int dotsNumber;
+
     private Match match;
 
     public LivingRoomTileSpot(Match m, int dotsNumber) {

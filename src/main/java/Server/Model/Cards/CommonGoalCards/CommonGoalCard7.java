@@ -10,6 +10,17 @@ import java.util.Set;
 
 public class CommonGoalCard7 extends CommonGoalCard {
 
+
+    public CommonGoalCard7() {
+        super();
+    }
+
+    /**
+     * Constructor for CommonGoalCard7
+     * @param playersNum is the number of players in the game
+     * @param secondIstance is true if there are 5 players in the game, false otherwise
+     */
+
     public CommonGoalCard7(int playersNum, boolean secondIstance) {
         super(playersNum, secondIstance);
     }

@@ -4,6 +4,7 @@ import Server.Events.MVEvents.MVEvent;
 import Server.Events.MVEvents.ModifiedLivingRoomEvent;
 import Server.Model.LightMatch;
 import Server.Model.Match;
+import com.google.gson.annotations.Expose;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +22,9 @@ public class LivingRoom {
     private final static int LIVINGROOOMWIDTH = 9;
     private final static int LIVINGROOMHEIGHT = 9;
 
-    private LivingRoomTileSpot[][] tileMatrix;
+    @Expose
+    private LivingRoomTileSpot[][] tileMatrix; //ok
+
     private Map<TileType, Integer> tileSack;
 
 

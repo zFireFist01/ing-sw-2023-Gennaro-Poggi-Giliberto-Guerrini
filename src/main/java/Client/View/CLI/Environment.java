@@ -4,7 +4,7 @@ package Client.View.CLI;
 
 public class Environment {
 
-    private static final int DEFAULT_WIDTH = 170;
+    private static final int DEFAULT_WIDTH = 180;
     private static final int DEFAULT_HEIGHT = 50;
 
 

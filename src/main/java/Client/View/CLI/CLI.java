@@ -85,7 +85,7 @@ public class CLI implements Runnable , View {
     private ArrayList<String> chat = new ArrayList<>();
     private boolean chatIsOpened = false;
     private HashMap<Integer,Player> players = new HashMap<>();
-    private HashMap<Player,Integer> finalScores;
+    private HashMap<Integer,Integer> finalScores;
     private Player winner;
     private int numberPlayers;
     private Player me;
@@ -229,6 +229,7 @@ public class CLI implements Runnable , View {
         }
         System.out.println("Match started");
         System.out.println("You are " + myNick );
+        printLivingRoom(match.getLivingRoom().getCLIRepresentation());
         printPersonalGoal(me.getPersonalGoalCard().getCLIRepresentation());
         CommonGoalCard commonGoal= match.getCommonGoals()[0];
         printCommonGoal1(commonGoal.getCLIRepresentation());
@@ -415,7 +416,7 @@ public class CLI implements Runnable , View {
      * @param match is the light version of the match
      */
     private void onModifiedMatchEndedEvent(LightMatch match){
-        finalScores= (HashMap<Player, Integer>) match.getScores();
+        finalScores= (HashMap<Integer, Integer>) match.getScores();
         winner = match.getWinner();
     }
 
@@ -476,7 +477,7 @@ public class CLI implements Runnable , View {
 
         for(int i=0;i<numberPlayers;i++){
             p =players.get(i);
-            System.out.println(ANSIParameters.RED + p.getPlayerNickName() + ANSIParameters.CRESET + " with: " + ANSIParameters.MAGENTA + finalScores.get(p) + " points" + ANSIParameters.CRESET);
+            System.out.println(ANSIParameters.RED + p.getPlayerNickName() + ANSIParameters.CRESET + " with: " + ANSIParameters.MAGENTA + finalScores.get(p.getPlayerID()) + " points" + ANSIParameters.CRESET);
 
         }
         System.out.println("The winner is: " + ANSIParameters.YELLOW + winner.getPlayerNickName() + ANSIParameters.CRESET );
@@ -866,7 +867,7 @@ public class CLI implements Runnable , View {
 
                 length++;
             }
-            for(int j = 0; j < length; j++){
+            for(int j = 0; j < names[i].length(); j++){
                 board.setChar(i + PLAYER_NAME_I,j + number+length,names[i].charAt(j));
             }
 

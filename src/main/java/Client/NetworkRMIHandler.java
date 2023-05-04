@@ -5,11 +5,14 @@ import Server.Events.Event;
 import Server.Events.MVEvents.MVEvent;
 import Server.Events.SelectViewEvents.SelectViewEvent;
 import Server.Events.VCEvents.VCEvent;
+import Server.Model.Cards.CommonGoalCard;
+import Server.Model.Cards.CommonGoalCardAdapter;
 import Server.Network.RMIWaiter;
 import Server.Network.RMIWaiterInterface;
 import Server.Network.VirtualRMIView;
 import Server.Network.VirtualView;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.NotBoundException;
@@ -59,7 +62,9 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements NetworkHan
 
     @Override
     public void sendMVEvent(String json) throws RemoteException{
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation().registerTypeAdapter(CommonGoalCard.class, new CommonGoalCardAdapter())
+                .create();
         Event event = gson.fromJson(json, Event.class);
         String type = event.getPrimaryType();
         switch (type) {

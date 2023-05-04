@@ -2,12 +2,14 @@ package Server.Events.MVEvents;
 
 import Server.Events.Event;
 import Server.Model.LightMatch;
+import com.google.gson.annotations.Expose;
 
 /**
  * This abstract class is used to notify the client that something has been modified in the model.
  * @author Paolo Gennaro
  */
 public abstract class MVEvent extends Event {
+    @Expose
     private final String primaryType = "MVEvent";
     //private String methodName;
     //private LightMatch match;
