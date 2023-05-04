@@ -32,16 +32,18 @@ import java.util.List;
  */
 public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, RemoteVirtualView {
     RemoteNetworkHandler client;
+    boolean isFirsToJoin;
 
     /**
      * This list contains all the VCEventListeners that are listening to this VirtualRMIView, which in fact is the only
      * controller of the match this view belongs to.
      */
     List<VCEventListener> vcEventListeners;
-    public VirtualRMIView(RemoteNetworkHandler networkHandler) throws RemoteException {
+    public VirtualRMIView(RemoteNetworkHandler networkHandler, boolean isFirsToJoin) throws RemoteException {
         super();
         client = networkHandler;
         vcEventListeners = new ArrayList<>();
+        this.isFirsToJoin = isFirsToJoin;
     }
 
     @Override
@@ -58,7 +60,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
         try {
             client.receiveSelectViewEvent(
                     new Gson().toJson(
-                            new LoginView()
+                            new LoginView(isFirsToJoin)
                     )
             );
         } catch (RemoteException e) {
@@ -90,7 +92,11 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
         Gson gson = new GsonBuilder()
                 .registerTypeAdapterFactory(new EventTypeAdapterFactory())
                 .create();
-        Event event = gson.fromJson(json,Event.class);
+        VCEvent vcEvent = gson.fromJson(json,VCEvent.class);
+        for(VCEventListener listener : vcEventListeners){
+            listener.onVCEvent(vcEvent,this);
+        }
+        /*
         switch (event.getPrimaryType()){
             case "VCEvent":
                 event = gson.fromJson(json,VCEvent.class);
@@ -102,7 +108,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
                 throw new IllegalAccessException("MVEvent not allowed in this context");
             case "SelectViewEvent":
                 throw new IllegalAccessException("SelectViewEvent not allowed in this context");
-        }
+        }*/
     }
 
     /**
@@ -133,6 +139,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
     public void onSelectViewEvent(SelectViewEvent event) {
         Gson gson = new Gson();
         String json = gson.toJson(event);
+        json += "\n";
         try {
             client.receiveSelectViewEvent(json);
         } catch (RemoteException e) {

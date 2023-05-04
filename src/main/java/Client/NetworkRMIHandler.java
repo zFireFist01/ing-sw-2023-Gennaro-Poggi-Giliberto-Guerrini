@@ -61,11 +61,14 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements RemoteNetw
 
     @Override
     public void receiveMVEvent(String json) throws RemoteException{
-        Gson gson = new GsonBuilder()
+        /*Gson gson = new GsonBuilder()
                 .excludeFieldsWithoutExposeAnnotation()
                 .registerTypeAdapter(CommonGoalCard.class, new CommonGoalCardAdapter())
+                .create();*/
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapterFactory(new EventTypeAdapterFactory())
                 .create();
-        Event event = gson.fromJson(json, Event.class);
+        MVEvent event = gson.fromJson(json, MVEvent.class);
         String type = event.getPrimaryType();
         switch (type) {
             case "MVEvent":
@@ -85,7 +88,7 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements RemoteNetw
         Gson gson = new GsonBuilder()
                 .registerTypeAdapterFactory(new EventTypeAdapterFactory())
                 .create();
-        Event event = gson.fromJson(json,Event.class);
+        SelectViewEvent event = gson.fromJson(json,SelectViewEvent.class);
         String type = event.getPrimaryType();
         switch (type) {
             case "MVEvent":

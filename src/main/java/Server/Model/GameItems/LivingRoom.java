@@ -37,7 +37,7 @@ public class LivingRoom {
      */
     public LivingRoom(Match m){
         tileMatrix = new LivingRoomTileSpot[LIVINGROOOMWIDTH][LIVINGROOMHEIGHT];
-
+        this.m = m;
         //The generic corner square
         LivingRoomTileSpot[][] cornerSquare = new LivingRoomTileSpot[LIVINGROOOMWIDTH/3][LIVINGROOMHEIGHT/3];
         //The generic edge square
@@ -217,9 +217,11 @@ public class LivingRoom {
      */
     public TileType[] takeTiles(Couple<Integer, Integer>[] couples) throws UnsupportedOperationException{
         TileType[] resultTypes = new TileType[3];
+        Map<Couple<Integer,Integer>, TileType> positions = new HashMap<>();
         int len = couples.length;
         boolean inRow = true;
         boolean inCol = true;
+        boolean insertedAll = true;
         int i=0;
         //I have to check if all the desired tiles have at least one free edge BEFORE picking the first one of them
         for(Couple c: couples){
@@ -245,13 +247,21 @@ public class LivingRoom {
             for(Couple c : couples){
                 try{
                     resultTypes[i] = takeTile(c.getA(), c.getB());
+                    positions.put(c, resultTypes[i]);
                     i++;
                 }catch(UnsupportedOperationException e){
+                    insertedAll = false;
                     System.err.println("Error occurred when picking tile in position "+c.toString()+": "+ e.getMessage());
                     break;      //I want to break if at least one tile is not pick-able
-                }               //NOTE that I don't have to revert the "taking" beacuse the method takeTile checks
-                                //before applying changes
+                }
             }
+        }
+        if(!insertedAll){
+            //I have to revert the changes
+            for(Couple c : positions.keySet()){
+                tileMatrix[c.getA()][c.getB()].setTile(positions.get(c));
+            }
+            throw new UnsupportedOperationException("At least one of the tiles you selected is not pick-able!");
         }
         notifyMVEventListeners(new ModifiedLivingRoomEvent(new LightMatch(this.m)));
         return resultTypes;
@@ -426,7 +436,10 @@ public class LivingRoom {
         }
 
         return res;
+
+        //return new char[20][38];
     }
+
 
     public void notifyMVEventListeners(MVEvent event){
         m.notifyMVEventListeners(new ModifiedLivingRoomEvent(new LightMatch(this.m)));

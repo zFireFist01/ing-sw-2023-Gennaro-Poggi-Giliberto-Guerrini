@@ -30,8 +30,9 @@ public class RMIWaiter extends UnicastRemoteObject implements RMIWaiterInterface
      */
     public synchronized RemoteVirtualView giveConnection(RemoteNetworkHandler requestingClient) throws RemoteException{
         //VirtualView clientsVV = new VirtualRMIView((NetworkRMIHandler) requestingClient);
-        VirtualView clientsVV = new VirtualRMIView(requestingClient);
+        VirtualView clientsVV;
         if(server.waitingMatch()){
+            clientsVV = new VirtualRMIView(requestingClient, false);
             //We don't need to istantiate a new match
             Match m = server.getWaitingMatch();
             clientsVV.run();
@@ -42,6 +43,7 @@ public class RMIWaiter extends UnicastRemoteObject implements RMIWaiterInterface
             server.subscribeNewViewToExistingMatch(m, clientsVV);
         }else{
             //We need to create a new match
+            clientsVV = new VirtualRMIView(requestingClient, true);
             Match m = new Match();
             Controller c = new Controller(m);
             clientsVV.run();
