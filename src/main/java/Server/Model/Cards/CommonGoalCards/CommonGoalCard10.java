@@ -60,9 +60,15 @@ public class CommonGoalCard10 extends CommonGoalCard {
     @Override
     public char[][] getCLIRepresentation() {
         char[][] res = new char[13][15];
-        for(int i=0; i<13; i++){
-            res[i][0]=  '|';
-            res[i][14]= '|';
+
+        for (int i = 0; i < 13; i++) {
+            for (int j = 0; j < 15; j++) {
+                if(j==0||j==14){
+                    res[i][j]='|';
+                }else {
+                    res[i][j] = ' ';
+                }
+            }
         }
 
         res[3][6]='+';
@@ -95,13 +101,12 @@ public class CommonGoalCard10 extends CommonGoalCard {
 
         return res;
     }
-    /*
+
     /**
      * @return a string that describes CommonGoalCard10
      * @author martagiliberto
      */
-
-    /*
+/*
     @Override
     public String getDescription() {
         return "Five tiles of the same type forming an X.";
