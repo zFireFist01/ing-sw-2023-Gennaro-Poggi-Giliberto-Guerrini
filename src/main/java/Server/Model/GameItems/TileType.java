@@ -1,5 +1,7 @@
 package Server.Model.GameItems;
 
+import Client.View.CLI.ANSIParameters;
+
 /**
  * TileType defines all the type of tile that exists in the actual game
  */
@@ -31,6 +33,7 @@ public enum TileType{
             case TROPHIES -> res[0][0] = 'T';
             case PLANTS -> res[0][0] = 'P';
             default -> res[0][0] = '?';
+
         }
         return res;
     }

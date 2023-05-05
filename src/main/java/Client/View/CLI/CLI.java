@@ -72,13 +72,11 @@ public class CLI implements Runnable , View {
     private final static char[][] EMPTYSPOT= {{'+','-','-','-','-','-','-','-','+'},
             {'|',' ',' ',' ',' ',' ',' ',' ','|'},
             {'|',' ',' ',' ',' ',' ',' ',' ','|'},
-            {'|',' ',' ',' ',' ',' ',' ',' ','|'},
             {'+','-','-','-','-','-','-','-','+'}};
 
     private final static char[][] ENDTILE= {{'+','-','-','-','-','-','-','-','+'},
             {'|',' ',' ','#','1',' ',' ',' ','|'},
             {'|',' ','P','o','i','n','t',' ','|'},
-            {'|',' ',' ',' ',' ',' ',' ',' ','|'},
             {'+','-','-','-','-','-','-','-','+'}};
 
     private NetworkHandler networkHandler;
@@ -765,7 +763,7 @@ public class CLI implements Runnable , View {
             i++;
         }
 
-        for(int i = 0; i < personalGoal.length; i++){
+        for(i = 0; i < personalGoal.length; i++){
             for(int j = 0; j < personalGoal[i].length; j++){
                 board.setChar(i + CARDLINE,j + PERSONAL_J,personalGoal[i][j]);
             }
@@ -787,8 +785,6 @@ public class CLI implements Runnable , View {
     }
 
     private void printPoints1(char[][] points){
-
-
         for(int i = 0; i < points.length; i++){
             for(int j = 0; j < points[i].length; j++){
                 board.setChar(i + CARDLINE,j + POINTS_1_J,points[i][j]);
