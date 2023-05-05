@@ -1,5 +1,9 @@
 package Server.Network;
-
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.Enumeration;
 
 import Server.Controller.Controller;
 import Server.Model.Match;
@@ -22,6 +26,25 @@ public class SocketWaiter implements Runnable{
     public SocketWaiter(Server server, int port) throws IOException {
         this.server = server;
         this.serverSocket=new ServerSocket(1098);
+        try {
+            Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+
+            while (networkInterfaces.hasMoreElements()) {
+                NetworkInterface networkInterface = networkInterfaces.nextElement();
+                if (networkInterface.isUp() && !networkInterface.isLoopback()) {
+                    Enumeration<InetAddress> inetAddresses = networkInterface.getInetAddresses();
+                    while (inetAddresses.hasMoreElements()) {
+                        InetAddress inetAddress = inetAddresses.nextElement();
+                        if (!inetAddress.isLoopbackAddress() && inetAddress.isSiteLocalAddress()) {
+                            System.out.println("Indirizzo IP del server: " + inetAddress.getHostAddress());
+                            break;
+                        }
+                    }
+                }
+            }
+        } catch (SocketException e) {
+            System.out.println("Impossibile ottenere l'indirizzo IP: " + e.getMessage());
+        }
     }
 
     @Override
