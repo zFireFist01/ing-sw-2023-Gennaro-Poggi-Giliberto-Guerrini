@@ -48,18 +48,7 @@ public class Message {
         this.timeSent = timeSent;
         this.receiver = null;
     }
-
-    /**
-     * This function is for printing a message
-     */
-    public void printMessage(){
-        if(receiver != null) {
-            System.out.println("[" + this.timeSent + "]" + " " + this.sender.getPlayerNickName() + ":" + " " + this.content);
-        }else{
-            System.out.println("[" + this.timeSent + "]" + " " + this.sender.getPlayerNickName() + " to @All:" + " " + this.content);
-        }
-    }
-
+    
     public Player getSender() {
         return sender;
     }

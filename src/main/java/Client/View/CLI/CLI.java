@@ -26,6 +26,7 @@ import Server.Model.Player.Player;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -502,8 +503,12 @@ public class CLI implements Runnable , View {
         System.out.println("Chat:");
 
         for(String s : chat){
-            System.out.println(ANSIParameters.RED + s.split(" ")[0]+ ANSIParameters.CRESET + " Sent to "  +  ANSIParameters.BLUE + s.split(" ")[2] + ":" + ANSIParameters.CRESET + s.split(" ")[4]);
-
+            String[] subStrings = s.split(" ");
+            System.out.print(subStrings[0] + " " + ANSIParameters.RED + subStrings[1] + ANSIParameters.CRESET + " "  +  ANSIParameters.BLUE + "to " + subStrings[2] + ":" + ANSIParameters.CRESET + " ");
+            for(int i = 3; i< subStrings.length; i++){
+                System.out.print(subStrings[i] + " ");
+            }
+            System.out.println();
         }
 
     }
@@ -513,12 +518,16 @@ public class CLI implements Runnable , View {
         print();
     }
 
-    public void onModifiedChatEvent(Message El_loco_message){
-        String s = MessageToString(El_loco_message);
+    public void onModifiedChatEvent(Message message){
+        String s = MessageToString(message);
 
         chat.add(s);
         if(chatIsOpened){
-            System.out.println(ANSIParameters.RED + s.split(" ")[0]+ ANSIParameters.CRESET + " Sent to "  +  ANSIParameters.BLUE + s.split(" ")[2] + ": " + ANSIParameters.CRESET + s.split(" ")[4]);
+            if(message.getReceiver() != null) {
+                System.out.println("[" + message.getTimeSent() + "]" + " " + ANSIParameters.RED + message.getSender().getPlayerNickName()  + ANSIParameters.CRESET + " " + ANSIParameters.BLUE + "to @" + message.getReceiver().getPlayerNickName()+ ":" + ANSIParameters.CRESET + " " + message.getContent());
+            }else{
+                System.out.println("[" + message.getTimeSent() + "]" + " " + ANSIParameters.RED + message.getSender().getPlayerNickName() + ANSIParameters.CRESET + " " + ANSIParameters.BLUE + "to @All:" + ANSIParameters.CRESET + " " + message.getContent());
+            }
         }
     }
 
@@ -530,7 +539,7 @@ public class CLI implements Runnable , View {
             receiver = message.getReceiver().getPlayerNickName();
         }
 
-        String s = message.getSender().getPlayerNickName() + "  @" + receiver + "  " + message.getContent();
+        String s = "[" + message.getTimeSent() + "]" + " " + message.getSender().getPlayerNickName() + " @" + receiver + " " + message.getContent();
         return s;
 
     }
@@ -972,12 +981,6 @@ public class CLI implements Runnable , View {
         board.print();
         System.out.println(ANSIParameters.GREEN + currentView.getMessage() + ANSIParameters.CRESET);
     }
-
-
-
-
-
-
 
 
     //refresh the CLI
