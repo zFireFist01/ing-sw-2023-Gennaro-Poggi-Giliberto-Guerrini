@@ -15,6 +15,12 @@ public enum PointsTile {
      */
     public char[][] getCLIRepresentation(){
         char[][] res = new char[4][9];
+
+        for(int i=0; i<4; i++){
+            for(int j=0; j<9; j++){
+                res[i][j] = ' ';
+            }
+        }
         res[0][0] = '+';
         res[0][8] = '+';
         res[3][0] = '+';

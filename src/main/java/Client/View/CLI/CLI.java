@@ -759,8 +759,10 @@ public class CLI implements Runnable , View {
     }
 
     private void printPersonalGoal(char[][] personalGoal){
+        int i=0;
         for(char c : "Personal Goal".toCharArray()){
-            board.setChar(CARDLINE -1,PERSONAL_J+1,c);
+            board.setChar(CARDLINE -1,PERSONAL_J+i,c);
+            i++;
         }
 
         for(int i = 0; i < personalGoal.length; i++){
@@ -771,11 +773,13 @@ public class CLI implements Runnable , View {
     }
 
     private void printCommonGoal1(char[][] commonGoal){
+        int i=0;
         for(char c : "#1 CommonGoal".toCharArray()){
-            board.setChar(CARDLINE -1,COMMON_1_J+1,c);
+            board.setChar(CARDLINE -1,COMMON_1_J+i,c);
+            i++;
         }
 
-        for(int i = 0; i < commonGoal.length; i++){
+        for(i = 0; i < commonGoal.length; i++){
             for(int j = 0; j < commonGoal[i].length; j++){
                 board.setChar(i + CARDLINE,j + COMMON_1_J,commonGoal[i][j]);
             }
@@ -793,11 +797,13 @@ public class CLI implements Runnable , View {
     }
 
     private void printCommonGoal2(char[][] commonGoal){
+        int i=0;
         for(char c : "#2 CommonGoal".toCharArray()){
-            board.setChar(CARDLINE -1,COMMON_2_J+1,c);
+            board.setChar(CARDLINE -1,COMMON_2_J+i,c);
+            i++;
         }
 
-        for(int i = 0; i < commonGoal.length; i++){
+        for(i = 0; i < commonGoal.length; i++){
             for(int j = 0; j < commonGoal[i].length; j++){
                 board.setChar(i + CARDLINE,j + COMMON_2_J,commonGoal[i][j]);
             }
@@ -910,11 +916,10 @@ public class CLI implements Runnable , View {
             length = 0;
             number=BOOKSHELF_1_J+ 38*i;
             while(length*2 +names[i].length() < NAME_LENGTH){
-
                 length++;
             }
             for(int j = 0; j < names[i].length(); j++){
-                board.setChar(i + PLAYER_NAME_I,j + number+length,names[i].charAt(j));
+                board.setChar(PLAYER_NAME_I,j + number+length,names[i].charAt(j));
             }
 
         }
