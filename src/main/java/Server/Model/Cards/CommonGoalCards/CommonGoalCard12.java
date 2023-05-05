@@ -27,7 +27,7 @@ public class CommonGoalCard12 extends CommonGoalCard {
      * this method checks if CommonGoal12 is completed
      * @param bookshelf the bookshelf of the player
      * @return true if CommonGoal12 is completed, false if it is not
-     * @author martagiliberto
+     * @author Marta Giliberto
      */
     @Override
     public boolean check(Bookshelf bookshelf) {
@@ -48,8 +48,10 @@ public class CommonGoalCard12 extends CommonGoalCard {
             }else if(j==1){
                 if(conto==lungprec+1){
                     ordine=1;
+                    lungprec=conto;
                 }else if(conto==lungprec-1){
                     ordine=2;
+                    lungprec=conto;
                 }else{
                     ok= false;
                 }
@@ -58,10 +60,12 @@ public class CommonGoalCard12 extends CommonGoalCard {
                 if(conto!=lungprec+1){
                     ok=false;
                 }
+                lungprec=conto;
             }else if(ordine==2){
                 if(conto!=lungprec-1){
                     ok=false;
                 }
+                lungprec=conto;
             }
 
             conto=0;

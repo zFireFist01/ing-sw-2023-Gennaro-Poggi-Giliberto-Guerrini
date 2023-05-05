@@ -15,7 +15,6 @@ import static org.junit.Assert.*;
 
 public class MatchTest {
 
-
     //addContestant tests
     /**
      * addContestant test1 checks if when number of missing players is equal to 0, evolves the match status

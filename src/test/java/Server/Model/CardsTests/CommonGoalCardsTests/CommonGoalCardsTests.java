@@ -2104,11 +2104,11 @@ public void CommonGoalCard6_expectedTrue_Test() {
      * @author Marta Giliberto
      */
     @Test
-    public void CommonGoalCard12_expectedTrue_Test(){
+    public void CommonGoalCard12_expectedTrue_Test1(){
         Match match=new Match();
         CommonGoalCard card12 = new CommonGoalCard12(4, false);
         Bookshelf bookshelf= new Bookshelf(match);
-        BookshelfTileSpot[][] matrix = testBookshelf.getTileMatrix();
+        BookshelfTileSpot[][] matrix = bookshelf.getTileMatrix();
 
         bookshelf.insertTile(0, TileType.CATS);
         bookshelf.insertTile(0, TileType.CATS);
@@ -2133,11 +2133,117 @@ public void CommonGoalCard6_expectedTrue_Test() {
         bookshelf.insertTile(3, TileType.PLANTS);
 
         bookshelf.insertTile(4, TileType.PLANTS);
-        bookshelf.insertTile(3, TileType.PLANTS);
+        bookshelf.insertTile(4, TileType.PLANTS);
 
         assertTrue(card12.check(bookshelf));
     }
 
+    /**
+     * This method tests the CommonGoalCard12 in an environment where the check function should return true
+     * @author Marta Giliberto
+     */
+    @Test
+    public void CommonGoalCard12_expectedTrue_Test2(){
+        Match match=new Match();
+        CommonGoalCard card12 = new CommonGoalCard12(4, false);
+        Bookshelf bookshelf= new Bookshelf(match);
+        BookshelfTileSpot[][] matrix = bookshelf.getTileMatrix();
+
+        bookshelf.insertTile(0, TileType.CATS);
+        bookshelf.insertTile(0, TileType.CATS);
+        bookshelf.insertTile(0, TileType.CATS);
+        bookshelf.insertTile(0, TileType.CATS);
+        bookshelf.insertTile(0, TileType.CATS);
+
+        bookshelf.insertTile(1, TileType.CATS);
+        bookshelf.insertTile(1, TileType.CATS);
+        bookshelf.insertTile(1, TileType.CATS);
+        bookshelf.insertTile(1, TileType.CATS);
+
+        bookshelf.insertTile(2, TileType.GAMES);
+        bookshelf.insertTile(2, TileType.GAMES);
+        bookshelf.insertTile(2, TileType.GAMES);
+
+        bookshelf.insertTile(3, TileType.PLANTS);
+        bookshelf.insertTile(3, TileType.PLANTS);
+
+        bookshelf.insertTile(4, TileType.PLANTS);
+
+        assertTrue(card12.check(bookshelf));
+    }
+
+    /**
+     * This method tests the CommonGoalCard12 in an environment where the check function should return true
+     * @author Marta Giliberto
+     */
+    @Test
+    public void CommonGoalCard12_expectedTrue_Test3(){
+        Match match=new Match();
+        CommonGoalCard card12 = new CommonGoalCard12(4, false);
+        Bookshelf bookshelf= new Bookshelf(match);
+        BookshelfTileSpot[][] matrix = bookshelf.getTileMatrix();
+
+        bookshelf.insertTile(4, TileType.CATS);
+        bookshelf.insertTile(4, TileType.CATS);
+        bookshelf.insertTile(4, TileType.CATS);
+        bookshelf.insertTile(4, TileType.CATS);
+        bookshelf.insertTile(4, TileType.CATS);
+        bookshelf.insertTile(4, TileType.CATS);
+
+        bookshelf.insertTile(3, TileType.CATS);
+        bookshelf.insertTile(3, TileType.CATS);
+        bookshelf.insertTile(3, TileType.CATS);
+        bookshelf.insertTile(3, TileType.CATS);
+        bookshelf.insertTile(3, TileType.CATS);
+
+        bookshelf.insertTile(2, TileType.GAMES);
+        bookshelf.insertTile(2, TileType.GAMES);
+        bookshelf.insertTile(2, TileType.GAMES);
+        bookshelf.insertTile(2, TileType.GAMES);
+
+        bookshelf.insertTile(1, TileType.PLANTS);
+        bookshelf.insertTile(1, TileType.PLANTS);
+        bookshelf.insertTile(1, TileType.PLANTS);
+
+        bookshelf.insertTile(0, TileType.PLANTS);
+        bookshelf.insertTile(0, TileType.PLANTS);
+
+        assertTrue(card12.check(bookshelf));
+    }
+
+    /**
+     * This method tests the CommonGoalCard12 in an environment where the check function should return true
+     * @author Marta Giliberto
+     */
+    @Test
+    public void CommonGoalCard12_expectedTrue_Test4(){
+        Match match=new Match();
+        CommonGoalCard card12 = new CommonGoalCard12(4, false);
+        Bookshelf bookshelf= new Bookshelf(match);
+        BookshelfTileSpot[][] matrix = bookshelf.getTileMatrix();
+
+        bookshelf.insertTile(4, TileType.CATS);
+        bookshelf.insertTile(4, TileType.CATS);
+        bookshelf.insertTile(4, TileType.CATS);
+        bookshelf.insertTile(4, TileType.CATS);
+        bookshelf.insertTile(4, TileType.CATS);
+
+        bookshelf.insertTile(3, TileType.CATS);
+        bookshelf.insertTile(3, TileType.CATS);
+        bookshelf.insertTile(3, TileType.CATS);
+        bookshelf.insertTile(3, TileType.CATS);
+
+        bookshelf.insertTile(2, TileType.GAMES);
+        bookshelf.insertTile(2, TileType.GAMES);
+        bookshelf.insertTile(2, TileType.GAMES);
+
+        bookshelf.insertTile(1, TileType.PLANTS);
+        bookshelf.insertTile(1, TileType.PLANTS);
+
+        bookshelf.insertTile(0, TileType.PLANTS);
+
+        assertTrue(card12.check(bookshelf));
+    }
     /**
      * This method tests the CommonGoalCard12 in an environment where the check function should return false
      * @author Marta Giliberto
@@ -2147,7 +2253,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
         Match match=new Match();
         CommonGoalCard card12 = new CommonGoalCard12(4, false);
         Bookshelf bookshelf= new Bookshelf(match);
-        BookshelfTileSpot[][] matrix = testBookshelf.getTileMatrix();
+        BookshelfTileSpot[][] matrix = bookshelf.getTileMatrix();
 
         bookshelf.insertTile(0, TileType.CATS);
         bookshelf.insertTile(0, TileType.CATS);
