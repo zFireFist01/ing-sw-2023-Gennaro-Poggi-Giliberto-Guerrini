@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.Time;
+import java.time.LocalTime;
 
 import static org.junit.Assert.*;
 
@@ -29,11 +30,11 @@ public class PlayersChatTest {
         Player sender = new Player(m, senderID, senderName);
         Time timeSent = new Time(60);
         String content = "Test for message";
-        Message message1 = new Message(sender, content, timeSent, receiver);
-        Message message2 = new Message(sender, content, timeSent);
-        Message message3 = new Message(receiver, content, timeSent, sender);
-        Message message4 = new Message(receiver, content, timeSent);
-        Message message5 = new Message(sender, content, timeSent, other);
+        Message message1 = new Message(sender, content, new Time(60), receiver);
+        Message message2 = new Message(sender, content, new Time(60));
+        Message message3 = new Message(receiver, content, new Time(60), sender);
+        Message message4 = new Message(receiver, content, new Time(60));
+        Message message5 = new Message(sender, content, new Time(60), other);
         this.tester.addMessage(message1);
         this.tester.addMessage(message2);
         this.tester.addMessage(message3);

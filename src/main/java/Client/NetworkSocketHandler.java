@@ -51,6 +51,7 @@ public class NetworkSocketHandler implements NetworkHandler{
         Gson gson = new GsonBuilder()
                 .registerTypeAdapterFactory(new EventTypeAdapterFactory())
                 .create();
+        System.out.println("Received message: " + json);
         MVEvent event = gson.fromJson(json, MVEvent.class);
         view.onMVEvent(event);
     }

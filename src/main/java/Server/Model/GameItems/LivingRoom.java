@@ -230,14 +230,12 @@ public class LivingRoom {
             }
         }
         //Checking if they are aligned...
-        for(int j=0; j<len-1;j++){
+        for(int j=0; j<len-1&&(inRow || inCol);j++){
             if(inRow && (couples[j].getA() != couples[j+1].getA())){
                 inRow = false;
-                break;
             }
-            if(inCol && (couples[j].getB() != couples[j].getB())){
+            if(inCol && (couples[j].getB() != couples[j+1].getB())){
                 inCol = false;
-                break;
             }
         }
         if(!(inRow || inCol)){
@@ -273,19 +271,38 @@ public class LivingRoom {
      * @param j column of the tile we want tp check
      * @return true if and only if the tile we're checking has at least one free edge
      */
-    private boolean oneFreeEdge(int i, int j){
-        int tli = (i==0 ? 0:i-1); // top line index
-        int bli = (i==LIVINGROOMHEIGHT-1 ? i:i+1); // bottom line index
-        int lci = (j==0 ? j:j-1); //left column index
-        int rci = (j==LIVINGROOOMWIDTH-1 ? j:j+1); // right column index
-        int count = 0;//how many free edges does the (i,j) tile have
+    private boolean oneFreeEdge(int i, int j) {
 
-        for(int k = tli; k<bli; k++){
-            for(int l = lci; l<rci; l++){
-                if(tileMatrix[k][l].isReal() == false || tileMatrix[k][l].isEmpty()){
-                    count++;
-                    if(count >= 1){ return true;}
-                }
+        if (i == 0) {
+            if (j == 0) {
+                return (tileMatrix[i][j + 1].isReal() == false || tileMatrix[i][j + 1].isEmpty()) ||
+                        (tileMatrix[i + 1][j].isReal() == false || tileMatrix[i + 1][j].isEmpty());
+            } else if (j == LIVINGROOOMWIDTH - 1) {
+                return (tileMatrix[i][j - 1].isReal() == false || tileMatrix[i][j - 1].isEmpty()) ||
+                        (tileMatrix[i + 1][j].isReal() == false || tileMatrix[i + 1][j].isEmpty());
+            }
+        } else if (i == LIVINGROOMHEIGHT - 1) {
+            if (j == 0) {
+                return (tileMatrix[i][j + 1].isReal() == false || tileMatrix[i][j + 1].isEmpty()) ||
+                        (tileMatrix[i - 1][j].isReal() == false || tileMatrix[i - 1][j].isEmpty());
+            } else if (j == LIVINGROOOMWIDTH - 1) {
+                return (tileMatrix[i][j - 1].isReal() == false || tileMatrix[i][j - 1].isEmpty()) ||
+                        (tileMatrix[i - 1][j].isReal() == false || tileMatrix[i - 1][j].isEmpty());
+            }
+        } else {
+            if (j == 0) {
+                return (tileMatrix[i][j + 1].isReal() == false || tileMatrix[i][j + 1].isEmpty()) ||
+                        (tileMatrix[i - 1][j].isReal() == false || tileMatrix[i - 1][j].isEmpty()) ||
+                        (tileMatrix[i + 1][j].isReal() == false || tileMatrix[i + 1][j].isEmpty());
+            } else if (j == LIVINGROOOMWIDTH - 1) {
+                return (tileMatrix[i][j - 1].isReal() == false || tileMatrix[i][j - 1].isEmpty()) ||
+                        (tileMatrix[i - 1][j].isReal() == false || tileMatrix[i - 1][j].isEmpty()) ||
+                        (tileMatrix[i + 1][j].isReal() == false || tileMatrix[i + 1][j].isEmpty());
+            } else {
+                return (tileMatrix[i][j + 1].isReal() == false || tileMatrix[i][j + 1].isEmpty()) ||
+                        (tileMatrix[i][j - 1].isReal() == false || tileMatrix[i][j - 1].isEmpty()) ||
+                        (tileMatrix[i - 1][j].isReal() == false || tileMatrix[i - 1][j].isEmpty()) ||
+                        (tileMatrix[i + 1][j].isReal() == false || tileMatrix[i + 1][j].isEmpty());
             }
         }
         return false;
@@ -367,7 +384,7 @@ public class LivingRoom {
 
 
     public void notifyMVEventListeners(MVEvent event){
-        m.notifyMVEventListeners(new ModifiedLivingRoomEvent(new LightMatch(this.m)));
+        this.m.notifyMVEventListeners(event);
     }
 
 }
