@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.awt.print.Book;
 import java.sql.Time;
+import java.time.LocalTime;
 
 import static org.junit.Assert.*;
 
@@ -25,7 +26,7 @@ public class MessageTest {
         String senderName = "Sender";
         int senderID = 3;
         Player sender = new Player(match, senderID, senderName);
-        Time timeSent = new Time(60);
+        LocalTime timeSent = LocalTime.now();
         String content = "Test for message";
         assertThrows(UnsupportedOperationException.class, ()->this.tester = new Message(sender, content, timeSent, sender));
     }

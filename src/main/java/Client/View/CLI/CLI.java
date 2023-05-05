@@ -24,9 +24,8 @@ import Server.Model.LightMatch;
 import Server.Model.Player.Player;
 
 import java.lang.reflect.InvocationTargetException;
-import java.sql.Time;
+import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -712,13 +711,13 @@ public class CLI implements Runnable , View {
                         Message messageToSend=null;
                         boolean flag=false;
                         if(inputArray[1].equals("@All")) {
-                            messageToSend=new Message(this.me,message,new Time(60));
+                            messageToSend=new Message(this.me,message, LocalTime.now());
                             flag=true;
                         }else{
 
                             for(Integer i: this.players.keySet()){
                                 if(("@"+this.players.get(i).getPlayerNickName()).equals(inputArray[1])){
-                                    messageToSend=new Message(this.me,message,new Time(60), this.players.get(i));
+                                    messageToSend=new Message(this.me,message,LocalTime.now(), this.players.get(i));
                                     flag=true;
                                 }
                             }

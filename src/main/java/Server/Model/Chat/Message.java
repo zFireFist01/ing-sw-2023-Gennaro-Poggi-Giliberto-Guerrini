@@ -2,8 +2,8 @@ package Server.Model.Chat;
 
 import Server.Model.Player.Player;
 import com.google.gson.annotations.Expose;
-
-import java.sql.Time;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 
 /**
@@ -16,7 +16,7 @@ public class Message {
     @Expose
     private final String content;
     @Expose
-    private final Time timeSent;
+    private final String timeSent;
     @Expose
     private final Player receiver;
 
@@ -28,11 +28,12 @@ public class Message {
      * @param receiver is the one who receives the message
      * @throws UnsupportedOperationException when the sender and the receiver are the same
      */
-    public Message(Player sender, String content, Time timeSent, Player receiver) throws UnsupportedOperationException{
+    public Message(Player sender, String content, LocalTime timeSent, Player receiver) throws UnsupportedOperationException{
         if(sender.equals(receiver)) throw new UnsupportedOperationException("You can't text yourself!");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         this.sender = sender;
         this.content = content;
-        this.timeSent = timeSent;
+        this.timeSent = timeSent.format(formatter);;
         this.receiver = receiver;
     }
 
@@ -42,10 +43,11 @@ public class Message {
      * @param content is the content of the message
      * @param timeSent is the time when the message is sent
      */
-    public Message(Player sender, String content, Time timeSent){
+    public Message(Player sender, String content, LocalTime timeSent){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         this.sender = sender;
         this.content = content;
-        this.timeSent = timeSent;
+        this.timeSent = timeSent.format(formatter);;
         this.receiver = null;
     }
     
@@ -57,8 +59,8 @@ public class Message {
         return content;
     }
 
-    public Time getTimeSent() {
-        return timeSent;
+    public String getTimeSent() {
+        return this.timeSent;
     }
 
     public Player getReceiver() {

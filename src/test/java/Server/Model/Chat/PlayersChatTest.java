@@ -28,13 +28,14 @@ public class PlayersChatTest {
         String senderName = "Sender";
         int senderID = 3;
         Player sender = new Player(m, senderID, senderName);
-        Time timeSent = new Time(60);
         String content = "Test for message";
-        Message message1 = new Message(sender, content, new Time(60), receiver);
-        Message message2 = new Message(sender, content, new Time(60));
-        Message message3 = new Message(receiver, content, new Time(60), sender);
-        Message message4 = new Message(receiver, content, new Time(60));
-        Message message5 = new Message(sender, content, new Time(60), other);
+
+        Message message1 = new Message(sender, content, LocalTime.now(), receiver);
+        Message message2 = new Message(sender, content, LocalTime.now());
+        Message message3 = new Message(receiver, content, LocalTime.now(), sender);
+        Message message4 = new Message(receiver, content, LocalTime.now());
+        Message message5 = new Message(sender, content, LocalTime.now(), other);
+
         this.tester.addMessage(message1);
         this.tester.addMessage(message2);
         this.tester.addMessage(message3);
