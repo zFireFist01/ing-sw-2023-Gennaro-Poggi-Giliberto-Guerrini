@@ -502,9 +502,7 @@ public class CLI implements Runnable , View {
         System.out.println("Chat:");
 
         for(String s : chat){
-            String message = s.substring(2,s.length()-1);
-            //print s[0] In RED
-            System.out.println(ANSIParameters.RED + s.split(" ")[0]+ ANSIParameters.CRESET + "Sent to :"  +  ANSIParameters.BLUE + s.split(" ")[1] + ANSIParameters.CRESET + " A message: " + message );
+            System.out.println(ANSIParameters.RED + s.split(" ")[0]+ ANSIParameters.CRESET + " Sent to "  +  ANSIParameters.BLUE + s.split(" ")[2] + ":" + ANSIParameters.CRESET + s.split(" ")[4]);
 
         }
 
@@ -520,16 +518,14 @@ public class CLI implements Runnable , View {
 
         chat.add(s);
         if(chatIsOpened){
-            String message = s.substring(2,s.length()-1);
-            //print s[0] In RED
-            System.out.println(ANSIParameters.RED + s.split(" ")[0]+ ANSIParameters.CRESET + "Sent to :"  +  ANSIParameters.BLUE + s.split(" ")[1] + ANSIParameters.CRESET + " A message: " + message );
+            System.out.println(ANSIParameters.RED + s.split(" ")[0]+ ANSIParameters.CRESET + " Sent to "  +  ANSIParameters.BLUE + s.split(" ")[2] + ": " + ANSIParameters.CRESET + s.split(" ")[4]);
         }
     }
 
     private String MessageToString(Message message){
         String receiver;
         if(message.getReceiver() == null) {
-            receiver = "@All";
+            receiver = "All";
         }else{
             receiver = message.getReceiver().getPlayerNickName();
         }
@@ -722,9 +718,9 @@ public class CLI implements Runnable , View {
                                 break;
                             }
                         }
-                     if(flag) {
+                        if(flag) {
                          networkHandler.onVCEvent(new SendMessage(messageToSend));
-                     }
+                        }
                     } catch (NoSuchMethodException e) {
                         throw new RuntimeException(e);
                     } catch (InvocationTargetException e) {

@@ -51,10 +51,13 @@ public class Message {
 
     /**
      * This function is for printing a message
-     * @param message is the message we want to print
      */
-    public void printMessage(Message message){
-        System.out.println("[" + this.timeSent + "]" + " " + this.sender.getPlayerNickName() + ":" + " " + this.content);
+    public void printMessage(){
+        if(receiver != null) {
+            System.out.println("[" + this.timeSent + "]" + " " + this.sender.getPlayerNickName() + ":" + " " + this.content);
+        }else{
+            System.out.println("[" + this.timeSent + "]" + " " + this.sender.getPlayerNickName() + " to @All:" + " " + this.content);
+        }
     }
 
     public Player getSender() {
