@@ -14,4 +14,5 @@ public interface RemoteNetworkHandler extends /*NetworkHandler,*/ Remote {
 
     void receiveSelectViewEvent(String json) throws RemoteException;
 
+    void pong() throws RemoteException;
 }

@@ -31,13 +31,14 @@ public class Server implements Runnable{
     List<Match> matches;
     Map<Match, Controller> macthesControllers;
     Map<Match, List<VirtualView>> matchesViews;
-
+    PingManager pingManager;
 
     public Server() throws IOException{
         boolean done = false;
         this.matches = new ArrayList<>();
         matchesViews = new HashMap<>();
         this.macthesControllers = new HashMap<>();
+        pingManager = new PingManager(new ArrayList<>(), new HashMap<>());
         this.socketWaiter = new SocketWaiter(this,1098);
         while(!done){
             try{
@@ -94,6 +95,7 @@ public class Server implements Runnable{
                 System.err.println(e.getStackTrace());
             }
         }
+        new Thread(pingManager).start();
         System.out.println("Server started");
     }
 
@@ -138,11 +140,13 @@ public class Server implements Runnable{
         macthesControllers.put(m,c);
         matchesViews.put(m, new ArrayList<>());
         matchesViews.get(m).add(vv);
+        pingManager.addVirtualView(vv, c);
     }
 
     protected synchronized void subscribeNewViewToExistingMatch(Match m, VirtualView vv){
         //matchesViews.put(m,vv);
         matchesViews.get(m).add(vv);
+        pingManager.addVirtualView(vv, macthesControllers.get(m));
     }
 
 }

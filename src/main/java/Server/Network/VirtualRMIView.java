@@ -15,6 +15,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.lang.reflect.InvocationTargetException;
+import java.net.Socket;
+import java.net.SocketException;
+import java.rmi.ConnectException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -33,6 +36,7 @@ import java.util.List;
 public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, RemoteVirtualView {
     RemoteNetworkHandler client;
     boolean isFirsToJoin;
+    boolean pongReceived;
 
     /**
      * This list contains all the VCEventListeners that are listening to this VirtualRMIView, which in fact is the only
@@ -44,6 +48,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
         client = networkHandler;
         vcEventListeners = new ArrayList<>();
         this.isFirsToJoin = isFirsToJoin;
+        this.pongReceived = true;
     }
 
     @Override
@@ -158,4 +163,30 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
         vcEventListeners.remove(listener);
     }
 
+    @Override
+    public void ping() {
+        try{
+            pongReceived = false;
+            System.out.println("Pinging client");
+            client.pong();
+            pongReceived = true;
+            System.out.println("Pong received");
+        } catch (ConnectException e){
+            System.err.println("Client disconnected: " + e.getMessage() + "\n" + e.getStackTrace());
+        }catch (RemoteException e){
+            System.err.println("Remote exception: " + e.getMessage() + "\n" + e.getStackTrace());
+        }
+    }
+
+    @Override
+    public boolean checkPongResponse() {
+       if(!pongReceived){
+           System.err.println("Client disconnected");
+           return false;
+           //throw new RuntimeException("Client disconnected");
+       }else{
+           pongReceived = false;
+           return true;
+       }
+    }
 }

@@ -28,6 +28,7 @@ import java.util.*;
  */
 public class Match {
     private ArrayList<Player> players;
+    private ArrayList<Player> disconnectedPlayers = new ArrayList<>();
     private PlayersChat gameChat;
     private ArrayList<Integer> selectedTiles;
     private int width;
@@ -407,7 +408,11 @@ public class Match {
      * @author Marta Giliberto
      */
     public void setCurrentPlayer() {
-        this.currentPlayer = currentPlayer.getNextPlayer();
+        //this.currentPlayer = currentPlayer.getNextPlayer();
+        currentPlayer=currentPlayer.getNextPlayer();
+        while(disconnectedPlayers.contains(currentPlayer)){
+            currentPlayer=currentPlayer.getNextPlayer();
+        }
     }
 
     /**
@@ -500,5 +505,15 @@ public class Match {
         for(MVEventListener listener : this.mvEventListeners){
             listener.onMVEvent(event);
         }
+    }
+
+    public void disconnectPlayer(Player player){
+        //TODO: check
+        disconnectedPlayers.add(player);
+    }
+
+    public void reconnectPlayer(Player player){
+        //TODO: check
+        this.disconnectedPlayers.remove(player);
     }
 }

@@ -25,12 +25,13 @@ public class VirtualSocketView implements VirtualView{
     Scanner in;
     OutputStream out;
     boolean isFirstToJoin;
-
+    boolean pongReceived;
 
     List<VCEventListener> vcEventListeners;
 
     public VirtualSocketView(Socket socket , boolean isFirstToJoin) {
         this.socket = socket;
+        this.pongReceived = true;
         this.vcEventListeners= new ArrayList<>();
         try {
             in = new Scanner(socket.getInputStream());
@@ -79,6 +80,11 @@ public class VirtualSocketView implements VirtualView{
                 .create();
         VCEvent vcEvent = gson.fromJson(message, VCEvent.class);
         sendVCEvent(vcEvent);*/
+        if(message.contains("pong")){
+            pongReceived = true;
+            message = message.replace("pong", "");
+
+        }
         try {
             receiveVCEvent(message);
         } catch (NoSuchMethodException e) {
@@ -167,4 +173,36 @@ public class VirtualSocketView implements VirtualView{
         vcEventListeners.remove(listener);
     }
 
+    @Override
+    public void ping() {
+        pongReceived = false;
+        String pingMessage = "ping";
+        try {
+            out.write(pingMessage.getBytes());
+            out.flush();
+            System.out.println("Ping sent: "+pingMessage);
+            System.out.flush();
+        } catch (IOException e) {
+            System.err.println(e.getStackTrace());
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public boolean checkPongResponse() {
+        if(!pongReceived){
+            System.out.println("Client disconnected");
+            return false;
+            /*try {
+                socket.close();
+            } catch (IOException e) {
+                System.err.println(e.getStackTrace());
+                throw new RuntimeException(e);
+            }*/
+        }else{
+            pongReceived = false;
+            System.out.println("Pong received");
+            return true;
+        }
+    }
 }

@@ -38,4 +38,8 @@ public interface VirtualView extends Runnable, MVEventListener, SelectViewEventL
 
     @Override
     void run();
+
+    void ping();
+
+    boolean checkPongResponse();
 }

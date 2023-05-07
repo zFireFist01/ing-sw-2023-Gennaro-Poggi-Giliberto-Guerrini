@@ -109,7 +109,11 @@ public class NetworkSocketHandler implements NetworkHandler{
         while (true) {
             message = in.nextLine();
             System.out.println("Received message: " + message);
-
+            if(message.contains("ping")){
+                System.out.println("Received ping message");
+                message = message.replace("ping", "");
+                pong();
+            }
 
             event = gson.fromJson(message, Event.class);
             primaryType = event.getPrimaryType();
@@ -124,6 +128,17 @@ public class NetworkSocketHandler implements NetworkHandler{
                 default:
                     throw new RuntimeException("Unknown event type");
             }
+        }
+    }
+
+    private void pong(){
+        String pongMessage = "pong";
+        try {
+            out.write(pongMessage.getBytes());
+            out.flush();
+            System.out.println("Message sent: " + pongMessage);
+        } catch (IOException e) {
+            throw new RuntimeException("Error while sending pong message to server");
         }
     }
 }
