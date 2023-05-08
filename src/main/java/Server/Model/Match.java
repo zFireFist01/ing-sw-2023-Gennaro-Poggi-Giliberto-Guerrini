@@ -129,15 +129,26 @@ public class Match {
      * this method checks if a player has completed a common goal
      * @author Marta Giliberto
      */
-    public void checkCommonGoals(Player player){
+    public void checkCommonGoals(Player player) {
         if(commonGoals[0].check(player.getBookshelf())) {
-            player.assignPointTile(commonGoals[0].pickPointsTile());
-            notifyMVEventListeners(new ModifiedPointsEvent(new LightMatch(this)));
+            try {
+                player.assignPointTile(commonGoals[0].pickPointsTile());
+                notifyMVEventListeners(new ModifiedPointsEvent(new LightMatch(this)));
+            } catch (UnsupportedOperationException e) {
+                //do nothing
+            }
+
         }
 
         if(commonGoals[1].check(player.getBookshelf())) {
-            player.assignPointTile(commonGoals[1].pickPointsTile());
-            notifyMVEventListeners(new ModifiedPointsEvent(new LightMatch(this)));
+            try {
+                player.assignPointTile(commonGoals[1].pickPointsTile());
+                notifyMVEventListeners(new ModifiedPointsEvent(new LightMatch(this)));
+            }catch(UnsupportedOperationException e){
+                //do nothing
+            }
+
+
         }
     }
 
