@@ -27,6 +27,7 @@ public class ANSIParameters {
     public static final String BG_MAGENTA = "\033[45m";
     public static final String BG_CYAN = "\033[46m";
     public static final String BG_WHITE = "\033[47m";
+    public static final String BG_BROWN ="\033[48;5;130m";
 
 
 

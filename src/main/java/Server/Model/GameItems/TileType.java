@@ -23,16 +23,16 @@ public enum TileType{
      * This method is used from the CLI to obtain a printable representation of this object
      * @return the char matrix that represents a "drawing" of this object
      */
-    public char[][] getCLIRepresentation(){
-        char[][] res = new char[1][1];
+    public String[][] getCLIRepresentation(){
+        String[][] res = new String[1][1];
         switch (this){
-            case CATS -> res[0][0] = 'C';
-            case BOOKS -> res[0][0] = 'B';
-            case GAMES -> res[0][0] = 'G';
-            case FRAMES -> res[0][0] = 'F';
-            case TROPHIES -> res[0][0] = 'T';
-            case PLANTS -> res[0][0] = 'P';
-            default -> res[0][0] = '?';
+            case CATS -> res[0][0] = ANSIParameters.BG_GREEN +" " + ANSIParameters.CRESET;
+            case BOOKS -> res[0][0] = ANSIParameters.BG_WHITE +" " + ANSIParameters.CRESET;
+            case GAMES -> res[0][0] = ANSIParameters.BG_YELLOW +" " + ANSIParameters.CRESET;
+            case FRAMES -> res[0][0] = ANSIParameters.BG_BLUE +" " + ANSIParameters.CRESET;
+            case TROPHIES -> res[0][0] = ANSIParameters.BG_CYAN +" " + ANSIParameters.CRESET;
+            case PLANTS -> res[0][0] = ANSIParameters.BG_MAGENTA +" " + ANSIParameters.CRESET;
+            default -> res[0][0] = "?";
 
         }
         return res;

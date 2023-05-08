@@ -182,11 +182,9 @@ public class Controller implements VCEventListener {
             }
             match.getCurrentPlayer().clearTakenTiles();
             match.clearSelectedTiles();
-            try{
-                match.checkCommonGoals(currentPlayer);
-            }catch(UnsupportedOperationException e){
-                throw new UnsupportedOperationException();
-            }
+
+            match.checkCommonGoals(currentPlayer);
+
 
             int numberOfPlayers = match.getNumberOfPlayers();
 

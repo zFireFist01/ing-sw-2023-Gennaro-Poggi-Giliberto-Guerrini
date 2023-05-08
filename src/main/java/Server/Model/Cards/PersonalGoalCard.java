@@ -189,27 +189,37 @@ public enum PersonalGoalCard implements Card {
      * This method is used fromn the CLI to obtain a printable represention of this object
      * @return the char matrix that represents a "drawing" of this object
      */
-    public char[][] getCLIRepresentation(){
-        char[][] res  = new char[13][15];
+    public String[][] getCLIRepresentation(){
+        String[][] res  = new String[13][15];
         for(int i=0;i<13;i++){
-            res[i][1] = ' ';
-            res[i][13] = ' ';
-            res[i][0] = '|';
-            res[i][14] = '|';
+            res[i][1] = " ";
+            res[i][13] = " ";
+            res[i][0] = "║";
+            res[i][14] = "║";
         }
+        res[0][0]="╔";
+        res[0][14]="╗";
+        res[12][0]="╚";
+        res[12][14]="╝";
         for(int i=0;i<13;i++){
             for(int j=2;j<13;j++){
                 if(i%2 == 0){
                     if(j%2 == 0){
-                        res[i][j] = '+';
+                        res[i][j] = "╬";
+                        if(i==0){
+                            res[i][j] = "╦";
+                        }
+                        if(i==12){
+                            res[i][j] = "╩";
+                        }
                     }else{
-                        res[i][j] = '-';
+                        res[i][j] = "═";
                     }
                 }else{
                     if(j%2 == 0){
-                        res[i][j] = '|';
+                        res[i][j] = "║";
                     }else{
-                        res[i][j] = ' ';
+                        res[i][j] = " ";
                     }
                 }
             }
