@@ -543,9 +543,13 @@ public class CLI implements Runnable , View {
 
 
     private void printHelp(){
-        if(currentView.getType().equals("LoginView")){
+        if(currentView == null){
+            System.out.println("info        : show this message\n"+
+                               "play        : login to the server\n"+
+                               "quit        : quit the game\n");
+        }else if(currentView.getType().equals("LoginView")){
             System.out.println("info play \n quit");
-        }else if(currentView.getType().equals("PickingTileView")) {
+        }else if(currentView.getType().equals("PickingTilesGameView")) {
             System.out.println("info pick \n checkout open \n close send \n quit");
         }else if(currentView.getType().equals("InsertingTilesGameView")){
             System.out.println("info select \n open close \n send quit");

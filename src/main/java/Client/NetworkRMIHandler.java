@@ -120,4 +120,8 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements RemoteNetw
         throw new IllegalAccessError("This method should not be called");
     }
 
+    @Override
+    public void pong() throws RemoteException{
+        return;
+    }
 }

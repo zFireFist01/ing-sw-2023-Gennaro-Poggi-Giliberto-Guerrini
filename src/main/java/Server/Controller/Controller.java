@@ -37,8 +37,7 @@ public class Controller implements VCEventListener {
     private VirtualView currentPlayerView;
     private final Map<Integer,VirtualView > PlayerViews=new HashMap<>();
     private List<SelectViewEventListener> selectViewEventListeners;
-
-
+    private Map<Integer, Player> hashNicknames = new HashMap<>();
 
     public Controller(Match match){
         this.match = match;
@@ -58,8 +57,10 @@ public class Controller implements VCEventListener {
 
         if(players.size()==0 && numberofPlayers!=0){
             match.setNumberOfPlayers(numberofPlayers);
-            match.addContestant(new Player(match, nickname.hashCode(),nickname));
+            Player newPlayer = new Player(match, nickname.hashCode(),nickname);
+            match.addContestant(newPlayer);
             PlayerViews.put(nickname.hashCode(),caller);
+            hashNicknames.put(nickname.hashCode(),newPlayer);
             caller.onSelectViewEvent(new GameView());
 
         }else{
@@ -76,9 +77,10 @@ public class Controller implements VCEventListener {
             }else if(nickname.contains(" ")) {
                 caller.onSelectViewEvent(new LoginView("Nickname cannot contain spaces"));
             }else{
-                match.addContestant(new Player(match, nickname.hashCode(),nickname));
+                Player newPlayer = new Player(match, nickname.hashCode(),nickname);
+                match.addContestant(newPlayer);
                 PlayerViews.put(nickname.hashCode(),caller);
-
+                hashNicknames.put(nickname.hashCode(),newPlayer);
                 if(match.getMatchStatus() instanceof WaitingForPlayers){
                     caller.onSelectViewEvent(new GameView());
                 }else if (match.getMatchStatus() instanceof Running){
@@ -450,6 +452,41 @@ public class Controller implements VCEventListener {
 
     public void removeSelectViewEventListener(SelectViewEventListener listener){
         selectViewEventListeners.remove(listener);
+    }
+
+    public void playerDisconnected(VirtualView vv){
+        //TODO: check
+        if(PlayerViews.containsValue(vv)){
+            Integer playerHash = null;
+            for(Integer i : PlayerViews.keySet()){
+                if(PlayerViews.get(i).equals(vv)){
+                    playerHash = i;
+                    break;
+                }
+            }
+            match.disconnectPlayer(hashNicknames.get(playerHash), PlayerViews.get(playerHash));
+        }else{
+            throw new RuntimeException("PingPongManager tells me a player has lost connection but" +
+                    " he was not in the match");
+        }
+
+    }
+
+    public void playerConnected(VirtualView vv){
+        //TODO: check
+        if(PlayerViews.containsValue(vv)){
+            Integer playerHash = null;
+            for(Integer i : PlayerViews.keySet()){
+                if(PlayerViews.get(i).equals(vv)){
+                    playerHash = i;
+                    break;
+                }
+            }
+            match.reconnectPlayer(hashNicknames.get(playerHash), PlayerViews.get(playerHash));
+        }else{
+            throw new RuntimeException("PingPongManager tells me a player has reconnected but" +
+                    " he was not in the match");
+        }
     }
 
 }
