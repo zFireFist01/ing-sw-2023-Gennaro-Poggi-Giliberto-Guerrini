@@ -27,6 +27,8 @@ import java.util.*;
  * @author Marta Giliberto
  */
 public class Match {
+
+
     private ArrayList<Player> players;
     private PlayersChat gameChat;
     private ArrayList<Integer> selectedTiles;
@@ -158,7 +160,8 @@ public class Match {
      */
     private void extractFirstPlayer(){
         Random random = new Random();
-        int indexOfFirstPlayer = random.nextInt(numberOfPlayers-1);
+
+        int indexOfFirstPlayer = random.nextInt(numberOfPlayers);
         this.firstPlayer= players.get(indexOfFirstPlayer);
     }
 
