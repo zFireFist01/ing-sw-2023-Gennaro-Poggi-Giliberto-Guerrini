@@ -466,7 +466,7 @@ public class Controller implements VCEventListener {
                     break;
                 }
             }
-            match.disconnectPlayer(hashNicknames.get(playerHash));
+            match.disconnectPlayer(hashNicknames.get(playerHash), PlayerViews.get(playerHash));
         }else{
             throw new RuntimeException("PingPongManager tells me a player has lost connection but" +
                     " he was not in the match");
@@ -484,7 +484,7 @@ public class Controller implements VCEventListener {
                     break;
                 }
             }
-            match.reconnectPlayer(hashNicknames.get(playerHash));
+            match.reconnectPlayer(hashNicknames.get(playerHash), PlayerViews.get(playerHash));
         }else{
             throw new RuntimeException("PingPongManager tells me a player has reconnected but" +
                     " he was not in the match");

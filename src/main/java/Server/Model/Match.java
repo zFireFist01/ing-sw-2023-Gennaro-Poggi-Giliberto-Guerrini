@@ -17,6 +17,7 @@ import Server.Model.GameItems.TileType;
 import Server.Model.MatchStatus.MatchStatus;
 import Server.Model.MatchStatus.NotRunning;
 import Server.Model.Player.Player;
+import Server.Network.VirtualView;
 
 import java.sql.Time;
 import java.util.*;
@@ -49,7 +50,7 @@ public class Match {
     private int count=0;
 
     private List<MVEventListener> mvEventListeners=new ArrayList<>();
-
+    private Map<MVEventListener, Player> disconnectedPlayersVirtualViews = new HashMap<>();
     public Match(){
         this.matchStatus= new NotRunning(this);
         this.gameChat = null;
@@ -412,6 +413,9 @@ public class Match {
         currentPlayer=currentPlayer.getNextPlayer();
         while(disconnectedPlayers.contains(currentPlayer)){
             currentPlayer=currentPlayer.getNextPlayer();
+            if(currentPlayer==firstPlayer){
+                break;
+            }
         }
     }
 
@@ -503,17 +507,28 @@ public class Match {
 
     public void notifyMVEventListeners(MVEvent event){
         for(MVEventListener listener : this.mvEventListeners){
-            listener.onMVEvent(event);
+            if(!disconnectedPlayersVirtualViews.containsKey(listener)) {
+                listener.onMVEvent(event);
+            }
         }
     }
 
-    public void disconnectPlayer(Player player){
-        //TODO: check
-        disconnectedPlayers.add(player);
+    public List<Player> getDisconnectedPlayers(){
+        return new ArrayList<>(disconnectedPlayers);
     }
 
-    public void reconnectPlayer(Player player){
+    public void disconnectPlayer(Player player, VirtualView virtualView){
+        //TODO: check
+        if(!disconnectedPlayers.contains(player)){
+            disconnectedPlayers.add(player);
+        }
+        System.out.println("DISCONNECTED PLAYERS: "+disconnectedPlayers);
+        disconnectedPlayersVirtualViews.put(virtualView, player);
+    }
+
+    public void reconnectPlayer(Player player, VirtualView virtualView){
         //TODO: check
         this.disconnectedPlayers.remove(player);
+        this.disconnectedPlayersVirtualViews.remove(virtualView);
     }
 }

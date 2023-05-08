@@ -60,7 +60,15 @@ public class Player {
      * @return is the next player assigned to the player
      */
     public Player getNextPlayer() {
-        return nextPlayer;
+        //return nextPlayer;
+        Player localNextPlayer = nextPlayer;
+        while(m.getDisconnectedPlayers().contains(localNextPlayer)) {
+            localNextPlayer = localNextPlayer.getNextPlayer();
+            if (localNextPlayer == this){
+                break;
+            }
+        }
+        return localNextPlayer;
     }
 
     /**

@@ -114,7 +114,11 @@ public class VirtualSocketView implements VirtualView{
             out.write(message.getBytes());
             out.flush();
             System.out.println("Message sent: "+message);
-        } catch (IOException e) {
+        }catch (SocketException e){
+            //System.out.println("Lost connection with the client");
+            //We don't need to notify the controller because it will be notified by the PingManager
+            // checking the pongReceived variable
+        }catch (IOException e) {
             System.err.println(e.getStackTrace());
             throw new RuntimeException(e);
         }
@@ -129,7 +133,11 @@ public class VirtualSocketView implements VirtualView{
             out.write(message.getBytes());
             out.flush();
             System.out.println("Message sent "+ message);
-        } catch (IOException e) {
+        }catch (SocketException e){
+            //System.out.println("Lost connection with the client");
+            //We don't need to notify the controller because it will be notified by the PingManager
+            // checking the pongReceived variable
+        }catch (IOException e) {
             System.err.println(e.getStackTrace());
             throw new RuntimeException(e);
         }
