@@ -187,6 +187,7 @@ public class CLI implements Runnable , View {
         switch(methodName) {
             case "onModifiedChatEvent" -> {
                 onModifiedChatEvent((Message)event.getValue());
+                return;
             }
             case "onModifiedBookshelfEvent" -> {
                 onModifiedBookshelfEvent(event.getMatch());

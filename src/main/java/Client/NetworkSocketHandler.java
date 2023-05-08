@@ -52,7 +52,7 @@ public class NetworkSocketHandler implements NetworkHandler{
         Gson gson = new GsonBuilder()
                 .registerTypeAdapterFactory(new EventTypeAdapterFactory())
                 .create();
-        System.out.println("Received message: " + json);
+        //System.out.println("Received message: " + json);
         MVEvent event = gson.fromJson(json, MVEvent.class);
         view.onMVEvent(event);
     }
@@ -79,7 +79,7 @@ public class NetworkSocketHandler implements NetworkHandler{
         try {
             out.write(json.getBytes());
             out.flush();
-            System.out.println("Message sent: " + json);
+            //System.out.println("Message sent: " + json);
         } catch (IOException e) {
             throw new RuntimeException("Error while sending event to server");
         }
@@ -97,7 +97,7 @@ public class NetworkSocketHandler implements NetworkHandler{
             this.out = socket.getOutputStream();
             System.out.println("Connected to the socket server!");
             String welcomeMessage = in.nextLine();
-            System.out.println("Ricevuto messaggio di benvenuto: " + welcomeMessage);
+            //System.out.println("Ricevuto messaggio di benvenuto: " + welcomeMessage);
         } catch (IOException e) {
             System.err.println(e.getStackTrace());
             throw new RuntimeException(e);
