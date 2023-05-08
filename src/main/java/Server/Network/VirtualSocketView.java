@@ -15,8 +15,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class VirtualSocketView implements VirtualView{
@@ -68,9 +70,14 @@ public class VirtualSocketView implements VirtualView{
             throw new RuntimeException(e);
         }
         while (true){
-            String message = in.nextLine();
-            System.out.println("Message received: "+message);
-            manageMessage(message);
+            try{
+                String message = in.nextLine();
+                System.out.println("Message received: "+message);
+                manageMessage(message);
+            }catch (NoSuchElementException e) {
+                //This means that we lost connection with the client
+                //We just wait...
+            }
         }
     }
 
@@ -80,19 +87,20 @@ public class VirtualSocketView implements VirtualView{
                 .create();
         VCEvent vcEvent = gson.fromJson(message, VCEvent.class);
         sendVCEvent(vcEvent);*/
-        if(message.contains("pong")){
+        if(message.equals("pong")){
             pongReceived = true;
-            message = message.replace("pong", "");
+            //message = message.replace("pong", "");
+        }else{
 
-        }
-        try {
-            receiveVCEvent(message);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+            try {
+                receiveVCEvent(message);
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException(e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
     @Override
@@ -176,13 +184,18 @@ public class VirtualSocketView implements VirtualView{
     @Override
     public void ping() {
         pongReceived = false;
-        String pingMessage = "ping";
+        String pingMessage = "ping\n";
         try {
             out.write(pingMessage.getBytes());
             out.flush();
             System.out.println("Ping sent: "+pingMessage);
             System.out.flush();
-        } catch (IOException e) {
+        }catch (SocketException e){
+            System.out.println("Lost connection with the client");
+            //We don't need to notify the controller because it will be notified by the PingManager
+            // checking the checkPongResponse method. We just wait.
+            //throw new RuntimeException(e);
+        }catch (IOException e) {
             System.err.println(e.getStackTrace());
             throw new RuntimeException(e);
         }

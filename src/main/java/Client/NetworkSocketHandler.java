@@ -18,6 +18,7 @@ import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.rmi.RemoteException;
 import java.util.Scanner;
 
@@ -108,37 +109,41 @@ public class NetworkSocketHandler implements NetworkHandler{
 
         while (true) {
             message = in.nextLine();
-            System.out.println("Received message: " + message);
-            if(message.contains("ping")){
-                System.out.println("Received ping message");
-                message = message.replace("ping", "");
+            //System.out.println("Received message: " + message);
+            if(message.equals("ping")){
+                //System.out.println("Received ping message");
+                //message = message.replace("ping", "");
                 pong();
-            }
+            }else{
+                event = gson.fromJson(message, Event.class);
+                primaryType = event.getPrimaryType();
 
-            event = gson.fromJson(message, Event.class);
-            primaryType = event.getPrimaryType();
-
-            switch (primaryType) {
-                case "MVEvent":
-                    receiveMVEvent(message);
-                    break;
-                case "SelectViewEvent":
-                    receiveSelectViewEvent(message);
-                    break;
-                default:
-                    throw new RuntimeException("Unknown event type");
+                switch (primaryType) {
+                    case "MVEvent":
+                        receiveMVEvent(message);
+                        break;
+                    case "SelectViewEvent":
+                        receiveSelectViewEvent(message);
+                        break;
+                    default:
+                        throw new RuntimeException("Unknown event type");
+                }
             }
         }
     }
 
     private void pong(){
-        String pongMessage = "pong";
+        String pongMessage = "pong\n";
         try {
             out.write(pongMessage.getBytes());
             out.flush();
-            System.out.println("Message sent: " + pongMessage);
-        } catch (IOException e) {
+            //System.out.println("Message sent: " + pongMessage);
+        }catch (SocketException e){
+            System.out.println("Lost connection with server");
+            //We don't do anything (is it wrong? We'll see...)
+        }catch (IOException e) {
             throw new RuntimeException("Error while sending pong message to server");
         }
+
     }
 }
