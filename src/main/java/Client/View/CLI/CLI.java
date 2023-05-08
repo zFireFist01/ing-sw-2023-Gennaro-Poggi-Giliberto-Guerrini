@@ -69,15 +69,15 @@ public class CLI implements Runnable , View {
     private final static int PLAYER_3_POINTS_2_J = 98;
     private final static int PLAYER_4_POINTS_1_J = 121;
     private final static int PLAYER_4_POINTS_2_J = 136;
-    private final static char[][] EMPTYSPOT= {{'+','-','-','-','-','-','-','-','+'},
-            {'|',' ',' ',' ',' ',' ',' ',' ','|'},
-            {'|',' ',' ',' ',' ',' ',' ',' ','|'},
-            {'+','-','-','-','-','-','-','-','+'}};
+    private final static String[][] EMPTYSPOT= {{ANSIParameters.RED+"╔","═","═","═","═","═","═","═","╗" + ANSIParameters.CRESET},
+            {ANSIParameters.RED+"║"," "," "," "," "," "," "," ","║"+ ANSIParameters.CRESET},
+            {ANSIParameters.RED+"║"," "," "," "," "," "," "," ","║"+ ANSIParameters.CRESET},
+            {ANSIParameters.RED+"╚","═","═","═","═","═","═","═","╝"+ ANSIParameters.CRESET}};
 
-    private final static char[][] ENDTILE= {{'+','-','-','-','-','-','-','-','+'},
-            {'|',' ',' ','#','1',' ',' ',' ','|'},
-            {'|',' ','P','o','i','n','t',' ','|'},
-            {'+','-','-','-','-','-','-','-','+'}};
+    private final static String[][] ENDTILE= {{ANSIParameters.RED+"╔","═","═","═","═","═","═","═","╗"+ ANSIParameters.CRESET},
+            {ANSIParameters.RED+"║"," "," ","#","1"," "," "," ","║"+ ANSIParameters.CRESET},
+            {ANSIParameters.RED+"║"," ","P","o","i","n","t"," ","║"+ ANSIParameters.CRESET},
+            {ANSIParameters.RED+"╚","═","═","═","═","═","═","═","╝"+ ANSIParameters.CRESET}};
 
     private NetworkHandler networkHandler;
     private Environment board = new Environment();
@@ -231,11 +231,11 @@ public class CLI implements Runnable , View {
         printPersonalGoal(me.getPersonalGoalCard().getCLIRepresentation());
         CommonGoalCard commonGoal= match.getCommonGoals()[0];
         printCommonGoal1(commonGoal.getCLIRepresentation());
-        printPoints1(commonGoal.getPointsTiles().get(0).getCLIRepresentation());
+        printPoints1(commonGoal.getPointsTiles().get(commonGoal.getPointsTiles().size()-1).getCLIRepresentation());
         printDescription1(commonGoal.getCommonGoalDescription());
         commonGoal = match.getCommonGoals()[1];
         printCommonGoal2(commonGoal.getCLIRepresentation());
-        printPoints2(commonGoal.getPointsTiles().get(0).getCLIRepresentation());
+        printPoints2(commonGoal.getPointsTiles().get(commonGoal.getPointsTiles().size()-1).getCLIRepresentation());
         printDescription2(commonGoal.getCommonGoalDescription());
 
         switch(numberPlayers) {
@@ -357,8 +357,8 @@ public class CLI implements Runnable , View {
             }
 
         }
-        printPoints1(match.getCommonGoals()[0].getPointsTiles().get(0).getCLIRepresentation());
-        printPoints2(match.getCommonGoals()[1].getPointsTiles().get(0).getCLIRepresentation());
+        printPoints1(match.getCommonGoals()[0].getPointsTiles().get(match.getCommonGoals()[0].getPointsTiles().size()-1).getCLIRepresentation());
+        printPoints2(match.getCommonGoals()[1].getPointsTiles().get(match.getCommonGoals()[1].getPointsTiles().size()-1).getCLIRepresentation());
         if(match.getFirstToFinish()!=null){
             int i;
             for(i=0;i<numberPlayers;i++){
@@ -746,7 +746,7 @@ public class CLI implements Runnable , View {
 
     //refresh the board
 
-    private void printLivingRoom(char[][] livingRoom){
+    private void printLivingRoom(String[][] livingRoom){
 
         for(int i = 0; i < livingRoom.length; i++){
             for(int j = 0; j < livingRoom[i].length; j++){
@@ -756,10 +756,10 @@ public class CLI implements Runnable , View {
 
     }
 
-    private void printPersonalGoal(char[][] personalGoal){
+    private void printPersonalGoal(String[][] personalGoal){
         int i=0;
-        for(char c : "Personal Goal".toCharArray()){
-            board.setChar(CARDLINE -1,PERSONAL_J+i,c);
+        for( char c : "Personal Goal".toCharArray()){
+            board.setChar(CARDLINE -1,PERSONAL_J+i,String.valueOf(c));
             i++;
         }
 
@@ -773,21 +773,21 @@ public class CLI implements Runnable , View {
     private void printCommonGoal1(char[][] commonGoal){
         int i=0;
         for(char c : "#1 CommonGoal".toCharArray()){
-            board.setChar(CARDLINE -1,COMMON_1_J+i,c);
+            board.setChar(CARDLINE -1,COMMON_1_J+i,String.valueOf(c));
             i++;
         }
 
         for(i = 0; i < commonGoal.length; i++){
             for(int j = 0; j < commonGoal[i].length; j++){
-                board.setChar(i + CARDLINE,j + COMMON_1_J,commonGoal[i][j]);
+                board.setChar(i + CARDLINE,j + COMMON_1_J,String.valueOf(commonGoal[i][j]));
             }
         }
     }
 
-    private void printPoints1(char[][] points){
+    private void printPoints1(String[][] points){
         for(int i = 0; i < points.length; i++){
             for(int j = 0; j < points[i].length; j++){
-                board.setChar(i + CARDLINE,j + POINTS_1_J,points[i][j]);
+                board.setChar(i + CARDLINE,j + POINTS_1_J,String.valueOf(points[i][j]));
             }
         }
     }
@@ -795,18 +795,18 @@ public class CLI implements Runnable , View {
     private void printCommonGoal2(char[][] commonGoal){
         int i=0;
         for(char c : "#2 CommonGoal".toCharArray()){
-            board.setChar(CARDLINE -1,COMMON_2_J+i,c);
+            board.setChar(CARDLINE -1,COMMON_2_J+i,String.valueOf(c));
             i++;
         }
 
         for(i = 0; i < commonGoal.length; i++){
             for(int j = 0; j < commonGoal[i].length; j++){
-                board.setChar(i + CARDLINE,j + COMMON_2_J,commonGoal[i][j]);
+                board.setChar(i + CARDLINE,j + COMMON_2_J,String.valueOf(commonGoal[i][j]));
             }
         }
     }
 
-    private void printPoints2(char[][] points){
+    private void printPoints2(String[][] points){
         for(int i = 0; i < points.length; i++){
             for(int j = 0; j < points[i].length; j++){
                 board.setChar(i + CARDLINE,j + POINTS_2_J,points[i][j]);
@@ -817,7 +817,7 @@ public class CLI implements Runnable , View {
     private void printDescription1(String[] description){
         for (int i = 0; i < description.length; i++){
             for(int j = 0; j < description[i].length(); j++){
-                board.setChar(i + DESCRIPTION_I,j + DESCRIPTION_1_J,description[i].charAt(j));
+                board.setChar(i + DESCRIPTION_I,j + DESCRIPTION_1_J,String.valueOf(description[i].charAt(j)));
             }
         }
 
@@ -826,13 +826,13 @@ public class CLI implements Runnable , View {
     private void printDescription2(String[] description){
         for (int i = 0; i < description.length; i++){
             for(int j = 0; j < description[i].length(); j++){
-                board.setChar(i + DESCRIPTION_I,j + DESCRIPTION_2_J,description[i].charAt(j));
+                board.setChar(i + DESCRIPTION_I,j + DESCRIPTION_2_J,String.valueOf(description[i].charAt(j)));
             }
         }
 
     }
 
-    private void printBookshelf1(char[][] bookshelf){
+    private void printBookshelf1(String[][] bookshelf){
         for(int i = 0; i < bookshelf.length; i++){
             for(int j = 0; j < bookshelf[i].length; j++){
                 board.setChar(i + BOOKSHELF_I,j + BOOKSHELF_1_J,bookshelf[i][j]);
@@ -841,7 +841,7 @@ public class CLI implements Runnable , View {
 
     }
 
-    private void printBookshelf2(char[][] bookshelf){
+    private void printBookshelf2(String[][] bookshelf){
         for(int i = 0; i < bookshelf.length; i++){
             for(int j = 0; j < bookshelf[i].length; j++){
                 board.setChar(i + BOOKSHELF_I,j + BOOKSHELF_2_J,bookshelf[i][j]);
@@ -850,7 +850,7 @@ public class CLI implements Runnable , View {
 
     }
 
-    private void printBookshelf3(char[][] bookshelf){
+    private void printBookshelf3(String[][] bookshelf){
         for(int i = 0; i < bookshelf.length; i++){
             for(int j = 0; j < bookshelf[i].length; j++){
                 board.setChar(i + BOOKSHELF_I,j + BOOKSHELF_3_J,bookshelf[i][j]);
@@ -859,7 +859,7 @@ public class CLI implements Runnable , View {
 
     }
 
-    private void printBookshelf4(char[][] bookshelf){
+    private void printBookshelf4(String[][] bookshelf){
         for(int i = 0; i < bookshelf.length; i++){
             for(int j = 0; j < bookshelf[i].length; j++){
                 board.setChar(i + BOOKSHELF_I,j + BOOKSHELF_4_J,bookshelf[i][j]);
@@ -868,7 +868,7 @@ public class CLI implements Runnable , View {
 
     }
 
-    private void printEndTile1(char[][] endTile){
+    private void printEndTile1(String[][] endTile){
         for(int i = 0; i < endTile.length; i++){
             for(int j = 0; j < endTile[i].length; j++){
                 board.setChar(i + END_TILE_I,j + END_TILE_1_J,endTile[i][j]);
@@ -877,7 +877,7 @@ public class CLI implements Runnable , View {
 
     }
 
-    private void printEndTile2(char[][] endTile){
+    private void printEndTile2(String[][] endTile){
         for(int i = 0; i < endTile.length; i++){
             for(int j = 0; j < endTile[i].length; j++){
                 board.setChar(i + END_TILE_I,j + END_TILE_2_J,endTile[i][j]);
@@ -886,7 +886,7 @@ public class CLI implements Runnable , View {
 
     }
 
-    private void printEndTile3(char[][] endTile){
+    private void printEndTile3(String[][] endTile){
         for(int i = 0; i < endTile.length; i++){
             for(int j = 0; j < endTile[i].length; j++){
                 board.setChar(i + END_TILE_I,j + END_TILE_3_J,endTile[i][j]);
@@ -895,7 +895,7 @@ public class CLI implements Runnable , View {
 
     }
 
-    private void printEndTile4(char[][] endTile){
+    private void printEndTile4(String[][] endTile){
         for(int i = 0; i < endTile.length; i++){
             for(int j = 0; j < endTile[i].length; j++){
                 board.setChar(i + END_TILE_I,j + END_TILE_4_J,endTile[i][j]);
@@ -915,13 +915,13 @@ public class CLI implements Runnable , View {
                 length++;
             }
             for(int j = 0; j < names[i].length(); j++){
-                board.setChar(PLAYER_NAME_I,j + number+length,names[i].charAt(j));
+                board.setChar(PLAYER_NAME_I,j + number+length,String.valueOf(names[i].charAt(j)));
             }
 
         }
     }
 
-    private void printPlayer1Points(char[][] points1 ,char[][] points2){
+    private void printPlayer1Points(String[][] points1 ,String[][] points2){
         for(int i = 0; i < points1.length; i++){
             for(int j = 0; j < points1[i].length; j++){
                 board.setChar(i + PLAYER_POINTS_I,j + PLAYER_1_POINTS_1_J,points1[i][j]);
@@ -935,7 +935,7 @@ public class CLI implements Runnable , View {
         }
     }
 
-    private void printPlayer2Points(char[][] points1 ,char[][] points2){
+    private void printPlayer2Points(String[][] points1 ,String[][] points2){
         for(int i = 0; i < points1.length; i++){
             for(int j = 0; j < points1[i].length; j++){
                 board.setChar(i + PLAYER_POINTS_I,j + PLAYER_2_POINTS_1_J,points1[i][j]);
@@ -949,7 +949,7 @@ public class CLI implements Runnable , View {
         }
     }
 
-    private void printPlayer3Points(char[][] points1 ,char[][] points2){
+    private void printPlayer3Points(String[][] points1 ,String[][] points2){
         for(int i = 0; i < points1.length; i++){
             for(int j = 0; j < points1[i].length; j++){
                 board.setChar(i + PLAYER_POINTS_I,j + PLAYER_3_POINTS_1_J,points1[i][j]);
@@ -963,7 +963,7 @@ public class CLI implements Runnable , View {
         }
     }
 
-    private void printPlayer4Points(char[][] points1 ,char[][] points2){
+    private void printPlayer4Points(String[][] points1 ,String[][] points2){
         for(int i = 0; i < points1.length; i++){
             for(int j = 0; j < points1[i].length; j++){
                 board.setChar(i + PLAYER_POINTS_I,j + PLAYER_4_POINTS_1_J,points1[i][j]);

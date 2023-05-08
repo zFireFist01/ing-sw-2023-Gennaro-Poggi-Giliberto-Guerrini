@@ -109,6 +109,19 @@ public class LivingRoom {
         }
     }
 
+    private boolean livingroomneedRefresh(){
+        for(int i = 0; i < LIVINGROOMHEIGHT; i++){
+            for(int j = 0; j < LIVINGROOOMWIDTH; j++){
+                if(tileMatrix[i][j].isReal() && !tileMatrix[i][j].isEmpty()){
+                    if((tileMatrix[i+1][j].isReal() && !tileMatrix[i+1][j].isEmpty()) || (tileMatrix[i-1][j].isReal() && !tileMatrix[i-1][j].isEmpty()) || (tileMatrix[i][j+1].isReal() && !tileMatrix[i][j+1].isEmpty()) || (tileMatrix[i][j-1].isReal() && !tileMatrix[i][j-1].isEmpty())){
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
     /**
      * @return A copy of the matrix that describes the livingroom of match m, in the current state
      */
@@ -261,6 +274,9 @@ public class LivingRoom {
             }
             throw new UnsupportedOperationException("At least one of the tiles you selected is not pick-able!");
         }
+        if(livingroomneedRefresh()){
+            refreshLivingRoom();
+        }
         notifyMVEventListeners(new ModifiedLivingRoomEvent(new LightMatch(this.m)));
         return resultTypes;
     }
@@ -313,32 +329,54 @@ public class LivingRoom {
      * @return a matrix of char that represents the LivingRoom
      * @author Marta Giliberto
      */
-    public char[][] getCLIRepresentation(){
-        char[][] res= new char[20][39];
+    public String[][] getCLIRepresentation(){
+        String[][] res= new String[20][39];
         int k=0;
         for(int i=0; i<19; i++){
             for(int j=2; j<39; j++){
                 if(i%2==0){
                     if(j%4!=0 && j%2==0){
-                        res[i][j]='+';
+                        res[i][j]="╬";
+                        if(i==0 || i==18){
+                            res[i][j]="─";
+                            if(j==2 && i==0){
+                                res[i][j]="╔";
+                            }else if(j==38 && i==0){
+                                res[i][j]="╗";
+                            }else if(j==2 && i==18){
+                                res[i][j]="╚";
+                            }else if(j==38 && i==18){
+                                res[i][j]="╝";
+                            }
+                        }
+
+
+
+
                     }else{
-                        res[i][j]='-';
+                        res[i][j]="═";
                     }
                 }else{
                     if(j%4!=0 && j%2==0){
-                        res[i][j]='|';
+                        res[i][j]="║";
                     }else if(j%2!=0){
-                        res[i][j]=' ';
+                        //res[i][j]=" ";
                     }else{
                         if(this.getTileMatrix()[k][j/4-1].isEmpty()){
-                            res[i][j]=' ';
+                            res[i][j]=" ";
+                            res[i][j-1]=" ";
+                            res[i][j+1]=" ";
+
                         }else{
+                            res[i][j-1] = this.getTileMatrix()[k][j/4 -1].getTileType().getCLIRepresentation()[0][0];
                             res[i][j] = this.getTileMatrix()[k][j/4 -1].getTileType().getCLIRepresentation()[0][0];
+                            res[i][j+1] = this.getTileMatrix()[k][j/4 -1].getTileType().getCLIRepresentation()[0][0];
                         }
                     }
 
                     if(j==38){
                         k++;
+                        //k++;
                     }
                 }
             }
@@ -347,35 +385,35 @@ public class LivingRoom {
 
         for(int j=0; j<39;j++){
             if(j%4!=0 || j==0){
-                res[19][j]=' ';
+                res[19][j]=" ";
             }
         }
         for(int i=0; i<20; i++){
             if(i%2==0){
-                res[i][0]=' ';
+                res[i][0]=" ";
             }
-            res[i][1]=' ';
+            res[i][1]=" ";
         }
 
-        res[1][0]='a';
-        res[3][0]='b';
-        res[5][0]='c';
-        res[7][0]='d';
-        res[9][0]='e';
-        res[11][0]='f';
-        res[13][0]='g';
-        res[15][0]='h';
-        res[17][0]='i';
+        res[1][0]="a";
+        res[3][0]="b";
+        res[5][0]="c";
+        res[7][0]="d";
+        res[9][0]="e";
+        res[11][0]="f";
+        res[13][0]="g";
+        res[15][0]="h";
+        res[17][0]="i";
 
-        res[19][4]='0';
-        res[19][8]='1';
-        res[19][12]='2';
-        res[19][16]='3';
-        res[19][20]='4';
-        res[19][24]='5';
-        res[19][28]='6';
-        res[19][32]='7';
-        res[19][36]='8';
+        res[19][4]="0";
+        res[19][8]="1";
+        res[19][12]="2";
+        res[19][16]="3";
+        res[19][20]="4";
+        res[19][24]="5";
+        res[19][28]="6";
+        res[19][32]="7";
+        res[19][36]="8";
 
         return res;
 
