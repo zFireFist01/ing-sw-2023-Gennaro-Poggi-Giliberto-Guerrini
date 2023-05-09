@@ -250,6 +250,7 @@ public class Controller implements VCEventListener {
 
 
         int[] tmp,selectedTiles;
+        String messageTiles = "";
         boolean flag=false;
         int playernumber = match.getNumberOfPlayers();
         tmp=match.getSelectedTiles();
@@ -275,7 +276,17 @@ public class Controller implements VCEventListener {
 
             selectedTiles[0]=coordinates[0];
             selectedTiles[1]=coordinates[1];
+            messageTiles += " Tiles Selected: ";
+            for (int i = 0; i < selectedTiles.length; i+=2) {
+                char c = (char) ('a' + selectedTiles[i]);
+                messageTiles += c;
+                messageTiles += ",";
+                messageTiles += String.valueOf(selectedTiles[i+1]);
+                messageTiles += " ";
+            }
+
             match.setSelectedTiles(selectedTiles);
+            caller.onSelectViewEvent(new PickingTilesGameView(messageTiles));
             return;
         }
 
@@ -309,8 +320,19 @@ public class Controller implements VCEventListener {
         }else{
             selectedTiles=new int[tmp.length];
             System.arraycopy(tmp, 0, selectedTiles, 0, tmp.length);
+
+            messageTiles += "You can't select more than 6 tiles!";
+        }
+        messageTiles += " Tiles Selected: ";
+        for (int i = 0; i < selectedTiles.length; i+=2) {
+            char c = (char) ('a' + selectedTiles[i]);
+            messageTiles += c;
+            messageTiles += ",";
+            messageTiles += String.valueOf(selectedTiles[i+1]);
+            messageTiles += " ";
         }
         match.setSelectedTiles(selectedTiles);
+        caller.onSelectViewEvent(new PickingTilesGameView(messageTiles));
     }
 
     /**

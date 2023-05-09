@@ -205,6 +205,9 @@ public class CLI implements Runnable , View {
                 onMatchStartedEvent(event.getMatch());
 
             }
+            case "onModifiedTurnEvent" -> {
+                onModifiedTurnEvent(event.getMatch());
+            }
 
         }
         if(!chatIsOpened && !MatchEnded){
@@ -286,9 +289,20 @@ public class CLI implements Runnable , View {
             names[i] = players.get(i).getPlayerNickName();
         }
 
-        printNames(names);
+        printNames(names, match.getCurrentPlayer().getPlayerNickName());
 
 
+
+    }
+
+    private void onModifiedTurnEvent(LightMatch match){
+        String[] names = new String[numberPlayers];
+
+        for (int i = 0; i < numberPlayers; i++) {
+            names[i] = players.get(i).getPlayerNickName();
+        }
+
+        printNames(names, match.getCurrentPlayer().getPlayerNickName());        ;
     }
 
     /**
@@ -399,6 +413,7 @@ public class CLI implements Runnable , View {
             }
 
         }
+
     }
 
     /**
@@ -909,7 +924,7 @@ public class CLI implements Runnable , View {
 
     }
 
-    private void printNames(String[] names){
+    private void printNames(String[] names, String current){
         int length;
         int number;
 
@@ -918,6 +933,13 @@ public class CLI implements Runnable , View {
             number=BOOKSHELF_1_J+ 38*i;
             while(length*2 +names[i].length() < NAME_LENGTH){
                 length++;
+            }
+            if(names[i].equals(current)){
+                board.setChar(PLAYER_NAME_I, number+length-1, ANSIParameters.GREEN);
+                board.setChar(PLAYER_NAME_I, number+length+names[i].length(), "\033[0m");
+            }else{
+                board.setChar(PLAYER_NAME_I, number+length-1, ANSIParameters.RED);
+                board.setChar(PLAYER_NAME_I, number+length+names[i].length(), "\033[0m");
             }
             for(int j = 0; j < names[i].length(); j++){
                 board.setChar(PLAYER_NAME_I,j + number+length,String.valueOf(names[i].charAt(j)));

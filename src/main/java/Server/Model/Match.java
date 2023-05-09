@@ -1,9 +1,6 @@
 package Server.Model;
 
-import Server.Events.MVEvents.MVEvent;
-import Server.Events.MVEvents.MatchStartedEvent;
-import Server.Events.MVEvents.ModifiedMatchEndedEvent;
-import Server.Events.MVEvents.ModifiedPointsEvent;
+import Server.Events.MVEvents.*;
 import Server.Listeners.MVEventListener;
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Cards.PersonalGoalCard;
@@ -431,6 +428,8 @@ public class Match {
                 break;
             }
         }
+        notifyMVEventListeners(new ModifiedTurnEvent(new LightMatch(this)));
+
     }
 
     /**

@@ -75,6 +75,9 @@ public class EventAdapter extends TypeAdapter<Event> {
                     case "ModifiedPointsEvent":
                         eventClass = ModifiedPointsEvent.class;
                         break;
+                    case "ModifiedTurnEvent":
+                        eventClass = ModifiedTurnEvent.class;
+                        break;
 
                     default:
                         throw new IOException("Unknown event type: " + secondaryType);
