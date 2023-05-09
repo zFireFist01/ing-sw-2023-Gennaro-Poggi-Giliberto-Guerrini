@@ -296,6 +296,10 @@ public class LivingRoom {
             } else if (j == LIVINGROOOMWIDTH - 1) {
                 return (tileMatrix[i][j - 1].isReal() == false || tileMatrix[i][j - 1].isEmpty()) ||
                         (tileMatrix[i + 1][j].isReal() == false || tileMatrix[i + 1][j].isEmpty());
+            }else{
+                return (tileMatrix[i][j - 1].isReal() == false || tileMatrix[i][j - 1].isEmpty()) ||
+                        (tileMatrix[i + 1][j].isReal() == false || tileMatrix[i + 1][j].isEmpty()) ||
+                        (tileMatrix[i][j + 1].isReal() == false || tileMatrix[i][j + 1].isEmpty());
             }
         } else if (i == LIVINGROOMHEIGHT - 1) {
             if (j == 0) {
@@ -304,6 +308,10 @@ public class LivingRoom {
             } else if (j == LIVINGROOOMWIDTH - 1) {
                 return (tileMatrix[i][j - 1].isReal() == false || tileMatrix[i][j - 1].isEmpty()) ||
                         (tileMatrix[i - 1][j].isReal() == false || tileMatrix[i - 1][j].isEmpty());
+            }else{
+                return (tileMatrix[i][j - 1].isReal() == false || tileMatrix[i][j - 1].isEmpty()) ||
+                        (tileMatrix[i - 1][j].isReal() == false || tileMatrix[i - 1][j].isEmpty()) ||
+                        (tileMatrix[i][j + 1].isReal() == false || tileMatrix[i][j + 1].isEmpty());
             }
         } else {
             if (j == 0) {
@@ -321,7 +329,6 @@ public class LivingRoom {
                         (tileMatrix[i + 1][j].isReal() == false || tileMatrix[i + 1][j].isEmpty());
             }
         }
-        return false;
     }
 
     /**

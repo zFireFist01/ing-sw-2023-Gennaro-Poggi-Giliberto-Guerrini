@@ -22,18 +22,18 @@ Project requirements: [link](https://github.com/IoSonoDue2/ing-sw-2023-Gennaro-P
 ### Main functionalities
 | Functionality                    | Status |
 |:---------------------------------|:------:|
-| Complete rules                   |   ⛔    |
-| RMI                              |   ⛔    |
-| Socket                           |   ⛔    |
-| CLI _(Command Line Interface)_   |   ⛔    |
+| Complete rules                   |   ✅    |
+| RMI                              |   ✅    |
+| Socket                           |   ✅    |
+| CLI _(Command Line Interface)_   |   ✅    |
 | GUI _(Graphical User Interface)_ |   ⛔    |
 
 
 ### Advanced functionalities
 | Functionality                | Status |
 |:-----------------------------|:------:|
-| Chat                         |   ⛔    |
-| Simultaneous games           |   ⛔    |
+| Chat                         |   ✅    |
+| Simultaneous games           |   ✅    |
 | Persistence                  |   ⛔    |
 | Resilience to disconnections |   ⛔    |
 
