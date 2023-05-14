@@ -17,6 +17,7 @@ import Server.Events.VCEvents.VCEvent;
 import Server.Model.MatchStatus.Running;
 import Server.Model.MatchStatus.WaitingForPlayers;
 import Server.Model.Player.Player;
+import Server.Network.Server;
 import Server.Network.VirtualView;
 import Utils.MathUtils.*;
 
@@ -39,8 +40,10 @@ public class Controller implements VCEventListener {
     private List<SelectViewEventListener> selectViewEventListeners;
     private Map<Integer, Player> hashNicknames = new HashMap<>();
 
-    public Controller(Match match){
+    private Server server;
+    public Controller(Match match, Server server){
         this.match = match;
+        this.server = server;
         selectViewEventListeners = new ArrayList<>();
     }
 
@@ -62,7 +65,9 @@ public class Controller implements VCEventListener {
             PlayerViews.put(nickname.hashCode(),caller);
             hashNicknames.put(nickname.hashCode(),newPlayer);
             caller.onSelectViewEvent(new GameView());
-
+            caller.getConnectionInfo().setNickname(nickname);
+            //server.updateConnectionStatus(caller.getConnectionInfo(), true);
+            System.out.println("Controller connection info.nickname: " + caller.getConnectionInfo().getNickname());
         }else{
             for(Player player : players){
                 if(player.getPlayerID()==nickname.hashCode()) {
@@ -81,6 +86,9 @@ public class Controller implements VCEventListener {
                 match.addContestant(newPlayer);
                 PlayerViews.put(nickname.hashCode(),caller);
                 hashNicknames.put(nickname.hashCode(),newPlayer);
+                caller.getConnectionInfo().setNickname(nickname);
+                //server.updateConnectionStatus(caller.getConnectionInfo(), true);
+                System.out.println("Controller connection info.nickname: " + caller.getConnectionInfo().getNickname());
                 if(match.getMatchStatus() instanceof WaitingForPlayers){
                     caller.onSelectViewEvent(new GameView());
                 }else if (match.getMatchStatus() instanceof Running){
@@ -494,12 +502,17 @@ public class Controller implements VCEventListener {
 
     }
 
-    public void playerConnected(VirtualView vv){
+    public void playerConnected(VirtualView vv) {
         //TODO: check
-        if(PlayerViews.containsValue(vv)){
+        /*if(PlayerViews.containsValue(vv)){
             Integer playerHash = null;
             for(Integer i : PlayerViews.keySet()){
-                if(PlayerViews.get(i).equals(vv)){
+                //if(PlayerViews.get(i).equals(vv)){
+                  //  playerHash = i;
+                   // break;
+                //}
+                if(PlayerViews.get(i).getConnectionInfo().getSignature()
+                        .equals(vv.getConnectionInfo().getSignature())){
                     playerHash = i;
                     break;
                 }
@@ -508,7 +521,19 @@ public class Controller implements VCEventListener {
         }else{
             throw new RuntimeException("PingPongManager tells me a player has reconnected but" +
                     " he was not in the match");
+        }*/
+        if (PlayerViews.containsValue(vv)) {
+            for (Integer i : PlayerViews.keySet()) {
+                if (PlayerViews.get(i).equals(vv)) {
+                    match.reconnectPlayer(hashNicknames.get(i), PlayerViews.get(i));
+                    match.triggerMVUpdate();
+                }
+            }
+            //match.reconnectPlayer(hashNicknames.get(playerHash), PlayerViews.get(playerHash));
         }
     }
 
+    public Map<Integer, VirtualView> getPlayerViews() {
+        return PlayerViews;
+    }
 }
