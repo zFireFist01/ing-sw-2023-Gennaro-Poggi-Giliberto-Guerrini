@@ -22,8 +22,11 @@ import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Chat.Message;
 import Server.Model.LightMatch;
 import Server.Model.Player.Player;
+import Utils.ConnectionInfo;
 
 import java.lang.reflect.InvocationTargetException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -95,7 +98,8 @@ public class CLI implements Runnable , View {
 
     private boolean myTurn = false;
     private Scanner scanner;
-
+    private boolean isReconnecting = false;
+    private ConnectionInfo connectionInfo = null;
 
     public CLI(){
         scanner = new Scanner(System.in);
@@ -132,6 +136,17 @@ public class CLI implements Runnable , View {
     private void connect(){
         boolean flag = true;
         ConnectionType connectionType = null;
+        System.out.println("Are you re-connecting because of a disconnection? (y/n)");
+        String answer = scanner.nextLine();
+        String previousNickname = null;
+        if(answer.equalsIgnoreCase("y")){
+            System.out.println("You will now proceed to the reconnection process, " +
+                    "please use the same nickname you used before and the same connection type (Socket or RMI)");
+            System.out.println("What was your nickname?:");
+            previousNickname = scanner.nextLine();
+            myNick = new String(previousNickname);
+            isReconnecting = true;
+        }
         System.out.println("Select connection type: ");
         System.out.println("1) Socket 2) RMI");
         String connection =scanner.nextLine();
@@ -161,7 +176,7 @@ public class CLI implements Runnable , View {
         try{
             //connectionHandler = new ConnectionHandler(connectionType,port,host);
             if(connectionType == ConnectionType.SOCKET) {
-                networkHandler = new NetworkSocketHandler(host, port, this);
+                networkHandler = new NetworkSocketHandler(host, port, this, isReconnecting);
             }else{
                 networkHandler = new NetworkRMIHandler(this);
             }
@@ -170,7 +185,17 @@ public class CLI implements Runnable , View {
             System.err.println(e.getMessage()+"\n"+e.getStackTrace());
             System.exit(1);
         }
-        System.out.println("Connection successful");
+        String localIP = null;
+        try {
+            InetAddress ipAddress = InetAddress.getLocalHost();
+            localIP = ipAddress.getHostAddress();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        connectionInfo = new ConnectionInfo(localIP,connectionType, previousNickname);
+        //connectionInfo.setNickname(previousNickname);
+        //networkHandler.setConnectionInfo(connectionInfo);
+        //System.out.println("Connection successful");
 
     }
 
@@ -1014,4 +1039,12 @@ public class CLI implements Runnable , View {
 
     //update()
 
+    public ConnectionInfo getConnectionInfo(){
+        return connectionInfo;
+    }
+
+    @Override
+    public boolean isReconnecting() {
+        return isReconnecting;
+    }
 }

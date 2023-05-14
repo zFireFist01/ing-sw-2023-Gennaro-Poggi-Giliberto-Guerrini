@@ -1,17 +1,18 @@
 package Server.Network;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.UnknownHostException;
+import java.io.OutputStream;
+import java.net.*;
 import java.util.Enumeration;
 
+import Client.ConnectionType;
 import Server.Controller.Controller;
+import Server.Events.SelectViewEvents.GameView;
 import Server.Model.Match;
+import Utils.ConnectionInfo;
+import com.google.gson.Gson;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * This class is used to wait for new connections and create a new VirtualSocketView for each one.
@@ -49,31 +50,80 @@ public class SocketWaiter implements Runnable{
 
     @Override
     public void run(){
+        //TODO: Deal with the connection and reconnection using a thread pool because the function has become a bit too long
         while(true){
             Socket socket;
-            VirtualSocketView clientVV;
+            //VirtualSocketView clientVV;
+            VirtualView clientVV;
             try {
                 socket = this.serverSocket.accept();
-                //clients.add(client);
-
-                if(server.waitingMatch()){
-                    clientVV = new VirtualSocketView(socket,false);
-                    new Thread(clientVV).start();
-                    Match m = server.getWaitingMatch();
-                    m.addMVEventListener(clientVV);
-                    Controller c = server.getMatchsController(m);
-                    clientVV.addVCEventListener(c);
-                    c.addSelectViewEventListener(clientVV);
-                    server.subscribeNewViewToExistingMatch(m, clientVV);
+                Scanner localIn = new Scanner(socket.getInputStream());
+                OutputStream localOut = socket.getOutputStream();
+                String action = localIn.nextLine();
+                if(action.equals("Connecting")){
+                    System.out.println("HELLOOOO\n");
+                    //clients.add(client);
+                    ConnectionInfo connectionInfo =
+                            new Gson().fromJson(localIn.nextLine(), ConnectionInfo.class);
+                    if(server.waitingMatch()){
+                        clientVV = new VirtualSocketView(socket,false);
+                        ((VirtualSocketView )clientVV).setConnectionInfo(connectionInfo);
+                        new Thread(clientVV).start();
+                        Match m = server.getWaitingMatch();
+                        m.addMVEventListener(clientVV);
+                        Controller c = server.getMatchsController(m);
+                        clientVV.addVCEventListener(c);
+                        c.addSelectViewEventListener(clientVV);
+                        server.subscribeNewViewToExistingMatch(m, clientVV);
+                    }else{
+                        clientVV = new VirtualSocketView(socket,true);
+                        ((VirtualSocketView )clientVV).setConnectionInfo(connectionInfo);
+                        new Thread(clientVV).start();
+                        Match m = new Match();
+                        Controller c = new Controller(m, server);
+                        m.addMVEventListener(clientVV);
+                        clientVV.addVCEventListener(c);
+                        c.addSelectViewEventListener(clientVV);
+                        server.subscribeNewMatch(m,c, clientVV);
+                    }
+                    server.updateConnectionStatus(clientVV.getConnectionInfo(), true);
                 }else{
-                    clientVV = new VirtualSocketView(socket,true);
-                    new Thread(clientVV).start();
-                    Match m = new Match();
-                    Controller c = new Controller(m);
-                    m.addMVEventListener(clientVV);
-                    clientVV.addVCEventListener(c);
-                    c.addSelectViewEventListener(clientVV);
-                    server.subscribeNewMatch(m,c, clientVV);
+                    //The client is trying to reconnect
+                    ConnectionInfo connectionInfo =
+                            new Gson().fromJson(localIn.nextLine(), ConnectionInfo.class);
+
+                    boolean found = false;
+                    for(Match m : server.getMacthesControllers().keySet()){
+                        for(Integer i: server.getMacthesControllers().get(m).getPlayerViews().keySet()){
+                            if(server.getMacthesControllers().get(m).getPlayerViews()
+                                    .get(i).getConnectionInfo().getSignature().equals(connectionInfo.getSignature())){
+                                //We found the player that is trying to reconnect
+                                //We have to use the already existing VirtualView
+                                clientVV = server.getMacthesControllers().get(m).getPlayerViews().get(i);
+                                clientVV.setPongReceived();
+                                if(clientVV instanceof VirtualSocketView){
+                                    System.err.println("BLAH BLAH BLAH");
+                                    ((VirtualSocketView)clientVV).setSocket(socket, localIn);
+                                    clientVV.setPongReceived(); //Dovrebbe essere inutile...
+                                    clientVV.onSelectViewEvent(new GameView("Wait for your turn"));
+                                }else{
+                                    throw new UnsupportedOperationException("The client didn't choose Socket as a re-connection type, " +
+                                            "while the first time he connected he did");
+                                }
+                                //server.updateConnectionStatus(connectionInfo, true);
+
+                                server.updateConnectionStatus(connectionInfo, true);
+
+                                server.getMacthesControllers().get(m).playerConnected(clientVV);
+                                System.out.println("Hello world!");
+                                found = true;
+                                break;
+                            }
+                        }
+                        if(found){
+                            break;
+                        }
+                    }
                 }
             } catch (IOException e) {
                 System.err.println(e.getStackTrace());

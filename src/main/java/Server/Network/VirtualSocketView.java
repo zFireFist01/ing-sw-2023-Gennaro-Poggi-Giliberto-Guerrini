@@ -9,6 +9,7 @@ import Server.Events.VCEvents.VCEvent;
 import Server.Listeners.VCEventListener;
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Cards.CommonGoalCardAdapter;
+import Utils.ConnectionInfo;
 import com.google.gson.*;
 
 import java.io.IOException;
@@ -30,6 +31,8 @@ public class VirtualSocketView implements VirtualView{
     boolean pongReceived;
 
     List<VCEventListener> vcEventListeners;
+
+    ConnectionInfo connectionInfo;
 
     public VirtualSocketView(Socket socket , boolean isFirstToJoin) {
         this.socket = socket;
@@ -71,7 +74,10 @@ public class VirtualSocketView implements VirtualView{
         }
         while (true){
             try{
-                String message = in.nextLine();
+                String message;
+                synchronized (this.in){
+                    message = in.nextLine();
+                }
                 System.out.println("Message received: "+message);
                 manageMessage(message);
             }catch (NoSuchElementException e) {
@@ -226,4 +232,30 @@ public class VirtualSocketView implements VirtualView{
             return true;
         }
     }
+
+    public void setConnectionInfo(ConnectionInfo connectionInfo){
+        this.connectionInfo = connectionInfo;
+    }
+    @Override
+    public ConnectionInfo getConnectionInfo() {
+        return this.connectionInfo;
+    }
+
+    @Override
+    public void setPongReceived() {
+        pongReceived = true;
+    }
+
+    public void setSocket(Socket socket, Scanner in){
+        this.socket = socket;
+        synchronized (this.in){
+            this.in = in;
+        }
+        try {
+            this.out = this.socket.getOutputStream();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

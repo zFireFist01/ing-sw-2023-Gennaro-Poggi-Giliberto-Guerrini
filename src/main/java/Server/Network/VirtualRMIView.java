@@ -1,8 +1,8 @@
 package Server.Network;
 
+import Client.NetworkHandler;
 import Client.NetworkRMIHandler;
 import Client.View.RemoteNetworkHandler;
-import Server.Events.Event;
 import Server.Events.EventTypeAdapterFactory;
 import Server.Events.MVEvents.MVEvent;
 import Server.Events.SelectViewEvents.LoginView;
@@ -11,14 +11,12 @@ import Server.Events.VCEvents.VCEvent;
 import Server.Listeners.VCEventListener;
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Cards.CommonGoalCardAdapter;
+import Utils.ConnectionInfo;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.lang.reflect.InvocationTargetException;
-import java.net.Socket;
-import java.net.SocketException;
 import java.rmi.ConnectException;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -37,6 +35,8 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
     RemoteNetworkHandler client;
     boolean isFirsToJoin;
     boolean pongReceived;
+
+    ConnectionInfo connectionInfo;
 
     /**
      * This list contains all the VCEventListeners that are listening to this VirtualRMIView, which in fact is the only
@@ -122,7 +122,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
      * @param event the MVEvent to be sent to the client.
      * @see Gson
      */
-    public void onMVEvent(MVEvent event) {
+    public synchronized void onMVEvent(MVEvent event) {
         Gson gson = new GsonBuilder()
                 .excludeFieldsWithoutExposeAnnotation().registerTypeAdapter(CommonGoalCard.class, new CommonGoalCardAdapter())
                 .create();
@@ -141,7 +141,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
      * @param event the SelectViewEvent to be sent to the client.
      * @see Gson
      */
-    public void onSelectViewEvent(SelectViewEvent event) {
+    public synchronized void onSelectViewEvent(SelectViewEvent event) {
         Gson gson = new Gson();
         String json = gson.toJson(event);
         json += "\n";
@@ -155,16 +155,20 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
 
     @Override
     public void addVCEventListener(VCEventListener listener){
-        vcEventListeners.add(listener);
+        synchronized (vcEventListeners){
+            vcEventListeners.add(listener);
+        }
     }
 
     @Override
     public void removeVCEventListener(VCEventListener listener){
-        vcEventListeners.remove(listener);
+        synchronized (vcEventListeners){
+            vcEventListeners.remove(listener);
+        }
     }
 
     @Override
-    public void ping() {
+    public synchronized void ping() {
         try{
             pongReceived = false;
             System.out.println("Pinging client");
@@ -179,7 +183,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
     }
 
     @Override
-    public boolean checkPongResponse() {
+    public synchronized boolean checkPongResponse() {
        if(!pongReceived){
            System.err.println("Client disconnected");
            return false;
@@ -189,4 +193,25 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
            return true;
        }
     }
+
+    @Override
+    public synchronized void setPongReceived(){
+        pongReceived = true;
+    }
+    public ConnectionInfo getConnectionInfo() {
+        synchronized (connectionInfo){
+            return connectionInfo;
+        }
+    }
+
+    public void setConnectionInfo(ConnectionInfo connectionInfo) {
+        synchronized (connectionInfo){
+            this.connectionInfo = connectionInfo;
+        }
+    }
+
+    public void setClient(RemoteNetworkHandler client) {
+        this.client = client;
+    }
+
 }

@@ -9,11 +9,14 @@ public class PingManager implements Runnable{
     Map<VirtualView, Controller> virtualViewControllerMap;
     Map<VirtualView, Boolean> virtualViewStatuses;
     Timer timer;
-    public PingManager(List<VirtualView> virtualViews, Map<VirtualView, Controller> virtualViewControllerMap){
+    Server server;
+
+    public PingManager(Server server, List<VirtualView> virtualViews, Map<VirtualView, Controller> virtualViewControllerMap){
         this.virtualViews = virtualViews;
         this.virtualViewControllerMap = virtualViewControllerMap;
         this.virtualViewStatuses = new HashMap<>();
         this.timer = new Timer();
+        this.server = server;
     }
 
     public void addVirtualView(VirtualView virtualView, Controller controller){
@@ -51,12 +54,17 @@ public class PingManager implements Runnable{
                         //The player lost connection
                         virtualViewStatuses.put(virtualView, false);
                         virtualViewControllerMap.get(virtualView).playerDisconnected(virtualView);
+                        //server.updateConnectionStatus(virtualView.getConnectionInfo(), false);
+                        synchronized (server){
+                            server.updateConnectionStatus(virtualView.getConnectionInfo(), false);
+                        }
                     }else{
                         if(virtualViewStatuses.get(virtualView) == false){
                             //The player lost connection and then reconnected
                             virtualViewStatuses.put(virtualView, true);
-                            virtualViewControllerMap.get(virtualView).playerConnected(virtualView);
-
+                            //virtualViewControllerMap.get(virtualView).playerConnected(virtualView);
+                            //server.setClientsConnectionStatuses(virtualView.getConnectionInfo(), true);
+                            //server.updateConnectionStatus(virtualView.getConnectionInfo(), true);
                         }
                     }
                 }

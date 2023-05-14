@@ -1,10 +1,14 @@
 package Server.Network;
 
+import Client.NetworkHandler;
+import Client.NetworkRMIHandler;
+import Client.View.RemoteNetworkHandler;
 import Server.Events.MVEvents.MVEvent;
 import Server.Events.SelectViewEvents.SelectViewEvent;
 import Server.Listeners.MVEventListener;
 import Server.Listeners.SelectViewEventListener;
 import Server.Listeners.VCEventListener;
+import Utils.ConnectionInfo;
 
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
@@ -42,4 +46,9 @@ public interface VirtualView extends Runnable, MVEventListener, SelectViewEventL
     void ping();
 
     boolean checkPongResponse();
+
+    public ConnectionInfo getConnectionInfo();
+
+    public void setPongReceived();
+
 }

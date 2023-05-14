@@ -34,6 +34,7 @@ public class NetworkSocketHandler implements NetworkHandler{
     private OutputStream out;
     private final String host;
     private final int port;
+    private boolean isReconnecting;
 
     /**
      * This constructor is used to create a new NetworkSocketHandler and connect it to the server
@@ -41,10 +42,11 @@ public class NetworkSocketHandler implements NetworkHandler{
      * @param port the port of the server
      * @param view the view
      */
-    public NetworkSocketHandler(String host, int port, View view) {
+    public NetworkSocketHandler(String host, int port, View view, boolean isReconnecting) {
         this.host = host;
         this.view = view;
         this.port = port;
+        this.isReconnecting = isReconnecting;
     }
 
     @Override
@@ -95,8 +97,25 @@ public class NetworkSocketHandler implements NetworkHandler{
             this.socket = new Socket(host, port);
             this.in = new Scanner(socket.getInputStream()); //message from server
             this.out = socket.getOutputStream();
+            if(isReconnecting){
+                out.write("Reconnecting\n".getBytes());
+                out.flush();
+                out.write(
+                        (new Gson().toJson(view.getConnectionInfo())+"\n").getBytes()
+                );
+                out.flush();
+                //In queso caso non devo aspettare il messaggio di benvenuto
+                System.out.println("Reconnecting to the socket server!: connection info sent:\n"+new Gson().toJson(view.getConnectionInfo())+"\n");
+            } else{
+                out.write("Connecting\n".getBytes());
+                out.flush();
+                out.write(
+                        (new Gson().toJson(view.getConnectionInfo())+"\n").getBytes()
+                );
+                out.flush();
+                String welcomeMessage = in.nextLine(); //Devo prima aspettare il messaggio di benvenuto
+            }
             System.out.println("Connected to the socket server!");
-            String welcomeMessage = in.nextLine();
             //System.out.println("Ricevuto messaggio di benvenuto: " + welcomeMessage);
         } catch (IOException e) {
             System.err.println(e.getStackTrace());

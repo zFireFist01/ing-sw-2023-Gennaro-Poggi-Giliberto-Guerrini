@@ -10,6 +10,7 @@ import Server.Events.VCEvents.VCEvent;
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Cards.CommonGoalCardAdapter;
 import Server.Network.*;
+import Utils.ConnectionInfo;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -44,6 +45,7 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements RemoteNetw
 
         try {
             rmiWaiter = (RMIWaiterInterface) registry.lookup("RMIWaiter");
+            System.out.println("RMIWaiter found");
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         } catch (NotBoundException e) {
@@ -52,7 +54,13 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements RemoteNetw
         }
 
         try {
-            virtualRMIView = rmiWaiter.giveConnection(this);
+            //virtualRMIView = rmiWaiter.giveConnection(this);
+            if(view.isReconnecting()){
+                virtualRMIView = rmiWaiter.reGiveConnection(this, view.getConnectionInfo());
+                System.out.println("called reGiveConnection");
+            }else{
+                virtualRMIView = rmiWaiter.giveConnection(this);
+            }
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -123,5 +131,10 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements RemoteNetw
     @Override
     public void pong() throws RemoteException{
         return;
+    }
+
+    @Override
+    public ConnectionInfo getConnectionInfo() throws RemoteException{
+        return this.view.getConnectionInfo();
     }
 }

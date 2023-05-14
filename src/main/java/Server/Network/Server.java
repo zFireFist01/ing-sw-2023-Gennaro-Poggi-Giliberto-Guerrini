@@ -4,6 +4,7 @@ import Server.Controller.Controller;
 import Server.Model.Match;
 import Server.Model.MatchStatus.NotRunning;
 import Server.Model.MatchStatus.WaitingForPlayers;
+import Utils.ConnectionInfo;
 
 import java.io.IOException;
 import java.rmi.AccessException;
@@ -32,13 +33,15 @@ public class Server implements Runnable{
     Map<Match, Controller> macthesControllers;
     Map<Match, List<VirtualView>> matchesViews;
     PingManager pingManager;
+    Map<ConnectionInfo, Boolean> clientsConnectionStatuses;
 
     public Server() throws IOException{
         boolean done = false;
         this.matches = new ArrayList<>();
         matchesViews = new HashMap<>();
         this.macthesControllers = new HashMap<>();
-        pingManager = new PingManager(new ArrayList<>(), new HashMap<>());
+        this.clientsConnectionStatuses = new HashMap<>();
+        pingManager = new PingManager(this, new ArrayList<>(), new HashMap<>());
         this.socketWaiter = new SocketWaiter(this,1098);
         while(!done){
             try{
@@ -123,8 +126,10 @@ public class Server implements Runnable{
      * This method is used from both the RMI waiter and the Socket waiter to get the controller of a given
      * @return the controller of the given match
      */
-    protected synchronized Controller getMatchsController(Match m){
-        return macthesControllers.get(m);
+    protected  Controller getMatchsController(Match m){
+        synchronized (macthesControllers){
+            return macthesControllers.get(m);
+        }
     }
 
     /**
@@ -149,4 +154,73 @@ public class Server implements Runnable{
         pingManager.addVirtualView(vv, macthesControllers.get(m));
     }
 
+    public Map<ConnectionInfo, Boolean> getClientsConnectionStatuses() {
+        //return clientsConnectionStatuses;
+        synchronized (clientsConnectionStatuses){
+            return new HashMap<>(clientsConnectionStatuses);
+        }
+    }
+
+    public void setClientsConnectionStatuses(ConnectionInfo connectionInfo, boolean status) {
+        synchronized (clientsConnectionStatuses){
+            this.clientsConnectionStatuses.put(connectionInfo, status);
+        }
+    }
+
+    public Map<Match, Controller> getMacthesControllers() {
+        //return macthesControllers;
+        synchronized (macthesControllers){
+            return new HashMap<>(macthesControllers);
+        }
+    }
+
+    public Map<Match, List<VirtualView>> getMatchesViews() {
+        //return matchesViews;
+        synchronized (matchesViews) {
+            return new HashMap<>(matchesViews);
+        }
+    }
+
+    public void updateConnectionStatus(ConnectionInfo connectionInfo, boolean status){
+        synchronized (clientsConnectionStatuses){
+            /*if(!clientsConnectionStatuses.containsKey(connectionInfo)) {
+                clientsConnectionStatuses.put(connectionInfo, status);
+                return;
+            }
+            for(ConnectionInfo ci : clientsConnectionStatuses.keySet()){
+                if(ci.getSignature().equals(connectionInfo.getSignature())){
+                    //clientsConnectionStatuses.put(ci, status);
+                    //clientsConnectionStatuses.remove(ci);
+                    ci.setNickname(connectionInfo.getNickname());
+                    clientsConnectionStatuses.put(ci, status);
+                }
+            }*/
+            clientsConnectionStatuses.put(connectionInfo, status);
+        }
+    }
+
+    public boolean wasConnectedAndHasDisconnected(ConnectionInfo connectionInfo){
+        synchronized (clientsConnectionStatuses){
+            if(!clientsConnectionStatuses.containsKey(connectionInfo))
+                return false;
+            for(ConnectionInfo ci : clientsConnectionStatuses.keySet()){
+                if(ci.getSignature().equals(connectionInfo.getSignature())){
+                    return clientsConnectionStatuses.get(ci)==false;
+                }
+            }
+            return false;
+        }
+    }
+
+    /*
+    public boolean atLeastOneDisconnected(){
+        synchronized (clientsConnectionStatuses){
+            for(ConnectionInfo ci : clientsConnectionStatuses.keySet()){
+                if(clientsConnectionStatuses.get(ci)==false)
+                    return true;
+            }
+            return false;
+        }
+
+    }*/
 }

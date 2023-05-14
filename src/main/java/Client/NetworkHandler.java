@@ -3,6 +3,7 @@ package Client;
 import Server.Events.VCEvents.VCEvent;
 import Server.Listeners.VCEventListener;
 import Server.Network.VirtualView;
+import Utils.ConnectionInfo;
 
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
@@ -25,5 +26,7 @@ public interface NetworkHandler extends VCEventListener, Runnable{
 
     @Override
     void run();
+
+
 
 }
