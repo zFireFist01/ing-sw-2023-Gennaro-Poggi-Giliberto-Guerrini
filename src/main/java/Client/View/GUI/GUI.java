@@ -59,64 +59,19 @@ public class GUI extends Application implements View {
 
 
     public GUI () {
-        /*
-        URL titleUrl;
-        try {
-            titleUrl = new File("/home/due2/Desktop/Progetto_SW_ENG/17_MyShelfie_BGA/Publisher material/Title_2000x618px.png").toURI().toURL();
-
-        }catch(MalformedURLException e){
-            System.out.println("Resource not found");
-            return;
-        }
-
-
-
-        Image titleImage = new Image(titleUrl.toString());
-
-        */
 
         Image titleImage = new Image(getClass().getResource("/Publisher material/Title 2000x618px.png").toString());
         this.titleImageView = new ImageView(titleImage);
 
-        /*
-        URL bookshelfUrl;
-        try {
-            bookshelfUrl = new File("/boards/bookshelf.png").toURI().toURL();
-        }catch(MalformedURLException e){
-            System.out.println("Resource not found");
-            return;
-        }
-        Image bookshelfImage = new Image(bookshelfUrl.toString());
-        */
 
         Image bookshelfImage = new Image(getClass().getResource("/boards/bookshelf.png").toString());
         this.BookshelfImageView = new ImageView(bookshelfImage);
 
-        /*
-        URL livingRoomUrl;
 
-        try {
-            livingRoomUrl = new File("/home/due2/Desktop/Progetto_SW_ENG/17_MyShelfie_BGA/boards/livingroom.png").toURI().toURL();
-        }catch(MalformedURLException e){
-            System.out.println("Resource not found");
-            return;
-        }
-        Image livingRoomImage = new Image(livingRoomUrl.toString());
-        */
         Image livingRoomImage = new Image(getClass().getResource("/boards/livingroom.png").toString());
         this.livingRoomImageView = new ImageView(livingRoomImage);
 
-        /*
-        URL wallpaperUrl;
-        try {
-            wallpaperUrl = new File("/home/due2/Desktop/Progetto_SW_ENG/17_MyShelfie_BGA/Publisher material/Display_3.jpg").toURI().toURL();
-        }catch(MalformedURLException e){
-            System.out.println("Resource not found");
-            return;
-        }
 
-        Image wallpaperImage = new Image(wallpaperUrl.toString());
-        */
         Image wallpaperImage = new Image(getClass().getResource("/Publisher material/Display_3.jpg").toString());
         this.wallpaperImageView = new ImageView(wallpaperImage);
 
@@ -226,8 +181,9 @@ public class GUI extends Application implements View {
         Stage isReconnectingStage = new Stage();
         isReconnectingStage.setTitle("Reconnection process");
 
+        Text askPreviousNicknameText = new Text("Please insert your previous nickname");
         TextField askPreviousNickname = new TextField();
-        askPreviousNickname.setPromptText("What was your previous nickname?");
+        askPreviousNickname.setPromptText("Previous Nickname");
         Button okButton = new Button("OK");
         okButton.setOnAction(e -> {
             previousNickname = askPreviousNickname.getText();
@@ -237,7 +193,7 @@ public class GUI extends Application implements View {
         /*TextField connectionInfoField = new TextField();
         connectionInfoField.setPromptText("Connection Info");*/
 
-        HBox isReconnectingRoot = new HBox(10, askPreviousNickname, okButton);
+        VBox isReconnectingRoot = new VBox(10, askPreviousNicknameText, askPreviousNickname, okButton);
         isReconnectingRoot.setAlignment(Pos.CENTER);
         isReconnectingRoot.setPadding(new Insets(20));
 
