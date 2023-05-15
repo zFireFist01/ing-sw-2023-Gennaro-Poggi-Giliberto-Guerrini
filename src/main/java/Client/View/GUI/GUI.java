@@ -31,8 +31,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 
 public class GUI extends Application implements View {
@@ -50,6 +52,10 @@ public class GUI extends Application implements View {
     private SelectViewEvent currentView;
     private boolean matchStarted = false;
     private boolean MatchEnded = false;
+    private ConnectionInfo connectionInfo;
+    private boolean isReconnecting;
+    private String previousNickname = null; //Will be null if isReconnecting==false
+
 
 
     public GUI () {
@@ -113,6 +119,9 @@ public class GUI extends Application implements View {
         */
         Image wallpaperImage = new Image(getClass().getResource("/Publisher material/Display_3.jpg").toString());
         this.wallpaperImageView = new ImageView(wallpaperImage);
+
+        connectionInfo = null;
+        isReconnecting = false;
     }
 
 
@@ -126,7 +135,28 @@ public class GUI extends Application implements View {
     public void start(Stage primaryStage) {
         El_loco_Stage = primaryStage;
 
+        Text askIsReconnnecting = new Text("Are you reconnecting?");
+        Button yesButton = new Button("Yes");
+        Button noButton = new Button("No");
+        yesButton.setOnAction(e -> {
+            isReconnecting = true;
+            showIsReconnectingWindow(primaryStage);
+            //primaryStage.close();
+        });
+        noButton.setOnAction(e -> {
+            isReconnecting = false;
+            showNormalWindow(primaryStage);
+            //primaryStage.close();
+        });
+        HBox reconnectingBox = new HBox(askIsReconnnecting, yesButton, noButton);
+        reconnectingBox.setAlignment(Pos.CENTER);
+        reconnectingBox.setSpacing(20);
+        reconnectingBox.setPadding(new Insets(20, 20, 20, 20));
+        Scene reconnectingScene = new Scene(reconnectingBox, 500, 200);
+        primaryStage.setScene(reconnectingScene);
+        primaryStage.show();
 
+        /*
         titleImageView.setFitWidth(600);
         titleImageView.setPreserveRatio(true);
         titleImageView.setSmooth(true);
@@ -180,6 +210,104 @@ public class GUI extends Application implements View {
         });
 
 
+        StackPane root = new StackPane(wallpaperImageView, choose);
+        StackPane.setAlignment(choose, Pos.CENTER);
+
+
+        Scene scene = new Scene(root, 800, 600);
+        primaryStage.setTitle("MyShelfie");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+         */
+    }
+
+    private void showIsReconnectingWindow(Stage primaryStage){
+        Stage isReconnectingStage = new Stage();
+        isReconnectingStage.setTitle("Reconnection process");
+
+        TextField askPreviousNickname = new TextField();
+        askPreviousNickname.setPromptText("What was your previous nickname?");
+        Button okButton = new Button("OK");
+        okButton.setOnAction(e -> {
+            previousNickname = askPreviousNickname.getText();
+            showNormalWindow(primaryStage);
+            isReconnectingStage.close();
+        });
+        /*TextField connectionInfoField = new TextField();
+        connectionInfoField.setPromptText("Connection Info");*/
+
+        HBox isReconnectingRoot = new HBox(10, askPreviousNickname, okButton);
+        isReconnectingRoot.setAlignment(Pos.CENTER);
+        isReconnectingRoot.setPadding(new Insets(20));
+
+        Scene isReconnectingScene = new Scene(isReconnectingRoot, 300, 200);
+        isReconnectingStage.setScene(isReconnectingScene);
+        isReconnectingStage.show();
+    }
+
+    private void showNormalWindow(Stage primaryStage){
+        titleImageView.setFitWidth(600);
+        titleImageView.setPreserveRatio(true);
+        titleImageView.setSmooth(true);
+
+        wallpaperImageView.setOpacity(0.7);
+
+
+        Button rmiButton = new Button("RMI");
+        Button socketButton = new Button("SOCKET");
+
+        rmiButton.setMinWidth(200);
+        rmiButton.setMinHeight(100);
+
+        socketButton.setMinWidth(200);
+        socketButton.setMinHeight(100);
+
+        rmiButton.setStyle("-fx-background-color: #FFC0CB; -fx-border-radius: 15; -fx-background-radius: 15;");
+
+        String hoverStyle1 = "-fx-background-color: #FF69B4; -fx-border-radius: 15; -fx-background-radius: 15;"
+                + "-fx-effect: dropshadow(three-pass-box, rgba(255, 105, 180, 0.8), 10, 0, 0, 0);";
+
+        rmiButton.setOnMouseEntered(e -> rmiButton.setStyle(hoverStyle1));
+        rmiButton.setOnMouseExited(e -> rmiButton.setStyle("-fx-background-color: #FFC0CB; -fx-border-radius: 15; -fx-background-radius: 15;"));
+
+        String hoverStyle2 = "-fx-background-color: #00BFFF; -fx-border-radius: 15; -fx-background-radius: 15;"
+                + "-fx-effect: dropshadow(three-pass-box, rgba(0, 191, 255, 0.8), 10, 0, 0, 0);";
+
+
+
+        socketButton.setStyle("-fx-background-color: #ADD8E6; -fx-border-radius: 15; -fx-background-radius: 15;");
+        socketButton.setOnMouseEntered(e -> socketButton.setStyle(hoverStyle2));
+        socketButton.setOnMouseExited(e -> socketButton.setStyle("-fx-background-color: #ADD8E6; -fx-border-radius: 15; -fx-background-radius: 15;"));
+
+
+
+        HBox buttons = new HBox(10, rmiButton, socketButton);
+        buttons.setAlignment(Pos.CENTER);
+
+
+        VBox choose = new VBox(10, titleImageView, buttons);
+        choose.setAlignment(Pos.CENTER);
+
+        String localIP = null;
+        try {
+            InetAddress ipAddress = InetAddress.getLocalHost();
+            localIP = ipAddress.getHostAddress();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
+        rmiButton.setOnAction(e -> {
+            connectionType = ConnectionType.RMI;
+            showRMIConnectionWindow(primaryStage);
+        });
+
+        socketButton.setOnAction(e -> {
+            connectionType = ConnectionType.SOCKET;
+            showSocketConnectionWindow(primaryStage);
+        });
+
+        this.connectionInfo = new ConnectionInfo(localIP, connectionType, previousNickname);
         StackPane root = new StackPane(wallpaperImageView, choose);
         StackPane.setAlignment(choose, Pos.CENTER);
 
@@ -424,11 +552,11 @@ public class GUI extends Application implements View {
 
     @Override
     public boolean isReconnecting() {
-        return false;
+        return isReconnecting;
     }
 
     @Override
     public ConnectionInfo getConnectionInfo() {
-        return null;
+        return connectionInfo;
     }
 }
