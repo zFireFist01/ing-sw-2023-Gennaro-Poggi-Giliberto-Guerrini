@@ -10,6 +10,7 @@ import Server.Events.SelectViewEvents.GameView;
 import Server.Events.SelectViewEvents.LoginView;
 import Server.Events.SelectViewEvents.SelectViewEvent;
 import Server.Events.VCEvents.LoginEvent;
+import Utils.ConnectionInfo;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -52,6 +53,7 @@ public class GUI extends Application implements View {
 
 
     public GUI () {
+        /*
         URL titleUrl;
         try {
             titleUrl = new File("/home/due2/Desktop/Progetto_SW_ENG/17_MyShelfie_BGA/Publisher material/Title_2000x618px.png").toURI().toURL();
@@ -62,19 +64,29 @@ public class GUI extends Application implements View {
         }
 
 
+
         Image titleImage = new Image(titleUrl.toString());
+
+        */
+
+        Image titleImage = new Image(getClass().getResource("/Publisher material/Title 2000x618px.png").toString());
         this.titleImageView = new ImageView(titleImage);
 
+        /*
         URL bookshelfUrl;
         try {
-            bookshelfUrl = new File("/home/due2/Desktop/Progetto_SW_ENG/17_MyShelfie_BGA/boards/bookshelf.png").toURI().toURL();
+            bookshelfUrl = new File("/boards/bookshelf.png").toURI().toURL();
         }catch(MalformedURLException e){
             System.out.println("Resource not found");
             return;
         }
         Image bookshelfImage = new Image(bookshelfUrl.toString());
+        */
+
+        Image bookshelfImage = new Image(getClass().getResource("/boards/bookshelf.png").toString());
         this.BookshelfImageView = new ImageView(bookshelfImage);
 
+        /*
         URL livingRoomUrl;
 
         try {
@@ -84,8 +96,11 @@ public class GUI extends Application implements View {
             return;
         }
         Image livingRoomImage = new Image(livingRoomUrl.toString());
+        */
+        Image livingRoomImage = new Image(getClass().getResource("/boards/livingroom.png").toString());
         this.livingRoomImageView = new ImageView(livingRoomImage);
 
+        /*
         URL wallpaperUrl;
         try {
             wallpaperUrl = new File("/home/due2/Desktop/Progetto_SW_ENG/17_MyShelfie_BGA/Publisher material/Display_3.jpg").toURI().toURL();
@@ -93,7 +108,10 @@ public class GUI extends Application implements View {
             System.out.println("Resource not found");
             return;
         }
+
         Image wallpaperImage = new Image(wallpaperUrl.toString());
+        */
+        Image wallpaperImage = new Image(getClass().getResource("/Publisher material/Display_3.jpg").toString());
         this.wallpaperImageView = new ImageView(wallpaperImage);
     }
 
@@ -101,15 +119,7 @@ public class GUI extends Application implements View {
 
 
     public static void main(String[] args) {
-
-
-
         launch(args);
-
-
-
-
-
     }
 
 
@@ -182,7 +192,7 @@ public class GUI extends Application implements View {
     private void showSocketConnectionWindow(Stage primaryStage) {
 
         Stage loginStage = new Stage();
-        loginStage.setTitle("Insert Adress and Port");
+        loginStage.setTitle("Insert Address and Port");
 
         TextField addressField = new TextField();
         addressField.setPromptText("Server IP Address");
@@ -193,7 +203,7 @@ public class GUI extends Application implements View {
         loginButton.setOnAction(e -> {
             String host = addressField.getText();
             int port = Integer.parseInt(portField.getText());
-            networkHandler = new NetworkSocketHandler(host, port, this);
+            networkHandler = new NetworkSocketHandler(host, port, this, false);
 
             showInitWindow(primaryStage);
 
@@ -410,5 +420,15 @@ public class GUI extends Application implements View {
 
     public void run() {
         //launch();
+    }
+
+    @Override
+    public boolean isReconnecting() {
+        return false;
+    }
+
+    @Override
+    public ConnectionInfo getConnectionInfo() {
+        return null;
     }
 }
