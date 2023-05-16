@@ -19,7 +19,12 @@ import Server.Events.VCEvents.LoginEvent;
 import Server.Events.VCEvents.*;
 
 import Server.Model.Cards.CommonGoalCard;
+import Server.Model.Cards.PersonalGoalCard;
 import Server.Model.Chat.Message;
+import Server.Model.GameItems.BookshelfTileSpot;
+import Server.Model.GameItems.LivingRoomTileSpot;
+import Server.Model.GameItems.PointsTile;
+import Server.Model.GameItems.TileType;
 import Server.Model.LightMatch;
 import Server.Model.Player.Player;
 import Utils.ConnectionInfo;
@@ -256,54 +261,55 @@ public class CLI implements Runnable , View {
         }
         System.out.println("Match started");
         System.out.println("You are " + myNick );
-        printLivingRoom(match.getLivingRoom().getCLIRepresentation());
-        printPersonalGoal(me.getPersonalGoalCard().getCLIRepresentation());
+        printLivingRoom(renderLivingroom(match.getLivingRoom().getTileMatrix()));
+        printPersonalGoal(renderPersonalGoalCard(me.getPersonalGoalCard().getTileMatrix(),
+                me.getPersonalGoalCard().getCardID()));
         CommonGoalCard commonGoal= match.getCommonGoals()[0];
-        printCommonGoal1(commonGoal.getCLIRepresentation());
-        printPoints1(commonGoal.getPointsTiles().get(commonGoal.getPointsTiles().size()-1).getCLIRepresentation());
+        printCommonGoal1(renderCommonGoalCard(commonGoal));
+        printPoints1(renderPointTile(commonGoal.getPointsTiles().get(commonGoal.getPointsTiles().size()-1)));
         printDescription1(commonGoal.getCommonGoalDescription());
         commonGoal = match.getCommonGoals()[1];
-        printCommonGoal2(commonGoal.getCLIRepresentation());
-        printPoints2(commonGoal.getPointsTiles().get(commonGoal.getPointsTiles().size()-1).getCLIRepresentation());
+        printCommonGoal2(renderCommonGoalCard(commonGoal));
+        printPoints2(renderPointTile(commonGoal.getPointsTiles().get(commonGoal.getPointsTiles().size()-1)));
         printDescription2(commonGoal.getCommonGoalDescription());
 
         switch(numberPlayers) {
             case 2 -> {
-                printBookshelf1(players.get(0).getBookshelf().getCLIRepresentation());
+                printBookshelf1(renderBookshelf(players.get(0).getBookshelf().getTileMatrix()));
                 printEndTile1(EMPTYSPOT);
                 printPlayer1Points(EMPTYSPOT, EMPTYSPOT);
 
-                printBookshelf2(players.get(1).getBookshelf().getCLIRepresentation());
+                printBookshelf2(renderBookshelf(players.get(1).getBookshelf().getTileMatrix()));
                 printEndTile2(EMPTYSPOT);
                 printPlayer2Points(EMPTYSPOT, EMPTYSPOT);
             }
             case 3 -> {
-                printBookshelf1(players.get(0).getBookshelf().getCLIRepresentation());
+                printBookshelf1(renderBookshelf(players.get(0).getBookshelf().getTileMatrix()));
                 printEndTile1(EMPTYSPOT);
                 printPlayer1Points(EMPTYSPOT, EMPTYSPOT);
 
-                printBookshelf2(players.get(1).getBookshelf().getCLIRepresentation());
+                printBookshelf2(renderBookshelf(players.get(1).getBookshelf().getTileMatrix()));
                 printEndTile2(EMPTYSPOT);
                 printPlayer2Points(EMPTYSPOT, EMPTYSPOT);
 
-                printBookshelf3(players.get(2).getBookshelf().getCLIRepresentation());
+                printBookshelf3(renderBookshelf(players.get(2).getBookshelf().getTileMatrix()));
                 printEndTile3(EMPTYSPOT);
                 printPlayer3Points(EMPTYSPOT, EMPTYSPOT);
             }
             case 4 -> {
-                printBookshelf1(players.get(0).getBookshelf().getCLIRepresentation());
+                printBookshelf1(renderBookshelf(players.get(0).getBookshelf().getTileMatrix()));
                 printEndTile1(EMPTYSPOT);
                 printPlayer1Points(EMPTYSPOT, EMPTYSPOT);
 
-                printBookshelf2(players.get(1).getBookshelf().getCLIRepresentation());
+                printBookshelf2(renderBookshelf(players.get(1).getBookshelf().getTileMatrix()));
                 printEndTile2(EMPTYSPOT);
                 printPlayer2Points(EMPTYSPOT, EMPTYSPOT);
 
-                printBookshelf3(players.get(2).getBookshelf().getCLIRepresentation());
+                printBookshelf3(renderBookshelf(players.get(2).getBookshelf().getTileMatrix()));
                 printEndTile3(EMPTYSPOT);
                 printPlayer3Points(EMPTYSPOT, EMPTYSPOT);
 
-                printBookshelf4(players.get(3).getBookshelf().getCLIRepresentation());
+                printBookshelf4(renderBookshelf(players.get(3).getBookshelf().getTileMatrix()));
                 printEndTile4(EMPTYSPOT);
                 printPlayer4Points(EMPTYSPOT, EMPTYSPOT);
             }
@@ -339,66 +345,64 @@ public class CLI implements Runnable , View {
         switch(numberPlayers) {
             case 2 -> {
                 if(match.getPlayers().get(0).getPointsTiles().size() == 1) {
-                    printPlayer1Points(match.getPlayers().get(0).getPointsTiles().get(0).getCLIRepresentation(), EMPTYSPOT);
+                    printPlayer1Points(renderPointTile(match.getPlayers().get(0).getPointsTiles().get(0)), EMPTYSPOT);
                 }else if(match.getPlayers().get(0).getPointsTiles().size() == 2){
-                    printPlayer1Points(match.getPlayers().get(0).getPointsTiles().get(0).getCLIRepresentation(),match.getPlayers().get(0).getPointsTiles().get(1).getCLIRepresentation());
+                    printPlayer1Points(renderPointTile(match.getPlayers().get(0).getPointsTiles().get(0)),renderPointTile(match.getPlayers().get(0).getPointsTiles().get(1)));
                 }
                 if(match.getPlayers().get(1).getPointsTiles().size() == 1) {
-                    printPlayer2Points(match.getPlayers().get(1).getPointsTiles().get(0).getCLIRepresentation(), EMPTYSPOT);
+                    printPlayer2Points(renderPointTile(match.getPlayers().get(1).getPointsTiles().get(0)), EMPTYSPOT);
                 }else if(match.getPlayers().get(1).getPointsTiles().size() == 2){
-                    printPlayer2Points(match.getPlayers().get(1).getPointsTiles().get(0).getCLIRepresentation(), match.getPlayers().get(1).getPointsTiles().get(1).getCLIRepresentation());
+                    printPlayer2Points(renderPointTile(match.getPlayers().get(1).getPointsTiles().get(0)), renderPointTile(match.getPlayers().get(1).getPointsTiles().get(1)));
                 }
             }
             case 3->{
                 if(match.getPlayers().get(0).getPointsTiles().size() == 1) {
-                    printPlayer1Points(match.getPlayers().get(0).getPointsTiles().get(0).getCLIRepresentation(), EMPTYSPOT);
+                    printPlayer1Points(renderPointTile(match.getPlayers().get(0).getPointsTiles().get(0)), EMPTYSPOT);
                 }else if(match.getPlayers().get(0).getPointsTiles().size() == 2){
-                    printPlayer1Points(match.getPlayers().get(0).getPointsTiles().get(0).getCLIRepresentation(), match.getPlayers().get(0).getPointsTiles().get(1).getCLIRepresentation());
-
+                    printPlayer1Points(renderPointTile(match.getPlayers().get(0).getPointsTiles().get(0)), renderPointTile(match.getPlayers().get(0).getPointsTiles().get(1)));
                 }
 
                 if(match.getPlayers().get(1).getPointsTiles().size() == 1) {
-                    printPlayer2Points(match.getPlayers().get(1).getPointsTiles().get(0).getCLIRepresentation(), EMPTYSPOT);
+                    printPlayer2Points(renderPointTile(match.getPlayers().get(1).getPointsTiles().get(0)), EMPTYSPOT);
                 }else if(match.getPlayers().get(1).getPointsTiles().size() == 2){
-                    printPlayer2Points(match.getPlayers().get(1).getPointsTiles().get(0).getCLIRepresentation(), match.getPlayers().get(1).getPointsTiles().get(1).getCLIRepresentation());
+                    printPlayer2Points(renderPointTile(match.getPlayers().get(1).getPointsTiles().get(0)), renderPointTile(match.getPlayers().get(1).getPointsTiles().get(1)));
                 }
 
                 if(match.getPlayers().get(2).getPointsTiles().size() == 1) {
-                    printPlayer3Points(match.getPlayers().get(2).getPointsTiles().get(0).getCLIRepresentation(), EMPTYSPOT);
+                    printPlayer3Points(renderPointTile(match.getPlayers().get(2).getPointsTiles().get(0)), EMPTYSPOT);
                 }else if(match.getPlayers().get(2).getPointsTiles().size() == 2){
-                    printPlayer3Points(match.getPlayers().get(2).getPointsTiles().get(0).getCLIRepresentation(), match.getPlayers().get(2).getPointsTiles().get(1).getCLIRepresentation());
-
+                    printPlayer3Points(renderPointTile(match.getPlayers().get(2).getPointsTiles().get(0)), renderPointTile(match.getPlayers().get(2).getPointsTiles().get(1)));
                 }
-            }case 4->{
+            }
+            case 4->{
                 if(match.getPlayers().get(0).getPointsTiles().size() == 1) {
-                    printPlayer1Points(match.getPlayers().get(0).getPointsTiles().get(0).getCLIRepresentation(), EMPTYSPOT);
+                    printPlayer1Points(renderPointTile(match.getPlayers().get(0).getPointsTiles().get(0)), EMPTYSPOT);
                 }else if(match.getPlayers().get(0).getPointsTiles().size() == 2){
-                    printPlayer1Points(match.getPlayers().get(0).getPointsTiles().get(0).getCLIRepresentation(), match.getPlayers().get(0).getPointsTiles().get(1).getCLIRepresentation());
-
+                    printPlayer1Points(renderPointTile(match.getPlayers().get(0).getPointsTiles().get(0)), renderPointTile(match.getPlayers().get(0).getPointsTiles().get(1)));
                 }
 
                 if(match.getPlayers().get(1).getPointsTiles().size() == 1) {
-                    printPlayer2Points(match.getPlayers().get(1).getPointsTiles().get(0).getCLIRepresentation(), EMPTYSPOT);
+                    printPlayer2Points(renderPointTile(match.getPlayers().get(1).getPointsTiles().get(0)), EMPTYSPOT);
                 }else if(match.getPlayers().get(1).getPointsTiles().size() == 2){
-                    printPlayer2Points(match.getPlayers().get(1).getPointsTiles().get(0).getCLIRepresentation(), match.getPlayers().get(1).getPointsTiles().get(1).getCLIRepresentation());
+                    printPlayer2Points(renderPointTile(match.getPlayers().get(1).getPointsTiles().get(0)), renderPointTile(match.getPlayers().get(1).getPointsTiles().get(1)));
                 }
 
                 if(match.getPlayers().get(2).getPointsTiles().size() == 1) {
-                    printPlayer3Points(match.getPlayers().get(2).getPointsTiles().get(0).getCLIRepresentation(), EMPTYSPOT);
+                    printPlayer3Points(renderPointTile(match.getPlayers().get(2).getPointsTiles().get(0)), EMPTYSPOT);
                 }else if(match.getPlayers().get(2).getPointsTiles().size() == 2) {
-                    printPlayer3Points(match.getPlayers().get(2).getPointsTiles().get(0).getCLIRepresentation(), match.getPlayers().get(2).getPointsTiles().get(1).getCLIRepresentation());
+                    printPlayer3Points(renderPointTile(match.getPlayers().get(2).getPointsTiles().get(0)), renderPointTile(match.getPlayers().get(2).getPointsTiles().get(1)));
                 }
 
                 if(match.getPlayers().get(3).getPointsTiles().size() == 1) {
-                    printPlayer4Points(match.getPlayers().get(3).getPointsTiles().get(0).getCLIRepresentation(), EMPTYSPOT);
+                    printPlayer4Points(renderPointTile(match.getPlayers().get(3).getPointsTiles().get(0)), EMPTYSPOT);
                 }else if(match.getPlayers().get(3).getPointsTiles().size() == 2){
-                    printPlayer4Points(match.getPlayers().get(3).getPointsTiles().get(0).getCLIRepresentation(), match.getPlayers().get(3).getPointsTiles().get(1).getCLIRepresentation());
+                    printPlayer4Points(renderPointTile(match.getPlayers().get(3).getPointsTiles().get(0)), renderPointTile(match.getPlayers().get(3).getPointsTiles().get(1)));
                 }
             }
 
         }
-        printPoints1(match.getCommonGoals()[0].getPointsTiles().get(match.getCommonGoals()[0].getPointsTiles().size()-1).getCLIRepresentation());
-        printPoints2(match.getCommonGoals()[1].getPointsTiles().get(match.getCommonGoals()[1].getPointsTiles().size()-1).getCLIRepresentation());
+        printPoints1(renderPointTile(match.getCommonGoals()[0].getPointsTiles().get(match.getCommonGoals()[0].getPointsTiles().size()-1)));
+        printPoints2(renderPointTile(match.getCommonGoals()[1].getPointsTiles().get(match.getCommonGoals()[1].getPointsTiles().size()-1)));
         if(match.getFirstToFinish()!=null){
             int i;
             for(i=0;i<numberPlayers;i++){
@@ -423,18 +427,18 @@ public class CLI implements Runnable , View {
     private void onModifiedBookshelfEvent(LightMatch match){
         switch(numberPlayers) {
             case 2 -> {
-                printBookshelf1(match.getPlayers().get(0).getBookshelf().getCLIRepresentation());
-                printBookshelf2(match.getPlayers().get(1).getBookshelf().getCLIRepresentation());
+                printBookshelf1(renderBookshelf(match.getPlayers().get(0).getBookshelf().getTileMatrix()));
+                printBookshelf2(renderBookshelf(match.getPlayers().get(1).getBookshelf().getTileMatrix()));
             }
             case 3->{
-                printBookshelf1(match.getPlayers().get(0).getBookshelf().getCLIRepresentation());
-                printBookshelf2(match.getPlayers().get(1).getBookshelf().getCLIRepresentation());
-                printBookshelf3(match.getPlayers().get(2).getBookshelf().getCLIRepresentation());
+                printBookshelf1(renderBookshelf(match.getPlayers().get(0).getBookshelf().getTileMatrix()));
+                printBookshelf2(renderBookshelf(match.getPlayers().get(1).getBookshelf().getTileMatrix()));
+                printBookshelf3(renderBookshelf(match.getPlayers().get(2).getBookshelf().getTileMatrix()));
             }case 4->{
-                printBookshelf1(match.getPlayers().get(0).getBookshelf().getCLIRepresentation());
-                printBookshelf2(match.getPlayers().get(1).getBookshelf().getCLIRepresentation());
-                printBookshelf3(match.getPlayers().get(2).getBookshelf().getCLIRepresentation());
-                printBookshelf4(match.getPlayers().get(3).getBookshelf().getCLIRepresentation());
+                printBookshelf1(renderBookshelf(match.getPlayers().get(0).getBookshelf().getTileMatrix()));
+                printBookshelf2(renderBookshelf(match.getPlayers().get(1).getBookshelf().getTileMatrix()));
+                printBookshelf3(renderBookshelf(match.getPlayers().get(2).getBookshelf().getTileMatrix()));
+                printBookshelf4(renderBookshelf(match.getPlayers().get(3).getBookshelf().getTileMatrix()));
             }
 
         }
@@ -447,7 +451,7 @@ public class CLI implements Runnable , View {
      * @author Valentino Guerrini
      */
     private void onModifiedLivingRoomEvent(LightMatch match){
-        printLivingRoom(match.getLivingRoom().getCLIRepresentation());
+        printLivingRoom(renderLivingroom(match.getLivingRoom().getTileMatrix()));
     }
 
     /**
@@ -1034,7 +1038,937 @@ public class CLI implements Runnable , View {
         System.out.println(ANSIParameters.GREEN + currentView.getMessage() + ANSIParameters.CRESET);
     }
 
+    /**
+     *
+     * @param tileType
+     * @return
+     * @author Valentino Guerrini
+     */
+    private String[][] renderTileType(TileType tileType){
+        String[][] res = new String[1][1];
+        switch (tileType){
+            case CATS -> res[0][0] = ANSIParameters.BG_GREEN +" " + ANSIParameters.CRESET;
+            case BOOKS -> res[0][0] = ANSIParameters.BG_WHITE +" " + ANSIParameters.CRESET;
+            case GAMES -> res[0][0] = ANSIParameters.BG_YELLOW +" " + ANSIParameters.CRESET;
+            case FRAMES -> res[0][0] = ANSIParameters.BG_BLUE +" " + ANSIParameters.CRESET;
+            case TROPHIES -> res[0][0] = ANSIParameters.BG_CYAN +" " + ANSIParameters.CRESET;
+            case PLANTS -> res[0][0] = ANSIParameters.BG_MAGENTA +" " + ANSIParameters.CRESET;
+            default -> res[0][0] = "?";
 
+        }
+        return res;
+    }
+
+    /**
+     *
+     * @param tileMatrix
+     * @return
+     * @author Paolo Gennaro & Valentino Guerrini
+     */
+    private String[][] renderBookshelf(BookshelfTileSpot[][] tileMatrix){
+        String[][] res = new String[14][21];
+
+
+        for(int i = 0; i<14; i++){
+            for(int j = 0; j<21; j++){
+                if(i%2 == 0){
+                    if(j%4 == 0){
+                        res[i][j] =ANSIParameters.BG_BROWN +  " " +ANSIParameters.CRESET;
+                    }else{
+                        res[i][j] =ANSIParameters.BG_BROWN+  " " +ANSIParameters.CRESET;
+                    }
+                }else{
+                    if(j%4 == 0){
+                        res[i][j] = ANSIParameters.BG_BROWN + "|" + ANSIParameters.CRESET;
+                    }else{
+                        res[i][j] = " ";
+                    }
+                }
+            }
+        }
+
+        int k = 0;
+        int m = 0;
+
+        for(int i=0; i<14 && m<6;i++){
+            for(int j=0; j<21 && k<5; j++){
+                if((j-2)%4==0 && (i-1)%2==0 && (j-2)/4==k && (i-1)/2==m){
+                    if(tileMatrix[m][k].getTileType() != null) {
+                        res[i][j] = renderTileType(tileMatrix[m][k].getTileType())[0][0];
+                        res[i][j-1] = renderTileType(tileMatrix[m][k].getTileType())[0][0];
+                        res[i][j+1] = renderTileType(tileMatrix[m][k].getTileType())[0][0];
+                    }
+                    k++;
+                    if (k == 5) {
+                        k = 0;
+                        m++;
+                    }
+                }
+            }
+        }
+
+        res[13][2] = "0";
+        res[13][6] = "1";
+        res[13][10] = "2";
+        res[13][14] = "3";
+        res[13][18] = "4";
+
+
+        return res;
+    }
+
+    /**
+     *
+     * @param tileMatrix
+     * @param cardID
+     * @return
+     * @author Marta Giliberto, Patrick Poggi, Valentino Guerrini, Paolo Gennaro
+     */
+    private String[][] renderPersonalGoalCard(BookshelfTileSpot[][] tileMatrix, int cardID){
+        String[][] res  = new String[13][15];
+        for(int i=0;i<13;i++){
+            res[i][1] = " ";
+            res[i][13] = " ";
+            res[i][0] = "║";
+            res[i][14] = "║";
+        }
+        res[0][0]="╔";
+        res[0][14]="╗";
+        res[12][0]="╚";
+        res[12][14]="╝";
+        for(int i=0;i<13;i++){
+            for(int j=2;j<13;j++){
+                if(i%2 == 0){
+                    if(j%2 == 0){
+                        res[i][j] = "╬";
+                        if(i==0){
+                            res[i][j] = "╦";
+                        }
+                        if(i==12){
+                            res[i][j] = "╩";
+                        }
+                    }else{
+                        res[i][j] = "═";
+                    }
+                }else{
+                    if(j%2 == 0){
+                        res[i][j] = "║";
+                    }else{
+                        res[i][j] = " ";
+                    }
+                }
+            }
+        }
+        switch(cardID){
+            case 1 -> {
+                res[1][3] = renderTileType(TileType.PLANTS)[0][0];
+                res[1][7] = renderTileType(TileType.FRAMES)[0][0];
+                res[3][11] = renderTileType(TileType.CATS)[0][0];
+                res[5][9] = renderTileType(TileType.BOOKS)[0][0];
+                res[7][5] = renderTileType(TileType.GAMES)[0][0];
+                res[11][7] = renderTileType(TileType.TROPHIES)[0][0];
+
+            }
+            case 2 -> {
+                res[3][5]= renderTileType(TileType.PLANTS)[0][0];
+                res[5][3]= renderTileType(TileType.CATS)[0][0];
+                res[5][7]= renderTileType(TileType.GAMES)[0][0];
+                res[7][11]= renderTileType(TileType.BOOKS)[0][0];
+                res[9][9]= renderTileType(TileType.TROPHIES)[0][0];
+                res[11][11]= renderTileType(TileType.FRAMES)[0][0];
+            }
+            case 3 ->{
+                res[3][3]= renderTileType(TileType.FRAMES)[0][0];
+                res[3][9]= renderTileType(TileType.GAMES)[0][0];
+                res[5][7]= renderTileType(TileType.PLANTS)[0][0];
+                res[7][5]= renderTileType(TileType.CATS)[0][0];
+                res[7][11]= renderTileType(TileType.TROPHIES)[0][0];
+                res[9][3]= renderTileType(TileType.BOOKS)[0][0];
+            }
+
+            case 4 -> {
+                res[1][11] = renderTileType(TileType.GAMES)[0][0];
+                res[5][3] = renderTileType(TileType.TROPHIES)[0][0];
+                res[5][5] = renderTileType(TileType.FRAMES)[0][0];
+                res[7][9] = renderTileType(TileType.PLANTS)[0][0];
+                res[9][5] = renderTileType(TileType.BOOKS)[0][0];
+                res[9][7] = renderTileType(TileType.CATS)[0][0];
+            }
+            case 5 -> {
+                res[3][5] = renderTileType(TileType.TROPHIES)[0][0];
+                res[7][5] = renderTileType(TileType.FRAMES)[0][0];
+                res[7][7] = renderTileType(TileType.BOOKS)[0][0];
+                res[9][11] = renderTileType(TileType.PLANTS)[0][0];
+                res[11][3] = renderTileType(TileType.GAMES)[0][0];
+                res[11][9] = renderTileType(TileType.GAMES)[0][0];
+            }
+            case 6 -> {
+                res[1][7] = renderTileType(TileType.TROPHIES)[0][0];
+                res[1][11] = renderTileType(TileType.CATS)[0][0];
+                res[5][9] = renderTileType(TileType.BOOKS)[0][0];
+                res[9][5] = renderTileType(TileType.GAMES)[0][0];
+                res[9][9] = renderTileType(TileType.FRAMES)[0][0];
+                res[11][3] = renderTileType(TileType.PLANTS)[0][0];
+            }
+            case 7 -> {
+                res[1][3] = renderTileType(TileType.CATS)[0][0];
+                res[3][9] = renderTileType(TileType.FRAMES)[0][0];
+                res[5][5] = renderTileType(TileType.PLANTS)[0][0];
+                res[7][3] = renderTileType(TileType.TROPHIES)[0][0];
+                res[9][7] = renderTileType(TileType.GAMES)[0][0];
+                res[11][11] = renderTileType(TileType.BOOKS)[0][0];
+            }
+            case 8 -> {
+                res[1][11] = renderTileType(TileType.FRAMES)[0][0];
+                res[3][5] = renderTileType(TileType.CATS)[0][0];
+                res[5][7] = renderTileType(TileType.TROPHIES)[0][0];
+                res[7][3] = renderTileType(TileType.PLANTS)[0][0];
+                res[9][9] = renderTileType(TileType.BOOKS)[0][0];
+                res[11][9] = renderTileType(TileType.GAMES)[0][0];
+            }
+            case 9 -> {
+                res[1][7] = renderTileType(TileType.GAMES)[0][0];
+                res[5][7] = renderTileType(TileType.CATS)[0][0];
+                res[7][11] = renderTileType(TileType.BOOKS)[0][0];
+                res[9][5] = renderTileType(TileType.TROPHIES)[0][0];
+                res[9][11] = renderTileType(TileType.PLANTS)[0][0];
+                res[11][3] = renderTileType(TileType.FRAMES)[0][0];
+            }
+            case 10 -> {
+                 res[5][3] = renderTileType(TileType.BOOKS)[0][0];
+                res[9][5] = renderTileType(TileType.FRAMES)[0][0];
+                res[3][5] = renderTileType(TileType.GAMES)[0][0];
+                res[11][9] = renderTileType(TileType.PLANTS)[0][0];
+                res[7][9] = renderTileType(TileType.CATS)[0][0];
+                res[1][11] = renderTileType(TileType.TROPHIES)[0][0];
+            }
+            case 11 -> {
+                res[5][3] = renderTileType(TileType.GAMES)[0][0];
+                res[3][5] = renderTileType(TileType.BOOKS)[0][0];
+                res[7][7] = renderTileType(TileType.FRAMES)[0][0];
+                res[1][7] = renderTileType(TileType.PLANTS)[0][0];
+                res[11][9] = renderTileType(TileType.TROPHIES)[0][0];
+                res[9][11] = renderTileType(TileType.CATS)[0][0];
+            }
+            case 12 -> {
+                res[11][3] = renderTileType(TileType.CATS)[0][0];
+                res[3][5] = renderTileType(TileType.PLANTS)[0][0];
+                res[5][7] = renderTileType(TileType.FRAMES)[0][0];
+                res[1][7] = renderTileType(TileType.BOOKS)[0][0];
+                res[7][9] = renderTileType(TileType.TROPHIES)[0][0];
+                res[9][11] = renderTileType(TileType.BOOKS)[0][0];
+            }
+        }
+
+        return res;
+    }
+
+    /**
+     * @author Marta Giliberto
+     */
+    private String[][] renderLivingroom(LivingRoomTileSpot[][] tileMatrix){
+        String[][] res= new String[20][39];
+        int k=0;
+        for(int i=0; i<19; i++){
+            for(int j=2; j<39; j++){
+                if(i%2==0){
+                    if(j%4!=0 && j%2==0){
+                        res[i][j]="╬";
+                        if(i==0 || i==18){
+                            res[i][j]="─";
+                            if(j==2 && i==0){
+                                res[i][j]="╔";
+                            }else if(j==38 && i==0){
+                                res[i][j]="╗";
+                            }else if(j==2 && i==18){
+                                res[i][j]="╚";
+                            }else if(j==38 && i==18){
+                                res[i][j]="╝";
+                            }
+                        }
+
+
+
+
+                    }else{
+                        res[i][j]="═";
+                    }
+                }else{
+                    if(j%4!=0 && j%2==0){
+                        res[i][j]="║";
+                    }else if(j%2!=0){
+                        //res[i][j]=" ";
+                    }else{
+                        if(tileMatrix[k][j/4-1].isEmpty()){
+                            res[i][j]=" ";
+                            res[i][j-1]=" ";
+                            res[i][j+1]=" ";
+
+                        }else{
+                            res[i][j-1] = renderTileType(tileMatrix[k][j/4 -1].getTileType())[0][0];
+                            res[i][j] = renderTileType(tileMatrix[k][j/4 -1].getTileType())[0][0];
+                            res[i][j+1] = renderTileType(tileMatrix[k][j/4 -1].getTileType())[0][0];
+                        }
+                    }
+
+                    if(j==38){
+                        k++;
+                        //k++;
+                    }
+                }
+            }
+
+        }
+
+        for(int j=0; j<39;j++){
+            if(j%4!=0 || j==0){
+                res[19][j]=" ";
+            }
+        }
+        for(int i=0; i<20; i++){
+            if(i%2==0){
+                res[i][0]=" ";
+            }
+            res[i][1]=" ";
+        }
+
+        res[1][0]="a";
+        res[3][0]="b";
+        res[5][0]="c";
+        res[7][0]="d";
+        res[9][0]="e";
+        res[11][0]="f";
+        res[13][0]="g";
+        res[15][0]="h";
+        res[17][0]="i";
+
+        res[19][4]="0";
+        res[19][8]="1";
+        res[19][12]="2";
+        res[19][16]="3";
+        res[19][20]="4";
+        res[19][24]="5";
+        res[19][28]="6";
+        res[19][32]="7";
+        res[19][36]="8";
+
+        return res;
+    }
+
+    /**
+     *
+     * @param commonGoalCard
+     * @return
+     * @author Marta Giliberto, Patrick Poggi, Valentino Guerrini, Paolo Gennaro
+     */
+    private char[][] renderCommonGoalCard(CommonGoalCard commonGoalCard){
+        char[][] res  = new char[13][15];
+        switch(commonGoalCard.getCardID()){
+            //Valentino Guerrini
+            case 1 -> {
+                for(int i=0;i<13;i++){
+                    res[i][1] = ' ';
+                    res[i][13] = ' ';
+                    res[i][0] = '|';
+                    res[i][14] = '|';
+                }
+                for(int i=0;i<13;i++){
+                    for(int j=2;j<13;j++){
+                        if(i%2 == 0){
+                            if(j%2 == 0){
+                                res[i][j] = '+';
+                            }else{
+                                res[i][j] = '-';
+                            }
+                        }else{
+                            if(j%2 == 0){
+                                res[i][j] = '|';
+                            }else{
+                                res[i][j] = ' ';
+                            }
+                        }
+                    }
+                }
+                res[1][11] = '=';
+                res[1][9] = '=';
+                res[3][11] = '=';
+                res[3][9] = '=';
+
+                res[9][3] = '=';
+                res[9][5] = '=';
+                res[11][3] = '=';
+                res[11][5] = '=';
+
+                break;
+            }
+            //Valentino Guerrini
+            case 2 -> {
+                for(int i=0;i<13;i++){
+                    res[i][1] = ' ';
+                    res[i][13] = ' ';
+                    res[i][0] = '|';
+                    res[i][14] = '|';
+                }
+
+                for(int i=0;i<13;i++){
+                    for(int j=2;j<13;j++){
+                        if(i%2 == 0){
+                            if(j%2 == 0){
+                                res[i][j] = '+';
+                            }else{
+                                res[i][j] = '-';
+                            }
+                        }else{
+                            if(j%2 == 0){
+                                res[i][j] = '|';
+                            }else{
+                                res[i][j] = ' ';
+                            }
+                        }
+                    }
+                }
+                res[1][3] = '=';
+                res[3][3] = '=';
+                res[5][3] = '=';
+                res[7][3] = '=';
+                res[9][3] = '=';
+                res[11][3] = '=';
+
+                res[1][9] = '=';
+                res[3][9] = '=';
+                res[5][9] = '=';
+                res[7][9] = '=';
+                res[9][9] = '=';
+                res[11][9] = '=';
+
+                break;
+            }
+            //Valentino Guerrini
+            case 3 -> {
+                for(int i=0;i<13;i++){
+                    res[i][1] = ' ';
+                    res[i][13] = ' ';
+                    res[i][0] = '|';
+                    res[i][14] = '|';
+                }
+                for(int i=0;i<13;i++){
+                    for(int j=2;j<13;j++){
+                        if(i%2 == 0){
+                            if(j%2 == 0){
+                                res[i][j] = '+';
+                            }else{
+                                res[i][j] = '-';
+                            }
+                        }else{
+                            if(j%2 == 0){
+                                res[i][j] = '|';
+                            }else{
+                                res[i][j] = ' ';
+                            }
+                        }
+                    }
+                }
+                res[1][11] = '=';
+                res[1][9] = '=';
+                res[3][11] = '=';
+                res[3][9] = '=';
+
+                res[3][3]= '=';
+                res[3][5] = '=';
+                res[5][3] = '=';
+                res[5][5] = '=';
+
+                res[5][11] = '=';
+                res[5][9] = '=';
+                res[7][11] = '=';
+                res[7][9] = '=';
+
+                res[9][3] = '=';
+                res[9][5] = '=';
+                res[11][3] = '=';
+                res[11][5] = '=';
+                break;
+            }
+            //Paolo Gennaro
+            case 4 -> {
+                for(int i = 0; i<13; i++){
+                    for(int j = 0; j<15; j++){
+                        if(j == 0 || j == 14){
+                            res[i][j] = '|';
+                        }else{
+                            res[i][j] = ' ';
+                        }
+                    }
+                }
+
+                res[4][5] = '+';
+                res[4][6] = '-';
+                res[4][7] = '+';
+                res[5][5] = '+';
+                res[5][6] = 'X';
+                res[5][7] = '+';
+                res[6][5] = '+';
+                res[6][6] = '-';
+                res[6][7] = '+';
+                res[7][5] = '+';
+                res[7][6] = 'X';
+                res[7][7] = '+';
+                res[8][5] = '+';
+                res[8][6] = '-';
+                res[8][7] = '+';
+                break;
+            }
+            //Marta Giliberto
+            case 5 -> {
+                for(int i = 0; i<13; i++){
+                    res[i][0] = '|';
+                    res[i][14] = '|';
+                    res[i][1] = ' ';
+                    res[i][13]= ' ';
+                }
+
+                for(int i = 0; i<13; i++){
+                    for(int j=2; j<13; j++){
+                        if(i%2==0){
+                            if(j%2==0){
+                                res[i][j] = '+';
+                            }else if(j==3||j==7||j==11) {
+                                res[i][j] = '-';
+                            }else{
+                                res[i][j] = ' ';
+                            }
+                        }else{
+                            if(j%2==0){
+                                res[i][j] = '|';
+                            }else{
+                                res[i][j] = ' ';
+                            }
+                        }
+                    }
+                }
+                break;
+            }
+            //Paolo Gennaro
+            case 6 -> {
+                for(int i = 0; i<13; i++){
+                    for(int j = 0; j<15; j++){
+                        if(j ==0 || j == 14){
+                            res[i][j] = '|';
+                        }else{
+                            res[i][j] = ' ';
+                        }
+                    }
+                }
+                res[4][2] = '+';
+                res[4][3] = '-';
+                res[4][4] = '+';
+                res[4][5] = '-';
+                res[4][6] = '+';
+                res[4][7] = '-';
+                res[4][8] = '+';
+                res[4][9] = '-';
+                res[4][10] = '+';
+                res[4][11] = '-';
+                res[4][12] = '+';
+                res[5][2] = '|';
+                res[5][4] = '|';
+                res[5][6] = '|';
+                res[5][8] = '|';
+                res[5][10] = '|';
+                res[5][12] = '|';
+                res[6][2] = '+';
+                res[6][3] = '-';
+                res[6][4] = '+';
+                res[6][5] = '-';
+                res[6][6] = '+';
+                res[6][7] = '-';
+                res[6][8] = '+';
+                res[6][9] = '-';
+                res[6][10] = '+';
+                res[6][11] = '-';
+                res[6][12] = '+';
+                break;
+            }
+            //Patrick Poggi
+            case 7 -> {
+                for(int i=0;i<13;i++){
+                    res[i][1] = ' ';
+                    res[i][13] = ' ';
+                    res[i][0] = '|';
+                    res[i][14] = '|';
+                }
+                for(int i=0;i<13;i++){
+                    for(int j=2;j<13;j++){
+                        if(i%2 == 0){
+                            if(j%2 == 0){
+                                res[i][j] = '+';
+                            }else{
+                                res[i][j] = '-';
+                            }
+                        }else{
+                            if(j%2 == 0){
+                                res[i][j] = '|';
+                            }else{
+                                res[i][j] = ' ';
+                            }
+                        }
+                    }
+                }
+
+                res[1][3] = 'C';
+                res[1][5] = 'C';
+                res[1][7] = 'C';
+                res[1][9] = 'C';
+                res[1][11] = 'C';
+
+                res[3][3] = 'B';
+                res[3][5] = 'B';
+                res[3][7] = 'B';
+                res[3][9] = 'B';
+                res[3][11] = 'B';
+
+                res[5][3] = ' ';
+                res[5][3] = ' ';
+                res[5][3] = ' ';
+                res[5][3] = ' ';
+                res[5][3] = ' ';
+
+                res[7][3] = 'T';
+                res[7][5] = 'T';
+                res[7][7] = 'T';
+                res[7][9] = 'T';
+                res[7][11] = 'T';
+
+                res[9][3] = ' ';
+                res[9][3] = ' ';
+                res[9][3] = ' ';
+                res[9][3] = ' ';
+                res[9][3] = ' ';
+
+                res[11][3] = 'C';
+                res[11][5] = 'C';
+                res[11][7] = 'C';
+                res[11][9] = 'C';
+                res[11][11] = 'C';
+
+                break;
+            }
+            //Patrick Poggi
+            case 8 -> {
+                for(int i=0;i<13;i++){
+                    res[i][1] = ' ';
+                    res[i][13] = ' ';
+                    res[i][0] = '|';
+                    res[i][14] = '|';
+                }
+                for(int i=0;i<13;i++){
+                    for(int j=2;j<13;j++){
+                        if(i%2 == 0){
+                            if(j%2 == 0){
+                                res[i][j] = '+';
+                            }else{
+                                res[i][j] = '-';
+                            }
+                        }else{
+                            if(j%2 == 0){
+                                res[i][j] = '|';
+                            }else{
+                                res[i][j] = ' ';
+                            }
+                        }
+                    }
+                }
+
+                res[1][3] = '=';
+                res[11][3] = '=';
+                res[1][11] = '=';
+                res[11][11] = '=';
+                break;
+            }
+            //Patrick Poggi
+            case 9 -> {
+                for(int i=0;i<13;i++){
+                    res[i][1] = ' ';
+                    res[i][13] = ' ';
+                    res[i][0] = '|';
+                    res[i][14] = '|';
+                }
+                for(int i=0;i<13;i++){
+                    for(int j=2;j<13;j++){
+                        if(i%2 == 0){
+                            if(j%2 == 0){
+                                res[i][j] = '+';
+                            }else{
+                                res[i][j] = '-';
+                            }
+                        }else{
+                            if(j%2 == 0){
+                                res[i][j] = '|';
+                            }else{
+                                res[i][j] = ' ';
+                            }
+                        }
+                    }
+                }
+
+                res[1][3] = 'C';
+                res[3][5] = 'C';
+                res[3][11] = 'C';
+                res[7][3] = 'C';
+                res[7][5] = 'C';
+                res[7][9] = 'C';
+                res[9][7] = 'C';
+                res[11][11] = 'C';
+                break;
+            }
+            //Marta Giliberto
+            case 10 -> {
+                for (int i = 0; i < 13; i++) {
+                    for (int j = 0; j < 15; j++) {
+                        if(j==0||j==14){
+                            res[i][j]='|';
+                        }else {
+                            res[i][j] = ' ';
+                        }
+                    }
+                }
+
+                res[3][4]='+';
+                res[3][6]='+';
+                res[3][8]='+';
+                res[3][10]='+';
+                res[5][4]='+';
+                res[5][6]='+';
+                res[5][8]='+';
+                res[5][10]='+';
+                res[7][4]='+';
+                res[7][6]='+';
+                res[7][8]='+';
+                res[7][10]='+';
+                res[9][4]='+';
+                res[9][6]='+';
+                res[9][8]='+';
+                res[9][10]='+';
+
+
+                res[3][5]='-';
+                res[3][9]='-';
+                res[5][5]='-';
+                res[5][9]='-';
+                res[7][5]='-';
+                res[7][9]='-';
+                res[9][5]='-';
+                res[9][9]='-';
+
+                res[4][4]='|';
+                res[4][6]='|';
+                res[4][8]='|';
+                res[4][10]='|';
+                res[6][6]='|';
+                res[6][8]='|';
+                res[8][4]='|';
+                res[8][6]='|';
+                res[8][8]='|';
+                res[8][10]='|';
+
+                res[4][5]='=';
+                res[4][9]='=';
+                res[6][7]='=';
+                res[8][5]='=';
+                res[8][9]='=';
+                break;
+            }
+            //Marta Giliberto
+            case 11 -> {
+                for (int i = 0; i < 13; i++) {
+                    for (int j = 0; j < 15; j++) {
+                        if(j==0||j==14){
+                            res[i][j]='|';
+                        }else {
+                            res[i][j] = ' ';
+                        }
+                    }
+                }
+
+                res[1][2]  ='+';
+                res[1][4]  ='+';
+                res[3][2]  ='+';
+                res[3][4]  ='+';
+                res[3][6]  ='+';
+                res[5][4]  ='+';
+                res[5][6]  ='+';
+                res[5][8]  ='+';
+                res[7][6]  ='+';
+                res[7][8]  ='+';
+                res[7][10] ='+';
+                res[9][8]  ='+';
+                res[9][10] ='+';
+                res[9][12] ='+';
+                res[11][10]='+';
+                res[11][12]='+';
+
+                res[1][3]  ='-';
+                res[3][3]  ='-';
+                res[3][5]  ='-';
+                res[5][5]  ='-';
+                res[5][7]  ='-';
+                res[7][7]  ='-';
+                res[7][9]  ='-';
+                res[9][9]  ='-';
+                res[9][11] ='-';
+                res[11][11]='-';
+
+                res[2][3]  ='=';
+                res[4][5]  ='=';
+                res[6][7]  ='=';
+                res[8][9]  ='=';
+                res[10][11]='=';
+                break;
+            }
+            //Marta Giliberto
+            case 12 -> {
+                for(int i=0; i<13; i++) {
+                    for (int j = 0; j < 15; j++) {
+                        if (j == 0 || j == 14) {
+                            res[i][j] = '|';
+                        } else {
+                            res[i][j] = ' ';
+                        }
+                    }
+                }
+
+                res[1][2]='+';
+                res[1][3]='-';
+                res[1][4]='+';
+                res[2][2]='|';
+                res[2][4]='|';
+                res[3][2]='+';
+                res[3][3]='-';
+                res[3][4]='+';
+                res[3][5]='-';
+                res[3][6]='+';
+                res[4][2]='|';
+                res[4][4]='|';
+                res[4][6]='|';
+                res[5][2]='+';
+                res[5][3]='-';
+                res[5][4]='+';
+                res[5][5]='-';
+                res[5][6]='+';
+                res[5][7]='-';
+                res[5][8]='+';
+                res[6][2]='|';
+                res[6][4]='|';
+                res[6][6]='|';
+                res[6][8]='|';
+                res[7][2]='+';
+                res[7][3]='-';
+                res[7][4]='+';
+                res[7][5]='-';
+                res[7][6]='+';
+                res[7][7]='-';
+                res[7][8]='+';
+                res[7][9]='-';
+                res[7][10]='+';
+                res[8][2]='|';
+                res[8][4]='|';
+                res[8][6]='|';
+                res[8][8]='|';
+                res[8][10]='|';
+                res[9][2]='+';
+                res[9][3]='-';
+                res[9][4]='+';
+                res[9][5]='-';
+                res[9][6]='+';
+                res[9][7]='-';
+                res[9][8]='+';
+                res[9][9]='-';
+                res[9][10]='+';
+                res[9][11]='-';
+                res[9][12]='+';
+                res[10][2]='|';
+                res[10][4]='|';
+                res[10][6]='|';
+                res[10][8]='|';
+                res[10][10]='|';
+                res[10][12]='|';
+                res[11][2]='+';
+                res[11][3]='-';
+                res[11][4]='+';
+                res[11][5]='-';
+                res[11][6]='+';
+                res[11][7]='-';
+                res[11][8]='+';
+                res[11][9]='-';
+                res[11][10]='+';
+                res[11][11]='-';
+                res[11][12]='+';
+                break;
+            }
+        }
+        return res;
+    }
+
+    /**
+     *
+     * @param pointsTile
+     * @return
+     * @author: Valentino Guerrini, Paolo Gennao, Patrick Poggi
+     */
+    private String[][] renderPointTile(PointsTile pointsTile){
+        String[][] res = new String[4][9];
+
+        for(int i=0; i<4; i++){
+            for(int j=0; j<9; j++){
+                res[i][j] = " ";
+            }
+        }
+        res[0][0] = "╔";
+        res[0][8] = "╗";
+        res[3][0] = "╚";
+        res[3][8] = "╝";
+        for(int j=1;j<8;j++){
+            res[0][j] = "═";
+            res[3][j] = "═";
+        }
+        res[1][0] = "║";
+        res[2][0] = "║";
+
+        res[1][8] = "║";
+        res[2][8] = "║";
+
+        res[2][2] = "p";
+        res[2][3] = "o";
+        res[2][4] = "i";
+        res[2][5] = "n";
+        res[2][6] = "t";
+        res[2][7] = "s";
+
+        switch(pointsTile.getNumberOfPoints()){
+            case 2 -> {
+                res[1][4] = "2";
+                break;
+            }
+            case 4 -> {
+                res[1][4] = "4";
+                break;
+            }
+            case 6 -> {
+                res[1][4] = "6";
+                break;
+            }
+            case 8 -> {
+                res[1][4] = "8";
+                break;
+            }
+            default -> {
+                res[1][4] = "?";
+                break;
+            }
+        }
+
+        return res;
+    }
     //refresh the CLI
 
     //update()
