@@ -44,50 +44,6 @@ public class CommonGoalCard9 extends CommonGoalCard {
 
 
     /**
-     * This method returns a CLI representation (ASCII-art like) of the 9th common goal card
-     * @return the char[][] matrix of the representation
-     * @author patrickpoggi
-     */
-    @Override
-    public char[][] getCLIRepresentation() {
-        char[][] res  = new char[13][15];
-        for(int i=0;i<13;i++){
-            res[i][1] = ' ';
-            res[i][13] = ' ';
-            res[i][0] = '|';
-            res[i][14] = '|';
-        }
-        for(int i=0;i<13;i++){
-            for(int j=2;j<13;j++){
-                if(i%2 == 0){
-                    if(j%2 == 0){
-                        res[i][j] = '+';
-                    }else{
-                        res[i][j] = '-';
-                    }
-                }else{
-                    if(j%2 == 0){
-                        res[i][j] = '|';
-                    }else{
-                        res[i][j] = ' ';
-                    }
-                }
-            }
-        }
-
-        res[1][3] = 'C';
-        res[3][5] = 'C';
-        res[3][11] = 'C';
-        res[7][3] = 'C';
-        res[7][5] = 'C';
-        res[7][9] = 'C';
-        res[9][7] = 'C';
-        res[11][11] = 'C';
-
-        return res;
-    }
-
-    /**
      * This method returns a CLI representation (ASCII-art like) of the 9th common goal card's description
      * @return the String[] "matrix" of the representation
      * @author patrickpoggi

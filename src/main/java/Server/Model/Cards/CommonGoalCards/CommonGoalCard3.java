@@ -72,54 +72,6 @@ public class CommonGoalCard3 extends CommonGoalCard {
     }
 
 
-    public char[][] getCLIRepresentation(){
-        char[][] res  = new char[13][15];
-
-        for(int i=0;i<13;i++){
-            res[i][1] = ' ';
-            res[i][13] = ' ';
-            res[i][0] = '|';
-            res[i][14] = '|';
-        }
-        for(int i=0;i<13;i++){
-            for(int j=2;j<13;j++){
-                if(i%2 == 0){
-                    if(j%2 == 0){
-                        res[i][j] = '+';
-                    }else{
-                        res[i][j] = '-';
-                    }
-                }else{
-                    if(j%2 == 0){
-                        res[i][j] = '|';
-                    }else{
-                        res[i][j] = ' ';
-                    }
-                }
-            }
-        }
-        res[1][11] = '=';
-        res[1][9] = '=';
-        res[3][11] = '=';
-        res[3][9] = '=';
-
-        res[3][3]= '=';
-        res[3][5] = '=';
-        res[5][3] = '=';
-        res[5][5] = '=';
-
-        res[5][11] = '=';
-        res[5][9] = '=';
-        res[7][11] = '=';
-        res[7][9] = '=';
-
-        res[9][3] = '=';
-        res[9][5] = '=';
-        res[11][3] = '=';
-        res[11][5] = '=';
-
-        return res;
-    }
 
     @Override
     public String[] getCommonGoalDescription(){
