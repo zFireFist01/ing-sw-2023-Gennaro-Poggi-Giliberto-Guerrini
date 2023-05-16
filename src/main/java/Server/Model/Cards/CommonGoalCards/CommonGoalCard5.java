@@ -88,40 +88,6 @@ public class CommonGoalCard5 extends CommonGoalCard {
         return 5;
     }
 
-
-    public char[][] getCLIRepresentation() {
-        char[][] res = new char[13][15];
-
-        for(int i = 0; i<13; i++){
-            res[i][0] = '|';
-            res[i][14] = '|';
-            res[i][1] = ' ';
-            res[i][13]= ' ';
-        }
-
-        for(int i = 0; i<13; i++){
-            for(int j=2; j<13; j++){
-                if(i%2==0){
-                    if(j%2==0){
-                        res[i][j] = '+';
-                    }else if(j==3||j==7||j==11) {
-                        res[i][j] = '-';
-                    }else{
-                        res[i][j] = ' ';
-                    }
-                }else{
-                    if(j%2==0){
-                        res[i][j] = '|';
-                    }else{
-                        res[i][j] = ' ';
-                    }
-                }
-            }
-        }
-
-        return res;
-    }
-
     public String[] getCommonGoalDescription(){
         String[] description = new String[8];
 
