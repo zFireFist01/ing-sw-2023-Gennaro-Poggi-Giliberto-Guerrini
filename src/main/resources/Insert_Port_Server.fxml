@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.View.GUI.GUI">
+   <children>
+      <ImageView fitHeight="400.0" fitWidth="600.0">
+         <image>
+            <Image url="@misc/sfondo parquet.jpg" />
+         </image>
+      </ImageView>
+      <TextField fx:id="portServerRMI" layoutX="159.0" layoutY="187.0" prefHeight="25.0" prefWidth="281.0" text="Server Port:" />
+      <ImageView fitHeight="94.0" fitWidth="247.0" layoutX="177.0" layoutY="60.0">
+         <image>
+            <Image url="@Publisher material/Title 2000x618px.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="connectButtonRMI" layoutX="259.0" layoutY="261.0" mnemonicParsing="false" onAction="#OnClickConnectRMIButton" prefHeight="41.0" prefWidth="81.0" text="Connect" />
+   </children>
+</AnchorPane>

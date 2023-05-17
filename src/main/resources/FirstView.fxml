@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.View.GUI.GUI">
+   <children>
+      <ImageView fitHeight="400.0" fitWidth="600.0">
+         <image>
+            <Image url="@misc/sfondo parquet.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="248.0" fitWidth="250.0" layoutX="172.0" layoutY="71.0">
+         <image>
+            <Image url="@Publisher material/Box noshadow 280x280.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="quitButton" layoutX="499.0" layoutY="356.0" mnemonicParsing="false" onAction="#OnQuitButton" prefHeight="30.0" prefWidth="84.0" text="QUIT">
+         <font>
+            <Font name="Calibri Bold" size="18.0" />
+         </font>
+      </Button>
+      <Button fx:id="playButton" layoutX="187.0" layoutY="72.0" mnemonicParsing="false" onAction="#OnPlayButton" opacity="0.0" prefHeight="247.0" prefWidth="222.0" />
+   </children>
+</AnchorPane>

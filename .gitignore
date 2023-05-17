@@ -83,7 +83,14 @@ fabric.properties
 # Editor-based Rest Client
 .idea/httpRequests
 
-src/main/resources
+src/main/resources/boards
+src/main/resources/common\ goal\ cards
+src/main/resources/item\ tiles
+src/main/resources/misc
+src/main/resources/personal\ goal\ cards
+src/main/resources/Publisher\ material
+src/main/resources/scoring\ tokens
+
 
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
