@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="465.0" prefWidth="675.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.View.GUI.GUIController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="465.0" prefWidth="675.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" >
    <children>
       <ImageView fitHeight="505.0" fitWidth="788.0">
          <image>
@@ -23,13 +23,13 @@
       </ImageView>
       <HBox alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="91.0" prefWidth="205.0">
          <children>
-            <Button fx:id="socketButton" mnemonicParsing="false" onAction="#OnClickSocketButton" prefHeight="49.0" prefWidth="101.0" text="Socket">
+            <Button fx:id="socketButton" mnemonicParsing="false" onAction="#onClickSocketButton" prefHeight="49.0" prefWidth="101.0" text="Socket">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
             <Pane prefHeight="200.0" prefWidth="30.0" />
-            <Button fx:id="RMIButton" mnemonicParsing="false" onAction="#OnClickRMIButton" prefHeight="49.0" prefWidth="101.0" text="RMI">
+            <Button fx:id="RMIButton" mnemonicParsing="false" onAction="#onClickRMIButton" prefHeight="49.0" prefWidth="101.0" text="RMI">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>

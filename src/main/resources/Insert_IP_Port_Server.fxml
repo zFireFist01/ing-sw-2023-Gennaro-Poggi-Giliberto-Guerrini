@@ -6,7 +6,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.View.GUI.GUIController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ImageView fitHeight="400.0" fitWidth="600.0">
          <image>
@@ -20,6 +20,6 @@
             <Image url="@Publisher material/Title 2000x618px.png" />
          </image>
       </ImageView>
-      <Button fx:id="connectButton" layoutX="260.0" layoutY="276.0" mnemonicParsing="false" onAction="#OnClickConnectButton" prefHeight="39.0" prefWidth="79.0" text="Connect" />
+      <Button fx:id="connectButton" layoutX="260.0" layoutY="276.0" mnemonicParsing="false" onAction="#onClickConnectButton" prefHeight="39.0" prefWidth="79.0" text="Connect" />
    </children>
 </AnchorPane>
