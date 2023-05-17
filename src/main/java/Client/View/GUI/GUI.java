@@ -323,7 +323,7 @@ public class GUI extends Application implements View {
         loginButton.setOnAction(e -> {
             String host = addressField.getText();
             int port = Integer.parseInt(portField.getText());
-            networkHandler = new NetworkSocketHandler(host, port, this, false);
+            networkHandler = new NetworkSocketHandler(host, port, this);
 
             showInitWindow(primaryStage);
 
@@ -585,7 +585,7 @@ public class GUI extends Application implements View {
     private void OnClickConnectButton(ActionEvent event) throws IOException {
         String host = addressServer.getText();
         int port = Integer.parseInt(portServer.getText());
-        networkHandler = new NetworkSocketHandler(host, port, this, isReconnecting);
+        networkHandler = new NetworkSocketHandler(host, port, this);
         String localIP = null;
         try {
             InetAddress ipAddress = InetAddress.getLocalHost();
@@ -650,6 +650,7 @@ public class GUI extends Application implements View {
     @FXML
     private void OnPlayButton(ActionEvent event) throws IOException{
         new Thread(networkHandler).start();
+        System.out.println("NetworkHandler started");
     }
 
 
