@@ -296,7 +296,7 @@ public class GUI extends Application implements View {
         loginButton.setOnAction(e -> {
             String host = addressField.getText();
             int port = Integer.parseInt(portField.getText());
-            networkHandler = new NetworkSocketHandler(host, port, this, false);
+            networkHandler = new NetworkSocketHandler(host, port, this);
 
             showInitWindow(primaryStage);
 
@@ -521,6 +521,7 @@ public class GUI extends Application implements View {
         return connectionInfo;
     }
 
+    
 
 
 }

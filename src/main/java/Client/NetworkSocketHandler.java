@@ -47,11 +47,11 @@ public class NetworkSocketHandler implements NetworkHandler{
      * @param port the port of the server
      * @param view the view
      */
-    public NetworkSocketHandler(String host, int port, View view, boolean isReconnecting) {
+    public NetworkSocketHandler(String host, int port, View view) {
         this.host = host;
         this.view = view;
         this.port = port;
-        this.isReconnecting = isReconnecting;
+        this.isReconnecting = view.isReconnecting();
     }
 
     @Override
