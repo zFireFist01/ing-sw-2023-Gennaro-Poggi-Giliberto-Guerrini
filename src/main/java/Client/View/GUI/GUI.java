@@ -428,7 +428,7 @@ public class GUI extends Application implements View {
     }
 
     private void onLoginViewEvent(SelectViewEvent event) throws IOException {
-        currentView=event;
+        currentView = event;
         LoginView loginView = (LoginView) event;
 
         /*
@@ -634,7 +634,6 @@ public class GUI extends Application implements View {
         currentStage.show();
     }
 
-
     @FXML
     private void onClickRMIButton(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Insert_Port_Server.fxml"));
@@ -671,9 +670,10 @@ public class GUI extends Application implements View {
         currentStage.setScene(newScene);
         currentStage.show();
     }
+
     @FXML
-    private void onClickUSubmitUsernameButton(ActionEvent event) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Gameview.fxml"));
+    private void onClickSubmitUsernamePlayerButton(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/WaitingPlayersToConnect.fxml"));
         fxmlLoader.setController(this);
         Parent newRoot = fxmlLoader.load();
         Scene newScene = new Scene(newRoot);
@@ -682,12 +682,23 @@ public class GUI extends Application implements View {
         currentStage.show();
     }
 
+    @FXML
+    private void onClickUSubmitUsernameButton(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/WaitingPlayersToConnect.fxml"));
+        fxmlLoader.setController(this);
+        Parent newRoot = fxmlLoader.load();
+        Scene newScene = new Scene(newRoot);
+        Stage currentStage = (Stage) submitUsernameButton.getScene().getWindow();
+        currentStage.setScene(newScene);
+        currentStage.show();
+    }
 
     @FXML
     private void onQuitButton(ActionEvent event){
         Stage currentStage = (Stage) quitButton.getScene().getWindow();
         currentStage.close();
     }
+
     @FXML
     private void onPlayButton(ActionEvent event) throws IOException{
         new Thread(this.networkHandler).start();
