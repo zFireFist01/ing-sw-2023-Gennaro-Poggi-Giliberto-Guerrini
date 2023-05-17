@@ -12,6 +12,11 @@ import Server.Model.Cards.CommonGoalCardAdapter;
 import Server.Network.VirtualView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -143,6 +148,7 @@ public class NetworkSocketHandler implements NetworkHandler{
                         break;
                     case "SelectViewEvent":
                         receiveSelectViewEvent(message);
+
                         break;
                     default:
                         throw new RuntimeException("Unknown event type");

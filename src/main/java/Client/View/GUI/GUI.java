@@ -49,8 +49,6 @@ public class GUI extends Application implements View {
     ImageView livingRoomImageView;
     ImageView wallpaperImageView;
 
-
-
     ConnectionType connectionType = null;
     private NetworkHandler networkHandler;
     private Stage primaryStage;
@@ -58,37 +56,11 @@ public class GUI extends Application implements View {
 
     private SelectViewEvent currentView;
     private boolean matchStarted = false;
+
     private boolean MatchEnded = false;
     private ConnectionInfo connectionInfo;
     private boolean isReconnecting;
     private String previousNickname = null; //Will be null if isReconnecting==false
-
-    @FXML
-    private Button yesButtonReConnection;
-    @FXML
-    private Button noButtonReConnection;
-    @FXML
-    private Button socketButton;
-    @FXML
-    private Button RMIButton;
-    @FXML
-    private Button submitUsernameAndPlayersButton;
-    @FXML
-    private Button submitUsernameButton;
-    @FXML
-    private Button connectButton;
-    @FXML
-    private TextField addressServer;
-    @FXML
-    private TextField portServer;
-    @FXML
-    private Button connectButtonRMI;
-    @FXML
-    private TextField portServerRMI;
-    @FXML
-    private Button quitButton;
-    @FXML
-    private Button playButton;
 
 
 
@@ -121,6 +93,7 @@ public class GUI extends Application implements View {
     public void start(Stage primaryStage) throws IOException {
 
         this.primaryStage = primaryStage;
+
         /*
         Text askIsReconnnecting = new Text("Are you reconnecting?");
         Button yesButton = new Button("Yes");
@@ -142,8 +115,8 @@ public class GUI extends Application implements View {
         Scene reconnectingScene = new Scene(reconnectingBox, 500, 200);
         */
 
-        Parent newRoot = FXMLLoader.load(getClass().getResource("/Re_Connection_Requests.fxml"));
-        Scene newScene = new Scene(newRoot);
+        Parent root = FXMLLoader.load(getClass().getResource("/Re_Connection_Requests.fxml"));
+        Scene newScene = new Scene(root);
         primaryStage.setScene(newScene);
         primaryStage.show();
 
@@ -475,8 +448,6 @@ public class GUI extends Application implements View {
             nameInputBox.setAlignment(Pos.CENTER);
         }
 
-
-
         Scene scene = new Scene(nameInputBox, 800, 600);
         primaryStage.setTitle("MyShelfie");
         primaryStage.setScene(scene);
@@ -534,7 +505,6 @@ public class GUI extends Application implements View {
 
     @Override
     public void onMVEvent(MVEvent event) {
-
     }
 
     public void run() {
@@ -551,106 +521,6 @@ public class GUI extends Application implements View {
         return connectionInfo;
     }
 
-    //Button methods
-
-    @FXML
-    private void onClickYesReconnect(ActionEvent event) throws IOException {
-        isReconnecting = true;
-        Parent newRoot = FXMLLoader.load(getClass().getResource("/Socket_RMI_Requests.fxml"));
-        Scene newScene = new Scene(newRoot);
-        Stage currentStage = (Stage) yesButtonReConnection.getScene().getWindow();
-        currentStage.setScene(newScene);
-        currentStage.show();
-    }
-
-    @FXML
-    private void OnClickNoReconnect(ActionEvent event) throws IOException {
-        isReconnecting = false;
-        Parent newRoot = FXMLLoader.load(getClass().getResource("/Socket_RMI_Requests.fxml"));
-        Scene newScene = new Scene(newRoot);
-        Stage currentStage = (Stage) noButtonReConnection.getScene().getWindow();
-        currentStage.setScene(newScene);
-        currentStage.show();
-    }
-
-    @FXML
-    private void OnClickSocketButton(ActionEvent event) throws IOException {
-        Parent newRoot = FXMLLoader.load(getClass().getResource("/Insert_IP_Port_Server.fxml"));
-        Scene newScene = new Scene(newRoot);
-        Stage currentStage = (Stage) socketButton.getScene().getWindow();
-        currentStage.setScene(newScene);
-        currentStage.show();
-    }
-    @FXML
-    private void OnClickConnectButton(ActionEvent event) throws IOException {
-        String host = addressServer.getText();
-        int port = Integer.parseInt(portServer.getText());
-        networkHandler = new NetworkSocketHandler(host, port, this, isReconnecting);
-        String localIP = null;
-        try {
-            InetAddress ipAddress = InetAddress.getLocalHost();
-            localIP = ipAddress.getHostAddress();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        connectionInfo = new ConnectionInfo(localIP,connectionType, previousNickname);
-        Parent newRoot = FXMLLoader.load(getClass().getResource("/FirstView.fxml"));
-
-        Scene newScene = new Scene(newRoot);
-        Stage currentStage = (Stage) connectButton.getScene().getWindow();
-        currentStage.setScene(newScene);
-        currentStage.show();
-    }
-    @FXML
-    private void OnClickRMIButton(ActionEvent event) throws IOException {
-        Parent newRoot = FXMLLoader.load(getClass().getResource("/Insert_Port_Server.fxml"));
-        Scene newScene = new Scene(newRoot);
-        Stage currentStage = (Stage) RMIButton.getScene().getWindow();
-        currentStage.setScene(newScene);
-        currentStage.show();
-    }
-    @FXML
-    private void OnClickConnectRMIButton(ActionEvent event) throws IOException {
-        int port = Integer.parseInt(portServerRMI.getText());
-
-        try{
-            networkHandler = new NetworkRMIHandler(this);
-            String localIP = null;
-            try {
-                InetAddress ipAddress = InetAddress.getLocalHost();
-                localIP = ipAddress.getHostAddress();
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
-            connectionInfo = new ConnectionInfo(localIP,connectionType, previousNickname);
-        } catch (RemoteException e1) {
-            e1.printStackTrace();
-        }
-        Parent newRoot = FXMLLoader.load(getClass().getResource("/FirstView.fxml"));
-        Scene newScene = new Scene(newRoot);
-        Stage currentStage = (Stage) connectButtonRMI.getScene().getWindow();
-        currentStage.setScene(newScene);
-        currentStage.show();
-    }
-    @FXML
-    private void OnClickUSubmitUsernameButton(ActionEvent event) throws IOException {
-        Parent newRoot = FXMLLoader.load(getClass().getResource("/GameView.fxml"));
-        Scene newScene = new Scene(newRoot);
-        Stage currentStage = (Stage) submitUsernameAndPlayersButton.getScene().getWindow();
-        currentStage.setScene(newScene);
-        currentStage.show();
-    }
-    @FXML
-    private void OnQuitButton(ActionEvent event){
-        Stage currentStage = (Stage) quitButton.getScene().getWindow();
-        currentStage.close();
-    }
-    
-    //TODO: da finire di implementare
-    @FXML
-    private void OnPlayButton(ActionEvent event) throws IOException{
-        new Thread(networkHandler).start();
-    }
 
 
 }
