@@ -97,6 +97,8 @@ public class GUI extends Application implements View {
     @FXML
     private Button playButton;
 
+    private Parent gameRoot;
+
 
 
 
@@ -133,35 +135,35 @@ public class GUI extends Application implements View {
 
 
         loader.setLocation(getClass().getResource("/Gameview.fxml"));
-        Parent root=null;
+
         try{
-            root = loader.load();
+            gameRoot = loader.load();
         }catch(IOException e){
             e.printStackTrace();
         }
-        Scene scene = new Scene(root);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.setTitle("Titolo della finestra");
-        stage.show();
+        Scene scene = new Scene(gameRoot);
+
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Titolo della finestra");
+        primaryStage.show();
 
 
-        ImageView i = (ImageView)root.lookup("#livingRoomImage");
+        ImageView i = (ImageView)gameRoot.lookup("#livingRoomImage");
 
         //Image newImage = new Image(getClass().getResource("/Publisher material/Display_3.jpg").toString());
 
 
         i.setImage(livingRoomImage);
 
-        StackPane s = (StackPane)root.lookup("#bookshelf3");
+        StackPane s = (StackPane)gameRoot.lookup("#player3Bookshelf");
         //wait for 5 second
 
-        StackPane my = (StackPane)root.lookup("#mybookshelf");
+        StackPane my = (StackPane)gameRoot.lookup("#mybookshelf");
 
         my.setDisable(false);
 
-        GridPane grid = (GridPane)root.lookup("#firstBookshelfGrid");
-        TextFlow flow = (TextFlow) root.lookup("#chatframe");
+        GridPane grid = (GridPane)gameRoot.lookup("#firstBookshelfGrid");
+        TextFlow flow = (TextFlow) gameRoot.lookup("#chatframe");
 
         ImageView cat = new ImageView(catImage);
         cat.setFitWidth(30);
@@ -169,8 +171,8 @@ public class GUI extends Application implements View {
         Text text1 = new Text("Ciao sono Leonardo da Vinci ");
         flow.getChildren().add(text1);
 
-        AnchorPane main = (AnchorPane)root.lookup("#MainPane") ;
-        ImageView wallpaper =(ImageView)root.lookup("#wallpaper") ;
+        AnchorPane main = (AnchorPane)gameRoot.lookup("#MainPane") ;
+        ImageView wallpaper =(ImageView)gameRoot.lookup("#wallpaper") ;
 
         wallpaper.fitHeightProperty().bind(main.heightProperty());
         wallpaper.fitWidthProperty().bind(main.widthProperty());
@@ -208,10 +210,11 @@ public class GUI extends Application implements View {
         reconnectingBox.setPadding(new Insets(20, 20, 20, 20));
         Scene reconnectingScene = new Scene(reconnectingBox, 500, 200);
         */
+
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Re_Connection_Requests.fxml"));
         fxmlLoader.setController(this);
-        root = fxmlLoader.load();
-        Scene newScene = new Scene(root);
+        gameRoot = fxmlLoader.load();
+        Scene newScene = new Scene(gameRoot);
         primaryStage.setScene(newScene);
         primaryStage.show();
 
@@ -639,6 +642,14 @@ public class GUI extends Application implements View {
     @Override
     public ConnectionInfo getConnectionInfo() {
         return connectionInfo;
+    }
+
+    @FXML
+    private void onTileSelected(ActionEvent event) throws IOException {
+        StackPane s = (StackPane)gameRoot.lookup("#player2Bookshelf");
+        s.setVisible(true);
+
+
     }
 
 
