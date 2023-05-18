@@ -560,7 +560,7 @@
                               </AnchorPane>
                            </children>
                         </StackPane>
-                        <StackPane id="player2bookshelf" layoutX="10.0" layoutY="10.0" prefHeight="150.0" prefWidth="200.0" visible="false">
+                        <StackPane id="player2Bookshelf" layoutX="10.0" layoutY="10.0" prefHeight="150.0" prefWidth="200.0" visible="false">
                            <children>
                               <BorderPane prefHeight="200.0" prefWidth="200.0">
                                  <center>

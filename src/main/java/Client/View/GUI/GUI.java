@@ -10,6 +10,10 @@ import Server.Events.SelectViewEvents.GameView;
 import Server.Events.SelectViewEvents.LoginView;
 import Server.Events.SelectViewEvents.SelectViewEvent;
 import Server.Events.VCEvents.LoginEvent;
+import Server.Model.Cards.CommonGoalCard;
+import Server.Model.Chat.Message;
+import Server.Model.LightMatch;
+import Server.Model.Player.Player;
 import Utils.ConnectionInfo;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -39,10 +43,12 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
+import java.util.HashMap;
 
 public class GUI extends Application implements View {
     //resources
     ImageView titleImageView;
+    private String myNick;
     ImageView BookshelfImageView;
     ImageView livingRoomImageView;
     ImageView wallpaperImageView;
@@ -50,7 +56,6 @@ public class GUI extends Application implements View {
     ConnectionType connectionType = null;
     private NetworkHandler networkHandler;
     private Stage primaryStage;
-    private Stage newStage;
 
     private SelectViewEvent currentView;
     private boolean matchStarted = false;
@@ -59,6 +64,9 @@ public class GUI extends Application implements View {
     private ConnectionInfo connectionInfo;
     private boolean isReconnecting;
     private String previousNickname = null; //Will be null if isReconnecting==false
+    private int numberPlayers;
+    private Player me;
+
 
 
     private FXMLLoader loader = new FXMLLoader();
@@ -69,6 +77,8 @@ public class GUI extends Application implements View {
     Image wallpaperImage;
     Image catImage;
 
+
+    private HashMap<Integer, Player> players = new HashMap<>();
 
     @FXML
     private Button yesButtonReConnection;
@@ -96,10 +106,17 @@ public class GUI extends Application implements View {
     private Button quitButton;
     @FXML
     private Button playButton;
+    @FXML
+    private TextField onlyUsernameField;
+    @FXML
+    private TextField usernameField;
+    @FXML
+    private ComboBox<String> numberPlayersMenu;
 
     private Parent gameRoot;
 
 
+    private String[] numberPlayersArray = {"2 Players", "3 Players", "4 Players"};
 
 
 
@@ -119,7 +136,6 @@ public class GUI extends Application implements View {
 
         this.wallpaperImageView = new ImageView(wallpaperImage);
         catImage = new Image(getClass().getResource("/item tiles/Gatti1.1.png").toString());
-
 
 
         connectionInfo = null;
@@ -181,6 +197,12 @@ public class GUI extends Application implements View {
 
 
 
+
+
+
+        s.setVisible(true);
+
+        s = (StackPane)gameRoot.lookup("#player2Bookshelf");
         s.setVisible(true);
 
 
@@ -490,11 +512,10 @@ public class GUI extends Application implements View {
                     }
                 });
             }
-            case "GameView" -> Platform.runLater(() -> {
+            /*case "GameView" -> Platform.runLater(() -> {
                 onGameViewEvent(event);
             });
-
-
+            */
 
         }
 
@@ -559,11 +580,11 @@ public class GUI extends Application implements View {
         primaryStage.show();
 
         */
-        //TODO: da continuare
         if(loginView.isFirstToJoin()) {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Select_Number_Of_Players.fxml"));
             fxmlLoader.setController(this);
             Parent newRoot = fxmlLoader.load();
+            numberPlayersMenu.setItems(FXCollections.observableArrayList("2 Players", "3 Players", "4 Players"));
             Scene newScene = new Scene(newRoot);
             primaryStage.setScene(newScene);
             primaryStage.show();
@@ -577,6 +598,7 @@ public class GUI extends Application implements View {
         }
     }
 
+    /*
     private void onGameViewEvent(SelectViewEvent event) {
         currentView = event;
         GameView gameView = (GameView) event;
@@ -620,14 +642,73 @@ public class GUI extends Application implements View {
         primaryStage.setTitle("Waiting for other players");
         primaryStage.setScene(scene);
         primaryStage.show();
-
-
-
-
     }
+    */
+
 
     @Override
     public void onMVEvent(MVEvent event) {
+        String methodName = event.getMethodName();
+
+
+        switch(methodName) {
+            case "onModifiedChatEvent" -> {
+                onModifiedChatEvent((Message)event.getValue());
+                return;
+            }
+            case "onModifiedBookshelfEvent" -> {
+                onModifiedBookshelfEvent(event.getMatch());
+            }
+            case "onModifiedLivingRoomEvent" -> {
+                onModifiedLivingRoomEvent(event.getMatch());
+            }
+            case "onModifiedMatchEndedEvent" -> {
+                onModifiedMatchEndedEvent(event.getMatch());
+            }
+            case "onModifiedPointsEvent" -> {
+                onModifiedPointsEvent(event.getMatch());
+            }
+            case "onMatchStartedEvent" -> {
+                onMatchStartedEvent(event.getMatch());
+
+            }
+            case "onModifiedTurnEvent" -> {
+                onModifiedTurnEvent(event.getMatch());
+            }
+
+        }
+    }
+
+    private void onModifiedTurnEvent(LightMatch match) {
+    }
+
+    private void onMatchStartedEvent(LightMatch match) {
+        this.matchStarted = true;
+        this.numberPlayers = match.getNumberOfPlayers();
+        for(int i = 0; i < numberPlayers; i++){
+            players.put(i,match.getPlayers().get(i));
+            if (match.getPlayers().get(i).getPlayerNickName().equals(myNick)){
+                me = match.getPlayers().get(i);
+            }
+        }
+        System.out.println("Match started");
+        System.out.println("You are " + myNick );
+
+    }
+
+    private void onModifiedPointsEvent(LightMatch match) {
+    }
+
+    private void onModifiedMatchEndedEvent(LightMatch match) {
+    }
+
+    private void onModifiedLivingRoomEvent(LightMatch match) {
+    }
+
+    private void onModifiedBookshelfEvent(LightMatch match) {
+    }
+
+    private void onModifiedChatEvent(Message value) {
     }
 
     public void run() {
@@ -646,8 +727,6 @@ public class GUI extends Application implements View {
 
     @FXML
     private void onTileSelected(ActionEvent event) throws IOException {
-        StackPane s = (StackPane)gameRoot.lookup("#player2Bookshelf");
-        s.setVisible(true);
 
 
     }
@@ -754,6 +833,13 @@ public class GUI extends Application implements View {
 
     @FXML
     private void onClickSubmitUsernamePlayerButton(ActionEvent event) throws IOException {
+        int numPlayer = numberPlayersMenu.getSelectionModel().getSelectedIndex() + 2;
+        this.myNick = usernameField.getText();
+        try{
+            networkHandler.onVCEvent(new LoginEvent(myNick, numPlayer));
+        }catch(Exception ex){
+            System.out.println("Error in login");
+        }
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/WaitingPlayersToConnect.fxml"));
         fxmlLoader.setController(this);
         Parent newRoot = fxmlLoader.load();
@@ -765,6 +851,12 @@ public class GUI extends Application implements View {
 
     @FXML
     private void onClickUSubmitUsernameButton(ActionEvent event) throws IOException {
+        this.myNick = onlyUsernameField.getText();
+        try{
+            networkHandler.onVCEvent(new LoginEvent(myNick));
+        }catch(Exception ex){
+            System.out.println("Error in login");
+        }
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/WaitingPlayersToConnect.fxml"));
         fxmlLoader.setController(this);
         Parent newRoot = fxmlLoader.load();
@@ -784,5 +876,6 @@ public class GUI extends Application implements View {
     private void onPlayButton(ActionEvent event) throws IOException{
         new Thread(this.networkHandler).start();
     }
+
 
 }
