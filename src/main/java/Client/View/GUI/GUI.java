@@ -14,26 +14,25 @@ import Utils.ConnectionInfo;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
-import java.io.File;
+import java.io.IOException;
 import java.net.InetAddress;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 
@@ -56,69 +55,32 @@ public class GUI extends Application implements View {
     private boolean isReconnecting;
     private String previousNickname = null; //Will be null if isReconnecting==false
 
+    private FXMLLoader loader = new FXMLLoader();
+
+    Image titleImage;
+    Image bookshelfImage;
+    Image livingRoomImage;
+    Image wallpaperImage;
+    Image catImage;
+
+
+
 
 
     public GUI () {
-        /*
-        URL titleUrl;
-        try {
-            titleUrl = new File("/home/due2/Desktop/Progetto_SW_ENG/17_MyShelfie_BGA/Publisher material/Title_2000x618px.png").toURI().toURL();
 
-        }catch(MalformedURLException e){
-            System.out.println("Resource not found");
-            return;
-        }
-
-
-
-        Image titleImage = new Image(titleUrl.toString());
-
-        */
-
-        Image titleImage = new Image(getClass().getResource("/Publisher material/Title 2000x618px.png").toString());
+        titleImage = new Image(getClass().getResource("/Publisher material/Title 2000x618px.png").toString());
         this.titleImageView = new ImageView(titleImage);
 
-        /*
-        URL bookshelfUrl;
-        try {
-            bookshelfUrl = new File("/boards/bookshelf.png").toURI().toURL();
-        }catch(MalformedURLException e){
-            System.out.println("Resource not found");
-            return;
-        }
-        Image bookshelfImage = new Image(bookshelfUrl.toString());
-        */
-
-        Image bookshelfImage = new Image(getClass().getResource("/boards/bookshelf.png").toString());
+        bookshelfImage = new Image(getClass().getResource("/boards/bookshelf.png").toString());
         this.BookshelfImageView = new ImageView(bookshelfImage);
 
-        /*
-        URL livingRoomUrl;
-
-        try {
-            livingRoomUrl = new File("/home/due2/Desktop/Progetto_SW_ENG/17_MyShelfie_BGA/boards/livingroom.png").toURI().toURL();
-        }catch(MalformedURLException e){
-            System.out.println("Resource not found");
-            return;
-        }
-        Image livingRoomImage = new Image(livingRoomUrl.toString());
-        */
-        Image livingRoomImage = new Image(getClass().getResource("/boards/livingroom.png").toString());
+        livingRoomImage = new Image(getClass().getResource("/boards/livingroom.png").toString());
         this.livingRoomImageView = new ImageView(livingRoomImage);
 
-        /*
-        URL wallpaperUrl;
-        try {
-            wallpaperUrl = new File("/home/due2/Desktop/Progetto_SW_ENG/17_MyShelfie_BGA/Publisher material/Display_3.jpg").toURI().toURL();
-        }catch(MalformedURLException e){
-            System.out.println("Resource not found");
-            return;
-        }
-
-        Image wallpaperImage = new Image(wallpaperUrl.toString());
-        */
-        Image wallpaperImage = new Image(getClass().getResource("/Publisher material/Display_3.jpg").toString());
+        wallpaperImage = new Image(getClass().getResource("/Publisher material/Display_3.jpg").toString());
         this.wallpaperImageView = new ImageView(wallpaperImage);
+        catImage = new Image(getClass().getResource("/item tiles/Gatti1.1.png").toString());
 
         connectionInfo = null;
         isReconnecting = false;
@@ -133,7 +95,62 @@ public class GUI extends Application implements View {
 
 
     public void start(Stage primaryStage) {
-        El_loco_Stage = primaryStage;
+
+
+        loader.setLocation(getClass().getResource("/Gameview.fxml"));
+        Parent root=null;
+        try{
+            root = loader.load();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Titolo della finestra");
+        stage.show();
+
+
+        ImageView i = (ImageView)root.lookup("#livingRoomImage");
+
+        //Image newImage = new Image(getClass().getResource("/Publisher material/Display_3.jpg").toString());
+
+
+        i.setImage(livingRoomImage);
+
+        StackPane s = (StackPane)root.lookup("#bookshelf3");
+        //wait for 5 second
+
+        StackPane my = (StackPane)root.lookup("#mybookshelf");
+
+        my.setDisable(false);
+
+        GridPane grid = (GridPane)root.lookup("#firstBookshelfGrid");
+        TextFlow flow = (TextFlow) root.lookup("#chatframe");
+
+        ImageView cat = new ImageView(catImage);
+        cat.setFitWidth(30);
+        cat.setFitHeight(30);
+        Text text1 = new Text("Ciao sono Leonardo da Vinci ");
+        flow.getChildren().add(text1);
+
+        AnchorPane main = (AnchorPane)root.lookup("#MainPane") ;
+        ImageView wallpaper =(ImageView)root.lookup("#wallpaper") ;
+
+        wallpaper.fitHeightProperty().bind(main.heightProperty());
+        wallpaper.fitWidthProperty().bind(main.widthProperty());
+
+        grid.add(cat,2,5);
+
+
+
+        s.setVisible(true);
+
+
+
+
+
+        /*El_loco_Stage = primaryStage;
 
         Text askIsReconnnecting = new Text("Are you reconnecting?");
         Button yesButton = new Button("Yes");
@@ -316,6 +333,8 @@ public class GUI extends Application implements View {
         primaryStage.setTitle("MyShelfie");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+
     }
     private void showSocketConnectionWindow(Stage primaryStage) {
 
