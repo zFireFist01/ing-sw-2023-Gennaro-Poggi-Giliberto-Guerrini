@@ -12,6 +12,11 @@ import Server.Model.Cards.CommonGoalCardAdapter;
 import Server.Network.VirtualView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -42,11 +47,11 @@ public class NetworkSocketHandler implements NetworkHandler{
      * @param port the port of the server
      * @param view the view
      */
-    public NetworkSocketHandler(String host, int port, View view, boolean isReconnecting) {
+    public NetworkSocketHandler(String host, int port, View view) {
         this.host = host;
         this.view = view;
         this.port = port;
-        this.isReconnecting = isReconnecting;
+        this.isReconnecting = view.isReconnecting();
     }
 
     @Override
@@ -143,6 +148,7 @@ public class NetworkSocketHandler implements NetworkHandler{
                         break;
                     case "SelectViewEvent":
                         receiveSelectViewEvent(message);
+
                         break;
                     default:
                         throw new RuntimeException("Unknown event type");

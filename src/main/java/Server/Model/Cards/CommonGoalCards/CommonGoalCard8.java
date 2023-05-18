@@ -29,45 +29,6 @@ public class CommonGoalCard8 extends CommonGoalCard {
     }
 
     /**
-     * This method returns a CLI representation (ASCII-art like) of the 8th common goal card
-     * @return the char[][] matrix of the representation
-     * @author patrickpoggi
-     */
-    @Override
-    public char[][] getCLIRepresentation() {
-        char[][] res  = new char[13][15];
-        for(int i=0;i<13;i++){
-            res[i][1] = ' ';
-            res[i][13] = ' ';
-            res[i][0] = '|';
-            res[i][14] = '|';
-        }
-        for(int i=0;i<13;i++){
-            for(int j=2;j<13;j++){
-                if(i%2 == 0){
-                    if(j%2 == 0){
-                        res[i][j] = '+';
-                    }else{
-                        res[i][j] = '-';
-                    }
-                }else{
-                    if(j%2 == 0){
-                        res[i][j] = '|';
-                    }else{
-                        res[i][j] = ' ';
-                    }
-                }
-            }
-        }
-
-        res[1][3] = '=';
-        res[11][3] = '=';
-        res[1][11] = '=';
-        res[11][11] = '=';
-        return res;
-    }
-
-    /**
      * This method returns a CLI representation (ASCII-art like) of the 8th common goal card's description
      * @return the String[] "matrix" of the representation
      * @author patrickpoggi

@@ -78,8 +78,6 @@ public abstract class CommonGoalCard implements Card {
         }
     }
 
-    public abstract char[][] getCLIRepresentation();
-
 
     public abstract String[] getCommonGoalDescription();
 

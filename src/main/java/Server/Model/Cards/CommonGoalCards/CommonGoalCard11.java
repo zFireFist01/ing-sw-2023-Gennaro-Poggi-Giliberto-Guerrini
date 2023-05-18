@@ -64,61 +64,6 @@ public class    CommonGoalCard11 extends CommonGoalCard {
         return 11;
     }
 
-    /**
-     * this method return the CLI representation of CommonGoalCard11
-     * @return a matrix of char that represents the CommonGoalCard11
-     * @author Marta Giliberto
-     */
-    @Override
-    public char[][] getCLIRepresentation() {
-        char[][] res = new char[13][15];
-
-        for (int i = 0; i < 13; i++) {
-            for (int j = 0; j < 15; j++) {
-                if(j==0||j==14){
-                    res[i][j]='|';
-                }else {
-                    res[i][j] = ' ';
-                }
-            }
-        }
-
-        res[1][2]  ='+';
-        res[1][4]  ='+';
-        res[3][2]  ='+';
-        res[3][4]  ='+';
-        res[3][6]  ='+';
-        res[5][4]  ='+';
-        res[5][6]  ='+';
-        res[5][8]  ='+';
-        res[7][6]  ='+';
-        res[7][8]  ='+';
-        res[7][10] ='+';
-        res[9][8]  ='+';
-        res[9][10] ='+';
-        res[9][12] ='+';
-        res[11][10]='+';
-        res[11][12]='+';
-
-        res[1][3]  ='-';
-        res[3][3]  ='-';
-        res[3][5]  ='-';
-        res[5][5]  ='-';
-        res[5][7]  ='-';
-        res[7][7]  ='-';
-        res[7][9]  ='-';
-        res[9][9]  ='-';
-        res[9][11] ='-';
-        res[11][11]='-';
-
-        res[2][3]  ='=';
-        res[4][5]  ='=';
-        res[6][7]  ='=';
-        res[8][9]  ='=';
-        res[10][11]='=';
-
-        return res;
-    }
 
     /**
      * @return a string that describes CommonGoalCard11

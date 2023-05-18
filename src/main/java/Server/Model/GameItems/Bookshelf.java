@@ -97,57 +97,6 @@ public class Bookshelf {
         return lastIndexes;
     }
 
-    public String[][] getCLIRepresentation(){
-        String[][] res = new String[14][21];
-
-
-        for(int i = 0; i<14; i++){
-            for(int j = 0; j<21; j++){
-                if(i%2 == 0){
-                    if(j%4 == 0){
-                        res[i][j] =ANSIParameters.BG_BROWN +  " " +ANSIParameters.CRESET;
-                    }else{
-                        res[i][j] =ANSIParameters.BG_BROWN+  " " +ANSIParameters.CRESET;
-                    }
-                }else{
-                    if(j%4 == 0){
-                        res[i][j] = ANSIParameters.BG_BROWN + "|" + ANSIParameters.CRESET;
-                    }else{
-                        res[i][j] = " ";
-                    }
-                }
-            }
-        }
-
-        int k = 0;
-        int m = 0;
-
-        for(int i=0; i<14 && m<6;i++){
-            for(int j=0; j<21 && k<5; j++){
-                if((j-2)%4==0 && (i-1)%2==0 && (j-2)/4==k && (i-1)/2==m){
-                    if(tileMatrix[m][k].getTileType() != null) {
-                        res[i][j] = tileMatrix[m][k].getTileType().getCLIRepresentation()[0][0];
-                        res[i][j-1] = tileMatrix[m][k].getTileType().getCLIRepresentation()[0][0];
-                        res[i][j+1] = tileMatrix[m][k].getTileType().getCLIRepresentation()[0][0];
-                    }
-                    k++;
-                    if (k == 5) {
-                        k = 0;
-                        m++;
-                    }
-                }
-            }
-        }
-
-        res[13][2] = "0";
-        res[13][6] = "1";
-        res[13][10] = "2";
-        res[13][14] = "3";
-        res[13][18] = "4";
-
-
-        return res;
-    }
 
     public void notifyMVEventListeners(MVEvent event){
         this.m.notifyMVEventListeners(event);
