@@ -59,15 +59,23 @@ public class Controller implements VCEventListener {
         ArrayList<Player> players = match.getPlayers();
 
         if(players.size()==0 && numberofPlayers!=0){
-            match.setNumberOfPlayers(numberofPlayers);
-            Player newPlayer = new Player(match, nickname.hashCode(),nickname);
-            match.addContestant(newPlayer);
-            PlayerViews.put(nickname.hashCode(),caller);
-            hashNicknames.put(nickname.hashCode(),newPlayer);
-            caller.onSelectViewEvent(new GameView());
-            caller.getConnectionInfo().setNickname(nickname);
-            //server.updateConnectionStatus(caller.getConnectionInfo(), true);
-            System.out.println("Controller connection info.nickname: " + caller.getConnectionInfo().getNickname());
+            if(nickname.length() > 20) {
+                caller.onSelectViewEvent(new LoginView(true,"Nickname too long, max 20 characters"));
+            }else if(nickname.length() < 3) {
+                caller.onSelectViewEvent(new LoginView(true,"Nickname too short, min 3 characters"));
+            }else if(nickname.contains(" ")) {
+                caller.onSelectViewEvent(new LoginView(true,"Nickname cannot contain spaces"));
+            }else {
+                match.setNumberOfPlayers(numberofPlayers);
+                Player newPlayer = new Player(match, nickname.hashCode(), nickname);
+                match.addContestant(newPlayer);
+                PlayerViews.put(nickname.hashCode(), caller);
+                hashNicknames.put(nickname.hashCode(), newPlayer);
+                caller.onSelectViewEvent(new GameView());
+                caller.getConnectionInfo().setNickname(nickname);
+                //server.updateConnectionStatus(caller.getConnectionInfo(), true);
+                System.out.println("Controller connection info.nickname: " + caller.getConnectionInfo().getNickname());
+            }
         }else{
             for(Player player : players){
                 if(player.getPlayerID()==nickname.hashCode()) {

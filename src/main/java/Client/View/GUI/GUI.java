@@ -643,71 +643,73 @@ public class GUI extends Application implements View {
         GridPane grid = (GridPane)gameRoot.lookup("#player"+String.valueOf(index)+"bookshelf");
         for (int i=0;i<6;i++ ){
             for(int j=0;j<5;j++){
-                switch(matrix[i][j].getTileType()){
-                    case CATS -> {
-                        ImageView tmp= getImageViewAt(grid,i,j);
-                        random = (int)(Math.random() * 3 + 1);
-                        if (random == 1) {
-                            tmp.setImage(catImage1);
-                        }else if(random == 2){
-                            tmp.setImage(catImage2);
-                        }else{
-                            tmp.setImage(catImage3);
+                if(matrix[i][j].getTileType()!=null){
+                    switch(matrix[i][j].getTileType()) {
+                        case CATS -> {
+                            ImageView tmp = getImageViewAt(grid, i, j);
+                            random = (int) (Math.random() * 3 + 1);
+                            if (random == 1) {
+                                tmp.setImage(catImage1);
+                            } else if (random == 2) {
+                                tmp.setImage(catImage2);
+                            } else {
+                                tmp.setImage(catImage3);
+                            }
                         }
-                    }
-                    case PLANTS -> {
-                        ImageView tmp= getImageViewAt(grid,i,j);
-                        random = (int)(Math.random() * 3 + 1);
-                        if (random == 1) {
-                            tmp.setImage(plantsImage1);
-                        }else if(random == 2){
-                            tmp.setImage(plantsImage2);
-                        }else{
-                            tmp.setImage(plantsImage3);
+                        case PLANTS -> {
+                            ImageView tmp = getImageViewAt(grid, i, j);
+                            random = (int) (Math.random() * 3 + 1);
+                            if (random == 1) {
+                                tmp.setImage(plantsImage1);
+                            } else if (random == 2) {
+                                tmp.setImage(plantsImage2);
+                            } else {
+                                tmp.setImage(plantsImage3);
+                            }
                         }
-                    }
-                    case GAMES -> {
-                        ImageView tmp= getImageViewAt(grid,i,j);
-                        random = (int)(Math.random() * 3 + 1);
-                        if (random == 1) {
-                            tmp.setImage(gamesImage1);
-                        }else if(random == 2){
-                            tmp.setImage(gamesImage2);
-                        }else{
-                            tmp.setImage(gamesImage3);
+                        case GAMES -> {
+                            ImageView tmp = getImageViewAt(grid, i, j);
+                            random = (int) (Math.random() * 3 + 1);
+                            if (random == 1) {
+                                tmp.setImage(gamesImage1);
+                            } else if (random == 2) {
+                                tmp.setImage(gamesImage2);
+                            } else {
+                                tmp.setImage(gamesImage3);
+                            }
                         }
-                    }
-                    case BOOKS -> {
-                        ImageView tmp= getImageViewAt(grid,i,j);
-                        random = (int)(Math.random() * 3 + 1);
-                        if (random == 1) {
-                            tmp.setImage(bookImage1);
-                        }else if(random == 2){
-                            tmp.setImage(bookImage2);
-                        }else{
-                            tmp.setImage(bookImage3);
+                        case BOOKS -> {
+                            ImageView tmp = getImageViewAt(grid, i, j);
+                            random = (int) (Math.random() * 3 + 1);
+                            if (random == 1) {
+                                tmp.setImage(bookImage1);
+                            } else if (random == 2) {
+                                tmp.setImage(bookImage2);
+                            } else {
+                                tmp.setImage(bookImage3);
+                            }
                         }
-                    }
-                    case FRAMES -> {
-                        ImageView tmp= getImageViewAt(grid,i,j);
-                        random = (int)(Math.random() * 3 + 1);
-                        if (random == 1) {
-                            tmp.setImage(frameImage1);
-                        }else if(random == 2){
-                            tmp.setImage(frameImage2);
-                        }else{
-                            tmp.setImage(frameImage3);
+                        case FRAMES -> {
+                            ImageView tmp = getImageViewAt(grid, i, j);
+                            random = (int) (Math.random() * 3 + 1);
+                            if (random == 1) {
+                                tmp.setImage(frameImage1);
+                            } else if (random == 2) {
+                                tmp.setImage(frameImage2);
+                            } else {
+                                tmp.setImage(frameImage3);
+                            }
                         }
-                    }
-                    case TROPHIES -> {
-                        ImageView tmp= getImageViewAt(grid,i,j);
-                        random = (int)(Math.random() * 3 + 1);
-                        if (random == 1) {
-                            tmp.setImage(trophyImage1);
-                        }else if(random == 2){
-                            tmp.setImage(trophyImage2);
-                        }else{
-                            tmp.setImage(trophyImage3);
+                        case TROPHIES -> {
+                            ImageView tmp = getImageViewAt(grid, i, j);
+                            random = (int) (Math.random() * 3 + 1);
+                            if (random == 1) {
+                                tmp.setImage(trophyImage1);
+                            } else if (random == 2) {
+                                tmp.setImage(trophyImage2);
+                            } else {
+                                tmp.setImage(trophyImage3);
+                            }
                         }
                     }
                 }
@@ -1079,7 +1081,8 @@ public class GUI extends Application implements View {
 
     @FXML
     private void onClickSubmitUsernamePlayerButton(ActionEvent event) throws IOException {
-        int numPlayer = numberPlayersMenu.getSelectionModel().getSelectedIndex() + 2;
+        int numPlayer = numberPlayersMenu.getSelectionModel().getSelectedIndex() + 2 ==1 ? 2 : numberPlayersMenu.getSelectionModel().getSelectedIndex();
+
         this.myNick = usernameField.getText();
         try{
             networkHandler.onVCEvent(new LoginEvent(myNick, numPlayer));
