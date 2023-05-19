@@ -19,7 +19,7 @@
       </ImageView>
       <Pane layoutX="360.0" layoutY="190.0" opacity="0.9" prefHeight="117.0" prefWidth="550.0" style="-fx-background-color: lightgray;">
          <children>
-            <Text layoutX="22.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Insert Your Username:" translateX="75.0" translateY="30.0">
+            <Text layoutX="-72.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Insert Your Username:" textAlignment="CENTER" translateX="75.0" translateY="30.0" wrappingWidth="543.2680053710938">
                <font>
                   <Font name="System Bold" size="36.0" />
                </font>
@@ -37,5 +37,10 @@
          </font>
       </Button>
       <ComboBox fx:id="numberPlayersMenu" layoutX="888.0" layoutY="379.0" prefWidth="150.0" promptText="Select N° Players" />
+      <Text id="errormessage" fill="#e43104" layoutX="359.0" layoutY="572.0" strokeType="OUTSIDE" strokeWidth="0.0" underline="true" wrappingWidth="543.2680053710938">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>

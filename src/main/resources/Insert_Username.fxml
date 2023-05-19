@@ -35,5 +35,10 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
+      <Text id="errormessage" fill="#e43104" layoutX="28.0" layoutY="332.0" strokeType="OUTSIDE" strokeWidth="0.0" underline="true" wrappingWidth="543.2680053710938">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>

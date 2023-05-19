@@ -11,7 +11,12 @@ import Server.Events.SelectViewEvents.LoginView;
 import Server.Events.SelectViewEvents.SelectViewEvent;
 import Server.Events.VCEvents.LoginEvent;
 import Server.Model.Cards.CommonGoalCard;
+import Server.Model.Cards.PersonalGoalCard;
 import Server.Model.Chat.Message;
+import Server.Model.GameItems.LivingRoom;
+import Server.Model.GameItems.LivingRoomTileSpot;
+import Server.Model.GameItems.PointsTile;
+import Server.Model.GameItems.TileType;
 import Server.Model.LightMatch;
 import Server.Model.Player.Player;
 import Utils.ConnectionInfo;
@@ -25,6 +30,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -44,13 +50,13 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.util.HashMap;
+import java.util.Random;
 
 public class GUI extends Application implements View {
     //resources
     ImageView titleImageView;
     private String myNick;
-    ImageView BookshelfImageView;
-    ImageView livingRoomImageView;
+
     ImageView wallpaperImageView;
 
     ConnectionType connectionType = null;
@@ -66,19 +72,61 @@ public class GUI extends Application implements View {
     private String previousNickname = null; //Will be null if isReconnecting==false
     private int numberPlayers;
     private Player me;
+    private CommonGoalCard firstCommonGoalCard;
+    private CommonGoalCard secondCommonGoalCard;
+    private PersonalGoalCard personalGoalCard;
 
 
 
     private FXMLLoader loader = new FXMLLoader();
 
-    Image titleImage;
-    Image bookshelfImage;
-    Image livingRoomImage;
-    Image wallpaperImage;
-    Image catImage;
+    //IMAGES
+    private Image titleImage;
+    private Image bookshelfImage;
+    private Image livingRoomImage;
+    private Image wallpaperImage;
+    private Image chairImage;
+    //TILES IMAGES
+    private Image catImage1;
+    private Image catImage2;
+    private Image catImage3;
+    private Image bookImage1;
+    private Image bookImage2;
+    private Image bookImage3;
+    private Image frameImage1;
+    private Image frameImage2;
+    private Image frameImage3;
+    private Image trophyImage1;
+    private Image trophyImage2;
+    private Image trophyImage3;
+    private Image gamesImage1;
+    private Image gamesImage2;
+    private Image gamesImage3;
+    private Image plantsImage1;
+    private Image plantsImage2;
+    private Image plantsImage3;
+
+    //CARDS IMAGES
+    private Image firstCommonGoalImage;
+    private Image secondCommonGoalImage;
+    private Image personalGoalImage;
+
+    //POINTS IMAGES
+    private Image points8Image;
+    private Image points6Image;
+    private Image points4Image;
+    private Image points2Image;
+    private Image points1Image;
+
+
+
+
+
 
 
     private HashMap<Integer, Player> players = new HashMap<>();
+
+
 
     @FXML
     private Button yesButtonReConnection;
@@ -122,21 +170,44 @@ public class GUI extends Application implements View {
 
     public GUI () {
 
-
+        //SETTING IMAGES
         titleImage = new Image(getClass().getResource("/Publisher material/Title 2000x618px.png").toString());
-        this.titleImageView = new ImageView(titleImage);
-
         bookshelfImage = new Image(getClass().getResource("/boards/bookshelf.png").toString());
-        this.BookshelfImageView = new ImageView(bookshelfImage);
-
         livingRoomImage = new Image(getClass().getResource("/boards/livingroom.png").toString());
-        this.livingRoomImageView = new ImageView(livingRoomImage);
-
         wallpaperImage = new Image(getClass().getResource("/Publisher material/Display_3.jpg").toString());
-
         this.wallpaperImageView = new ImageView(wallpaperImage);
-        catImage = new Image(getClass().getResource("/item tiles/Gatti1.1.png").toString());
 
+        chairImage = new Image(getClass().getResource("/misc/firstplayertoken.png").toString());
+
+        catImage1 = new Image(getClass().getResource("/item tiles/Gatti1.1.png").toString());
+        catImage2 = new Image(getClass().getResource("/item tiles/Gatti1.2.png").toString());
+        catImage3 = new Image(getClass().getResource("/item tiles/Gatti1.3.png").toString());
+
+        bookImage1 = new Image(getClass().getResource("/item tiles/Libri1.1.png").toString());
+        bookImage2 = new Image(getClass().getResource("/item tiles/Libri1.2.png").toString());
+        bookImage3 = new Image(getClass().getResource("/item tiles/Libri1.3.png").toString());
+
+        frameImage1 = new Image(getClass().getResource("/item tiles/Cornici1.1.png").toString());
+        frameImage2 = new Image(getClass().getResource("/item tiles/Cornici1.2.png").toString());
+        frameImage3 = new Image(getClass().getResource("/item tiles/Cornici1.3.png").toString());
+
+        trophyImage1 = new Image(getClass().getResource("/item tiles/Trofei1.1.png").toString());
+        trophyImage2 = new Image(getClass().getResource("/item tiles/Trofei1.2.png").toString());
+        trophyImage3 = new Image(getClass().getResource("/item tiles/Trofei1.3.png").toString());
+
+        gamesImage1 = new Image(getClass().getResource("/item tiles/Giochi1.1.png").toString());
+        gamesImage2 = new Image(getClass().getResource("/item tiles/Giochi1.2.png").toString());
+        gamesImage3 = new Image(getClass().getResource("/item tiles/Giochi1.3.png").toString());
+
+        plantsImage1 = new Image(getClass().getResource("/item tiles/Piante1.1.png").toString());
+        plantsImage2 = new Image(getClass().getResource("/item tiles/Piante1.2.png").toString());
+        plantsImage3 = new Image(getClass().getResource("/item tiles/Piante1.3.png").toString());
+
+        points8Image = new Image(getClass().getResource("/scoring tokens/scoring_8.jpg").toString());
+        points6Image = new Image(getClass().getResource("/scoring tokens/scoring_6.jpg").toString());
+        points4Image = new Image(getClass().getResource("/scoring tokens/scoring_4.jpg").toString());
+        points2Image = new Image(getClass().getResource("/scoring tokens/scoring_2.jpg").toString());
+        points1Image = new Image(getClass().getResource("/scoring tokens/end game.jpg").toString());
 
         connectionInfo = null;
         isReconnecting = false;
@@ -148,62 +219,6 @@ public class GUI extends Application implements View {
 
     public void start(Stage primaryStage) throws IOException {
 
-
-
-        loader.setLocation(getClass().getResource("/Gameview.fxml"));
-
-        try{
-            gameRoot = loader.load();
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-        Scene scene = new Scene(gameRoot);
-
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Titolo della finestra");
-        primaryStage.show();
-
-
-        ImageView i = (ImageView)gameRoot.lookup("#livingRoomImage");
-
-        //Image newImage = new Image(getClass().getResource("/Publisher material/Display_3.jpg").toString());
-
-
-        i.setImage(livingRoomImage);
-
-        StackPane s = (StackPane)gameRoot.lookup("#player3Bookshelf");
-        //wait for 5 second
-
-        StackPane my = (StackPane)gameRoot.lookup("#mybookshelf");
-
-        my.setDisable(false);
-
-        GridPane grid = (GridPane)gameRoot.lookup("#firstBookshelfGrid");
-        TextFlow flow = (TextFlow) gameRoot.lookup("#chatframe");
-
-        ImageView cat = new ImageView(catImage);
-        cat.setFitWidth(30);
-        cat.setFitHeight(30);
-        Text text1 = new Text("Ciao sono Leonardo da Vinci ");
-        flow.getChildren().add(text1);
-
-        AnchorPane main = (AnchorPane)gameRoot.lookup("#MainPane") ;
-        ImageView wallpaper =(ImageView)gameRoot.lookup("#wallpaper") ;
-
-        wallpaper.fitHeightProperty().bind(main.heightProperty());
-        wallpaper.fitWidthProperty().bind(main.widthProperty());
-
-        grid.add(cat,2,5);
-
-
-
-
-
-
-        s.setVisible(true);
-
-        s = (StackPane)gameRoot.lookup("#player2Bookshelf");
-        s.setVisible(true);
 
 
 
@@ -235,8 +250,8 @@ public class GUI extends Application implements View {
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Re_Connection_Requests.fxml"));
         fxmlLoader.setController(this);
-        gameRoot = fxmlLoader.load();
-        Scene newScene = new Scene(gameRoot);
+        Parent root = fxmlLoader.load();
+        Scene newScene = new Scene(root);
         primaryStage.setScene(newScene);
         primaryStage.show();
 
@@ -404,6 +419,10 @@ public class GUI extends Application implements View {
 
 
     }
+
+
+
+
     private void showSocketConnectionWindow(Stage primaryStage) {
 
         Stage loginStage = new Stage();
@@ -525,65 +544,14 @@ public class GUI extends Application implements View {
         currentView = event;
         LoginView loginView = (LoginView) event;
 
-        /*
-        Label messageLabel = new Label(loginView.getMessage());
-
-
-
-        TextField nameField = new TextField();
-        nameField.setPromptText("Name");
-
-        ComboBox<String> giocatoriComboBox = new ComboBox<>();
-        giocatoriComboBox.setItems(FXCollections.observableArrayList(
-                "1 Player", "2 Player", "3 Player", "4 Player"));
-
-
-        Button submitButton = new Button("Submit");
-
-
-
-        submitButton.setOnAction(e -> {
-            String playerName = nameField.getText();
-            if(loginView.isFirstToJoin()) {
-                int numPlayer = giocatoriComboBox.getSelectionModel().getSelectedIndex();
-                try{
-                    networkHandler.onVCEvent(new LoginEvent(playerName, numPlayer));
-                }catch(Exception ex){
-                    System.out.println("Error in login");
-                }
-
-            }else{
-                try{
-                    networkHandler.onVCEvent(new LoginEvent(playerName));
-                }catch(Exception ex){
-                    System.out.println("Error in login");
-                }
-            }
-        });
-
-        VBox inputBox = new VBox(10, messageLabel, nameField);
-        VBox nameInputBox;
-        if(loginView.isFirstToJoin()){
-            HBox nameNumberBox = new HBox(10, inputBox, giocatoriComboBox);
-
-            nameNumberBox.setAlignment(Pos.CENTER);
-            nameInputBox = new VBox(10, nameNumberBox, submitButton);
-            nameInputBox.setAlignment(Pos.CENTER);
-        }else {
-            nameInputBox = new VBox(10, inputBox, submitButton);
-            nameInputBox.setAlignment(Pos.CENTER);
-        }
-
-        Scene scene = new Scene(nameInputBox, 800, 600);
-        primaryStage.setTitle("MyShelfie");
-        primaryStage.setScene(scene);
-        primaryStage.show();
-
-        */
         if(loginView.isFirstToJoin()) {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Select_Number_Of_Players.fxml"));
             fxmlLoader.setController(this);
             Parent newRoot = fxmlLoader.load();
+            Text tmp = (Text)newRoot.lookup("#errormessage");
+            if(!loginView.getMessage().equals("Insert your username")){
+                tmp.setText(loginView.getMessage());
+            }
             numberPlayersMenu.setItems(FXCollections.observableArrayList("2 Players", "3 Players", "4 Players"));
             Scene newScene = new Scene(newRoot);
             primaryStage.setScene(newScene);
@@ -592,6 +560,10 @@ public class GUI extends Application implements View {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Insert_Username.fxml"));
             fxmlLoader.setController(this);
             Parent newRoot = fxmlLoader.load();
+            Text tmp = (Text)newRoot.lookup("#errormessage");
+            if(!loginView.getMessage().equals("Insert your username")){
+                tmp.setText(loginView.getMessage());
+            }
             Scene newScene = new Scene(newRoot);
             primaryStage.setScene(newScene);
             primaryStage.show();
@@ -666,14 +638,21 @@ public class GUI extends Application implements View {
                 onModifiedMatchEndedEvent(event.getMatch());
             }
             case "onModifiedPointsEvent" -> {
+
                 onModifiedPointsEvent(event.getMatch());
             }
             case "onMatchStartedEvent" -> {
-                onMatchStartedEvent(event.getMatch());
+
+                Platform.runLater(() -> {
+                    onMatchStartedEvent(event.getMatch());
+                });
 
             }
             case "onModifiedTurnEvent" -> {
-                onModifiedTurnEvent(event.getMatch());
+                Platform.runLater(() -> {
+                        onModifiedTurnEvent(event.getMatch());
+                });
+
             }
 
         }
@@ -684,15 +663,234 @@ public class GUI extends Application implements View {
 
     private void onMatchStartedEvent(LightMatch match) {
         this.matchStarted = true;
-        this.numberPlayers = match.getNumberOfPlayers();
+        numberPlayers = match.getPlayers().size();
         for(int i = 0; i < numberPlayers; i++){
             players.put(i,match.getPlayers().get(i));
             if (match.getPlayers().get(i).getPlayerNickName().equals(myNick)){
                 me = match.getPlayers().get(i);
+                if(i!=0) {
+                    Player tmp = players.get(0);
+                    players.put(0, me);
+                    players.put(i, tmp);
+                }
+            }
+
+        }
+
+        loader.setLocation(getClass().getResource("/Gameview.fxml"));
+        loader.setController(this);
+
+        try{
+            gameRoot = loader.load();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+
+        Scene scene = new Scene(gameRoot);
+
+
+        if(numberPlayers==3){
+            StackPane s = (StackPane)gameRoot.lookup("#player2Bookshelf");
+            s.setVisible(true);
+            Text name = (Text)gameRoot.lookup("#player1Name");
+            name.setText(players.get(1).getPlayerNickName());
+            name = (Text)gameRoot.lookup("#player2Name");
+            name.setText(players.get(2).getPlayerNickName());
+
+        }else if(numberPlayers==4){
+            StackPane s = (StackPane)gameRoot.lookup("#player2Bookshelf");
+            s.setVisible(true);
+            s = (StackPane)gameRoot.lookup("#player3Bookshelf");
+            s.setVisible(true);
+            Text name = (Text)gameRoot.lookup("#player1Name");
+            name.setText(players.get(1).getPlayerNickName());
+            name = (Text)gameRoot.lookup("#player2Name");
+            name.setText(players.get(2).getPlayerNickName());
+            name = (Text)gameRoot.lookup("#player3Name");
+            name.setText(players.get(3).getPlayerNickName());
+
+        }else{
+            Text name = (Text)gameRoot.lookup("#player1Name");
+            name.setText(players.get(1).getPlayerNickName());
+        }
+
+        ImageView wallpaper =(ImageView)gameRoot.lookup("#wallpaper") ;
+
+        AnchorPane main = (AnchorPane)gameRoot.lookup("#MainPane") ;
+        wallpaper.fitHeightProperty().bind(main.heightProperty());
+        wallpaper.fitWidthProperty().bind(main.widthProperty());
+
+        firstCommonGoalCard=match.getCommonGoals()[0];
+        secondCommonGoalCard=match.getCommonGoals()[1];
+        personalGoalCard=me.getPersonalGoalCard();
+
+        System.out.println(String.valueOf(firstCommonGoalCard.getCardID()));
+
+        firstCommonGoalImage=new Image(getClass().getResource(("/common goal cards/"+String.valueOf(firstCommonGoalCard.getCardID())+".jpg")).toString());
+        secondCommonGoalImage=new Image(getClass().getResource(("/common goal cards/"+String.valueOf(secondCommonGoalCard.getCardID())+".jpg")).toString());
+        personalGoalImage=new Image(getClass().getResource(("/personal goal cards/Personal_Goals"+String.valueOf(personalGoalCard.getCardID()==1 ? "" : personalGoalCard.getCardID())+".png")).toString());
+
+        ImageView firstCommonGoalImageView = (ImageView)gameRoot.lookup("#firstcommongoal");
+        firstCommonGoalImageView.setImage(firstCommonGoalImage);
+
+        ImageView secondCommonGoalImageView = (ImageView)gameRoot.lookup("#secondcommongoal");
+        secondCommonGoalImageView.setImage(secondCommonGoalImage);
+
+        ImageView personalGoalImageView = (ImageView)gameRoot.lookup("#personalgoal");
+        personalGoalImageView.setImage(personalGoalImage);
+
+        for(int i=0; i<numberPlayers;i++){
+            if(players.get(i).getPlayerNickName().equals(match.getCurrentPlayer().getPlayerNickName())){
+                ImageView firsttoken = (ImageView)gameRoot.lookup("#player"+String.valueOf(i)+"firsttoken");
+                firsttoken.setVisible(true);
+                break;
             }
         }
-        System.out.println("Match started");
-        System.out.println("You are " + myNick );
+
+
+
+
+
+
+
+        updateBookshelfs(match);
+        updateLivingroom(match);
+        updatePoints(match);
+
+
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("MyShelfie");
+        primaryStage.show();
+
+
+    }
+
+
+
+    private void updateBookshelfs(LightMatch match){
+
+    }
+
+    private void updateLivingroom(LightMatch match){
+
+        LivingRoomTileSpot livingroom[][]=match.getLivingRoom().getTileMatrix();
+        GridPane grid = (GridPane)gameRoot.lookup("#livingroomtiles");
+        int random;
+
+        for(int i=0;i<9;i++){
+            for(int j=0; j<9;j++){
+                if(livingroom[i][j].getTileType()== TileType.CATS){
+                    ImageView tmp= getImageViewAt(grid,i,j);
+                    random = (int)(Math.random() * 3 + 1);
+                    if (random == 1) {
+                        tmp.setImage(catImage1);
+                    }else if(random == 2){
+                        tmp.setImage(catImage2);
+                    }else{
+                        tmp.setImage(catImage3);
+                    }
+                }else if(livingroom[i][j].getTileType()== TileType.TROPHIES){
+                    ImageView tmp= getImageViewAt(grid,i,j);
+                    random = (int)(Math.random() * 3 + 1);
+                    if (random == 1) {
+                        tmp.setImage(trophyImage1);
+                    }else if(random == 2){
+                        tmp.setImage(trophyImage2);
+                    }else{
+                        tmp.setImage(trophyImage3);
+                    }
+                }else if(livingroom[i][j].getTileType()== TileType.FRAMES){
+                    ImageView tmp= getImageViewAt(grid,i,j);
+                    random = (int)(Math.random() * 3 + 1);
+                    if (random == 1) {
+                        tmp.setImage(frameImage1);
+                    }else if(random == 2){
+                        tmp.setImage(frameImage2);
+                    }else{
+                        tmp.setImage(frameImage3);
+                    }
+                }else if(livingroom[i][j].getTileType()== TileType.PLANTS){
+                    ImageView tmp= getImageViewAt(grid,i,j);
+                    random = (int)(Math.random() * 3 + 1);
+                    if (random == 1) {
+                        tmp.setImage(plantsImage1);
+                    }else if(random == 2){
+                        tmp.setImage(plantsImage2);
+                    }else{
+                        tmp.setImage(plantsImage3);
+                    }
+                }else if(livingroom[i][j].getTileType()== TileType.GAMES){
+                    ImageView tmp= getImageViewAt(grid,i,j);
+                    random = (int)(Math.random() * 3 + 1);
+                    if (random == 1) {
+                        tmp.setImage(gamesImage1);
+                    }else if(random == 2){
+                        tmp.setImage(gamesImage2);
+                    }else{
+                        tmp.setImage(gamesImage3);
+                    }
+                }else if(livingroom[i][j].getTileType()== TileType.BOOKS){
+                    ImageView tmp= getImageViewAt(grid,i,j);
+                    random = (int)(Math.random() * 3 + 1);
+                    if (random == 1) {
+                        tmp.setImage(bookImage1);
+                    }else if(random == 2){
+                        tmp.setImage(bookImage2);
+                    }else{
+                        tmp.setImage(bookImage3);
+                    }
+                }
+            }
+        }
+
+    }
+
+    private ImageView getImageViewAt(GridPane gridPane, int i, int j) {
+        for (Node node : gridPane.getChildren()) {
+            if (node instanceof ImageView) {
+
+                int rowIndex = GridPane.getRowIndex(node) == null ? 0 : GridPane.getRowIndex(node);
+                int columnIndex = GridPane.getColumnIndex(node) == null ? 0 : GridPane.getColumnIndex(node);
+
+                if (rowIndex == i && columnIndex == j) {
+                    return (ImageView) node;
+                }
+            }
+        }
+        return null;
+    }
+
+    private void updatePoints(LightMatch match){
+        firstCommonGoalCard=match.getCommonGoals()[0];
+        secondCommonGoalCard=match.getCommonGoals()[1];
+        ImageView firstCommonGoalPoints = (ImageView)gameRoot.lookup("#firstcommongoalpoints");
+        ImageView secondCommonGoalPoints = (ImageView)gameRoot.lookup("#secondcommongoalpoints");
+        if(firstCommonGoalCard.getPointsTiles().get(firstCommonGoalCard.getPointsTiles().size()-1)== PointsTile.EIGHT_1 || firstCommonGoalCard.getPointsTiles().get(firstCommonGoalCard.getPointsTiles().size()-1)== PointsTile.EIGHT_2){
+            firstCommonGoalPoints.setImage(points8Image);
+
+        }else if(firstCommonGoalCard.getPointsTiles().get(firstCommonGoalCard.getPointsTiles().size()-1)== PointsTile.SIX_1 || firstCommonGoalCard.getPointsTiles().get(firstCommonGoalCard.getPointsTiles().size()-1)== PointsTile.SIX_2){
+            firstCommonGoalPoints.setImage(points6Image);
+        }else if(firstCommonGoalCard.getPointsTiles().get(firstCommonGoalCard.getPointsTiles().size()-1)== PointsTile.FOUR_1 || firstCommonGoalCard.getPointsTiles().get(firstCommonGoalCard.getPointsTiles().size()-1)== PointsTile.FOUR_2){
+            firstCommonGoalPoints.setImage(points4Image);
+
+        } else if (firstCommonGoalCard.getPointsTiles().get(firstCommonGoalCard.getPointsTiles().size()-1) == PointsTile.TWO_1 || firstCommonGoalCard.getPointsTiles().get(firstCommonGoalCard.getPointsTiles().size()-1) == PointsTile.TWO_2) {
+            firstCommonGoalPoints.setImage(points2Image);
+        }else{
+            firstCommonGoalPoints.setImage(null);
+        }
+
+        if(secondCommonGoalCard.getPointsTiles().get(secondCommonGoalCard.getPointsTiles().size()-1)== PointsTile.EIGHT_2 || secondCommonGoalCard.getPointsTiles().get(secondCommonGoalCard.getPointsTiles().size()-1)== PointsTile.EIGHT_1) {
+            secondCommonGoalPoints.setImage(points8Image);
+        }else if(secondCommonGoalCard.getPointsTiles().get(secondCommonGoalCard.getPointsTiles().size()-1)== PointsTile.SIX_2 || secondCommonGoalCard.getPointsTiles().get(secondCommonGoalCard.getPointsTiles().size()-1)== PointsTile.SIX_1){
+            secondCommonGoalPoints.setImage(points6Image);
+        }else if(secondCommonGoalCard.getPointsTiles().get(secondCommonGoalCard.getPointsTiles().size()-1)== PointsTile.FOUR_2 || secondCommonGoalCard.getPointsTiles().get(secondCommonGoalCard.getPointsTiles().size()-1)== PointsTile.FOUR_1){
+            secondCommonGoalPoints.setImage(points4Image);
+        }else if(secondCommonGoalCard.getPointsTiles().get(secondCommonGoalCard.getPointsTiles().size()-1)== PointsTile.TWO_2 || secondCommonGoalCard.getPointsTiles().get(secondCommonGoalCard.getPointsTiles().size()-1)== PointsTile.TWO_1){
+            secondCommonGoalPoints.setImage(points2Image);
+        }else{
+            secondCommonGoalPoints.setImage(null);
+        }
+
 
     }
 
