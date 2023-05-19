@@ -13,8 +13,8 @@
             <Image url="@misc/sfondo parquet.jpg" />
          </image>
       </ImageView>
-      <TextField fx:id="addressServer" layoutX="200.0" layoutY="161.0" prefHeight="25.0" prefWidth="200.0" text="Server Address:" />
-      <TextField fx:id="portServer" layoutX="200.0" layoutY="214.0" prefHeight="25.0" prefWidth="200.0" text="Server Port:" />
+      <TextField fx:id="addressServer" layoutX="200.0" layoutY="161.0" prefHeight="25.0" prefWidth="200.0" promptText="Server Address:" />
+      <TextField fx:id="portServer" layoutX="200.0" layoutY="214.0" prefHeight="25.0" prefWidth="200.0" promptText="Server Port:" />
       <ImageView fitHeight="95.0" fitWidth="256.0" layoutX="172.0" layoutY="39.0">
          <image>
             <Image url="@Publisher material/Title 2000x618px.png" />
