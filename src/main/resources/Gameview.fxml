@@ -509,7 +509,7 @@
                                  <children>
                                     <BorderPane prefHeight="200.0" prefWidth="200.0">
                                        <center>
-                                          <GridPane id="firstBookshelfGrid" hgap="10.0" prefHeight="170.0" prefWidth="171.0" vgap="5.0" BorderPane.alignment="CENTER">
+                                          <GridPane id="player1bookshelf" hgap="10.0" prefHeight="170.0" prefWidth="171.0" vgap="5.0" BorderPane.alignment="CENTER">
                                             <columnConstraints>
                                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -592,7 +592,7 @@
                                  <children>
                                     <BorderPane prefHeight="200.0" prefWidth="200.0">
                                        <center>
-                                          <GridPane id="secondBookshelfGrid" hgap="10.0" prefHeight="170.0" prefWidth="171.0" vgap="5.0" BorderPane.alignment="CENTER">
+                                          <GridPane id="player2bookshelf" hgap="10.0" prefHeight="170.0" prefWidth="171.0" vgap="5.0" BorderPane.alignment="CENTER">
                                              <columnConstraints>
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -675,7 +675,7 @@
                                  <children>
                                     <BorderPane prefHeight="200.0" prefWidth="200.0">
                                        <center>
-                                          <GridPane id="thirdBookshelfGrid" hgap="10.0" prefHeight="170.0" prefWidth="171.0" vgap="5.0" BorderPane.alignment="CENTER">
+                                          <GridPane id="player3bookshelf" hgap="10.0" prefHeight="170.0" prefWidth="171.0" vgap="5.0" BorderPane.alignment="CENTER">
                                              <columnConstraints>
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -781,7 +781,7 @@
                                     <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="44.0" stroke="TRANSPARENT" strokeType="INSIDE" width="354.0" BorderPane.alignment="CENTER" />
                                  </bottom>
                                  <center>
-                                    <GridPane id="myBookshelfGrid" hgap="15.0" vgap="8.0" BorderPane.alignment="CENTER">
+                                    <GridPane id="player0bookshelf" hgap="15.0" vgap="8.0" BorderPane.alignment="CENTER">
                                       <columnConstraints>
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

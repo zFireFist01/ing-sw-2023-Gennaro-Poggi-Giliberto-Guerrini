@@ -13,10 +13,7 @@ import Server.Events.VCEvents.LoginEvent;
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Cards.PersonalGoalCard;
 import Server.Model.Chat.Message;
-import Server.Model.GameItems.LivingRoom;
-import Server.Model.GameItems.LivingRoomTileSpot;
-import Server.Model.GameItems.PointsTile;
-import Server.Model.GameItems.TileType;
+import Server.Model.GameItems.*;
 import Server.Model.LightMatch;
 import Server.Model.Player.Player;
 import Utils.ConnectionInfo;
@@ -227,27 +224,6 @@ public class GUI extends Application implements View {
         this.primaryStage = primaryStage;
 
 
-        /*
-        Text askIsReconnnecting = new Text("Are you reconnecting?");
-        Button yesButton = new Button("Yes");
-        Button noButton = new Button("No");
-        yesButton.setOnAction(e -> {
-            isReconnecting = true;
-            showIsReconnectingWindow(primaryStage);
-            //primaryStage.close();
-        });
-        noButton.setOnAction(e -> {
-            isReconnecting = false;
-            showNormalWindow(primaryStage);
-            //primaryStage.close();
-        });
-        HBox reconnectingBox = new HBox(askIsReconnnecting, yesButton, noButton);
-        reconnectingBox.setAlignment(Pos.CENTER);
-        reconnectingBox.setSpacing(20);
-        reconnectingBox.setPadding(new Insets(20, 20, 20, 20));
-        Scene reconnectingScene = new Scene(reconnectingBox, 500, 200);
-        */
-
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Re_Connection_Requests.fxml"));
         fxmlLoader.setController(this);
         Parent root = fxmlLoader.load();
@@ -255,70 +231,6 @@ public class GUI extends Application implements View {
         primaryStage.setScene(newScene);
         primaryStage.show();
 
-        /*
-        titleImageView.setFitWidth(600);
-        titleImageView.setPreserveRatio(true);
-        titleImageView.setSmooth(true);
-
-        wallpaperImageView.setOpacity(0.7);
-
-
-        Button rmiButton = new Button("RMI");
-        Button socketButton = new Button("SOCKET");
-
-        rmiButton.setMinWidth(200);
-        rmiButton.setMinHeight(100);
-
-        socketButton.setMinWidth(200);
-        socketButton.setMinHeight(100);
-
-        rmiButton.setStyle("-fx-background-color: #FFC0CB; -fx-border-radius: 15; -fx-background-radius: 15;");
-
-        String hoverStyle1 = "-fx-background-color: #FF69B4; -fx-border-radius: 15; -fx-background-radius: 15;"
-                + "-fx-effect: dropshadow(three-pass-box, rgba(255, 105, 180, 0.8), 10, 0, 0, 0);";
-
-        rmiButton.setOnMouseEntered(e -> rmiButton.setStyle(hoverStyle1));
-        rmiButton.setOnMouseExited(e -> rmiButton.setStyle("-fx-background-color: #FFC0CB; -fx-border-radius: 15; -fx-background-radius: 15;"));
-
-        String hoverStyle2 = "-fx-background-color: #00BFFF; -fx-border-radius: 15; -fx-background-radius: 15;"
-                + "-fx-effect: dropshadow(three-pass-box, rgba(0, 191, 255, 0.8), 10, 0, 0, 0);";
-
-
-
-        socketButton.setStyle("-fx-background-color: #ADD8E6; -fx-border-radius: 15; -fx-background-radius: 15;");
-        socketButton.setOnMouseEntered(e -> socketButton.setStyle(hoverStyle2));
-        socketButton.setOnMouseExited(e -> socketButton.setStyle("-fx-background-color: #ADD8E6; -fx-border-radius: 15; -fx-background-radius: 15;"));
-
-
-
-        HBox buttons = new HBox(10, rmiButton, socketButton);
-        buttons.setAlignment(Pos.CENTER);
-
-
-        VBox choose = new VBox(10, titleImageView, buttons);
-        choose.setAlignment(Pos.CENTER);
-
-        rmiButton.setOnAction(e -> {
-            connectionType = ConnectionType.RMI;
-            showRMIConnectionWindow(primaryStage);
-        });
-
-        socketButton.setOnAction(e -> {
-            connectionType = ConnectionType.SOCKET;
-            showSocketConnectionWindow(primaryStage);
-        });
-
-
-        StackPane root = new StackPane(wallpaperImageView, choose);
-        StackPane.setAlignment(choose, Pos.CENTER);
-
-
-        Scene scene = new Scene(root, 800, 600);
-        primaryStage.setTitle("MyShelfie");
-        primaryStage.setScene(scene);
-        primaryStage.show();
-
-         */
     }
 
     private void showIsReconnectingWindow(Stage primaryStage){
@@ -334,8 +246,6 @@ public class GUI extends Application implements View {
             showNormalWindow(primaryStage);
             isReconnectingStage.close();
         });
-        /*TextField connectionInfoField = new TextField();
-        connectionInfoField.setPromptText("Connection Info");*/
 
         VBox isReconnectingRoot = new VBox(10, askPreviousNicknameText, askPreviousNickname, okButton);
         isReconnectingRoot.setAlignment(Pos.CENTER);
@@ -570,52 +480,6 @@ public class GUI extends Application implements View {
         }
     }
 
-    /*
-    private void onGameViewEvent(SelectViewEvent event) {
-        currentView = event;
-        GameView gameView = (GameView) event;
-
-        StackPane root;
-
-        if(!matchStarted){
-            wallpaperImageView.setOpacity(0.7);
-
-            // Crea un testo con la scritta "Wait for other players to join"
-            Text waitingText = new Text("Wait for other players to join");
-            waitingText.setFont(Font.font("Arial", FontWeight.BOLD,20));
-
-            waitingText.setFill(Color.WHITE);
-
-            // Crea un riquadro sfocato con angoli smussati
-            Label blurredBackground = new Label();
-            blurredBackground.setEffect(new BoxBlur(5, 5, 10));
-            blurredBackground.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5); -fx-background-radius: 10;");
-            blurredBackground.setPadding(new Insets(10, 20, 10, 20));
-
-            blurredBackground.setMinSize(300, 50);
-
-            ProgressIndicator progressIndicator = new ProgressIndicator();
-            progressIndicator.setMaxSize(50, 50);
-
-
-            StackPane textPane = new StackPane(blurredBackground, waitingText, progressIndicator);
-            textPane.setAlignment(Pos.CENTER);
-
-            // Crea un layout StackPane e aggiungi l'immagine di sfondo, il riquadro e il testo
-            root = new StackPane(wallpaperImageView, textPane);
-            StackPane.setAlignment(textPane, Pos.CENTER);
-
-
-        }else{
-             root=null;
-        }
-        Scene scene = new Scene(root, 800, 600);
-
-        primaryStage.setTitle("Waiting for other players");
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
-    */
 
 
     @Override
@@ -629,17 +493,22 @@ public class GUI extends Application implements View {
                 return;
             }
             case "onModifiedBookshelfEvent" -> {
-                onModifiedBookshelfEvent(event.getMatch());
+                Platform.runLater(() -> {
+                    onModifiedBookshelfEvent(event.getMatch());
+                });
             }
             case "onModifiedLivingRoomEvent" -> {
-                onModifiedLivingRoomEvent(event.getMatch());
+                Platform.runLater(() -> {
+                    onModifiedLivingRoomEvent(event.getMatch());
+                });
             }
             case "onModifiedMatchEndedEvent" -> {
                 onModifiedMatchEndedEvent(event.getMatch());
             }
             case "onModifiedPointsEvent" -> {
-
-                onModifiedPointsEvent(event.getMatch());
+                Platform.runLater(() -> {
+                    onModifiedPointsEvent(event.getMatch());
+                });
             }
             case "onMatchStartedEvent" -> {
 
@@ -753,9 +622,9 @@ public class GUI extends Application implements View {
 
 
 
-        updateBookshelfs(match);
-        updateLivingroom(match);
-        updatePoints(match);
+        onModifiedBookshelfEvent(match);
+        onModifiedLivingRoomEvent(match);
+        onModifiedPointsEvent(match);
 
 
         primaryStage.setScene(scene);
@@ -767,11 +636,90 @@ public class GUI extends Application implements View {
 
 
 
-    private void updateBookshelfs(LightMatch match){
+    private void updateBookshelf(Player p , int index){
+        TileSpot matrix[][]=p.getBookshelf().getTileMatrix();
+        int random;
+
+        GridPane grid = (GridPane)gameRoot.lookup("#player"+String.valueOf(index)+"bookshelf");
+        for (int i=0;i<6;i++ ){
+            for(int j=0;j<5;j++){
+                if(matrix[i][j].getTileType()!=null){
+                    switch(matrix[i][j].getTileType()) {
+                        case CATS -> {
+                            ImageView tmp = getImageViewAt(grid, i, j);
+                            random = (int) (Math.random() * 3 + 1);
+                            if (random == 1) {
+                                tmp.setImage(catImage1);
+                            } else if (random == 2) {
+                                tmp.setImage(catImage2);
+                            } else {
+                                tmp.setImage(catImage3);
+                            }
+                        }
+                        case PLANTS -> {
+                            ImageView tmp = getImageViewAt(grid, i, j);
+                            random = (int) (Math.random() * 3 + 1);
+                            if (random == 1) {
+                                tmp.setImage(plantsImage1);
+                            } else if (random == 2) {
+                                tmp.setImage(plantsImage2);
+                            } else {
+                                tmp.setImage(plantsImage3);
+                            }
+                        }
+                        case GAMES -> {
+                            ImageView tmp = getImageViewAt(grid, i, j);
+                            random = (int) (Math.random() * 3 + 1);
+                            if (random == 1) {
+                                tmp.setImage(gamesImage1);
+                            } else if (random == 2) {
+                                tmp.setImage(gamesImage2);
+                            } else {
+                                tmp.setImage(gamesImage3);
+                            }
+                        }
+                        case BOOKS -> {
+                            ImageView tmp = getImageViewAt(grid, i, j);
+                            random = (int) (Math.random() * 3 + 1);
+                            if (random == 1) {
+                                tmp.setImage(bookImage1);
+                            } else if (random == 2) {
+                                tmp.setImage(bookImage2);
+                            } else {
+                                tmp.setImage(bookImage3);
+                            }
+                        }
+                        case FRAMES -> {
+                            ImageView tmp = getImageViewAt(grid, i, j);
+                            random = (int) (Math.random() * 3 + 1);
+                            if (random == 1) {
+                                tmp.setImage(frameImage1);
+                            } else if (random == 2) {
+                                tmp.setImage(frameImage2);
+                            } else {
+                                tmp.setImage(frameImage3);
+                            }
+                        }
+                        case TROPHIES -> {
+                            ImageView tmp = getImageViewAt(grid, i, j);
+                            random = (int) (Math.random() * 3 + 1);
+                            if (random == 1) {
+                                tmp.setImage(trophyImage1);
+                            } else if (random == 2) {
+                                tmp.setImage(trophyImage2);
+                            } else {
+                                tmp.setImage(trophyImage3);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
 
     }
 
-    private void updateLivingroom(LightMatch match){
+    private void onModifiedLivingRoomEvent(LightMatch match){
 
         LivingRoomTileSpot livingroom[][]=match.getLivingRoom().getTileMatrix();
         GridPane grid = (GridPane)gameRoot.lookup("#livingroomtiles");
@@ -860,7 +808,7 @@ public class GUI extends Application implements View {
         return null;
     }
 
-    private void updatePoints(LightMatch match){
+    private void onModifiedPointsEvent(LightMatch match){
         firstCommonGoalCard=match.getCommonGoals()[0];
         secondCommonGoalCard=match.getCommonGoals()[1];
         ImageView firstCommonGoalPoints = (ImageView)gameRoot.lookup("#firstcommongoalpoints");
@@ -891,19 +839,63 @@ public class GUI extends Application implements View {
             secondCommonGoalPoints.setImage(null);
         }
 
+        for(Player p : match.getPlayers()){
+            for(int i =0; i<numberPlayers;i++){
+                if(players.get(i).getPlayerID()==p.getPlayerID()){
+                    ImageView point1 = (ImageView)gameRoot.lookup("#player"+String.valueOf(i)+"point1");
+                    ImageView point2 = (ImageView)gameRoot.lookup("#player"+String.valueOf(i)+"point2");
+
+                    if(p.getPointsTiles()!=null){
+                        for(PointsTile point : p.getPointsTiles()){
+                            if(point== PointsTile.EIGHT_1) {
+                                point1.setImage(points8Image);
+                            }else if(point== PointsTile.SIX_1){
+                                point1.setImage(points6Image);
+                            }else if(point== PointsTile.FOUR_1){
+                                point1.setImage(points4Image);
+
+                            }else if(point== PointsTile.TWO_1){
+                                point1.setImage(points2Image);
+                            }else if(point== PointsTile.EIGHT_2){
+                                point2.setImage(points8Image);
+                            }else if(point== PointsTile.SIX_2){
+                                point2.setImage(points6Image);
+                            }else if(point== PointsTile.FOUR_2){
+                                point2.setImage(points4Image);
+                            }else if(point== PointsTile.TWO_2) {
+                                point2.setImage(points2Image);
+                            }
+
+                        }
+                    }
+                }
+                if(match.getFirstToFinish()!=null && players.get(i).getPlayerID()==match.getFirstToFinish().getPlayerID()){
+                    ImageView firstToFinish = (ImageView)gameRoot.lookup("#player"+String.valueOf(i)+"finish");
+                    firstToFinish.setImage(points1Image);
+                }
+            }
+        }
 
     }
 
-    private void onModifiedPointsEvent(LightMatch match) {
-    }
+
 
     private void onModifiedMatchEndedEvent(LightMatch match) {
+
+        //mettere la match ended view
     }
 
-    private void onModifiedLivingRoomEvent(LightMatch match) {
-    }
+
 
     private void onModifiedBookshelfEvent(LightMatch match) {
+        for(Player p : match.getPlayers()){
+            for(int i=0; i<numberPlayers;i++){
+                if(players.get(i).getPlayerNickName().equals(p.getPlayerNickName())){
+                    updateBookshelf(p,i);
+                    break;
+                }
+            }
+        }
     }
 
     private void onModifiedChatEvent(Message value) {
@@ -939,6 +931,34 @@ public class GUI extends Application implements View {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Socket_RMI_Requests.fxml"));
         fxmlLoader.setController(this);
         Parent newRoot = fxmlLoader.load();
+        Button rmiButton = (Button) newRoot.lookup("#rmibutton");
+        Button socketButton = (Button) newRoot.lookup("#socketbutton");
+
+        rmiButton.setMinWidth(100);
+        rmiButton.setMinHeight(50);
+
+        socketButton.setMinWidth(100);
+        socketButton.setMinHeight(50);
+
+        rmiButton.setStyle("-fx-background-color: #FFC0CB; -fx-border-radius: 15; -fx-background-radius: 15;");
+
+        String hoverStyle1 = "-fx-background-color: #FF69B4; -fx-border-radius: 15; -fx-background-radius: 15;"
+                + "-fx-effect: dropshadow(three-pass-box, rgba(255, 105, 180, 0.8), 10, 0, 0, 0);";
+
+        rmiButton.setOnMouseEntered(e -> rmiButton.setStyle(hoverStyle1));
+        rmiButton.setOnMouseExited(e -> rmiButton.setStyle("-fx-background-color: #FFC0CB; -fx-border-radius: 15; -fx-background-radius: 15;"));
+
+        String hoverStyle2 = "-fx-background-color: #00BFFF; -fx-border-radius: 15; -fx-background-radius: 15;"
+                + "-fx-effect: dropshadow(three-pass-box, rgba(0, 191, 255, 0.8), 10, 0, 0, 0);";
+
+
+
+        socketButton.setStyle("-fx-background-color: #ADD8E6; -fx-border-radius: 15; -fx-background-radius: 15;");
+        socketButton.setOnMouseEntered(e -> socketButton.setStyle(hoverStyle2));
+        socketButton.setOnMouseExited(e -> socketButton.setStyle("-fx-background-color: #ADD8E6; -fx-border-radius: 15; -fx-background-radius: 15;"));
+
+        ImageView wallpaper = (ImageView) newRoot.lookup("#wallpaper");
+        wallpaper.setOpacity(0.7);
         Scene newScene = new Scene(newRoot);
         Stage currentStage = (Stage) yesButtonReConnection.getScene().getWindow();
         currentStage.setScene(newScene);
@@ -951,6 +971,36 @@ public class GUI extends Application implements View {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Socket_RMI_Requests.fxml"));
         fxmlLoader.setController(this);
         Parent newRoot = fxmlLoader.load();
+
+        Button rmiButton = (Button) newRoot.lookup("#rmibutton");
+        Button socketButton = (Button) newRoot.lookup("#socketbutton");
+
+        rmiButton.setMinWidth(100);
+        rmiButton.setMinHeight(50);
+
+        socketButton.setMinWidth(100);
+        socketButton.setMinHeight(50);
+
+        rmiButton.setStyle("-fx-background-color: #FFC0CB; -fx-border-radius: 15; -fx-background-radius: 15;");
+
+        String hoverStyle1 = "-fx-background-color: #FF69B4; -fx-border-radius: 15; -fx-background-radius: 15;"
+                + "-fx-effect: dropshadow(three-pass-box, rgba(255, 105, 180, 0.8), 10, 0, 0, 0);";
+
+        rmiButton.setOnMouseEntered(e -> rmiButton.setStyle(hoverStyle1));
+        rmiButton.setOnMouseExited(e -> rmiButton.setStyle("-fx-background-color: #FFC0CB; -fx-border-radius: 15; -fx-background-radius: 15;"));
+
+        String hoverStyle2 = "-fx-background-color: #00BFFF; -fx-border-radius: 15; -fx-background-radius: 15;"
+                + "-fx-effect: dropshadow(three-pass-box, rgba(0, 191, 255, 0.8), 10, 0, 0, 0);";
+
+
+
+        socketButton.setStyle("-fx-background-color: #ADD8E6; -fx-border-radius: 15; -fx-background-radius: 15;");
+        socketButton.setOnMouseEntered(e -> socketButton.setStyle(hoverStyle2));
+        socketButton.setOnMouseExited(e -> socketButton.setStyle("-fx-background-color: #ADD8E6; -fx-border-radius: 15; -fx-background-radius: 15;"));
+
+        ImageView wallpaper = (ImageView) newRoot.lookup("#wallpaper");
+        wallpaper.setOpacity(0.7);
+
         Scene newScene = new Scene(newRoot);
         Stage currentStage = (Stage) noButtonReConnection.getScene().getWindow();
         currentStage.setScene(newScene);
@@ -1031,7 +1081,8 @@ public class GUI extends Application implements View {
 
     @FXML
     private void onClickSubmitUsernamePlayerButton(ActionEvent event) throws IOException {
-        int numPlayer = numberPlayersMenu.getSelectionModel().getSelectedIndex() + 2;
+        int numPlayer = numberPlayersMenu.getSelectionModel().getSelectedIndex() + 2 ==1 ? 2 : numberPlayersMenu.getSelectionModel().getSelectedIndex();
+
         this.myNick = usernameField.getText();
         try{
             networkHandler.onVCEvent(new LoginEvent(myNick, numPlayer));
