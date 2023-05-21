@@ -4,12 +4,14 @@ import Client.ConnectionType;
 import Client.NetworkHandler;
 import Client.NetworkRMIHandler;
 import Client.NetworkSocketHandler;
+import Client.View.CLI.ANSIParameters;
 import Client.View.View;
 import Server.Events.MVEvents.MVEvent;
 import Server.Events.SelectViewEvents.GameView;
 import Server.Events.SelectViewEvents.LoginView;
 import Server.Events.SelectViewEvents.SelectViewEvent;
 import Server.Events.VCEvents.LoginEvent;
+import Server.Events.VCEvents.SendMessage;
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Cards.PersonalGoalCard;
 import Server.Model.Chat.Message;
@@ -43,9 +45,12 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -157,6 +162,16 @@ public class GUI extends Application implements View {
     private TextField usernameField;
     @FXML
     private ComboBox<String> numberPlayersMenu;
+
+    //chat elements
+    @FXML
+    private TextArea chatTextArea;
+    @FXML
+    private ChoiceBox<String> chatChoiceBox;
+    @FXML
+    private Button sendButton;
+
+    private ArrayList<String> chat = new ArrayList<>();
 
     private Parent gameRoot;
 
@@ -489,8 +504,10 @@ public class GUI extends Application implements View {
 
         switch(methodName) {
             case "onModifiedChatEvent" -> {
-                onModifiedChatEvent((Message)event.getValue());
-                return;
+
+                Platform.runLater(() -> {
+                    onModifiedChatEvent((Message)event.getValue());
+                });
             }
             case "onModifiedBookshelfEvent" -> {
                 Platform.runLater(() -> {
@@ -532,19 +549,6 @@ public class GUI extends Application implements View {
 
     private void onMatchStartedEvent(LightMatch match) {
         this.matchStarted = true;
-        numberPlayers = match.getPlayers().size();
-        for(int i = 0; i < numberPlayers; i++){
-            players.put(i,match.getPlayers().get(i));
-            if (match.getPlayers().get(i).getPlayerNickName().equals(myNick)){
-                me = match.getPlayers().get(i);
-                if(i!=0) {
-                    Player tmp = players.get(0);
-                    players.put(0, me);
-                    players.put(i, tmp);
-                }
-            }
-
-        }
 
         loader.setLocation(getClass().getResource("/Gameview.fxml"));
         loader.setController(this);
@@ -556,6 +560,29 @@ public class GUI extends Application implements View {
         }
 
         Scene scene = new Scene(gameRoot);
+
+
+        numberPlayers = match.getPlayers().size();
+
+        chatChoiceBox.getItems().add("Everyone");
+        chatChoiceBox.setValue("Everyone");
+        for(int i = 0; i < numberPlayers; i++){
+            players.put(i,match.getPlayers().get(i));
+            if (match.getPlayers().get(i).getPlayerNickName().equals(myNick)){
+                me = match.getPlayers().get(i);
+                if(i!=0) {
+                    Player tmp = players.get(0);
+                    players.put(0, me);
+                    players.put(i, tmp);
+                }
+            }else{
+                chatChoiceBox.getItems().add(match.getPlayers().get(i).getPlayerNickName());
+            }
+
+
+        }
+
+
 
 
         if(numberPlayers==3){
@@ -615,6 +642,8 @@ public class GUI extends Application implements View {
                 break;
             }
         }
+
+
 
 
 
@@ -898,8 +927,7 @@ public class GUI extends Application implements View {
         }
     }
 
-    private void onModifiedChatEvent(Message value) {
-    }
+
 
     public void run() {
         //launch();
@@ -919,6 +947,67 @@ public class GUI extends Application implements View {
     private void onTileSelected(ActionEvent event) throws IOException {
 
 
+    }
+
+    //CHAT
+
+    public void onModifiedChatEvent(Message message){
+
+        String s = MessageToString(message);
+        TextFlow guichat = (TextFlow)gameRoot.lookup("#chatframe");
+
+
+        chat.add(s);
+        if(message.getReceiver() != null) {
+            guichat.getChildren().add(new Text( "[" + message.getTimeSent() + "]" + " " + message.getSender().getPlayerNickName() + " " + "to @" + message.getReceiver().getPlayerNickName()+ ":" + " " + message.getContent()+"\n"));
+        }else{
+            guichat.getChildren().add(new Text("[" + message.getTimeSent() + "]" + " " + message.getSender().getPlayerNickName() + " " + "to @All:" + " " + message.getContent()+"\n"));
+        }
+
+    }
+
+    private String MessageToString(Message message){
+        String receiver;
+        if(message.getReceiver() == null) {
+            receiver = "All";
+        }else{
+            receiver = message.getReceiver().getPlayerNickName();
+        }
+
+        String s = "[" + message.getTimeSent() + "]" + " " + message.getSender().getPlayerNickName() + " @" + receiver + " " + message.getContent();
+        return s;
+
+    }
+    @FXML
+    private void onSendMessage(ActionEvent event) throws IOException {
+        String receiver = (String) chatChoiceBox.getValue();
+        String message = chatTextArea.getText();
+        if(!message.equals("")){
+            chatTextArea.clear();
+            chatTextArea.setPromptText("Type your message here");
+            try {
+
+                Message messageToSend=null;
+                if(receiver.equals("Everyone")) {
+                    messageToSend=new Message(this.me,message, LocalTime.now());
+                }else{
+
+                    for(Integer i: this.players.keySet()){
+                        if((this.players.get(i).getPlayerNickName()).equals(receiver)){
+                            messageToSend=new Message(this.me,message,LocalTime.now(), this.players.get(i));
+                        }
+                    }
+                }
+                networkHandler.onVCEvent(new SendMessage(messageToSend));
+
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException(e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
 
@@ -1057,6 +1146,7 @@ public class GUI extends Application implements View {
     private void onClickConnectRMIButton(ActionEvent event) throws IOException {
         int port = Integer.parseInt(portServerRMI.getText());
 
+
         try{
             networkHandler = new NetworkRMIHandler(this);
             String localIP = null;
@@ -1081,7 +1171,7 @@ public class GUI extends Application implements View {
 
     @FXML
     private void onClickSubmitUsernamePlayerButton(ActionEvent event) throws IOException {
-        int numPlayer = numberPlayersMenu.getSelectionModel().getSelectedIndex() + 2 ==1 ? 2 : numberPlayersMenu.getSelectionModel().getSelectedIndex();
+        int numPlayer = numberPlayersMenu.getSelectionModel().getSelectedIndex() + 2 ==1 ? 2 : numberPlayersMenu.getSelectionModel().getSelectedIndex()+2;
 
         this.myNick = usernameField.getText();
         try{
