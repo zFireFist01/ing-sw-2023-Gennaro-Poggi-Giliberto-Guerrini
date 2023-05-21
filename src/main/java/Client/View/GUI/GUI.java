@@ -10,8 +10,7 @@ import Server.Events.MVEvents.MVEvent;
 import Server.Events.SelectViewEvents.GameView;
 import Server.Events.SelectViewEvents.LoginView;
 import Server.Events.SelectViewEvents.SelectViewEvent;
-import Server.Events.VCEvents.LoginEvent;
-import Server.Events.VCEvents.SendMessage;
+import Server.Events.VCEvents.*;
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Cards.PersonalGoalCard;
 import Server.Model.Chat.Message;
@@ -172,6 +171,122 @@ public class GUI extends Application implements View {
     private Button sendButton;
 
     private ArrayList<String> chat = new ArrayList<>();
+
+    //livingroom elements
+    @FXML
+    private Button tilea3;
+    @FXML
+    private Button tilea4;
+    @FXML
+    private Button tileb3;
+    @FXML
+    private Button tileb4;
+    @FXML
+    private Button tileb5;
+    @FXML
+    private Button tilec2;
+    @FXML
+    private Button tilec3;
+    @FXML
+    private Button tilec4;
+    @FXML
+    private Button tilec5;
+    @FXML
+    private Button tilec6;
+    @FXML
+    private Button tiled1;
+    @FXML
+    private Button tiled2;
+    @FXML
+    private Button tiled3;
+    @FXML
+    private Button tiled4;
+    @FXML
+    private Button tiled5;
+    @FXML
+    private Button tiled6;
+    @FXML
+    private Button tiled7;
+    @FXML
+    private Button tiled8;
+    @FXML
+    private Button tilee0;
+    @FXML
+    private Button tilee1;
+    @FXML
+    private Button tilee2;
+    @FXML
+    private Button tilee3;
+    @FXML
+    private Button tilee4;
+    @FXML
+    private Button tilee5;
+    @FXML
+    private Button tilee6;
+    @FXML
+    private Button tilee7;
+    @FXML
+    private Button tilee8;
+    @FXML
+    private Button tilef0;
+    @FXML
+    private Button tilef1;
+    @FXML
+    private Button tilef2;
+    @FXML
+    private Button tilef3;
+    @FXML
+    private Button tilef4;
+    @FXML
+    private Button tilef5;
+    @FXML
+    private Button tilef6;
+    @FXML
+    private Button tilef7;
+    @FXML
+    private Button tileg2;
+    @FXML
+    private Button tileg3;
+    @FXML
+    private Button tileg4;
+    @FXML
+    private Button tileg5;
+    @FXML
+    private Button tileg6;
+    @FXML
+    private Button tileh3;
+    @FXML
+    private Button tileh4;
+    @FXML
+    private Button tileh5;
+    @FXML
+    private Button tilei4;
+    @FXML
+    private Button tilei5;
+    @FXML
+    private GridPane livingroomgridbuttons;
+
+    //bookshelf elements
+    @FXML
+    private Button bookshelfcol0;
+    @FXML
+    private Button bookshelfcol1;
+    @FXML
+    private Button bookshelfcol2;
+    @FXML
+    private Button bookshelfcol3;
+    @FXML
+    private Button bookshelfcol4;
+    @FXML
+    private HBox mybookshelf;
+
+    //checkout
+    @FXML
+    private Button checkoutbutton;
+
+
+
+
 
     private Parent gameRoot;
 
@@ -943,11 +1058,75 @@ public class GUI extends Application implements View {
         return connectionInfo;
     }
 
+    //bookshelfselection
     @FXML
-    private void onTileSelected(ActionEvent event) throws IOException {
+    private void onSelectColoumn(ActionEvent event){
+        Button col = (Button) event.getSource();
+        String colId = col.getId();
+
+        int index = Integer.parseInt(String.valueOf(colId.charAt(12)));
+        try {
+            networkHandler.onVCEvent(new SelectColumn(index));
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
 
 
     }
+
+    //checkout
+
+    @FXML
+    private void onCheckout(ActionEvent event){
+        try {
+            networkHandler.onVCEvent(new CheckOutTiles());
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //livingroomselection
+
+    @FXML
+    private void onTileSelected(ActionEvent event) throws IOException {
+
+        Button tile = (Button) event.getSource();
+        String tileId = tile.getId();
+        GridPane grid = (GridPane)gameRoot.lookup("#livingroomtiles");
+
+        char row= tileId.charAt(4);
+        int column = Integer.parseInt(String.valueOf(tileId.charAt(5)));
+        int[] coordinatesInt = new int[2];
+        if(row>='a' && row <='i' && column>=0 && column<=8) {
+            coordinatesInt[0] = row - 'a';
+            coordinatesInt[1] = column;
+            try {
+                networkHandler.onVCEvent(new ClickOnTile(coordinatesInt));
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException(e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        //ImageView tmp= getImageViewAt(grid,coordinatesInt[0],coordinatesInt[1]);
+        //tmp.setOpacity(0.5);
+
+    }
+
+
+
+
+
 
     //CHAT
 
