@@ -51,7 +51,7 @@
                                        <children>
                                           <ImageView id="firstcommongoal" fitHeight="131.0" fitWidth="200.0">
                                              <image>
-                                                <Image url="@common goal cards/back.jpg" />
+                                                <Image url="@common%20goal%20cards/back.jpg" />
                                              </image>
                                              <effect>
                                                 <DropShadow />
@@ -68,7 +68,7 @@
                                        <children>
                                           <ImageView id="secondcommongoal" fitHeight="131.0" fitWidth="200.0">
                                              <image>
-                                                <Image url="@common goal cards/back.jpg" />
+                                                <Image url="@common%20goal%20cards/back.jpg" />
                                              </image>
                                              <effect>
                                                 <DropShadow />
@@ -88,7 +88,7 @@
                                                 <DropShadow />
                                              </effect>
                                              <image>
-                                                <Image url="@personal goal cards/back.jpg" />
+                                                <Image url="@personal%20goal%20cards/back.jpg" />
                                              </image>
                                           </ImageView>
                                        </children>
@@ -114,8 +114,7 @@
                                        </bottom>
                                        <center>
                                           <GridPane id="livingroomtiles" hgap="2.0" vgap="2.0" BorderPane.alignment="CENTER">
-                                            <columnConstraints>
-                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                             <columnConstraints>
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -123,19 +122,20 @@
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                            </columnConstraints>
-                                            <rowConstraints>
-                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                             </columnConstraints>
+                                             <rowConstraints>
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                            </rowConstraints>
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                             </rowConstraints>
                                              <padding>
                                                 <Insets bottom="2.0" left="2.0" right="1.0" top="1.0" />
                                              </padding>
@@ -502,43 +502,6 @@
                                           <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="425.0" stroke="TRANSPARENT" strokeType="INSIDE" width="23.0" BorderPane.alignment="CENTER" />
                                        </right>
                                     </BorderPane>
-                                    <AnchorPane prefHeight="429.0" prefWidth="374.0">
-                                       <children>
-                                          <ImageView fitHeight="132.0" fitWidth="110.0" layoutX="353.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@misc/firstplayertoken.png" />
-                                             </image>
-                                          </ImageView>
-                                          <ImageView fitHeight="54.0" fitWidth="54.0" layoutX="375.0" layoutY="385.0" pickOnBounds="true" preserveRatio="true" rotate="9.8">
-                                             <image>
-                                                <Image url="@scoring tokens/end game.jpg" />
-                                             </image>
-                                             <effect>
-                                                <InnerShadow />
-                                             </effect>
-                                          </ImageView>
-                                          <ImageView fitHeight="36.0" fitWidth="31.0" layoutX="39.0" layoutY="103.0" pickOnBounds="true" preserveRatio="true" rotate="95.7">
-                                             <image>
-                                                <Image url="@item tiles/Cornici1.2.png" />
-                                             </image>
-                                          </ImageView>
-                                          <ImageView fitHeight="36.0" fitWidth="31.0" layoutX="58.0" layoutY="91.0" pickOnBounds="true" preserveRatio="true" rotate="-69.4">
-                                             <image>
-                                                <Image url="@item tiles/Piante1.3.png" />
-                                             </image>
-                                          </ImageView>
-                                          <ImageView fitHeight="36.0" fitWidth="31.0" layoutX="69.0" layoutY="68.0" pickOnBounds="true" preserveRatio="true" rotate="153.4">
-                                             <image>
-                                                <Image url="@item tiles/Giochi1.3.png" />
-                                             </image>
-                                          </ImageView>
-                                          <ImageView fitHeight="125.0" fitWidth="122.0" layoutX="-42.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true" rotate="146.1">
-                                             <image>
-                                                <Image url="@misc/Sacchetto Aperto.png" />
-                                             </image>
-                                          </ImageView>
-                                       </children>
-                                    </AnchorPane>
                                  </children>
                               </StackPane>
                            </children>
@@ -550,21 +513,21 @@
                                     <BorderPane prefHeight="200.0" prefWidth="200.0">
                                        <center>
                                           <GridPane id="player1bookshelf" hgap="10.0" prefHeight="170.0" prefWidth="171.0" vgap="5.0" BorderPane.alignment="CENTER">
-                                            <columnConstraints>
-                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                             <columnConstraints>
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                            </columnConstraints>
-                                            <rowConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                             </columnConstraints>
+                                             <rowConstraints>
                                                 <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
                                                 <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
                                                 <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
-                                              <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
-                                              <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
-                                              <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
-                                            </rowConstraints>
+                                                <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                                             </rowConstraints>
                                              <children>
                                                 <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true" />
                                                 <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
@@ -841,21 +804,21 @@
                                  </bottom>
                                  <center>
                                     <GridPane id="player0bookshelf" hgap="15.0" vgap="8.0" BorderPane.alignment="CENTER">
-                                      <columnConstraints>
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                       <columnConstraints>
                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                      </columnConstraints>
-                                      <rowConstraints>
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                      </rowConstraints>
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
                                        <padding>
                                           <Insets left="1.0" top="1.0" />
                                        </padding>

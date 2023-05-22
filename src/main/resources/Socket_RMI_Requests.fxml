@@ -10,7 +10,7 @@
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="465.0" prefWidth="675.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ImageView id="wallpaper" fitHeight="505.0" fitWidth="788.0">
+      <ImageView fitHeight="471.2" fitWidth="684.0">
          <image>
             <Image url="@Publisher material/Display_3.jpg" />
          </image>

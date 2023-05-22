@@ -138,6 +138,10 @@ public class GUI extends Application implements View {
     @FXML
     private Button RMIButton;
     @FXML
+    private Button backSocket;
+    @FXML
+    private Button backRMI;
+    @FXML
     private Button submitUsernameAndPlayersButton;
     @FXML
     private Button submitUsernameButton;
@@ -1125,14 +1129,10 @@ public class GUI extends Application implements View {
 
     }
 
-
-
     private void onModifiedMatchEndedEvent(LightMatch match) {
 
         //mettere la match ended view
     }
-
-
 
     private void onModifiedBookshelfEvent(LightMatch match) {
         for(Player p : match.getPlayers()){
@@ -1144,8 +1144,6 @@ public class GUI extends Application implements View {
             }
         }
     }
-
-
 
     public void run() {
         //launch();
@@ -1182,7 +1180,6 @@ public class GUI extends Application implements View {
     }
 
     //checkout
-
     @FXML
     private void onCheckout(ActionEvent event){
         try {
@@ -1197,7 +1194,6 @@ public class GUI extends Application implements View {
     }
 
     //livingroomselection
-
     @FXML
     private void onTileSelected(ActionEvent event) throws IOException {
 
@@ -1232,7 +1228,6 @@ public class GUI extends Application implements View {
 
 
     //CHAT
-
     public void onModifiedChatEvent(Message message){
 
         String s = MessageToString(message);
@@ -1295,7 +1290,6 @@ public class GUI extends Application implements View {
 
 
     //Buttons Methods
-
     @FXML
     private void onClickYesReconnect(ActionEvent event) throws IOException {
         this.isReconnecting = true;
@@ -1329,7 +1323,6 @@ public class GUI extends Application implements View {
         socketButton.setOnMouseExited(e -> socketButton.setStyle("-fx-background-color: #ADD8E6; -fx-border-radius: 15; -fx-background-radius: 15;"));
 
         ImageView wallpaper = (ImageView) newRoot.lookup("#wallpaper");
-        wallpaper.setOpacity(0.7);
         Scene newScene = new Scene(newRoot);
         Stage currentStage = (Stage) yesButtonReConnection.getScene().getWindow();
         currentStage.setScene(newScene);
@@ -1370,7 +1363,6 @@ public class GUI extends Application implements View {
         socketButton.setOnMouseExited(e -> socketButton.setStyle("-fx-background-color: #ADD8E6; -fx-border-radius: 15; -fx-background-radius: 15;"));
 
         ImageView wallpaper = (ImageView) newRoot.lookup("#wallpaper");
-        wallpaper.setOpacity(0.7);
 
         Scene newScene = new Scene(newRoot);
         Stage currentStage = (Stage) noButtonReConnection.getScene().getWindow();
@@ -1498,5 +1490,38 @@ public class GUI extends Application implements View {
         new Thread(this.networkHandler).start();
     }
 
+    @FXML
+    private void onBackButtonClicked(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Socket_RMI_Requests.fxml"));
+        fxmlLoader.setController(this);
+        Parent newRoot = fxmlLoader.load();
+        Button rmiButton = (Button) newRoot.lookup("#rmibutton");
+        Button socketButton = (Button) newRoot.lookup("#socketbutton");
 
+        rmiButton.setMinWidth(100);
+        rmiButton.setMinHeight(50);
+
+        socketButton.setMinWidth(100);
+        socketButton.setMinHeight(50);
+
+        rmiButton.setStyle("-fx-background-color: #FFC0CB; -fx-border-radius: 15; -fx-background-radius: 15;");
+
+        String hoverStyle1 = "-fx-background-color: #FF69B4; -fx-border-radius: 15; -fx-background-radius: 15;"
+                + "-fx-effect: dropshadow(three-pass-box, rgba(255, 105, 180, 0.8), 10, 0, 0, 0);";
+
+        rmiButton.setOnMouseEntered(e -> rmiButton.setStyle(hoverStyle1));
+        rmiButton.setOnMouseExited(e -> rmiButton.setStyle("-fx-background-color: #FFC0CB; -fx-border-radius: 15; -fx-background-radius: 15;"));
+
+        String hoverStyle2 = "-fx-background-color: #00BFFF; -fx-border-radius: 15; -fx-background-radius: 15;"
+                + "-fx-effect: dropshadow(three-pass-box, rgba(0, 191, 255, 0.8), 10, 0, 0, 0);";
+
+
+
+        socketButton.setStyle("-fx-background-color: #ADD8E6; -fx-border-radius: 15; -fx-background-radius: 15;");
+        socketButton.setOnMouseEntered(e -> socketButton.setStyle(hoverStyle2));
+        socketButton.setOnMouseExited(e -> socketButton.setStyle("-fx-background-color: #ADD8E6; -fx-border-radius: 15; -fx-background-radius: 15;"));
+        Scene newScene = new Scene(newRoot);
+        primaryStage.setScene(newScene);
+        primaryStage.show();
+    }
 }
