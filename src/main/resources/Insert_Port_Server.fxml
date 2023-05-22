@@ -5,8 +5,10 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" >
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ImageView fitHeight="400.0" fitWidth="600.0">
          <image>
@@ -19,6 +21,15 @@
             <Image url="@Publisher material/Title 2000x618px.png" />
          </image>
       </ImageView>
-      <Button fx:id="connectButtonRMI" layoutX="259.0" layoutY="261.0" mnemonicParsing="false" onAction="#onClickConnectRMIButton" prefHeight="41.0" prefWidth="81.0" text="Connect" />
+      <Button fx:id="connectButtonRMI" layoutX="259.0" layoutY="261.0" mnemonicParsing="false" onAction="#onClickConnectRMIButton" prefHeight="41.0" prefWidth="81.0" style="-fx-background-color: #ffc033; -fx-border-radius: 15; -fx-background-radius: 15;" text="Connect">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
+      <Button fx:id="backRMI" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#onBackButtonClicked" style="-fx-background-color: #ffc033; -fx-border-radius: 15; -fx-background-radius: 15;" text="&lt;-back" />
+      <Text fill="RED" layoutX="130.0" layoutY="347.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="338.6665852864585">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>

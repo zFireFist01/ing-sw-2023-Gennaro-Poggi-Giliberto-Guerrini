@@ -4,12 +4,13 @@ import Client.ConnectionType;
 import Client.NetworkHandler;
 import Client.NetworkRMIHandler;
 import Client.NetworkSocketHandler;
+import Client.View.CLI.ANSIParameters;
 import Client.View.View;
 import Server.Events.MVEvents.MVEvent;
 import Server.Events.SelectViewEvents.GameView;
 import Server.Events.SelectViewEvents.LoginView;
 import Server.Events.SelectViewEvents.SelectViewEvent;
-import Server.Events.VCEvents.LoginEvent;
+import Server.Events.VCEvents.*;
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Cards.PersonalGoalCard;
 import Server.Model.Chat.Message;
@@ -43,9 +44,12 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -134,6 +138,10 @@ public class GUI extends Application implements View {
     @FXML
     private Button RMIButton;
     @FXML
+    private Button backSocket;
+    @FXML
+    private Button backRMI;
+    @FXML
     private Button submitUsernameAndPlayersButton;
     @FXML
     private Button submitUsernameButton;
@@ -157,6 +165,132 @@ public class GUI extends Application implements View {
     private TextField usernameField;
     @FXML
     private ComboBox<String> numberPlayersMenu;
+
+    //chat elements
+    @FXML
+    private TextArea chatTextArea;
+    @FXML
+    private ChoiceBox<String> chatChoiceBox;
+    @FXML
+    private Button sendButton;
+
+    private ArrayList<String> chat = new ArrayList<>();
+
+    //livingroom elements
+    @FXML
+    private Button tilea3;
+    @FXML
+    private Button tilea4;
+    @FXML
+    private Button tileb3;
+    @FXML
+    private Button tileb4;
+    @FXML
+    private Button tileb5;
+    @FXML
+    private Button tilec2;
+    @FXML
+    private Button tilec3;
+    @FXML
+    private Button tilec4;
+    @FXML
+    private Button tilec5;
+    @FXML
+    private Button tilec6;
+    @FXML
+    private Button tiled1;
+    @FXML
+    private Button tiled2;
+    @FXML
+    private Button tiled3;
+    @FXML
+    private Button tiled4;
+    @FXML
+    private Button tiled5;
+    @FXML
+    private Button tiled6;
+    @FXML
+    private Button tiled7;
+    @FXML
+    private Button tiled8;
+    @FXML
+    private Button tilee0;
+    @FXML
+    private Button tilee1;
+    @FXML
+    private Button tilee2;
+    @FXML
+    private Button tilee3;
+    @FXML
+    private Button tilee4;
+    @FXML
+    private Button tilee5;
+    @FXML
+    private Button tilee6;
+    @FXML
+    private Button tilee7;
+    @FXML
+    private Button tilee8;
+    @FXML
+    private Button tilef0;
+    @FXML
+    private Button tilef1;
+    @FXML
+    private Button tilef2;
+    @FXML
+    private Button tilef3;
+    @FXML
+    private Button tilef4;
+    @FXML
+    private Button tilef5;
+    @FXML
+    private Button tilef6;
+    @FXML
+    private Button tilef7;
+    @FXML
+    private Button tileg2;
+    @FXML
+    private Button tileg3;
+    @FXML
+    private Button tileg4;
+    @FXML
+    private Button tileg5;
+    @FXML
+    private Button tileg6;
+    @FXML
+    private Button tileh3;
+    @FXML
+    private Button tileh4;
+    @FXML
+    private Button tileh5;
+    @FXML
+    private Button tilei4;
+    @FXML
+    private Button tilei5;
+    @FXML
+    private GridPane livingroomgridbuttons;
+
+    //bookshelf elements
+    @FXML
+    private Button bookshelfcol0;
+    @FXML
+    private Button bookshelfcol1;
+    @FXML
+    private Button bookshelfcol2;
+    @FXML
+    private Button bookshelfcol3;
+    @FXML
+    private Button bookshelfcol4;
+    @FXML
+    private HBox mybookshelf;
+
+    //checkout
+    @FXML
+    private Button checkoutbutton;
+
+
+
+
 
     private Parent gameRoot;
 
@@ -441,10 +575,16 @@ public class GUI extends Application implements View {
                     }
                 });
             }
-            /*case "GameView" -> Platform.runLater(() -> {
+            case "GameView" -> Platform.runLater(() -> {
                 onGameViewEvent(event);
             });
-            */
+            case "PickingTilesGameView" -> Platform.runLater(() -> {
+                onPickingTilesGameView(event);
+            });
+            case "InsertingTilesGameView" -> Platform.runLater(() -> {
+                InsertingTilesGameView(event);
+            });
+
 
         }
 
@@ -480,6 +620,83 @@ public class GUI extends Application implements View {
         }
     }
 
+    private void onGameViewEvent(SelectViewEvent event){
+        if(matchStarted) {
+            livingroomgridbuttons.setDisable(true);
+            mybookshelf.setDisable(true);
+            checkoutbutton.setDisable(true);
+            checkoutbutton.setVisible(false);
+        }
+
+    }
+
+    private void onPickingTilesGameView(SelectViewEvent event){
+        livingroomgridbuttons.setDisable(false);
+        checkoutbutton.setDisable(false);
+        checkoutbutton.setVisible(true);
+        mybookshelf.setDisable(true);
+
+        String[] message = event.getMessage().split(" ");
+        if(message[0].equals("Tiles") && message[1].equals("Selected:")){
+            clearGrid(livingroomgridbuttons);
+            for(int i=0;i< message.length-2;i++) {
+
+                String[] coordinates = message[2+i].split(",");
+                char row = coordinates[0].charAt(0);
+                int column = Integer.parseInt(coordinates[1]);
+                int[] coordinatesInt = new int[2];
+                if (row >= 'a' && row <= 'i' && column >= 0 && column <= 8) {
+                    coordinatesInt[0] = row - 'a';
+                    coordinatesInt[1] = column;
+                }
+                Button selected = getButtonAt(livingroomgridbuttons, coordinatesInt[0], coordinatesInt[1]);
+                selected.setStyle("-fx-background-color: black; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 24px;");
+
+                selected.setOpacity(0.5);
+
+                selected.setText(String.valueOf(i));
+
+            }
+
+
+        }
+    }
+
+    private void clearGrid(GridPane gridPane) {
+        for (Node node : gridPane.getChildren()) {
+            if (node instanceof Button) {
+                ((Button) node).setOpacity(0);
+                ((Button) node).setText("");
+                ((Button) node).setStyle("");
+            }
+        }
+    }
+
+    private Button getButtonAt(GridPane gridPane, int i, int j) {
+        for (Node node : gridPane.getChildren()) {
+            if (node instanceof Button) {
+
+                int rowIndex = GridPane.getRowIndex(node) == null ? 0 : GridPane.getRowIndex(node);
+                int columnIndex = GridPane.getColumnIndex(node) == null ? 0 : GridPane.getColumnIndex(node);
+
+                if (rowIndex == i && columnIndex == j) {
+                    return (Button) node;
+                }
+            }
+        }
+        return null;
+    }
+
+    private void InsertingTilesGameView(SelectViewEvent event) {
+        clearGrid(livingroomgridbuttons);
+        livingroomgridbuttons.setDisable(true);
+        checkoutbutton.setDisable(true);
+        checkoutbutton.setVisible(false);
+        mybookshelf.setDisable(false);
+
+
+    }
+
 
 
     @Override
@@ -489,8 +706,10 @@ public class GUI extends Application implements View {
 
         switch(methodName) {
             case "onModifiedChatEvent" -> {
-                onModifiedChatEvent((Message)event.getValue());
-                return;
+
+                Platform.runLater(() -> {
+                    onModifiedChatEvent((Message)event.getValue());
+                });
             }
             case "onModifiedBookshelfEvent" -> {
                 Platform.runLater(() -> {
@@ -528,23 +747,12 @@ public class GUI extends Application implements View {
     }
 
     private void onModifiedTurnEvent(LightMatch match) {
+
+        //TODO
     }
 
     private void onMatchStartedEvent(LightMatch match) {
         this.matchStarted = true;
-        numberPlayers = match.getPlayers().size();
-        for(int i = 0; i < numberPlayers; i++){
-            players.put(i,match.getPlayers().get(i));
-            if (match.getPlayers().get(i).getPlayerNickName().equals(myNick)){
-                me = match.getPlayers().get(i);
-                if(i!=0) {
-                    Player tmp = players.get(0);
-                    players.put(0, me);
-                    players.put(i, tmp);
-                }
-            }
-
-        }
 
         loader.setLocation(getClass().getResource("/Gameview.fxml"));
         loader.setController(this);
@@ -556,6 +764,29 @@ public class GUI extends Application implements View {
         }
 
         Scene scene = new Scene(gameRoot);
+
+
+        numberPlayers = match.getPlayers().size();
+
+        chatChoiceBox.getItems().add("Everyone");
+        chatChoiceBox.setValue("Everyone");
+        for(int i = 0; i < numberPlayers; i++){
+            players.put(i,match.getPlayers().get(i));
+            if (match.getPlayers().get(i).getPlayerNickName().equals(myNick)){
+                me = match.getPlayers().get(i);
+                if(i!=0) {
+                    Player tmp = players.get(0);
+                    players.put(0, me);
+                    players.put(i, tmp);
+                }
+            }else{
+                chatChoiceBox.getItems().add(match.getPlayers().get(i).getPlayerNickName());
+            }
+
+
+        }
+
+
 
 
         if(numberPlayers==3){
@@ -617,14 +848,30 @@ public class GUI extends Application implements View {
         }
 
 
-
-
-
-
-
         onModifiedBookshelfEvent(match);
         onModifiedLivingRoomEvent(match);
         onModifiedPointsEvent(match);
+
+
+        bookshelfcol0.setStyle("-fx-background-color: transparent;");
+        bookshelfcol0.setOnMouseEntered(event -> bookshelfcol0.setStyle("-fx-background-color: cyan; -fx-opacity: 0.5;"));
+        bookshelfcol0.setOnMouseExited(event -> bookshelfcol0.setStyle("-fx-background-color: transparent;"));
+
+        bookshelfcol1.setStyle("-fx-background-color: transparent;");
+        bookshelfcol1.setOnMouseEntered(event -> bookshelfcol1.setStyle("-fx-background-color: cyan; -fx-opacity: 0.5;"));
+        bookshelfcol1.setOnMouseExited(event -> bookshelfcol1.setStyle("-fx-background-color: transparent;"));
+
+        bookshelfcol2.setStyle("-fx-background-color: transparent;");
+        bookshelfcol2.setOnMouseEntered(event -> bookshelfcol2.setStyle("-fx-background-color: cyan; -fx-opacity: 0.5;"));
+        bookshelfcol2.setOnMouseExited(event -> bookshelfcol2.setStyle("-fx-background-color: transparent;"));
+
+        bookshelfcol3.setStyle("-fx-background-color: transparent;");
+        bookshelfcol3.setOnMouseEntered(event -> bookshelfcol3.setStyle("-fx-background-color: cyan; -fx-opacity: 0.5;"));
+        bookshelfcol3.setOnMouseExited(event -> bookshelfcol3.setStyle("-fx-background-color: transparent;"));
+
+        bookshelfcol4.setStyle("-fx-background-color: transparent;");
+        bookshelfcol4.setOnMouseEntered(event -> bookshelfcol4.setStyle("-fx-background-color: cyan; -fx-opacity: 0.5;"));
+        bookshelfcol4.setOnMouseExited(event -> bookshelfcol4.setStyle("-fx-background-color: transparent;"));
 
 
         primaryStage.setScene(scene);
@@ -787,6 +1034,10 @@ public class GUI extends Application implements View {
                     }else{
                         tmp.setImage(bookImage3);
                     }
+                }else{
+                    ImageView tmp= getImageViewAt(grid,i,j);
+                    if(tmp!=null)
+                        tmp.setImage(null);
                 }
             }
         }
@@ -878,14 +1129,10 @@ public class GUI extends Application implements View {
 
     }
 
-
-
     private void onModifiedMatchEndedEvent(LightMatch match) {
 
         //mettere la match ended view
     }
-
-
 
     private void onModifiedBookshelfEvent(LightMatch match) {
         for(Player p : match.getPlayers()){
@@ -896,9 +1143,6 @@ public class GUI extends Application implements View {
                 }
             }
         }
-    }
-
-    private void onModifiedChatEvent(Message value) {
     }
 
     public void run() {
@@ -915,16 +1159,137 @@ public class GUI extends Application implements View {
         return connectionInfo;
     }
 
+    //bookshelfselection
+    @FXML
+    private void onSelectColoumn(ActionEvent event){
+        Button col = (Button) event.getSource();
+        String colId = col.getId();
+
+        int index = Integer.parseInt(String.valueOf(colId.charAt(12)));
+        try {
+            networkHandler.onVCEvent(new SelectColumn(index));
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
+    //checkout
+    @FXML
+    private void onCheckout(ActionEvent event){
+        try {
+            networkHandler.onVCEvent(new CheckOutTiles());
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //livingroomselection
     @FXML
     private void onTileSelected(ActionEvent event) throws IOException {
 
+        Button tile = (Button) event.getSource();
+        String tileId = tile.getId();
+        GridPane grid = (GridPane)gameRoot.lookup("#livingroomtiles");
+
+        char row= tileId.charAt(4);
+        int column = Integer.parseInt(String.valueOf(tileId.charAt(5)));
+        int[] coordinatesInt = new int[2];
+        if(row>='a' && row <='i' && column>=0 && column<=8) {
+            coordinatesInt[0] = row - 'a';
+            coordinatesInt[1] = column;
+            try {
+                networkHandler.onVCEvent(new ClickOnTile(coordinatesInt));
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException(e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        //ImageView tmp= getImageViewAt(grid,coordinatesInt[0],coordinatesInt[1]);
+        //tmp.setOpacity(0.5);
 
     }
 
 
 
-    //Buttons Methods
 
+
+
+    //CHAT
+    public void onModifiedChatEvent(Message message){
+
+        String s = MessageToString(message);
+        TextFlow guichat = (TextFlow)gameRoot.lookup("#chatframe");
+
+
+        chat.add(s);
+        if(message.getReceiver() != null) {
+            guichat.getChildren().add(new Text( "[" + message.getTimeSent() + "]" + " " + message.getSender().getPlayerNickName() + " " + "to @" + message.getReceiver().getPlayerNickName()+ ":" + " " + message.getContent()+"\n"));
+        }else{
+            guichat.getChildren().add(new Text("[" + message.getTimeSent() + "]" + " " + message.getSender().getPlayerNickName() + " " + "to @All:" + " " + message.getContent()+"\n"));
+        }
+
+    }
+
+    private String MessageToString(Message message){
+        String receiver;
+        if(message.getReceiver() == null) {
+            receiver = "All";
+        }else{
+            receiver = message.getReceiver().getPlayerNickName();
+        }
+
+        String s = "[" + message.getTimeSent() + "]" + " " + message.getSender().getPlayerNickName() + " @" + receiver + " " + message.getContent();
+        return s;
+
+    }
+    @FXML
+    private void onSendMessage(ActionEvent event) throws IOException {
+        String receiver = (String) chatChoiceBox.getValue();
+        String message = chatTextArea.getText();
+        if(!message.equals("")){
+            chatTextArea.clear();
+            chatTextArea.setPromptText("Type your message here");
+            try {
+
+                Message messageToSend=null;
+                if(receiver.equals("Everyone")) {
+                    messageToSend=new Message(this.me,message, LocalTime.now());
+                }else{
+
+                    for(Integer i: this.players.keySet()){
+                        if((this.players.get(i).getPlayerNickName()).equals(receiver)){
+                            messageToSend=new Message(this.me,message,LocalTime.now(), this.players.get(i));
+                        }
+                    }
+                }
+                networkHandler.onVCEvent(new SendMessage(messageToSend));
+
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException(e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+
+
+    //Buttons Methods
     @FXML
     private void onClickYesReconnect(ActionEvent event) throws IOException {
         this.isReconnecting = true;
@@ -958,7 +1323,6 @@ public class GUI extends Application implements View {
         socketButton.setOnMouseExited(e -> socketButton.setStyle("-fx-background-color: #ADD8E6; -fx-border-radius: 15; -fx-background-radius: 15;"));
 
         ImageView wallpaper = (ImageView) newRoot.lookup("#wallpaper");
-        wallpaper.setOpacity(0.7);
         Scene newScene = new Scene(newRoot);
         Stage currentStage = (Stage) yesButtonReConnection.getScene().getWindow();
         currentStage.setScene(newScene);
@@ -999,7 +1363,6 @@ public class GUI extends Application implements View {
         socketButton.setOnMouseExited(e -> socketButton.setStyle("-fx-background-color: #ADD8E6; -fx-border-radius: 15; -fx-background-radius: 15;"));
 
         ImageView wallpaper = (ImageView) newRoot.lookup("#wallpaper");
-        wallpaper.setOpacity(0.7);
 
         Scene newScene = new Scene(newRoot);
         Stage currentStage = (Stage) noButtonReConnection.getScene().getWindow();
@@ -1057,6 +1420,7 @@ public class GUI extends Application implements View {
     private void onClickConnectRMIButton(ActionEvent event) throws IOException {
         int port = Integer.parseInt(portServerRMI.getText());
 
+
         try{
             networkHandler = new NetworkRMIHandler(this);
             String localIP = null;
@@ -1081,7 +1445,7 @@ public class GUI extends Application implements View {
 
     @FXML
     private void onClickSubmitUsernamePlayerButton(ActionEvent event) throws IOException {
-        int numPlayer = numberPlayersMenu.getSelectionModel().getSelectedIndex() + 2 ==1 ? 2 : numberPlayersMenu.getSelectionModel().getSelectedIndex();
+        int numPlayer = numberPlayersMenu.getSelectionModel().getSelectedIndex() + 2 ==1 ? 2 : numberPlayersMenu.getSelectionModel().getSelectedIndex()+2;
 
         this.myNick = usernameField.getText();
         try{
@@ -1126,5 +1490,38 @@ public class GUI extends Application implements View {
         new Thread(this.networkHandler).start();
     }
 
+    @FXML
+    private void onBackButtonClicked(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Socket_RMI_Requests.fxml"));
+        fxmlLoader.setController(this);
+        Parent newRoot = fxmlLoader.load();
+        Button rmiButton = (Button) newRoot.lookup("#rmibutton");
+        Button socketButton = (Button) newRoot.lookup("#socketbutton");
 
+        rmiButton.setMinWidth(100);
+        rmiButton.setMinHeight(50);
+
+        socketButton.setMinWidth(100);
+        socketButton.setMinHeight(50);
+
+        rmiButton.setStyle("-fx-background-color: #FFC0CB; -fx-border-radius: 15; -fx-background-radius: 15;");
+
+        String hoverStyle1 = "-fx-background-color: #FF69B4; -fx-border-radius: 15; -fx-background-radius: 15;"
+                + "-fx-effect: dropshadow(three-pass-box, rgba(255, 105, 180, 0.8), 10, 0, 0, 0);";
+
+        rmiButton.setOnMouseEntered(e -> rmiButton.setStyle(hoverStyle1));
+        rmiButton.setOnMouseExited(e -> rmiButton.setStyle("-fx-background-color: #FFC0CB; -fx-border-radius: 15; -fx-background-radius: 15;"));
+
+        String hoverStyle2 = "-fx-background-color: #00BFFF; -fx-border-radius: 15; -fx-background-radius: 15;"
+                + "-fx-effect: dropshadow(three-pass-box, rgba(0, 191, 255, 0.8), 10, 0, 0, 0);";
+
+
+
+        socketButton.setStyle("-fx-background-color: #ADD8E6; -fx-border-radius: 15; -fx-background-radius: 15;");
+        socketButton.setOnMouseEntered(e -> socketButton.setStyle(hoverStyle2));
+        socketButton.setOnMouseExited(e -> socketButton.setStyle("-fx-background-color: #ADD8E6; -fx-border-radius: 15; -fx-background-radius: 15;"));
+        Scene newScene = new Scene(newRoot);
+        primaryStage.setScene(newScene);
+        primaryStage.show();
+    }
 }

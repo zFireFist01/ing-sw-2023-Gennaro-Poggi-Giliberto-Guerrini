@@ -6,41 +6,41 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="465.0" prefWidth="675.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ImageView fitHeight="720.0" fitWidth="1280.0">
+      <ImageView fitHeight="471.2" fitWidth="682.0">
          <image>
             <Image url="@misc/sfondo parquet.jpg" />
          </image>
       </ImageView>
-      <Pane layoutX="360.0" layoutY="190.0" opacity="0.9" prefHeight="117.0" prefWidth="550.0" style="-fx-background-color: lightgray;">
-         <children>
-            <Text layoutX="-72.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Insert Your Username:" textAlignment="CENTER" translateX="75.0" translateY="30.0" wrappingWidth="543.2680053710938">
-               <font>
-                  <Font name="System Bold" size="36.0" />
-               </font>
-            </Text>
-         </children>
-      </Pane>
-      <TextField fx:id="usernameField" layoutX="420.0" layoutY="362.0" prefHeight="59.0" prefWidth="436.0" promptText="Username">
+      <Text id="errormessage" layoutX="98.0" layoutY="200.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Insert Your Username and choose the number of Players:" wrappingWidth="485.2680969238281">
          <font>
-            <Font size="24.0" />
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+      <TextField fx:id="usernameField" layoutX="193.0" layoutY="239.0" prefHeight="39.0" prefWidth="288.0" promptText="Username">
+         <font>
+            <Font size="18.0" />
          </font>
       </TextField>
-      <Button fx:id="submitUsernameAndPlayersButton" layoutX="564.0" layoutY="454.0" mnemonicParsing="false" onAction="#onClickSubmitUsernamePlayerButton" prefHeight="69.0" prefWidth="133.0" text="Submit">
+      <Button fx:id="submitUsernameAndPlayersButton" layoutX="287.0" layoutY="320.0" mnemonicParsing="false" onAction="#onClickSubmitUsernamePlayerButton" prefHeight="45.0" prefWidth="99.0" style="-fx-border-radius: 15; -fx-background-radius: 15; -fx-background-color: #ffc033;" text="Submit">
          <font>
-            <Font size="24.0" />
+            <Font name="System Bold" size="18.0" />
          </font>
       </Button>
-      <ComboBox fx:id="numberPlayersMenu" layoutX="888.0" layoutY="379.0" prefWidth="150.0" promptText="Select N° Players" />
-      <Text id="errormessage" fill="#e43104" layoutX="359.0" layoutY="572.0" strokeType="OUTSIDE" strokeWidth="0.0" underline="true" wrappingWidth="543.2680053710938">
+      <ComboBox fx:id="numberPlayersMenu" layoutX="502.0" layoutY="236.0" prefHeight="45.0" prefWidth="132.0" promptText="Select N° Players" style="-fx-background-color: #ffc033; -fx-border-radius: 15; -fx-background-radius: 15;" />
+      <Text id="errormessage" fill="#e43104" layoutX="66.0" layoutY="393.0" strokeType="OUTSIDE" strokeWidth="0.0" underline="true" wrappingWidth="543.2680053710938">
          <font>
             <Font size="25.0" />
          </font>
       </Text>
+      <ImageView fitHeight="91.0" fitWidth="270.0" layoutX="202.0" layoutY="67.0">
+         <image>
+            <Image url="@Publisher material/Title 2000x618px.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
