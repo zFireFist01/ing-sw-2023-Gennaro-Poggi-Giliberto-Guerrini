@@ -104,7 +104,7 @@ public class SocketWaiter implements Runnable{
                                 if(clientVV instanceof VirtualSocketView){
                                     System.err.println("BLAH BLAH BLAH");
                                     ((VirtualSocketView)clientVV).setSocket(socket, localIn);
-                                    clientVV.setPongReceived(); //Dovrebbe essere inutile...
+                                    //clientVV.setPongReceived(); //Dovrebbe essere inutile...
                                     clientVV.onSelectViewEvent(new GameView("Wait for your turn"));
                                 }else{
                                     throw new UnsupportedOperationException("The client didn't choose Socket as a re-connection type, " +

@@ -30,6 +30,8 @@ public class ConnectionInfo implements java.io.Serializable{
         this.nickname = nickname;
         this.connectionType = connectionType;
     }
+
+
     public String getIp() {
         return ip;
     }

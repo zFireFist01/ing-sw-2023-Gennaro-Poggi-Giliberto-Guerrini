@@ -502,7 +502,19 @@ public class Controller implements VCEventListener {
                     break;
                 }
             }
+
             match.disconnectPlayer(hashNicknames.get(playerHash), PlayerViews.get(playerHash));
+            match.clearSelectedTiles();
+            Player currentPlayer = match.getCurrentPlayer();
+            currentPlayerView = PlayerViews.get(currentPlayer.getPlayerID());
+            currentPlayerView.onSelectViewEvent(new PickingTilesGameView());
+
+            for(Integer i  : PlayerViews.keySet()){
+                if(!match.getDisconnectedPlayersVirtualViews().containsKey(PlayerViews.get(i))
+                        && !PlayerViews.get(i).equals(currentPlayerView)){
+                    PlayerViews.get(i).onSelectViewEvent(new GameView());
+                }
+            }
         }else{
             throw new RuntimeException("PingPongManager tells me a player has lost connection but" +
                     " he was not in the match");
@@ -512,24 +524,6 @@ public class Controller implements VCEventListener {
 
     public void playerConnected(VirtualView vv) {
         //TODO: check
-        /*if(PlayerViews.containsValue(vv)){
-            Integer playerHash = null;
-            for(Integer i : PlayerViews.keySet()){
-                //if(PlayerViews.get(i).equals(vv)){
-                  //  playerHash = i;
-                   // break;
-                //}
-                if(PlayerViews.get(i).getConnectionInfo().getSignature()
-                        .equals(vv.getConnectionInfo().getSignature())){
-                    playerHash = i;
-                    break;
-                }
-            }
-            match.reconnectPlayer(hashNicknames.get(playerHash), PlayerViews.get(playerHash));
-        }else{
-            throw new RuntimeException("PingPongManager tells me a player has reconnected but" +
-                    " he was not in the match");
-        }*/
         if (PlayerViews.containsValue(vv)) {
             for (Integer i : PlayerViews.keySet()) {
                 if (PlayerViews.get(i).equals(vv)) {

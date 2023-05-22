@@ -10,7 +10,9 @@ import Server.Model.Match;
 import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * This class defines the player in game
@@ -164,4 +166,21 @@ public class Player {
         if (this.pointsTiles.contains(PointsTile.MATCH_ENDED)) throw new UnsupportedOperationException("You can't add more tiles after you took the tile for completing the bookshelf first!");
         this.pointsTiles.add(tile);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return playerID == player.playerID
+                && Objects.equals(bookshelf, player.bookshelf)
+                && Objects.equals(playerNickName, player.playerNickName)
+                && personalGoalCard == player.personalGoalCard
+                && Objects.equals(playerStatus, player.playerStatus)
+                && Objects.equals(pointsTiles, player.pointsTiles)
+                && Objects.equals(nextPlayer, player.nextPlayer)
+                && Arrays.equals(takenTiles, player.takenTiles)
+                && Objects.equals(m, player.m);
+    }
+
 }

@@ -50,16 +50,17 @@ public class PingManager implements Runnable{
                 }
                 for(VirtualView virtualView : virtualViews){
                     resp = virtualView.checkPongResponse();
-                    if(resp == false){
+                    if(resp == false && virtualViewStatuses.get(virtualView) == true){
                         //The player lost connection
+                        System.err.println("Ciao ciao ciao");
                         virtualViewStatuses.put(virtualView, false);
                         virtualViewControllerMap.get(virtualView).playerDisconnected(virtualView);
                         //server.updateConnectionStatus(virtualView.getConnectionInfo(), false);
-                        synchronized (server){
+                        //synchronized (server){
                             server.updateConnectionStatus(virtualView.getConnectionInfo(), false);
-                        }
+                        //}
                     }else{
-                        if(virtualViewStatuses.get(virtualView) == false){
+                        if(resp == true && virtualViewStatuses.get(virtualView) == false){
                             //The player lost connection and then reconnected
                             virtualViewStatuses.put(virtualView, true);
                             //virtualViewControllerMap.get(virtualView).playerConnected(virtualView);
