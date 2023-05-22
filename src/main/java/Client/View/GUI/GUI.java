@@ -571,10 +571,16 @@ public class GUI extends Application implements View {
                     }
                 });
             }
-            /*case "GameView" -> Platform.runLater(() -> {
+            case "GameView" -> Platform.runLater(() -> {
                 onGameViewEvent(event);
             });
-            */
+            case "PickingTilesGameView" -> Platform.runLater(() -> {
+                onPickingTilesGameView(event);
+            });
+            case "InsertingTilesGameView" -> Platform.runLater(() -> {
+                InsertingTilesGameView(event);
+            });
+
 
         }
 
@@ -608,6 +614,83 @@ public class GUI extends Application implements View {
             primaryStage.setScene(newScene);
             primaryStage.show();
         }
+    }
+
+    private void onGameViewEvent(SelectViewEvent event){
+        if(matchStarted) {
+            livingroomgridbuttons.setDisable(true);
+            mybookshelf.setDisable(true);
+            checkoutbutton.setDisable(true);
+            checkoutbutton.setVisible(false);
+        }
+
+    }
+
+    private void onPickingTilesGameView(SelectViewEvent event){
+        livingroomgridbuttons.setDisable(false);
+        checkoutbutton.setDisable(false);
+        checkoutbutton.setVisible(true);
+        mybookshelf.setDisable(true);
+
+        String[] message = event.getMessage().split(" ");
+        if(message[0].equals("Tiles") && message[1].equals("Selected:")){
+            clearGrid(livingroomgridbuttons);
+            for(int i=0;i< message.length-2;i++) {
+
+                String[] coordinates = message[2+i].split(",");
+                char row = coordinates[0].charAt(0);
+                int column = Integer.parseInt(coordinates[1]);
+                int[] coordinatesInt = new int[2];
+                if (row >= 'a' && row <= 'i' && column >= 0 && column <= 8) {
+                    coordinatesInt[0] = row - 'a';
+                    coordinatesInt[1] = column;
+                }
+                Button selected = getButtonAt(livingroomgridbuttons, coordinatesInt[0], coordinatesInt[1]);
+                selected.setStyle("-fx-background-color: black; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 24px;");
+
+                selected.setOpacity(0.5);
+
+                selected.setText(String.valueOf(i));
+
+            }
+
+
+        }
+    }
+
+    private void clearGrid(GridPane gridPane) {
+        for (Node node : gridPane.getChildren()) {
+            if (node instanceof Button) {
+                ((Button) node).setOpacity(0);
+                ((Button) node).setText("");
+                ((Button) node).setStyle("");
+            }
+        }
+    }
+
+    private Button getButtonAt(GridPane gridPane, int i, int j) {
+        for (Node node : gridPane.getChildren()) {
+            if (node instanceof Button) {
+
+                int rowIndex = GridPane.getRowIndex(node) == null ? 0 : GridPane.getRowIndex(node);
+                int columnIndex = GridPane.getColumnIndex(node) == null ? 0 : GridPane.getColumnIndex(node);
+
+                if (rowIndex == i && columnIndex == j) {
+                    return (Button) node;
+                }
+            }
+        }
+        return null;
+    }
+
+    private void InsertingTilesGameView(SelectViewEvent event) {
+        clearGrid(livingroomgridbuttons);
+        livingroomgridbuttons.setDisable(true);
+        checkoutbutton.setDisable(true);
+        checkoutbutton.setVisible(false);
+        mybookshelf.setDisable(false);
+
+
     }
 
 
@@ -660,6 +743,8 @@ public class GUI extends Application implements View {
     }
 
     private void onModifiedTurnEvent(LightMatch match) {
+
+        //TODO
     }
 
     private void onMatchStartedEvent(LightMatch match) {
@@ -759,16 +844,30 @@ public class GUI extends Application implements View {
         }
 
 
-
-
-
-
-
-
-
         onModifiedBookshelfEvent(match);
         onModifiedLivingRoomEvent(match);
         onModifiedPointsEvent(match);
+
+
+        bookshelfcol0.setStyle("-fx-background-color: transparent;");
+        bookshelfcol0.setOnMouseEntered(event -> bookshelfcol0.setStyle("-fx-background-color: cyan; -fx-opacity: 0.5;"));
+        bookshelfcol0.setOnMouseExited(event -> bookshelfcol0.setStyle("-fx-background-color: transparent;"));
+
+        bookshelfcol1.setStyle("-fx-background-color: transparent;");
+        bookshelfcol1.setOnMouseEntered(event -> bookshelfcol1.setStyle("-fx-background-color: cyan; -fx-opacity: 0.5;"));
+        bookshelfcol1.setOnMouseExited(event -> bookshelfcol1.setStyle("-fx-background-color: transparent;"));
+
+        bookshelfcol2.setStyle("-fx-background-color: transparent;");
+        bookshelfcol2.setOnMouseEntered(event -> bookshelfcol2.setStyle("-fx-background-color: cyan; -fx-opacity: 0.5;"));
+        bookshelfcol2.setOnMouseExited(event -> bookshelfcol2.setStyle("-fx-background-color: transparent;"));
+
+        bookshelfcol3.setStyle("-fx-background-color: transparent;");
+        bookshelfcol3.setOnMouseEntered(event -> bookshelfcol3.setStyle("-fx-background-color: cyan; -fx-opacity: 0.5;"));
+        bookshelfcol3.setOnMouseExited(event -> bookshelfcol3.setStyle("-fx-background-color: transparent;"));
+
+        bookshelfcol4.setStyle("-fx-background-color: transparent;");
+        bookshelfcol4.setOnMouseEntered(event -> bookshelfcol4.setStyle("-fx-background-color: cyan; -fx-opacity: 0.5;"));
+        bookshelfcol4.setOnMouseExited(event -> bookshelfcol4.setStyle("-fx-background-color: transparent;"));
 
 
         primaryStage.setScene(scene);
@@ -931,6 +1030,10 @@ public class GUI extends Application implements View {
                     }else{
                         tmp.setImage(bookImage3);
                     }
+                }else{
+                    ImageView tmp= getImageViewAt(grid,i,j);
+                    if(tmp!=null)
+                        tmp.setImage(null);
                 }
             }
         }

@@ -292,7 +292,7 @@ public class Controller implements VCEventListener {
 
             selectedTiles[0]=coordinates[0];
             selectedTiles[1]=coordinates[1];
-            messageTiles += " Tiles Selected: ";
+            messageTiles += "Tiles Selected: ";
             for (int i = 0; i < selectedTiles.length; i+=2) {
                 char c = (char) ('a' + selectedTiles[i]);
                 messageTiles += c;
@@ -339,7 +339,7 @@ public class Controller implements VCEventListener {
 
             messageTiles += "You can't select more than 6 tiles!";
         }
-        messageTiles += " Tiles Selected: ";
+        messageTiles += "Tiles Selected: ";
         for (int i = 0; i < selectedTiles.length; i+=2) {
             char c = (char) ('a' + selectedTiles[i]);
             messageTiles += c;
