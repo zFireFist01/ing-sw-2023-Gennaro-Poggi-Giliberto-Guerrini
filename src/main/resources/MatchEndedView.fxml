@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fitHeight="400.0" fitWidth="600.0">
+         <image>
+            <Image url="@misc/sfondo parquet.jpg" />
+         </image>
+      </ImageView>
+      <VBox layoutX="120.0" layoutY="108.0" prefHeight="247.0" prefWidth="371.0">
+         <children>
+            <Label />
+            <Label prefHeight="117.0" prefWidth="714.0" text="1°">
+               <font>
+                  <Font name="Calibri Bold" size="36.0" />
+               </font>
+            </Label>
+            <Label prefHeight="117.0" prefWidth="714.0" text="2°">
+               <font>
+                  <Font name="Calibri Bold" size="36.0" />
+               </font>
+            </Label>
+            <Label prefHeight="117.0" prefWidth="714.0" text="3°">
+               <font>
+                  <Font name="Calibri Bold" size="36.0" />
+               </font>
+            </Label>
+            <Label prefHeight="117.0" prefWidth="714.0" text="4°">
+               <font>
+                  <Font name="Calibri Bold" size="36.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+      <ImageView fitHeight="50.0" fitWidth="49.0" layoutX="67.0" layoutY="124.0">
+         <image>
+            <Image url="@corona.png" />
+         </image>
+      </ImageView>
+      <Label layoutY="25.0" prefHeight="50.0" prefWidth="600.0" text=" GAME IS OVER. THE WINNER IS...">
+         <font>
+            <Font name="Calibri Bold" size="42.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

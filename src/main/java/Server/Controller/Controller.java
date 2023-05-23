@@ -1,30 +1,29 @@
 package Server.Controller;
 
 import Server.Events.SelectViewEvents.*;
-
 import Server.Events.VCEvents.LoginEvent;
+import Server.Events.VCEvents.VCEvent;
 import Server.Listeners.SelectViewEventListener;
-
 import Server.Listeners.VCEventListener;
 import Server.Model.Chat.Message;
-import Server.Model.Chat.PlayersChat;
 import Server.Model.GameItems.LivingRoom;
 import Server.Model.GameItems.LivingRoomTileSpot;
-
 import Server.Model.GameItems.TileType;
 import Server.Model.Match;
-import Server.Events.VCEvents.VCEvent;
 import Server.Model.MatchStatus.Running;
 import Server.Model.MatchStatus.WaitingForPlayers;
 import Server.Model.Player.Player;
 import Server.Network.Server;
 import Server.Network.VirtualView;
-import Utils.MathUtils.*;
+import Utils.MathUtils.Couple;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.rmi.RemoteException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Controller class to manage the requests from the client
@@ -105,11 +104,6 @@ public class Controller implements VCEventListener {
 
             }
         }
-
-
-
-
-
     }
 
     /**
@@ -253,10 +247,7 @@ public class Controller implements VCEventListener {
      * @param coordinates of the tile selected by the player
      * @author ValentinoGuerrini
      */
-
     private void onClickOnTileEvent(int[] coordinates) throws RemoteException{
-
-
         int[] tmp,selectedTiles;
         String messageTiles = "";
         boolean flag=false;
@@ -535,5 +526,9 @@ public class Controller implements VCEventListener {
 
     public Map<Integer, VirtualView> getPlayerViews() {
         return PlayerViews;
+    }
+
+    public VirtualView getCaller() {
+        return caller;
     }
 }

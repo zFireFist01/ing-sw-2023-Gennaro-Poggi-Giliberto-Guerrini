@@ -34,6 +34,7 @@ public abstract class SelectViewEvent extends Event {
      * @return the type of view
      */
 
+
     public abstract String getType();
 
 
