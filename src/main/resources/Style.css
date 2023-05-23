@@ -1,0 +1,15 @@
+.message {
+    -fx-fill: #000000;  // Colore del testo
+}
+
+.message-box-from-me {
+    -fx-padding: 10px;  // Spaziatura intorno alla casella del messaggio
+-fx-background-color: #C6DAE7;  // Colore di sfondo del messaggio
+-fx-background-radius: 10px;  // Angoli arrotondati del messaggio
+}
+
+.message-box-from-them {
+    -fx-padding: 10px;
+    -fx-background-color: #A1D6CA;  // Different background color for received messages
+-fx-background-radius: 10px;
+}

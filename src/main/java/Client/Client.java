@@ -1,6 +1,7 @@
 package Client;
 
 import Client.View.CLI.CLI;
+import Client.View.GUI.GUI;
 
 import java.util.Scanner;
 
@@ -79,7 +80,7 @@ public class Client {
                 flag=false;
             }
             else if(choice==2){
-                //TODO gui
+                new GUI();//TODO gui
                 flag=false;
             }
             else {
