@@ -5,6 +5,8 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
@@ -13,13 +15,22 @@
             <Image url="@misc/sfondo parquet.jpg" />
          </image>
       </ImageView>
-      <TextField fx:id="addressServer" layoutX="200.0" layoutY="161.0" prefHeight="25.0" prefWidth="200.0" text="Server Address:" />
-      <TextField fx:id="portServer" layoutX="200.0" layoutY="214.0" prefHeight="25.0" prefWidth="200.0" text="Server Port:" />
+      <TextField fx:id="addressServer" layoutX="200.0" layoutY="161.0" prefHeight="25.0" prefWidth="200.0" promptText="Server Address:" />
+      <TextField fx:id="portServer" layoutX="200.0" layoutY="214.0" prefHeight="25.0" prefWidth="200.0" promptText="Server Port:" />
       <ImageView fitHeight="95.0" fitWidth="256.0" layoutX="172.0" layoutY="39.0">
          <image>
             <Image url="@Publisher material/Title 2000x618px.png" />
          </image>
       </ImageView>
-      <Button fx:id="connectButton" layoutX="260.0" layoutY="276.0" mnemonicParsing="false" onAction="#onClickConnectButton" prefHeight="39.0" prefWidth="79.0" text="Connect" />
+      <Button fx:id="connectButton" layoutX="260.0" layoutY="276.0" mnemonicParsing="false" onAction="#onClickConnectButton" prefHeight="39.0" prefWidth="79.0" style="-fx-background-color: #ffc033; -fx-border-radius: 15; -fx-background-radius: 15;" text="Connect">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
+      <Button fx:id="backSocket" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#onBackButtonClicked" style="-fx-background-color: #ffc033; -fx-border-radius: 15; -fx-background-radius: 15;" text="&lt;-back" />
+      <Text fx:id="errorSocket" fill="RED" layoutX="100.0" layoutY="348.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="400.1365966796875">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>

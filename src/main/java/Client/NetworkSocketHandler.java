@@ -1,30 +1,20 @@
 package Client;
 
-import java.net.ServerSocket;
 import Client.View.View;
 import Server.Events.Event;
 import Server.Events.EventTypeAdapterFactory;
 import Server.Events.MVEvents.MVEvent;
 import Server.Events.SelectViewEvents.SelectViewEvent;
 import Server.Events.VCEvents.VCEvent;
-import Server.Model.Cards.CommonGoalCard;
-import Server.Model.Cards.CommonGoalCardAdapter;
 import Server.Network.VirtualView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.rmi.RemoteException;
 import java.util.Scanner;
 
 
@@ -171,4 +161,5 @@ public class NetworkSocketHandler implements NetworkHandler{
         }
 
     }
+
 }

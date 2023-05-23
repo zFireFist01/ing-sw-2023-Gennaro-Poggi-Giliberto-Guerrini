@@ -1,29 +1,31 @@
+
 package Server.Controller;
 
 import Server.Events.SelectViewEvents.*;
+
 import Server.Events.VCEvents.LoginEvent;
-import Server.Events.VCEvents.VCEvent;
 import Server.Listeners.SelectViewEventListener;
+
 import Server.Listeners.VCEventListener;
 import Server.Model.Chat.Message;
+import Server.Model.Chat.PlayersChat;
 import Server.Model.GameItems.LivingRoom;
 import Server.Model.GameItems.LivingRoomTileSpot;
+
 import Server.Model.GameItems.TileType;
 import Server.Model.Match;
+import Server.Events.VCEvents.VCEvent;
 import Server.Model.MatchStatus.Running;
 import Server.Model.MatchStatus.WaitingForPlayers;
 import Server.Model.Player.Player;
 import Server.Network.Server;
 import Server.Network.VirtualView;
-import Utils.MathUtils.Couple;
+import Utils.MathUtils.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Controller class to manage the requests from the client
@@ -58,15 +60,23 @@ public class Controller implements VCEventListener {
         ArrayList<Player> players = match.getPlayers();
 
         if(players.size()==0 && numberofPlayers!=0){
-            match.setNumberOfPlayers(numberofPlayers);
-            Player newPlayer = new Player(match, nickname.hashCode(),nickname);
-            match.addContestant(newPlayer);
-            PlayerViews.put(nickname.hashCode(),caller);
-            hashNicknames.put(nickname.hashCode(),newPlayer);
-            caller.onSelectViewEvent(new GameView());
-            caller.getConnectionInfo().setNickname(nickname);
-            //server.updateConnectionStatus(caller.getConnectionInfo(), true);
-            System.out.println("Controller connection info.nickname: " + caller.getConnectionInfo().getNickname());
+            if(nickname.length() > 20) {
+                caller.onSelectViewEvent(new LoginView(true,"Nickname too long, max 20 characters"));
+            }else if(nickname.length() < 3) {
+                caller.onSelectViewEvent(new LoginView(true,"Nickname too short, min 3 characters"));
+            }else if(nickname.contains(" ")) {
+                caller.onSelectViewEvent(new LoginView(true,"Nickname cannot contain spaces"));
+            }else {
+                match.setNumberOfPlayers(numberofPlayers);
+                Player newPlayer = new Player(match, nickname.hashCode(), nickname);
+                match.addContestant(newPlayer);
+                PlayerViews.put(nickname.hashCode(), caller);
+                hashNicknames.put(nickname.hashCode(), newPlayer);
+                caller.onSelectViewEvent(new GameView());
+                caller.getConnectionInfo().setNickname(nickname);
+                //server.updateConnectionStatus(caller.getConnectionInfo(), true);
+                System.out.println("Controller connection info.nickname: " + caller.getConnectionInfo().getNickname());
+            }
         }else{
             for(Player player : players){
                 if(player.getPlayerID()==nickname.hashCode()) {
@@ -104,6 +114,11 @@ public class Controller implements VCEventListener {
 
             }
         }
+
+
+
+
+
     }
 
     /**
@@ -247,7 +262,10 @@ public class Controller implements VCEventListener {
      * @param coordinates of the tile selected by the player
      * @author ValentinoGuerrini
      */
+
     private void onClickOnTileEvent(int[] coordinates) throws RemoteException{
+
+
         int[] tmp,selectedTiles;
         String messageTiles = "";
         boolean flag=false;
@@ -275,7 +293,7 @@ public class Controller implements VCEventListener {
 
             selectedTiles[0]=coordinates[0];
             selectedTiles[1]=coordinates[1];
-            messageTiles += " Tiles Selected: ";
+            messageTiles += "Tiles Selected: ";
             for (int i = 0; i < selectedTiles.length; i+=2) {
                 char c = (char) ('a' + selectedTiles[i]);
                 messageTiles += c;
@@ -322,7 +340,7 @@ public class Controller implements VCEventListener {
 
             messageTiles += "You can't select more than 6 tiles!";
         }
-        messageTiles += " Tiles Selected: ";
+        messageTiles += "Tiles Selected: ";
         for (int i = 0; i < selectedTiles.length; i+=2) {
             char c = (char) ('a' + selectedTiles[i]);
             messageTiles += c;
@@ -485,7 +503,19 @@ public class Controller implements VCEventListener {
                     break;
                 }
             }
+
             match.disconnectPlayer(hashNicknames.get(playerHash), PlayerViews.get(playerHash));
+            match.clearSelectedTiles();
+            Player currentPlayer = match.getCurrentPlayer();
+            currentPlayerView = PlayerViews.get(currentPlayer.getPlayerID());
+            currentPlayerView.onSelectViewEvent(new PickingTilesGameView());
+
+            for(Integer i  : PlayerViews.keySet()){
+                if(!match.getDisconnectedPlayersVirtualViews().containsKey(PlayerViews.get(i))
+                        && !PlayerViews.get(i).equals(currentPlayerView)){
+                    PlayerViews.get(i).onSelectViewEvent(new GameView());
+                }
+            }
         }else{
             throw new RuntimeException("PingPongManager tells me a player has lost connection but" +
                     " he was not in the match");
@@ -495,24 +525,6 @@ public class Controller implements VCEventListener {
 
     public void playerConnected(VirtualView vv) {
         //TODO: check
-        /*if(PlayerViews.containsValue(vv)){
-            Integer playerHash = null;
-            for(Integer i : PlayerViews.keySet()){
-                //if(PlayerViews.get(i).equals(vv)){
-                  //  playerHash = i;
-                   // break;
-                //}
-                if(PlayerViews.get(i).getConnectionInfo().getSignature()
-                        .equals(vv.getConnectionInfo().getSignature())){
-                    playerHash = i;
-                    break;
-                }
-            }
-            match.reconnectPlayer(hashNicknames.get(playerHash), PlayerViews.get(playerHash));
-        }else{
-            throw new RuntimeException("PingPongManager tells me a player has reconnected but" +
-                    " he was not in the match");
-        }*/
         if (PlayerViews.containsValue(vv)) {
             for (Integer i : PlayerViews.keySet()) {
                 if (PlayerViews.get(i).equals(vv)) {
@@ -526,9 +538,5 @@ public class Controller implements VCEventListener {
 
     public Map<Integer, VirtualView> getPlayerViews() {
         return PlayerViews;
-    }
-
-    public VirtualView getCaller() {
-        return caller;
     }
 }

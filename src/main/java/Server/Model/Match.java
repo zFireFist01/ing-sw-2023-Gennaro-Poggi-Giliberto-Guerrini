@@ -49,6 +49,8 @@ public class Match {
     private int count = 0;
 
     private List<MVEventListener> mvEventListeners = new ArrayList<>();
+
+
     private Map<MVEventListener, Player> disconnectedPlayersVirtualViews = new HashMap<>();
 
     public Match() {
@@ -435,10 +437,11 @@ public class Match {
      */
     public void setCurrentPlayer() {
         //this.currentPlayer = currentPlayer.getNextPlayer();
+        Player localFirst = currentPlayer;
         currentPlayer = currentPlayer.getNextPlayer();
         while (disconnectedPlayers.contains(currentPlayer)) {
             currentPlayer = currentPlayer.getNextPlayer();
-            if (currentPlayer == firstPlayer) {
+            if (currentPlayer == localFirst) {
                 break;
             }
         }
@@ -555,10 +558,17 @@ public class Match {
         return new ArrayList<>(disconnectedPlayers);
     }
 
+    public Map<MVEventListener, Player> getDisconnectedPlayersVirtualViews() {
+        return new HashMap<>(disconnectedPlayersVirtualViews);
+    }
+
     public void disconnectPlayer(Player player, VirtualView virtualView) {
         //TODO: check
         if (!disconnectedPlayers.contains(player)) {
             disconnectedPlayers.add(player);
+        }
+        if(player.equals(currentPlayer)){
+            setCurrentPlayer();
         }
         System.out.println("DISCONNECTED PLAYERS: " + disconnectedPlayers);
         disconnectedPlayersVirtualViews.put(virtualView, player);

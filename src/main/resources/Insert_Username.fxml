@@ -20,7 +20,7 @@
             <Font size="14.0" />
          </font>
       </TextField>
-      <Button fx:id="submitUsernameButton" layoutX="252.0" layoutY="253.0" mnemonicParsing="false" onAction="#onClickUSubmitUsernameButton" prefHeight="27.0" prefWidth="96.0" text="Submit">
+      <Button fx:id="submitUsernameButton" layoutX="252.0" layoutY="253.0" mnemonicParsing="false" onAction="#onClickUSubmitUsernameButton" prefHeight="27.0" prefWidth="96.0" style="-fx-background-color: #ffc033; -fx-border-radius: 15; -fx-background-radius: 15;" text="Submit">
          <font>
             <Font size="14.0" />
          </font>
@@ -30,9 +30,14 @@
             <Image url="@Publisher material/Title 2000x618px.png" />
          </image>
       </ImageView>
-      <Text layoutX="199.0" layoutY="160.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Insert Your Username" wrappingWidth="201.4700927734375">
+      <Text layoutX="199.0" layoutY="160.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Insert Your Username:" wrappingWidth="201.4700927734375">
          <font>
             <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+      <Text id="errormessage" fill="#e43104" layoutX="28.0" layoutY="332.0" strokeType="OUTSIDE" strokeWidth="0.0" underline="true" wrappingWidth="543.2680053710938">
+         <font>
+            <Font size="25.0" />
          </font>
       </Text>
    </children>

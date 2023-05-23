@@ -17,10 +17,7 @@ import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.*;
 
 public class VirtualSocketView implements VirtualView{
 
@@ -30,6 +27,7 @@ public class VirtualSocketView implements VirtualView{
     boolean isFirstToJoin;
     boolean pongReceived;
 
+    Object pongLocker = new Object();
     List<VCEventListener> vcEventListeners;
 
     ConnectionInfo connectionInfo;
@@ -87,7 +85,7 @@ public class VirtualSocketView implements VirtualView{
         }
     }
 
-    private void manageMessage(String message){
+    private synchronized void manageMessage(String message){
         /*Gson gson = new GsonBuilder()
                 .registerTypeAdapterFactory(new EventTypeAdapterFactory())
                 .create();
@@ -111,41 +109,45 @@ public class VirtualSocketView implements VirtualView{
     }
     @Override
     public void onMVEvent(MVEvent mvEvent){
-        Gson gson = new GsonBuilder()
-                .excludeFieldsWithoutExposeAnnotation().registerTypeAdapter(CommonGoalCard.class, new CommonGoalCardAdapter())
-                .create();
-        String message = gson.toJson(mvEvent);
-        message+="\n";
-        try {
-            out.write(message.getBytes());
-            out.flush();
-            System.out.println("Message sent: "+message);
-        }catch (SocketException e){
-            //System.out.println("Lost connection with the client");
-            //We don't need to notify the controller because it will be notified by the PingManager
-            // checking the pongReceived variable
-        }catch (IOException e) {
-            System.err.println(e.getStackTrace());
-            throw new RuntimeException(e);
+        synchronized (this.out){
+            Gson gson = new GsonBuilder()
+                    .excludeFieldsWithoutExposeAnnotation().registerTypeAdapter(CommonGoalCard.class, new CommonGoalCardAdapter())
+                    .create();
+            String message = gson.toJson(mvEvent);
+            message+="\n";
+            try {
+                out.write(message.getBytes());
+                out.flush();
+                System.out.println("Message sent: "+message);
+            }catch (SocketException e){
+                //System.out.println("Lost connection with the client");
+                //We don't need to notify the controller because it will be notified by the PingManager
+                // checking the pongReceived variable
+            }catch (IOException e) {
+                System.err.println(e.getStackTrace());
+                throw new RuntimeException(e);
+            }
         }
     }
 
     @Override
     public void onSelectViewEvent(SelectViewEvent selectViewEvent){
-        Gson gson = new Gson();
-        String message = gson.toJson(selectViewEvent);
-        message+="\n";
-        try {
-            out.write(message.getBytes());
-            out.flush();
-            System.out.println("Message sent "+ message);
-        }catch (SocketException e){
-            //System.out.println("Lost connection with the client");
-            //We don't need to notify the controller because it will be notified by the PingManager
-            // checking the pongReceived variable
-        }catch (IOException e) {
-            System.err.println(e.getStackTrace());
-            throw new RuntimeException(e);
+        synchronized (this.out){
+            Gson gson = new Gson();
+            String message = gson.toJson(selectViewEvent);
+            message+="\n";
+            try {
+                out.write(message.getBytes());
+                out.flush();
+                System.out.println("Message sent "+ message);
+            }catch (SocketException e){
+                //System.out.println("Lost connection with the client");
+                //We don't need to notify the controller because it will be notified by the PingManager
+                // checking the pongReceived variable
+            }catch (IOException e) {
+                System.err.println(e.getStackTrace());
+                throw new RuntimeException(e);
+            }
         }
 
     }
@@ -197,39 +199,43 @@ public class VirtualSocketView implements VirtualView{
 
     @Override
     public void ping() {
-        pongReceived = false;
-        String pingMessage = "ping\n";
-        try {
-            out.write(pingMessage.getBytes());
-            out.flush();
-            System.out.println("Ping sent: "+pingMessage);
-            System.out.flush();
-        }catch (SocketException e){
-            System.out.println("Lost connection with the client");
-            //We don't need to notify the controller because it will be notified by the PingManager
-            // checking the checkPongResponse method. We just wait.
-            //throw new RuntimeException(e);
-        }catch (IOException e) {
-            System.err.println(e.getStackTrace());
-            throw new RuntimeException(e);
+        synchronized (this.out){
+            pongReceived = false;
+            String pingMessage = "ping\n";
+            try {
+                out.write(pingMessage.getBytes());
+                out.flush();
+                System.out.println("Ping sent: "+pingMessage);
+                System.out.flush();
+            }catch (SocketException e){
+                System.out.println("Lost connection with the client");
+                //We don't need to notify the controller because it will be notified by the PingManager
+                // checking the checkPongResponse method. We just wait.
+                //throw new RuntimeException(e);
+            }catch (IOException e) {
+                System.err.println(e.getStackTrace());
+                throw new RuntimeException(e);
+            }
         }
     }
 
     @Override
     public boolean checkPongResponse() {
-        if(!pongReceived){
-            System.out.println("Client disconnected");
-            return false;
+        synchronized (pongLocker){
+            if(!pongReceived){
+                System.out.println("Client disconnected");
+                return false;
             /*try {
                 socket.close();
             } catch (IOException e) {
                 System.err.println(e.getStackTrace());
                 throw new RuntimeException(e);
             }*/
-        }else{
-            pongReceived = false;
-            System.out.println("Pong received");
-            return true;
+            }else{
+                pongReceived = false;
+                System.out.println("Pong received");
+                return true;
+            }
         }
     }
 
@@ -243,7 +249,9 @@ public class VirtualSocketView implements VirtualView{
 
     @Override
     public void setPongReceived() {
-        pongReceived = true;
+        synchronized (pongLocker){
+            pongReceived = true;
+        }
     }
 
     public void setSocket(Socket socket, Scanner in){
@@ -252,7 +260,9 @@ public class VirtualSocketView implements VirtualView{
             this.in = in;
         }
         try {
-            this.out = this.socket.getOutputStream();
+            synchronized (this.out){
+                this.out = this.socket.getOutputStream();
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
