@@ -1,6 +1,5 @@
 package Server.Network;
 
-import Client.NetworkHandler;
 import Client.NetworkRMIHandler;
 import Client.View.RemoteNetworkHandler;
 import Server.Events.EventTypeAdapterFactory;
@@ -22,6 +21,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * This class is used to handle the network connection between the client and the server,
  * using RMI protocol. It is seen as a View from the controller and the model, it's seen as a VCEventListener from
@@ -35,7 +35,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
     RemoteNetworkHandler client;
     boolean isFirsToJoin;
     boolean pongReceived;
-
+    Object pongLocker = new Object();
     ConnectionInfo connectionInfo;
 
     /**
@@ -122,16 +122,18 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
      * @param event the MVEvent to be sent to the client.
      * @see Gson
      */
-    public synchronized void onMVEvent(MVEvent event) {
-        Gson gson = new GsonBuilder()
-                .excludeFieldsWithoutExposeAnnotation().registerTypeAdapter(CommonGoalCard.class, new CommonGoalCardAdapter())
-                .create();
-        String json = gson.toJson(event);
-        try {
-            client.receiveMVEvent(json);
-        } catch (RemoteException e) {
-            //We could say that the method invocation went wrong and so may be that the client lost connection
-            System.err.println(e.getStackTrace());
+    public /*synchronized*/ void onMVEvent(MVEvent event) {
+        synchronized (client){
+            Gson gson = new GsonBuilder()
+                    .excludeFieldsWithoutExposeAnnotation().registerTypeAdapter(CommonGoalCard.class, new CommonGoalCardAdapter())
+                    .create();
+            String json = gson.toJson(event);
+            try {
+                client.receiveMVEvent(json);
+            } catch (RemoteException e) {
+                //We could say that the method invocation went wrong and so may be that the client lost connection
+                System.err.println(e.getStackTrace());
+            }
         }
     }
 
@@ -141,39 +143,47 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
      * @param event the SelectViewEvent to be sent to the client.
      * @see Gson
      */
-    public synchronized void onSelectViewEvent(SelectViewEvent event) {
-        Gson gson = new Gson();
-        String json = gson.toJson(event);
-        json += "\n";
-        try {
-            client.receiveSelectViewEvent(json);
-        } catch (RemoteException e) {
-            //We could say that the method invocation went wrong and so may be that the client lost connection
-            System.err.println(e.getStackTrace());
+    public /*synchronized*/ void onSelectViewEvent(SelectViewEvent event) {
+        synchronized (client){
+            Gson gson = new Gson();
+            String json = gson.toJson(event);
+            json += "\n";
+            try {
+                client.receiveSelectViewEvent(json);
+            } catch (RemoteException e) {
+                //We could say that the method invocation went wrong and so may be that the client lost connection
+                System.err.println(e.getStackTrace());
+            }
         }
     }
 
     @Override
     public void addVCEventListener(VCEventListener listener){
-        synchronized (vcEventListeners){
+        synchronized(vcEventListeners){
             vcEventListeners.add(listener);
         }
     }
 
     @Override
     public void removeVCEventListener(VCEventListener listener){
-        synchronized (vcEventListeners){
+        synchronized(vcEventListeners){
             vcEventListeners.remove(listener);
         }
     }
 
     @Override
-    public synchronized void ping() {
+    public /*synchronized*/ void ping() {
         try{
-            pongReceived = false;
+            synchronized (pongLocker){
+                pongReceived = false;
+            }
             System.out.println("Pinging client");
-            client.pong();
-            pongReceived = true;
+            synchronized (client){
+                client.pong();
+            }
+            synchronized (pongLocker){
+                pongReceived = true;
+            }
             System.out.println("Pong received");
         } catch (ConnectException e){
             System.err.println("Client disconnected: " + e.getMessage() + "\n" + e.getStackTrace());
@@ -183,35 +193,39 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
     }
 
     @Override
-    public synchronized boolean checkPongResponse() {
-       if(!pongReceived){
-           System.err.println("Client disconnected");
-           return false;
-           //throw new RuntimeException("Client disconnected");
-       }else{
-           pongReceived = false;
-           return true;
+    public /*synchronized*/ boolean checkPongResponse() {
+       synchronized (pongLocker){
+           if(!pongReceived){
+               System.err.println("Client disconnected");
+               return false;
+               //throw new RuntimeException("Client disconnected");
+           }else{
+               pongReceived = false;
+               return true;
+           }
        }
     }
 
     @Override
-    public synchronized void setPongReceived(){
-        pongReceived = true;
+    public /*synchronized*/ void setPongReceived(){
+        synchronized (pongLocker){
+            pongReceived = true;
+        }
     }
     public ConnectionInfo getConnectionInfo() {
-        synchronized (connectionInfo){
-            return connectionInfo;
-        }
+        //TODO: check if we need a method get/setConnectionInfoNickname, since the point of this method is to read/write
+        // the nickname from the controller
+        return connectionInfo;
     }
 
     public void setConnectionInfo(ConnectionInfo connectionInfo) {
-        synchronized (connectionInfo){
-            this.connectionInfo = connectionInfo;
-        }
+        this.connectionInfo = connectionInfo;
     }
 
     public void setClient(RemoteNetworkHandler client) {
-        this.client = client;
+        synchronized (client){
+            this.client = client;
+        }
     }
 
 }

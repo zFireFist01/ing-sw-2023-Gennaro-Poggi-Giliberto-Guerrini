@@ -89,9 +89,9 @@ public class RMIWaiter extends UnicastRemoteObject implements RMIWaiterInterface
 
                         clientsVV.setPongReceived();
                         //server.updateConnectionStatus(connectionInfo, true);
-                        synchronized (server){
+                        //synchronized (server){
                             server.updateConnectionStatus(connectionInfo, true);
-                        }
+                        //}
                         server.getMacthesControllers().get(m).playerConnected(clientsVV);
                         System.out.println("Hello world!");
                         found = true;

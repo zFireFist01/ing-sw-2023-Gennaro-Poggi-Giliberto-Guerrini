@@ -353,6 +353,13 @@ public class GUI extends Application implements View {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Re_Connection_Requests.fxml"));
         fxmlLoader.setController(this);
         Parent root = fxmlLoader.load();
+        AnchorPane pane = (AnchorPane) root.lookup("#wallpaper");
+        ImageView wallpaper =(ImageView) root.lookup("#parquet") ;
+
+
+        wallpaper.fitHeightProperty().bind(pane.heightProperty());
+        wallpaper.fitWidthProperty().bind(pane.widthProperty());
+
         Scene newScene = new Scene(root);
         primaryStage.setScene(newScene);
         primaryStage.show();
@@ -756,6 +763,8 @@ public class GUI extends Application implements View {
         }
 
         Scene scene = new Scene(gameRoot);
+        scene.getStylesheets().add(getClass().getResource("/Style.css").toExternalForm());
+
 
 
         numberPlayers = match.getPlayers().size();
@@ -1219,15 +1228,41 @@ public class GUI extends Application implements View {
     public void onModifiedChatEvent(Message message){
 
         String s = MessageToString(message);
-        TextFlow guichat = (TextFlow)gameRoot.lookup("#chatframe");
+        VBox guichat = (VBox)gameRoot.lookup("#chatBox");
+        HBox messageBox;
 
 
         chat.add(s);
         if(message.getReceiver() != null) {
-            guichat.getChildren().add(new Text( "[" + message.getTimeSent() + "]" + " " + message.getSender().getPlayerNickName() + " " + "to @" + message.getReceiver().getPlayerNickName()+ ":" + " " + message.getContent()+"\n"));
+            Text messageText = new Text( "[" + message.getTimeSent() + "]" + " " + message.getSender().getPlayerNickName() + " " + "to @" + message.getReceiver().getPlayerNickName()+ ":" + " " + message.getContent()+"\n");
+            TextFlow messageFlow = new TextFlow(messageText);
+            if(message.getSender().getPlayerNickName().equals(me.getPlayerNickName()))
+                messageFlow.getStyleClass().add( "message-box-from-them");
+            else
+                messageFlow.getStyleClass().add( "message-box-from-me");
+            messageFlow.setMaxWidth(200);
+
+            messageBox = new HBox(messageFlow);
+            messageBox.setAlignment(message.getSender().getPlayerNickName().equals(me.getPlayerNickName())? Pos.CENTER_RIGHT : Pos.CENTER_LEFT);
+
         }else{
-            guichat.getChildren().add(new Text("[" + message.getTimeSent() + "]" + " " + message.getSender().getPlayerNickName() + " " + "to @All:" + " " + message.getContent()+"\n"));
+            Text messageText = new Text("[" + message.getTimeSent() + "]" + " " + message.getSender().getPlayerNickName() + " " + "to @All:" + " " + message.getContent()+"\n");
+            TextFlow messageFlow = new TextFlow(messageText);
+            if(message.getSender().getPlayerNickName().equals(me.getPlayerNickName()))
+                messageFlow.getStyleClass().add( "message-box-from-them");
+            else
+                messageFlow.getStyleClass().add( "message-box-from-me");
+            messageFlow.setMaxWidth(200);
+
+            messageBox = new HBox(messageFlow);
+            messageBox.setAlignment(message.getSender().getPlayerNickName().equals(me.getPlayerNickName())? Pos.CENTER_RIGHT : Pos.CENTER_LEFT);
         }
+
+        guichat.getChildren().add(messageBox);
+
+        // Scroll to the bottom
+        guichat.layout();
+        //scrollChat.setVvalue(1.0);
 
     }
 

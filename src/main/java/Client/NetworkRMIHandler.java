@@ -2,13 +2,10 @@ package Client;
 
 import Client.View.RemoteNetworkHandler;
 import Client.View.View;
-import Server.Events.Event;
 import Server.Events.EventTypeAdapterFactory;
 import Server.Events.MVEvents.MVEvent;
 import Server.Events.SelectViewEvents.SelectViewEvent;
 import Server.Events.VCEvents.VCEvent;
-import Server.Model.Cards.CommonGoalCard;
-import Server.Model.Cards.CommonGoalCardAdapter;
 import Server.Network.*;
 import Utils.ConnectionInfo;
 import com.google.gson.Gson;
@@ -16,7 +13,6 @@ import com.google.gson.GsonBuilder;
 
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.NotBoundException;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -137,4 +133,5 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements RemoteNetw
     public ConnectionInfo getConnectionInfo() throws RemoteException{
         return this.view.getConnectionInfo();
     }
+
 }

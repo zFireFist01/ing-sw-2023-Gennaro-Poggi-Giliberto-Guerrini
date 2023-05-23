@@ -1,6 +1,7 @@
 package Client;
 
 import Client.View.CLI.CLI;
+import Client.View.GUI.GUI;
 
 import java.util.Scanner;
 
