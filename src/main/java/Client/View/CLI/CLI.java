@@ -88,6 +88,7 @@ public class CLI implements Runnable , View {
             {ANSIParameters.RED+"╚","═","═","═","═","═","═","═","╝"+ ANSIParameters.CRESET}};
 
     private NetworkHandler networkHandler;
+    private int countOfPicks = 0;
     private Environment board = new Environment();
     private ArrayList<String> chat = new ArrayList<>();
     private boolean chatIsOpened = false;
@@ -113,6 +114,7 @@ public class CLI implements Runnable , View {
         System.out.println("info        : show this message\n"+
                            "play        : login to the server\n"+
                            "quit        : quit the game\n");
+        System.out.print("> ");
         new Thread(this::run).start();
         //refresh();
     }
@@ -142,23 +144,42 @@ public class CLI implements Runnable , View {
         boolean flag = true;
         ConnectionType connectionType = null;
         System.out.println("Are you re-connecting because of a disconnection? (y/n)");
+        System.out.print("> ");
         String answer = scanner.nextLine();
         String previousNickname = null;
+        while(!answer.equalsIgnoreCase("y") && !answer.equalsIgnoreCase("n")){
+            System.out.println("Invalid input: please insert y or n!");
+            System.out.print("> ");
+            answer = scanner.nextLine();
+        }
         if(answer.equalsIgnoreCase("y")){
             System.out.println("You will now proceed to the reconnection process, " +
                     "please use the same nickname you used before and the same connection type (Socket or RMI)");
             System.out.println("What was your nickname?:");
+            System.out.print("> ");
             previousNickname = scanner.nextLine();
             myNick = new String(previousNickname);
             isReconnecting = true;
         }
         System.out.println("Select connection type: ");
         System.out.println("1) Socket 2) RMI");
+        System.out.print("> ");
         String connection =scanner.nextLine();
-        System.out.println("Server Address:");
-        String host = scanner.nextLine();
+        while(!connection.equals("1") && !connection.equals("2")){
+            System.out.println("Invalid input: please insert 1 or 2!");
+            System.out.print("> ");
+            connection =scanner.nextLine();
+        }
+
+        String host = null;
+        if(connection.equals("1")) {
+            System.out.println("Server Address:");
+            System.out.print("> ");
+            host = scanner.nextLine();
+        }
 
         System.out.println("ServerPort:");
+        System.out.print("> ");
         int port = scanner.nextInt();
 
         while(flag){
@@ -174,6 +195,7 @@ public class CLI implements Runnable , View {
                 default:
                     System.out.println("Invalid connection type");
                     System.out.println("1) Socket 2) RMI");
+                    System.out.print("> ");
                     connection =scanner.nextLine();
             }
 
@@ -495,11 +517,12 @@ public class CLI implements Runnable , View {
         if(loginEvent.isFirstToJoin()) {
             System.out.println("You are the first player to join the match");
             System.out.println("Please insert your nickname and the number of players for the match: ");
+            System.out.print("> ");
 
 
         }else{
             System.out.println("Please insert your nickname: ");
-
+            System.out.print("> ");
         }
 
     }
@@ -552,6 +575,7 @@ public class CLI implements Runnable , View {
             }
             System.out.println();
         }
+        System.out.print(">");
 
     }
 
@@ -566,9 +590,13 @@ public class CLI implements Runnable , View {
         chat.add(s);
         if(chatIsOpened){
             if(message.getReceiver() != null) {
+                System.out.print("\b\b\b");
                 System.out.println("[" + message.getTimeSent() + "]" + " " + ANSIParameters.RED + message.getSender().getPlayerNickName()  + ANSIParameters.CRESET + " " + ANSIParameters.BLUE + "to @" + message.getReceiver().getPlayerNickName()+ ":" + ANSIParameters.CRESET + " " + message.getContent());
+                System.out.print("> ");
             }else{
+                System.out.print("\b\b\b");
                 System.out.println("[" + message.getTimeSent() + "]" + " " + ANSIParameters.RED + message.getSender().getPlayerNickName() + ANSIParameters.CRESET + " " + ANSIParameters.BLUE + "to @All:" + ANSIParameters.CRESET + " " + message.getContent());
+                System.out.print("> ");
             }
         }
     }
@@ -607,89 +635,51 @@ public class CLI implements Runnable , View {
         }else if(currentView.getType().equals("ChatOFFView")) {
             System.out.println("info open \n quit");
         }
+        System.out.print("> ");
     }
 
+    /**
+     * This method parses the input and calls/gives the right method/output after it
+     * @param input the input from the user
+     */
     private void parseInput(String input){
         String[] inputArray = input.split(" ");
         if(currentView!=null && currentView.getType().equals("LoginView")) {
-
             LoginView loginview = (LoginView) currentView;
-
             if(loginview.isFirstToJoin()){
                 if(inputArray.length == 2){
-                    myNick = inputArray[0];
-                    numberPlayers = Integer.parseInt(inputArray[1]);
-                    try {
-                        networkHandler.onVCEvent(new LoginEvent(myNick, numberPlayers));
-                    } catch (NoSuchMethodException e) {
-                        throw new RuntimeException(e);
-                    } catch (InvocationTargetException e) {
-                        throw new RuntimeException(e);
-                    } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
+                    if(inputArray[0].length() <= 20){
+                        myNick = inputArray[0];
+                        try {
+                            numberPlayers = Integer.parseInt(inputArray[1]);
+                            if(numberPlayers < 2 || numberPlayers > 4){
+                                throw new NumberFormatException();
+                            }
+                            networkHandler.onVCEvent(new LoginEvent(myNick, numberPlayers));
+                        } catch (NoSuchMethodException e) {
+                            throw new RuntimeException(e);
+                        } catch (InvocationTargetException e) {
+                            throw new RuntimeException(e);
+                        } catch (IllegalAccessException e) {
+                            throw new RuntimeException(e);
+                        } catch (NumberFormatException e){
+                            System.out.println("Invalid number of players! Number of players must be between 2 and 4");
+                            System.out.print("> ");
+                        }
+                    }else{
+                        System.out.println("Nickname must be max 20 char long! Try again: ");
+                        System.out.print("> ");
                     }
                 }else {
-                    System.out.println("Please insert your nickname and the number of players for the match: ");
+                    System.out.println("Please insert your nickname and the number of players for the match (between 2 and 4): ");
+                    System.out.print("> ");
                 }
             }else{
                 if (inputArray.length == 1) {
-                    myNick = inputArray[0];
-                    try {
-                        networkHandler.onVCEvent(new LoginEvent(myNick));
-                    } catch (NoSuchMethodException e) {
-                        throw new RuntimeException(e);
-                    } catch (InvocationTargetException e) {
-                        throw new RuntimeException(e);
-                    } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
-                    }
-                } else {
-                    System.out.println("Nickname must be one word");
-                }
-            }
-
-        }
-        switch (inputArray[0]){
-            case "info" -> {
-                printHelp();
-            }
-            case "play" -> {
-                new Thread(networkHandler).start();
-
-            }
-
-            case "quit" -> {
-                System.out.println("Bye!");
-                System.exit(0);
-            }
-            case "select" -> {
-                if(inputArray.length == 2){
-                    int index = Integer.parseInt(inputArray[1]);
-                    try {
-                        networkHandler.onVCEvent(new SelectColumn(index));
-                    } catch (NoSuchMethodException e) {
-                        throw new RuntimeException(e);
-                    } catch (InvocationTargetException e) {
-                        throw new RuntimeException(e);
-                    } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
-                    }
-                }else{
-                    System.out.println("Invalid input");
-                }
-
-            }
-            case "pick" -> {
-                if(inputArray.length == 2){
-                    String[] coordinates = inputArray[1].split(",");
-                    char row= coordinates[0].charAt(0);
-                    int column = Integer.parseInt(coordinates[1]);
-                    int[] coordinatesInt = new int[2];
-                    if(row>='a' && row <='i' && column>=0 && column<=8) {
-                        coordinatesInt[0] = row - 'a';
-                        coordinatesInt[1] = column;
+                    if(inputArray[0].length() <= 20){
+                        myNick = inputArray[0];
                         try {
-                            networkHandler.onVCEvent(new ClickOnTile(coordinatesInt));
+                            networkHandler.onVCEvent(new LoginEvent(myNick));
                         } catch (NoSuchMethodException e) {
                             throw new RuntimeException(e);
                         } catch (InvocationTargetException e) {
@@ -697,97 +687,229 @@ public class CLI implements Runnable , View {
                         } catch (IllegalAccessException e) {
                             throw new RuntimeException(e);
                         }
+                    }else{
+                        System.out.println("Nickname must be max 20 char long! Try again: ");
+                        System.out.print("> ");
+                    }
+                } else {
+                    System.out.println("Nickname must be one word");
+                    System.out.print("> ");
+                }
+            }
 
-                    }
-                }else{
-                    System.out.println("Invalid input");
+        }else{
+            switch (inputArray[0]){
+                case "info" -> {
+                    printHelp();
                 }
-            }
-            case "checkout" ->{
-                if(inputArray.length==1){
-                    try {
-                        networkHandler.onVCEvent(new CheckOutTiles());
-                    } catch (NoSuchMethodException e) {
-                        throw new RuntimeException(e);
-                    } catch (InvocationTargetException e) {
-                        throw new RuntimeException(e);
-                    } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
+                case "play" -> {
+                    //you can only use this command if the game is not started yet
+                    if(currentView == null) {
+                        new Thread(networkHandler).start();
+                    }else{
+                        System.out.println("You cannot use this command now!");
+                        System.out.print("> ");
                     }
-                }else {
-                    System.out.println("Invalid input");
                 }
-            }
-            case "open" ->{
-                if(inputArray.length==1){
-                    try {
-                        networkHandler.onVCEvent(new OpenChat());
-                    } catch (NoSuchMethodException e) {
-                        throw new RuntimeException(e);
-                    } catch (InvocationTargetException e) {
-                        throw new RuntimeException(e);
-                    } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
-                    }
-                }else {
-                    System.out.println("Invalid input");
+                case "quit" -> {
+                    System.out.println("Bye!");
+                    System.exit(0);
                 }
-            }
-            case "close" ->{
-                if(inputArray.length==1){
-                    try {
-                        networkHandler.onVCEvent(new CloseChat());
-                    } catch (NoSuchMethodException e) {
-                        throw new RuntimeException(e);
-                    } catch (InvocationTargetException e) {
-                        throw new RuntimeException(e);
-                    } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
-                    }
-                }else {
-                    System.out.println("Invalid input");
-                }
-            }
-            case "send" ->{
-                if(inputArray.length>=3){
-                    try {
-                        String message = new String("");
-                        for(int i = 2; i < inputArray.length; i++){
-                            message = message + inputArray[i] + " ";
-                        }
-                        Message messageToSend=null;
-                        boolean flag=false;
-                        if(inputArray[1].equals("@All")) {
-                            messageToSend=new Message(this.me,message, LocalTime.now());
-                            flag=true;
-                        }else{
-
-                            for(Integer i: this.players.keySet()){
-                                if(("@"+this.players.get(i).getPlayerNickName()).equals(inputArray[1])){
-                                    messageToSend=new Message(this.me,message,LocalTime.now(), this.players.get(i));
-                                    flag=true;
+                case "select" -> {
+                    //you can only use this command if you are in the InsertingTilesGameView
+                    if(currentView.getType().equals("InsertingTilesGameView")){
+                        if(inputArray.length == 2){
+                            try{
+                                int index = Integer.parseInt(inputArray[1]);
+                                if(index<0 || index>4){
+                                    System.out.println("Invalid input");
+                                    System.out.print("> ");
+                                    break;
                                 }
+                                networkHandler.onVCEvent(new SelectColumn(index));
+                            } catch (NoSuchMethodException e) {
+                                throw new RuntimeException(e);
+                            } catch (InvocationTargetException e) {
+                                throw new RuntimeException(e);
+                            } catch (IllegalAccessException e) {
+                                throw new RuntimeException(e);
+                            } catch (NumberFormatException e){
+                                System.out.println("Invalid input");
+                                System.out.print("> ");
                             }
-                            if(!flag){
-                                System.out.println("nickname does not exists");
-                                break;
-                            }
+                        }else{
+                            System.out.println("Invalid input");
+                            System.out.print("> ");
                         }
-                        if(flag) {
-                         networkHandler.onVCEvent(new SendMessage(messageToSend));
-                        }
-                    } catch (NoSuchMethodException e) {
-                        throw new RuntimeException(e);
-                    } catch (InvocationTargetException e) {
-                        throw new RuntimeException(e);
-                    } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
+                    }else{
+                        System.out.println("You cannot use this command now!");
+                        System.out.print("> ");
                     }
-                }else {
-                    System.out.println("Invalid input");
+                }
+                case "pick" -> {
+                    //You can use this command only if you are in the PickingTilesGameView
+                    if(currentView.getType().equals("PickingTilesGameView")){
+                        if(inputArray.length == 2){
+                            String[] coordinates = inputArray[1].split(",");
+                            char row= coordinates[0].charAt(0);
+                            int column = Integer.parseInt(coordinates[1]);
+                            int[] coordinatesInt = new int[2];
+                            if(row>='a' && row <='i' && column>=0 && column<=8) {
+                                coordinatesInt[0] = row - 'a';
+                                coordinatesInt[1] = column;
+                                try {
+                                    networkHandler.onVCEvent(new ClickOnTile(coordinatesInt));
+                                    countOfPicks++;
+                                } catch (NoSuchMethodException e) {
+                                    throw new RuntimeException(e);
+                                } catch (InvocationTargetException e) {
+                                    throw new RuntimeException(e);
+                                } catch (IllegalAccessException e) {
+                                    throw new RuntimeException(e);
+                                }
+
+                            }
+                        }else{
+                            System.out.println("Invalid input");
+                            System.out.print("> ");
+                        }
+                    }else{
+                        System.out.println("You cannot use this command now!");
+                        System.out.print("> ");
+                    }
+                }
+                case "checkout" ->{
+                    //If countOfPicks is not 0, it means that the player has picked at least one tile
+                    if(countOfPicks != 0) {
+                        if (inputArray.length == 1) {
+                            try {
+                                networkHandler.onVCEvent(new CheckOutTiles());
+                                countOfPicks = 0;
+                            } catch (NoSuchMethodException e) {
+                                throw new RuntimeException(e);
+                            } catch (InvocationTargetException e) {
+                                throw new RuntimeException(e);
+                            } catch (IllegalAccessException e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else {
+                            System.out.println("Invalid input");
+                            System.out.print("> ");
+
+                        }
+                    }else{
+                        System.out.println("You cannot use this command now!");
+                        System.out.print("> ");
+                    }
+                }
+                case "open" ->{
+                    //If current view is not null, it means that the game has started
+                    if(currentView != null) {
+                        if (inputArray.length == 1) {
+                            try {
+                                networkHandler.onVCEvent(new OpenChat());
+                            } catch (NoSuchMethodException e) {
+                                throw new RuntimeException(e);
+                            } catch (InvocationTargetException e) {
+                                throw new RuntimeException(e);
+                            } catch (IllegalAccessException e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else {
+                            System.out.println("Invalid input");
+                            System.out.print("> ");
+                        }
+                    }else{
+                        System.out.println("You cannot use this command now! Wait for the match to start!");
+                        System.out.print("> ");
+                    }
+                }
+                case "close" ->{
+                    //If current view is not null, it means that the game has started
+                    if(currentView != null) {
+                        if (inputArray.length == 1) {
+                            try {
+                                networkHandler.onVCEvent(new CloseChat());
+                            } catch (NoSuchMethodException e) {
+                                throw new RuntimeException(e);
+                            } catch (InvocationTargetException e) {
+                                throw new RuntimeException(e);
+                            } catch (IllegalAccessException e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else {
+                            System.out.println("Invalid input");
+                            System.out.print("> ");
+                        }
+                    }else {
+                        System.out.println("You cannot use this command now! Wait for the match to start!");
+                        System.out.print("> ");
+                    }
+                }
+                case "send" ->{
+                    //If current view is not null, it means that the game has started
+                    if(currentView != null) {
+                        //If you are the only one connected you cannot write in the chat
+                        if(players.size()<=1){
+                            System.out.println("You cannot use this command now! Wait for other players to join!");
+                            System.out.print("> ");
+                            break;
+                        }
+                        if (inputArray.length >= 3) {
+                            try {
+                                String message = new String("");
+                                for (int i = 2; i < inputArray.length; i++) {
+                                    message = message + inputArray[i] + " ";
+                                }
+                                Message messageToSend = null;
+                                boolean flag = false;
+                                if (inputArray[1].equals("@All")) {
+                                    messageToSend = new Message(this.me, message, LocalTime.now());
+                                    flag = true;
+                                } else {
+
+                                    for (Integer i : this.players.keySet()) {
+                                        if (("@" + this.players.get(i).getPlayerNickName()).equals(inputArray[1])) {
+                                            messageToSend = new Message(this.me, message, LocalTime.now(), this.players.get(i));
+                                            flag = true;
+                                        }
+                                    }
+                                    if (!flag) {
+                                        System.out.println("nickname does not exists");
+                                        System.out.print("> ");
+                                        break;
+                                    }
+                                }
+                                if (flag) {
+                                    networkHandler.onVCEvent(new SendMessage(messageToSend));
+                                    System.out.print("> ");
+                                }
+                            } catch (NoSuchMethodException e) {
+                                throw new RuntimeException(e);
+                            } catch (InvocationTargetException e) {
+                                throw new RuntimeException(e);
+                            } catch (IllegalAccessException e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else {
+                            System.out.println("Invalid input");
+                            System.out.print("> ");
+                        }
+                    }else{
+                        System.out.println("You cannot use this command now! Wait for the match to start!");
+                        System.out.print("> ");
+                    }
+                }
+                //If you don't enter a valid command, the program will ask you to enter a valid one
+                default -> {
+                    if(input != ""){
+                        System.out.println("Invalid input");
+                        System.out.print("> ");
+                    }
                 }
             }
         }
+
 
     }
 
@@ -1036,6 +1158,7 @@ public class CLI implements Runnable , View {
     private void print(){
         board.print();
         System.out.println(ANSIParameters.GREEN + currentView.getMessage() + ANSIParameters.CRESET);
+        System.out.print("> ");
     }
 
     /**

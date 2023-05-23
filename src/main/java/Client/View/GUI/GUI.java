@@ -353,15 +353,7 @@ public class GUI extends Application implements View {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Re_Connection_Requests.fxml"));
         fxmlLoader.setController(this);
         Parent root = fxmlLoader.load();
-
         Scene newScene = new Scene(root);
-        StackPane stackPane = ((StackPane) newScene.lookup("#stackPaneTest"));
-        stackPane.setPrefWidth(Region.USE_COMPUTED_SIZE);
-        stackPane.setPrefHeight(Region.USE_COMPUTED_SIZE);
-        ImageView tmp = ((ImageView) newScene.lookup("#imageTest"));
-        //tmp.fitHeightProperty().bind(stackPane.heightProperty());
-        //tmp.fitWidthProperty().bind(stackPane.widthProperty());
-        tmp.setPreserveRatio(true);
         primaryStage.setScene(newScene);
         primaryStage.show();
 
