@@ -290,8 +290,6 @@ public class GUI extends Application implements View {
 
 
 
-
-
     private Parent gameRoot;
 
 
@@ -349,19 +347,21 @@ public class GUI extends Application implements View {
     }
 
     public void start(Stage primaryStage) throws IOException {
-
-
-
-
-
-
         this.primaryStage = primaryStage;
 
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Re_Connection_Requests.fxml"));
         fxmlLoader.setController(this);
         Parent root = fxmlLoader.load();
+
         Scene newScene = new Scene(root);
+        StackPane stackPane = ((StackPane) newScene.lookup("#stackPaneTest"));
+        stackPane.setPrefWidth(Region.USE_COMPUTED_SIZE);
+        stackPane.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        ImageView tmp = ((ImageView) newScene.lookup("#imageTest"));
+        //tmp.fitHeightProperty().bind(stackPane.heightProperty());
+        //tmp.fitWidthProperty().bind(stackPane.widthProperty());
+        tmp.setPreserveRatio(true);
         primaryStage.setScene(newScene);
         primaryStage.show();
 
@@ -1223,10 +1223,6 @@ public class GUI extends Application implements View {
     }
 
 
-
-
-
-
     //CHAT
     public void onModifiedChatEvent(Message message){
 
@@ -1290,6 +1286,7 @@ public class GUI extends Application implements View {
 
 
     //Buttons Methods
+
     @FXML
     private void onClickYesReconnect(ActionEvent event) throws IOException {
         this.isReconnecting = true;
@@ -1384,9 +1381,19 @@ public class GUI extends Application implements View {
 
     @FXML
     private void onClickConnectButton(ActionEvent event) throws IOException {
+
         String host = addressServer.getText();
-        int port = Integer.parseInt(portServer.getText());
-        this.networkHandler = new NetworkSocketHandler(host, port, this);
+        try {
+            int port = Integer.parseInt(portServer.getText());
+            this.networkHandler = new NetworkSocketHandler(host, port, this);
+        }catch (NumberFormatException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Invalid port");
+            alert.setContentText("Please insert a valid port");
+            alert.showAndWait();
+            return;
+        }
 
         String localIP = null;
         try {
@@ -1418,8 +1425,16 @@ public class GUI extends Application implements View {
 
     @FXML
     private void onClickConnectRMIButton(ActionEvent event) throws IOException {
-        int port = Integer.parseInt(portServerRMI.getText());
-
+        try {
+            int port = Integer.parseInt(portServerRMI.getText());
+        }catch (NumberFormatException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Invalid port");
+            alert.setContentText("Please insert a valid port");
+            alert.showAndWait();
+            return;
+        }
 
         try{
             networkHandler = new NetworkRMIHandler(this);
