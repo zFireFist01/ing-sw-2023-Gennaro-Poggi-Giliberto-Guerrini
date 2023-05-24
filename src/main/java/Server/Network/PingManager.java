@@ -50,6 +50,9 @@ public class PingManager implements Runnable{
                 }
                 for(VirtualView virtualView : virtualViews){
                     resp = virtualView.checkPongResponse();
+                    if(resp){
+                        System.out.println("pong received from vv: "+ ((virtualView instanceof VirtualSocketView) ? "socket": "RMI"));
+                    }
                     if(resp == false && virtualViewStatuses.get(virtualView) == true){
                         //The player lost connection
                         System.err.println("Ciao ciao ciao");

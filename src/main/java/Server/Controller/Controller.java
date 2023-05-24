@@ -1,5 +1,6 @@
 package Server.Controller;
 
+import Server.Events.MVEvents.MatchStartedEvent;
 import Server.Events.SelectViewEvents.*;
 
 import Server.Events.VCEvents.LoginEvent;
@@ -12,6 +13,7 @@ import Server.Model.GameItems.LivingRoom;
 import Server.Model.GameItems.LivingRoomTileSpot;
 
 import Server.Model.GameItems.TileType;
+import Server.Model.LightMatch;
 import Server.Model.Match;
 import Server.Events.VCEvents.VCEvent;
 import Server.Model.MatchStatus.Running;
@@ -528,7 +530,8 @@ public class Controller implements VCEventListener {
             for (Integer i : PlayerViews.keySet()) {
                 if (PlayerViews.get(i).equals(vv)) {
                     match.reconnectPlayer(hashNicknames.get(i), PlayerViews.get(i));
-                    match.triggerMVUpdate();
+                    //match.triggerMVUpdate();
+                    PlayerViews.get(i).onMVEvent(new MatchStartedEvent(new LightMatch(match)));
                 }
             }
             //match.reconnectPlayer(hashNicknames.get(playerHash), PlayerViews.get(playerHash));
