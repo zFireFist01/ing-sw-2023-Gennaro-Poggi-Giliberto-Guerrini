@@ -388,6 +388,7 @@ public class GUI extends Application implements View {
 
     }
 
+    
     private void showIsReconnectingWindow(Stage primaryStage){
         Stage isReconnectingStage = new Stage();
         isReconnectingStage.setTitle("Reconnection process");
