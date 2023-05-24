@@ -4,27 +4,26 @@ import Client.ConnectionType;
 import Client.NetworkHandler;
 import Client.NetworkRMIHandler;
 import Client.NetworkSocketHandler;
-import Client.View.CLI.ANSIParameters;
 import Client.View.View;
 import Server.Events.MVEvents.MVEvent;
-import Server.Events.SelectViewEvents.GameView;
 import Server.Events.SelectViewEvents.LoginView;
 import Server.Events.SelectViewEvents.SelectViewEvent;
 import Server.Events.VCEvents.*;
 import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Cards.PersonalGoalCard;
 import Server.Model.Chat.Message;
-import Server.Model.GameItems.*;
+import Server.Model.GameItems.LivingRoomTileSpot;
+import Server.Model.GameItems.PointsTile;
+import Server.Model.GameItems.TileSpot;
+import Server.Model.GameItems.TileType;
 import Server.Model.LightMatch;
 import Server.Model.Player.Player;
 import Utils.ConnectionInfo;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -32,13 +31,9 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
@@ -51,7 +46,6 @@ import java.rmi.RemoteException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 
 public class GUI extends Application implements View {
     //resources
@@ -289,6 +283,33 @@ public class GUI extends Application implements View {
     private Button checkoutbutton;
 
 
+    //LastView
+    @FXML
+    private Label primo;
+    @FXML
+    private Label secondo;
+    @FXML
+    private Label terzo;
+    @FXML
+    private Label quarto;
+    @FXML
+    private Label nomePrimo;
+    @FXML
+    private Label nomeSecondo;
+    @FXML
+    private Label nomeTerzo;
+    @FXML
+    private Label nomeQuarto;
+    @FXML
+    private Label punteggioPrimo;
+    @FXML
+    private Label punteggioSecondo;
+    @FXML
+    private Label punteggioTerzo;
+    @FXML
+    private Label punteggioQuarto;
+
+
 
     private Parent gameRoot;
 
@@ -347,6 +368,7 @@ public class GUI extends Application implements View {
     }
 
     public void start(Stage primaryStage) throws IOException {
+
         this.primaryStage = primaryStage;
 
 
@@ -366,6 +388,7 @@ public class GUI extends Application implements View {
 
     }
 
+    
     private void showIsReconnectingWindow(Stage primaryStage){
         Stage isReconnectingStage = new Stage();
         isReconnectingStage.setTitle("Reconnection process");
@@ -462,8 +485,6 @@ public class GUI extends Application implements View {
 
 
     }
-
-
 
 
     private void showSocketConnectionWindow(Stage primaryStage) {
@@ -721,7 +742,11 @@ public class GUI extends Application implements View {
                 });
             }
             case "onModifiedMatchEndedEvent" -> {
-                onModifiedMatchEndedEvent(event.getMatch());
+                try {
+                    onModifiedMatchEndedEvent(event.getMatch());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             case "onModifiedPointsEvent" -> {
                 Platform.runLater(() -> {
@@ -786,9 +811,6 @@ public class GUI extends Application implements View {
 
 
         }
-
-
-
 
         if(numberPlayers==3){
             StackPane s = (StackPane)gameRoot.lookup("#player2Bookshelf");
@@ -1130,9 +1152,115 @@ public class GUI extends Application implements View {
 
     }
 
-    private void onModifiedMatchEndedEvent(LightMatch match) {
+    private void onModifiedMatchEndedEvent(LightMatch match) throws IOException {
+        Player tmpPlayer=match.getWinner();
+        String Punteggio;
+        Integer max=0;
+        this.MatchEnded= true;
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/MatchEndedView.fxml"));
+        fxmlLoader.setController(this);
+        Parent newRoot = fxmlLoader.load();
 
-        //mettere la match ended view
+        nomePrimo.setText(tmpPlayer.getPlayerNickName());
+        Punteggio=String.valueOf(match.getScores().get(tmpPlayer));
+        punteggioPrimo.setText(Punteggio);
+        tmpPlayer= tmpPlayer.getNextPlayer();
+        if(numberPlayers==2){
+            terzo.setVisible(false);
+            nomeTerzo.setVisible(false);
+            punteggioTerzo.setVisible(false);
+            quarto.setVisible(false);
+            nomeQuarto.setVisible(false);
+            punteggioQuarto.setVisible(false);
+            nomeSecondo.setText(tmpPlayer.getPlayerNickName());
+            Punteggio=String.valueOf(match.getScores().get(tmpPlayer));
+            punteggioSecondo.setText(Punteggio);
+        }else if(numberPlayers==3){
+            quarto.setVisible(false);
+            nomeQuarto.setVisible(false);
+            punteggioQuarto.setVisible(false);
+            nomePrimo.setText(tmpPlayer.getPlayerNickName());
+            Punteggio=String.valueOf(match.getScores().get(tmpPlayer));
+            punteggioPrimo.setText(Punteggio);
+            tmpPlayer= tmpPlayer.getNextPlayer();
+            if(match.getScores().get(tmpPlayer)>match.getScores().get(tmpPlayer.getNextPlayer())){
+                nomeSecondo.setText(tmpPlayer.getPlayerNickName());
+                Punteggio=String.valueOf(match.getScores().get(tmpPlayer));
+                punteggioSecondo.setText(Punteggio);
+                tmpPlayer= tmpPlayer.getNextPlayer();
+                nomeTerzo.setText(tmpPlayer.getPlayerNickName());
+                Punteggio=String.valueOf(match.getScores().get(tmpPlayer));
+                punteggioTerzo.setText(Punteggio);
+            }else if(match.getScores().get(tmpPlayer)<match.getScores().get(tmpPlayer.getNextPlayer())){
+                nomeTerzo.setText(tmpPlayer.getPlayerNickName());
+                Punteggio=String.valueOf(match.getScores().get(tmpPlayer));
+                punteggioTerzo.setText(Punteggio);
+                tmpPlayer= tmpPlayer.getNextPlayer();
+                nomeSecondo.setText(tmpPlayer.getPlayerNickName());
+                Punteggio=String.valueOf(match.getScores().get(tmpPlayer));
+                punteggioSecondo.setText(Punteggio);
+            }else if(match.getScores().get(tmpPlayer)==match.getScores().get(tmpPlayer.getNextPlayer())) {
+                if (match.getFirstPlayer().getPlayerNickName().equals(tmpPlayer.getNextPlayer().getPlayerNickName())) {
+                    nomeSecondo.setText(tmpPlayer.getPlayerNickName());
+                    Punteggio = String.valueOf(match.getScores().get(tmpPlayer));
+                    punteggioSecondo.setText(Punteggio);
+                    tmpPlayer = tmpPlayer.getNextPlayer();
+                    nomeTerzo.setText(tmpPlayer.getPlayerNickName());
+                    Punteggio = String.valueOf(match.getScores().get(tmpPlayer));
+                    punteggioTerzo.setText(Punteggio);
+                }else if((match.getFirstPlayer().equals(tmpPlayer.getPlayerNickName()))||(match.getFirstPlayer().equals(tmpPlayer.getNextPlayer().getNextPlayer()))) {
+                    nomeTerzo.setText(tmpPlayer.getPlayerNickName());
+                    Punteggio = String.valueOf(match.getScores().get(tmpPlayer));
+                    punteggioTerzo.setText(Punteggio);
+                    tmpPlayer = tmpPlayer.getNextPlayer();
+                    nomeSecondo.setText(tmpPlayer.getPlayerNickName());
+                    Punteggio = String.valueOf(match.getScores().get(tmpPlayer));
+                    punteggioSecondo.setText(Punteggio);
+                }
+            }
+        }else if(numberPlayers==4){
+            tmpPlayer= match.getFirstPlayer();
+            for(int i=0; i<4; i++){
+                if(tmpPlayer.equals(match.getWinner())){
+                    tmpPlayer=tmpPlayer.getNextPlayer();
+                }else{
+                    if(match.getScores().get(tmpPlayer)>=max){
+                        max=match.getScores().get(tmpPlayer);
+                        nomeSecondo.setText(tmpPlayer.getPlayerNickName());
+                    }
+                    tmpPlayer=tmpPlayer.getNextPlayer();
+                }
+            }
+            Punteggio=String.valueOf(max);
+            punteggioSecondo.setText(Punteggio);
+            max=0;
+            tmpPlayer= match.getFirstPlayer();
+            for(int i=0; i<4;i++){
+                if(tmpPlayer.equals(match.getWinner())||tmpPlayer.equals(nomeSecondo.getText())) {
+                    tmpPlayer = tmpPlayer.getNextPlayer();
+                }else{
+                    if(match.getScores().get(tmpPlayer)>=max){
+                        max=match.getScores().get(tmpPlayer);
+                        nomeTerzo.setText(tmpPlayer.getPlayerNickName());
+                    }
+                    tmpPlayer=tmpPlayer.getNextPlayer();
+                }
+            }
+            Punteggio=String.valueOf(max);
+            punteggioTerzo.setText(Punteggio);
+            max=0;
+            tmpPlayer=match.getFirstPlayer();
+            while(tmpPlayer.equals(match.getWinner())||tmpPlayer.equals(nomeSecondo.getText())||tmpPlayer.equals(nomeTerzo.getText())){
+                tmpPlayer=tmpPlayer.getNextPlayer();
+            }
+            nomeQuarto.setText(tmpPlayer.getPlayerNickName());
+            Punteggio=String.valueOf(match.getScores().get(tmpPlayer));
+            punteggioQuarto.setText(Punteggio);
+
+        }
+        Scene newScene = new Scene(newRoot);
+        primaryStage.setScene(newScene);
+        primaryStage.show();
     }
 
     private void onModifiedBookshelfEvent(LightMatch match) {
