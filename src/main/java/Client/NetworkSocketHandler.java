@@ -114,7 +114,7 @@ public class NetworkSocketHandler implements NetworkHandler{
             //System.out.println("Ricevuto messaggio di benvenuto: " + welcomeMessage);
         } catch (IOException e) {
             System.err.println(e.getStackTrace());
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error while connecting to server");
         }
         Gson gson = new GsonBuilder()
                 .registerTypeAdapterFactory(new EventTypeAdapterFactory())
