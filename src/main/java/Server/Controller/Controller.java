@@ -337,7 +337,7 @@ public class Controller implements VCEventListener {
             selectedTiles=new int[tmp.length];
             System.arraycopy(tmp, 0, selectedTiles, 0, tmp.length);
 
-            messageTiles += "You can't select more than 6 tiles!";
+            messageTiles += "You can't select more than 3 tiles!";
         }
         messageTiles += "Tiles Selected: ";
         for (int i = 0; i < selectedTiles.length; i+=2) {

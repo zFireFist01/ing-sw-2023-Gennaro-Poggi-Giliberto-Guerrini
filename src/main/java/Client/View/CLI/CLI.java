@@ -19,7 +19,6 @@ import Server.Events.VCEvents.LoginEvent;
 import Server.Events.VCEvents.*;
 
 import Server.Model.Cards.CommonGoalCard;
-import Server.Model.Cards.PersonalGoalCard;
 import Server.Model.Chat.Message;
 import Server.Model.GameItems.BookshelfTileSpot;
 import Server.Model.GameItems.LivingRoomTileSpot;
@@ -270,7 +269,7 @@ public class CLI implements Runnable , View {
 
     /**
      * This method is used to setup the board at the start of the match
-     * @param match
+     * @param match is a reference to the match object
      */
     private void onMatchStartedEvent(LightMatch match){
         matchStarted = true;
@@ -348,6 +347,10 @@ public class CLI implements Runnable , View {
 
     }
 
+    /**
+     * This method is used to print the names of the players
+     * @param match is a reference to the match object
+     */
     private void onModifiedTurnEvent(LightMatch match){
         String[] names = new String[numberPlayers];
 
@@ -485,6 +488,10 @@ public class CLI implements Runnable , View {
         winner = match.getWinner();
     }
 
+    /**
+     * This method is used to manage the SelectViewEvent
+     * @param event is the SelectViewEvent that contains the type of the view to be opened
+     */
     @Override
     public void onSelectViewEvent(SelectViewEvent event){
          String view = event.getType();
@@ -493,7 +500,6 @@ public class CLI implements Runnable , View {
              case "ChatOFFView" -> onCloseChatEvent();
              case "LoginView" -> onLoginViewEvent(event);
              case "GameView" -> onGameViewEvent(event);
-
              case "EndedMatchView" -> onEndedMatchViewEvent(event);
 
              default -> {
@@ -507,6 +513,11 @@ public class CLI implements Runnable , View {
 
     }
 
+
+    /**
+     * This method is to show the LoginView when a LoginViewEvent is received
+     * @param event
+     */
     private void onLoginViewEvent(SelectViewEvent event){
         currentView = event;
         LoginView loginEvent = (LoginView) event;
@@ -527,6 +538,10 @@ public class CLI implements Runnable , View {
 
     }
 
+    /**
+     * This method is used to show the GameView when a GameViewEvent is received
+     * @param event
+     */
     private void onGameViewEvent(SelectViewEvent event){
         currentView = event;
         if (!matchStarted) {
@@ -539,6 +554,10 @@ public class CLI implements Runnable , View {
 
     }
 
+    /**
+     * This method is used to show the EndedMatchView when a EndedMatchViewEvent is received
+     * @param event
+     */
     private void onEndedMatchViewEvent(SelectViewEvent event){
         MatchEnded = true;
         currentView = event;
@@ -561,6 +580,9 @@ public class CLI implements Runnable , View {
 
     //CHAT
 
+    /**
+     * This method is used to show the chat when a ChatEvent is received
+     */
     public void onOpenChatEvent(){
         chatIsOpened = true;
         System.out.print(ANSIParameters.CLEAR_SCREEN + ANSIParameters.CURSOR_HOME);
@@ -579,11 +601,18 @@ public class CLI implements Runnable , View {
 
     }
 
+    /**
+     * This method is used to close the chat when a CloseChatEvent is received
+     */
     public void onCloseChatEvent(){
         chatIsOpened = false;
         print();
     }
 
+    /**
+     * This method is used to update the chat, due to a message, through a ModifiedChatEvent
+     * @param message is the message that has been sent
+     */
     public void onModifiedChatEvent(Message message){
         String s = MessageToString(message);
 
@@ -601,6 +630,9 @@ public class CLI implements Runnable , View {
         }
     }
 
+    /**
+     * This method is used to convert a type Message to a string
+     */
     private String MessageToString(Message message){
         String receiver;
         if(message.getReceiver() == null) {
@@ -614,7 +646,9 @@ public class CLI implements Runnable , View {
 
     }
 
-
+    /**
+     * This method is used when the user types "info" to show the available commands
+     */
     private void printHelp(){
         if(currentView == null){
             System.out.println("info        : show this message\n"+
@@ -751,8 +785,26 @@ public class CLI implements Runnable , View {
                     if(currentView.getType().equals("PickingTilesGameView")){
                         if(inputArray.length == 2){
                             String[] coordinates = inputArray[1].split(",");
-                            char row= coordinates[0].charAt(0);
-                            int column = Integer.parseInt(coordinates[1]);
+                            char row;
+                            int column;
+                            try {
+                                row = coordinates[0].charAt(0);
+                                if(coordinates[0].length() != 1 || row<'a' || row>'i'){
+                                    System.out.println("Invalid input: row must be between a and i!");
+                                    System.out.print("> ");
+                                    break;
+                                }
+                                column = Integer.parseInt(coordinates[1]);
+                                if(column < 0 || column > 8){
+                                    System.out.println("Invalid input: column must be between 0 and 8!");
+                                    System.out.print("> ");
+                                    break;
+                                }
+                            }catch (NumberFormatException e){
+                                System.out.println("Invalid input: column must be a number!");
+                                System.out.print("> ");
+                                break;
+                            }
                             int[] coordinatesInt = new int[2];
                             if(row>='a' && row <='i' && column>=0 && column<=8) {
                                 coordinatesInt[0] = row - 'a';
@@ -917,6 +969,10 @@ public class CLI implements Runnable , View {
 
     //refresh the board
 
+    /**
+     * This method is used to print the living room board
+     * @param livingRoom
+     */
     private void printLivingRoom(String[][] livingRoom){
 
         for(int i = 0; i < livingRoom.length; i++){
@@ -927,6 +983,10 @@ public class CLI implements Runnable , View {
 
     }
 
+    /**
+     * This method is used to print the personalGoalCard of the player
+     * @param personalGoal
+     */
     private void printPersonalGoal(String[][] personalGoal){
         int i=0;
         for( char c : "Personal Goal".toCharArray()){
@@ -941,6 +1001,10 @@ public class CLI implements Runnable , View {
         }
     }
 
+    /**
+     * This method is used to print the first commonGoalCard of the game
+     * @param commonGoal
+     */
     private void printCommonGoal1(char[][] commonGoal){
         int i=0;
         for(char c : "#1 CommonGoal".toCharArray()){
@@ -955,6 +1019,10 @@ public class CLI implements Runnable , View {
         }
     }
 
+    /**
+     * This method is used to print the remaining points of the first commonGoalCard of the game
+     * @param points
+     */
     private void printPoints1(String[][] points){
         for(int i = 0; i < points.length; i++){
             for(int j = 0; j < points[i].length; j++){
@@ -963,6 +1031,10 @@ public class CLI implements Runnable , View {
         }
     }
 
+    /**
+     * This method is used to print the second commonGoalCard of the game
+     * @param commonGoal
+     */
     private void printCommonGoal2(char[][] commonGoal){
         int i=0;
         for(char c : "#2 CommonGoal".toCharArray()){
@@ -977,6 +1049,10 @@ public class CLI implements Runnable , View {
         }
     }
 
+    /**
+     * This method is used to print the remaining points of the second commonGoalCard of the game
+     * @param points
+     */
     private void printPoints2(String[][] points){
         for(int i = 0; i < points.length; i++){
             for(int j = 0; j < points[i].length; j++){
@@ -985,6 +1061,10 @@ public class CLI implements Runnable , View {
         }
     }
 
+    /**
+     * This method is used to print the description of the first commonGoalCard of the game
+     * @param description
+     */
     private void printDescription1(String[] description){
         for (int i = 0; i < description.length; i++){
             for(int j = 0; j < description[i].length(); j++){
@@ -994,6 +1074,10 @@ public class CLI implements Runnable , View {
 
     }
 
+    /**
+     * This method is used to print the description of the second commonGoalCard of the game
+     * @param description
+     */
     private void printDescription2(String[] description){
         for (int i = 0; i < description.length; i++){
             for(int j = 0; j < description[i].length(); j++){
@@ -1003,6 +1087,10 @@ public class CLI implements Runnable , View {
 
     }
 
+    /**
+     * This method is used to print the first BookShelf of the game
+     * @param bookshelf
+     */
     private void printBookshelf1(String[][] bookshelf){
         for(int i = 0; i < bookshelf.length; i++){
             for(int j = 0; j < bookshelf[i].length; j++){
@@ -1012,6 +1100,10 @@ public class CLI implements Runnable , View {
 
     }
 
+    /**
+     * This method is used to print the second BookShelf of the game
+     * @param bookshelf
+     */
     private void printBookshelf2(String[][] bookshelf){
         for(int i = 0; i < bookshelf.length; i++){
             for(int j = 0; j < bookshelf[i].length; j++){
@@ -1021,6 +1113,10 @@ public class CLI implements Runnable , View {
 
     }
 
+    /**
+     * This method is used to print the third BookShelf of the game, if needed
+     * @param bookshelf
+     */
     private void printBookshelf3(String[][] bookshelf){
         for(int i = 0; i < bookshelf.length; i++){
             for(int j = 0; j < bookshelf[i].length; j++){
@@ -1030,6 +1126,10 @@ public class CLI implements Runnable , View {
 
     }
 
+    /**
+     * This method is used to print the fourth BookShelf of the game, if needed
+     * @param bookshelf
+     */
     private void printBookshelf4(String[][] bookshelf){
         for(int i = 0; i < bookshelf.length; i++){
             for(int j = 0; j < bookshelf[i].length; j++){
@@ -1039,6 +1139,10 @@ public class CLI implements Runnable , View {
 
     }
 
+    /**
+     * This method is used to print the spot for the EndTile of the first bookshelf
+     * @param endTile
+     */
     private void printEndTile1(String[][] endTile){
         for(int i = 0; i < endTile.length; i++){
             for(int j = 0; j < endTile[i].length; j++){
@@ -1048,6 +1152,10 @@ public class CLI implements Runnable , View {
 
     }
 
+    /**
+     * This method is used to print the spot for the EndTile of the second bookshelf
+     * @param endTile
+     */
     private void printEndTile2(String[][] endTile){
         for(int i = 0; i < endTile.length; i++){
             for(int j = 0; j < endTile[i].length; j++){
@@ -1057,6 +1165,10 @@ public class CLI implements Runnable , View {
 
     }
 
+    /**
+     * This method is used to print the spot for the EndTile of the third bookshelf, if needed
+     * @param endTile
+     */
     private void printEndTile3(String[][] endTile){
         for(int i = 0; i < endTile.length; i++){
             for(int j = 0; j < endTile[i].length; j++){
@@ -1066,6 +1178,10 @@ public class CLI implements Runnable , View {
 
     }
 
+    /**
+     * This method is used to print the spot for the EndTile of the fourth bookshelf, if needed
+     * @param endTile
+     */
     private void printEndTile4(String[][] endTile){
         for(int i = 0; i < endTile.length; i++){
             for(int j = 0; j < endTile[i].length; j++){
@@ -1075,6 +1191,11 @@ public class CLI implements Runnable , View {
 
     }
 
+    /**
+     * This method is used to print for every bookshelf the name of the player assigned to it
+     * @param names
+     * @param current
+     */
     private void printNames(String[] names, String current){
         int length;
         int number;
@@ -1099,6 +1220,11 @@ public class CLI implements Runnable , View {
         }
     }
 
+    /**
+     * This method is used to print the points of the first bookshelf, related to the Common Goals
+     * @param points1
+     * @param points2
+     */
     private void printPlayer1Points(String[][] points1 ,String[][] points2){
         for(int i = 0; i < points1.length; i++){
             for(int j = 0; j < points1[i].length; j++){
@@ -1113,6 +1239,11 @@ public class CLI implements Runnable , View {
         }
     }
 
+    /**
+     * This method is used to print the points of the second bookshelf, related to the Common Goals
+     * @param points1
+     * @param points2
+     */
     private void printPlayer2Points(String[][] points1 ,String[][] points2){
         for(int i = 0; i < points1.length; i++){
             for(int j = 0; j < points1[i].length; j++){
@@ -1127,6 +1258,11 @@ public class CLI implements Runnable , View {
         }
     }
 
+    /**
+     * This method is used to print the points of the third bookshelf, related to the Common Goals
+     * @param points1
+     * @param points2
+     */
     private void printPlayer3Points(String[][] points1 ,String[][] points2){
         for(int i = 0; i < points1.length; i++){
             for(int j = 0; j < points1[i].length; j++){
@@ -1141,6 +1277,11 @@ public class CLI implements Runnable , View {
         }
     }
 
+    /**
+     * This method is used to print the points of the fourth bookshelf, related to the Common Goals
+     * @param points1
+     * @param points2
+     */
     private void printPlayer4Points(String[][] points1 ,String[][] points2){
         for(int i = 0; i < points1.length; i++){
             for(int j = 0; j < points1[i].length; j++){
@@ -1154,6 +1295,7 @@ public class CLI implements Runnable , View {
             }
         }
     }
+
 
     private void print(){
         board.print();
@@ -1409,10 +1551,6 @@ public class CLI implements Runnable , View {
                                 res[i][j]="╝";
                             }
                         }
-
-
-
-
                     }else{
                         res[i][j]="═";
                     }
@@ -2095,6 +2233,7 @@ public class CLI implements Runnable , View {
     //refresh the CLI
 
     //update()
+
 
     public ConnectionInfo getConnectionInfo(){
         return connectionInfo;
