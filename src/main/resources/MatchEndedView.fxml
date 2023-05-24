@@ -9,23 +9,23 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="anchorpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="anchorpane" fx:id="anchorpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ImageView id="sfondo" fitHeight="400.0" fitWidth="600.0">
+      <ImageView id="sfondo" fx:id="sfondo" fitHeight="400.0" fitWidth="600.0">
          <image>
             <Image url="@misc/sfondo parquet.jpg" />
          </image>
       </ImageView>
-      <VBox id="classifica" layoutX="84.0" layoutY="91.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="265.0">
+      <VBox id="classifica" fx:id="classifica" layoutX="84.0" layoutY="91.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="265.0">
          <children>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Label id="primo" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="40.0" text="1°" textFill="#ae0000">
+                  <Label id="primo" fx:id="primo" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="40.0" text="1°" textFill="#ae0000">
                      <font>
                         <Font name="Calibri Bold" size="36.0" />
                      </font>
                   </Label>
-                  <Label id="nomePrimo" prefHeight="70.0" prefWidth="291.0" textFill="#ae0000">
+                  <Label id="nomePrimo" fx:id="nomePrimo" prefHeight="70.0" prefWidth="291.0" textFill="#ae0000">
                      <font>
                         <Font name="Calibri Bold" size="16.0" />
                      </font>
@@ -34,12 +34,12 @@
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Label id="secondo" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="40.0" text="2°" textFill="#f7610a">
+                  <Label id="secondo" fx:id="secondo" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="40.0" text="2°" textFill="#f7610a">
                      <font>
                         <Font name="Calibri Bold" size="36.0" />
                      </font>
                   </Label>
-                  <Label id="nomeSecondo" prefHeight="70.0" prefWidth="295.0" textFill="#f7610a">
+                  <Label id="nomeSecondo" fx:id="nomeSecondo" prefHeight="70.0" prefWidth="295.0" textFill="#f7610a">
                      <font>
                         <Font name="Calibri Bold" size="16.0" />
                      </font>
@@ -48,12 +48,12 @@
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Label id="terzo" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="40.0" text="3°" textFill="#ffb91c">
+                  <Label id="terzo" fx:id="terzo" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="40.0" text="3°" textFill="#ffb91c">
                      <font>
                         <Font name="Calibri Bold" size="36.0" />
                      </font>
                   </Label>
-                  <Label id="nomeTerzo" prefHeight="70.0" prefWidth="291.0" textFill="#ffb91c">
+                  <Label id="nomeTerzo" fx:id="nomeTerzo" prefHeight="70.0" prefWidth="291.0" textFill="#ffb91c">
                      <font>
                         <Font name="Calibri" size="16.0" />
                      </font>
@@ -62,12 +62,12 @@
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Label id="quarto" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="40.0" text="4°" textFill="#ffdb4d">
+                  <Label id="quarto" fx:id="quarto" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="40.0" text="4°" textFill="#ffdb4d">
                      <font>
                         <Font name="Calibri Bold" size="36.0" />
                      </font>
                   </Label>
-                  <Label id="nomeQuarto" prefHeight="70.0" prefWidth="294.0" textFill="#ffdb4d">
+                  <Label id="nomeQuarto" fx:id="nomeQuarto" prefHeight="70.0" prefWidth="294.0" textFill="#ffdb4d">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -76,30 +76,30 @@
             </HBox>
          </children>
       </VBox>
-      <Label id="titolo" fx:id="title" layoutY="14.0" prefHeight="55.0" prefWidth="600.0" text=" GAME IS OVER. THE WINNER IS..." textAlignment="CENTER" textFill="WHITE">
+      <Label id="titolo" fx:id="titolo" layoutY="14.0" prefHeight="55.0" prefWidth="600.0" text=" GAME IS OVER. THE WINNER IS..." textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font name="Calibri Bold Italic" size="36.0" />
          </font>
       </Label>
-      <VBox id="punteggi" layoutX="349.0" layoutY="91.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="100.0">
+      <VBox id="punteggi" fx:id="punteggi" layoutX="349.0" layoutY="91.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="100.0">
          <children>
-            <Label id="punteggioPrimo" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="100.0" />
+            <Label id="punteggioPrimo" fx:id="punteggioPrimo" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="100.0" />
             <Label id="punteggioSecondo" fx:id="punteggioSecondo" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="100.0" />
             <Label id="punteggioTerzo" fx:id="punteggioTerzo" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="100.0" />
             <Label id="punteggioQuarto" fx:id="punteggioQuarto" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="100.0" />
          </children>
       </VBox>
-      <Label id="finalscores" layoutX="349.0" layoutY="63.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="28.0" prefWidth="100.0" text="FINAL SCORES" textFill="WHITE">
+      <Label id="finalscores" fx:id="finalscores" layoutX="349.0" layoutY="63.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="28.0" prefWidth="100.0" text="FINAL SCORES" textFill="WHITE">
          <font>
             <Font name="Calibri Bold" size="15.0" />
          </font>
       </Label>
-      <ImageView id="trofeo" fitHeight="70.0" fitWidth="70.0" layoutX="14.0" layoutY="91.0">
+      <ImageView id="trofeo" fx:id="trofeo" fitHeight="70.0" fitWidth="70.0" layoutX="14.0" layoutY="91.0">
          <image>
             <Image url="@item tiles/Trofei1.3.png" />
          </image>
       </ImageView>
-      <Button id="quitButton" layoutX="548.0" layoutY="371.0" mnemonicParsing="false" onAction="#onQuitButton" text="QUIT" />
-      <Button id="playButton" layoutX="455.0" layoutY="371.0" mnemonicParsing="false" onAction="#onPlayButton" text="PLAY AGAIN" />
+      <Button id="quitButton" fx:id="quitButton" layoutX="548.0" layoutY="371.0" mnemonicParsing="false" onAction="#onQuitButton" text="QUIT" />
+      <Button id="playButton" fx:id="playButton" layoutX="455.0" layoutY="371.0" mnemonicParsing="false" onAction="#onPlayButton" text="PLAY AGAIN" />
    </children>
 </AnchorPane>

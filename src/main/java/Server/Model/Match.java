@@ -261,10 +261,10 @@ public class Match {
         bookshelf = player.getBookshelf().getTileMatrix();
 
         for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                if (bookshelf[i][j].isEmpty())
-                    return false;
-            }
+
+            if (bookshelf[0][i].isEmpty())
+                return false;
+
         }
         if (firstToFinish == null) {
             firstToFinish = player;
@@ -285,30 +285,17 @@ public class Match {
      * @author Marta Giliberto
      */
     private void howManyAdjacentTiles(int i, int j, int[][] matrix, int tileType) {
+        if (i < 0 || i >= matrix.length || j < 0 || j >= matrix[0].length || matrix[i][j] != tileType) {
+            return;
+        }
+
         this.count++;
-
-        if (tileType == matrix[i][j + 1]) {
-            matrix[i][j] = 0;
-            howManyAdjacentTiles(i, j + 1, matrix, tileType);
-        }
-
-        if (tileType == matrix[i + 1][j]) {
-            matrix[i][j] = 0;
-            howManyAdjacentTiles(i + 1, j, matrix, tileType);
-        }
-
-        if (tileType == matrix[i - 1][j]) {
-            matrix[i][j] = 0;
-            howManyAdjacentTiles(i - 1, j, matrix, tileType);
-        }
-
-        if (tileType == matrix[i][j - 1]) {
-            matrix[i][j] = 0;
-            howManyAdjacentTiles(i, j - 1, matrix, tileType);
-        }
-
         matrix[i][j] = 0;
 
+        howManyAdjacentTiles(i, j + 1, matrix, tileType); // Right
+        howManyAdjacentTiles(i + 1, j, matrix, tileType); // Down
+        howManyAdjacentTiles(i - 1, j, matrix, tileType); // Up
+        howManyAdjacentTiles(i, j - 1, matrix, tileType); // Left
     }
 
     /**
@@ -384,18 +371,18 @@ public class Match {
 
             //controlla tessere punteggio common goal + fine partita
             hisPointsTiles = tmp.getPointsTiles();
-            for (int j = 0; hisPointsTiles.get(j) != null; j++) {
-                if ((hisPointsTiles.get(j).equals(PointsTile.TWO_1)) ||
-                        (hisPointsTiles.get(j).equals(PointsTile.TWO_2))) {
+            for (PointsTile p : hisPointsTiles) {
+                if ((p.equals(PointsTile.TWO_1)) ||
+                        (p.equals(PointsTile.TWO_2))) {
                     hisScores += 2;
-                } else if ((hisPointsTiles.get(j).equals(PointsTile.FOUR_1)) ||
-                        (hisPointsTiles.get(j).equals(PointsTile.FOUR_2))) {
+                } else if ((p.equals(PointsTile.FOUR_1)) ||
+                        (p.equals(PointsTile.FOUR_2))) {
                     hisScores += 4;
-                } else if ((hisPointsTiles.get(j).equals(PointsTile.SIX_1)) ||
-                        (hisPointsTiles.get(j).equals(PointsTile.SIX_2))) {
+                } else if ((p.equals(PointsTile.SIX_1)) ||
+                        (p.equals(PointsTile.SIX_2))) {
                     hisScores += 6;
-                } else if ((hisPointsTiles.get(j).equals(PointsTile.EIGHT_1)) ||
-                        (hisPointsTiles.get(j).equals(PointsTile.EIGHT_2))) {
+                } else if ((p.equals(PointsTile.EIGHT_1)) ||
+                        (p.equals(PointsTile.EIGHT_2))) {
                     hisScores += 8;
                 }//else if(hisPointsTiles.get(j).equals(PointsTile.MATCH_ENDED)){
                 //    hisScores++;

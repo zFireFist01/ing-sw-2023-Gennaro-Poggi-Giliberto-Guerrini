@@ -742,11 +742,15 @@ public class GUI extends Application implements View {
                 });
             }
             case "onModifiedMatchEndedEvent" -> {
-                try {
-                    onModifiedMatchEndedEvent(event.getMatch());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
+                    Platform.runLater(() -> {
+                        try {
+                            onModifiedMatchEndedEvent(event.getMatch());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+
             }
             case "onModifiedPointsEvent" -> {
                 Platform.runLater(() -> {
@@ -756,6 +760,7 @@ public class GUI extends Application implements View {
             case "onMatchStartedEvent" -> {
 
                 Platform.runLater(() -> {
+
                     onMatchStartedEvent(event.getMatch());
                 });
 
@@ -1087,28 +1092,31 @@ public class GUI extends Application implements View {
         secondCommonGoalCard=match.getCommonGoals()[1];
         ImageView firstCommonGoalPoints = (ImageView)gameRoot.lookup("#firstcommongoalpoints");
         ImageView secondCommonGoalPoints = (ImageView)gameRoot.lookup("#secondcommongoalpoints");
-        if(firstCommonGoalCard.getPointsTiles().get(firstCommonGoalCard.getPointsTiles().size()-1)== PointsTile.EIGHT_1 || firstCommonGoalCard.getPointsTiles().get(firstCommonGoalCard.getPointsTiles().size()-1)== PointsTile.EIGHT_2){
-            firstCommonGoalPoints.setImage(points8Image);
+        if(firstCommonGoalCard.getPointsTiles().size()!=0){
+            if(firstCommonGoalCard.getPointsTiles().get(firstCommonGoalCard.getPointsTiles().size()-1)== PointsTile.EIGHT_1 || firstCommonGoalCard.getPointsTiles().get(firstCommonGoalCard.getPointsTiles().size()-1)== PointsTile.EIGHT_2){
+                firstCommonGoalPoints.setImage(points8Image);
 
-        }else if(firstCommonGoalCard.getPointsTiles().get(firstCommonGoalCard.getPointsTiles().size()-1)== PointsTile.SIX_1 || firstCommonGoalCard.getPointsTiles().get(firstCommonGoalCard.getPointsTiles().size()-1)== PointsTile.SIX_2){
-            firstCommonGoalPoints.setImage(points6Image);
-        }else if(firstCommonGoalCard.getPointsTiles().get(firstCommonGoalCard.getPointsTiles().size()-1)== PointsTile.FOUR_1 || firstCommonGoalCard.getPointsTiles().get(firstCommonGoalCard.getPointsTiles().size()-1)== PointsTile.FOUR_2){
-            firstCommonGoalPoints.setImage(points4Image);
+            }else if(firstCommonGoalCard.getPointsTiles().get(firstCommonGoalCard.getPointsTiles().size()-1)== PointsTile.SIX_1 || firstCommonGoalCard.getPointsTiles().get(firstCommonGoalCard.getPointsTiles().size()-1)== PointsTile.SIX_2){
+                firstCommonGoalPoints.setImage(points6Image);
+            }else if(firstCommonGoalCard.getPointsTiles().get(firstCommonGoalCard.getPointsTiles().size()-1)== PointsTile.FOUR_1 || firstCommonGoalCard.getPointsTiles().get(firstCommonGoalCard.getPointsTiles().size()-1)== PointsTile.FOUR_2){
+                firstCommonGoalPoints.setImage(points4Image);
 
-        } else if (firstCommonGoalCard.getPointsTiles().get(firstCommonGoalCard.getPointsTiles().size()-1) == PointsTile.TWO_1 || firstCommonGoalCard.getPointsTiles().get(firstCommonGoalCard.getPointsTiles().size()-1) == PointsTile.TWO_2) {
-            firstCommonGoalPoints.setImage(points2Image);
+            } else if (firstCommonGoalCard.getPointsTiles().get(firstCommonGoalCard.getPointsTiles().size()-1) == PointsTile.TWO_1 || firstCommonGoalCard.getPointsTiles().get(firstCommonGoalCard.getPointsTiles().size()-1) == PointsTile.TWO_2) {
+                firstCommonGoalPoints.setImage(points2Image);
+            }
         }else{
             firstCommonGoalPoints.setImage(null);
         }
-
-        if(secondCommonGoalCard.getPointsTiles().get(secondCommonGoalCard.getPointsTiles().size()-1)== PointsTile.EIGHT_2 || secondCommonGoalCard.getPointsTiles().get(secondCommonGoalCard.getPointsTiles().size()-1)== PointsTile.EIGHT_1) {
-            secondCommonGoalPoints.setImage(points8Image);
-        }else if(secondCommonGoalCard.getPointsTiles().get(secondCommonGoalCard.getPointsTiles().size()-1)== PointsTile.SIX_2 || secondCommonGoalCard.getPointsTiles().get(secondCommonGoalCard.getPointsTiles().size()-1)== PointsTile.SIX_1){
-            secondCommonGoalPoints.setImage(points6Image);
-        }else if(secondCommonGoalCard.getPointsTiles().get(secondCommonGoalCard.getPointsTiles().size()-1)== PointsTile.FOUR_2 || secondCommonGoalCard.getPointsTiles().get(secondCommonGoalCard.getPointsTiles().size()-1)== PointsTile.FOUR_1){
-            secondCommonGoalPoints.setImage(points4Image);
-        }else if(secondCommonGoalCard.getPointsTiles().get(secondCommonGoalCard.getPointsTiles().size()-1)== PointsTile.TWO_2 || secondCommonGoalCard.getPointsTiles().get(secondCommonGoalCard.getPointsTiles().size()-1)== PointsTile.TWO_1){
-            secondCommonGoalPoints.setImage(points2Image);
+        if(secondCommonGoalCard.getPointsTiles().size()!=0){
+            if(secondCommonGoalCard.getPointsTiles().get(secondCommonGoalCard.getPointsTiles().size()-1)== PointsTile.EIGHT_2 || secondCommonGoalCard.getPointsTiles().get(secondCommonGoalCard.getPointsTiles().size()-1)== PointsTile.EIGHT_1) {
+                secondCommonGoalPoints.setImage(points8Image);
+            }else if(secondCommonGoalCard.getPointsTiles().get(secondCommonGoalCard.getPointsTiles().size()-1)== PointsTile.SIX_2 || secondCommonGoalCard.getPointsTiles().get(secondCommonGoalCard.getPointsTiles().size()-1)== PointsTile.SIX_1){
+                secondCommonGoalPoints.setImage(points6Image);
+            }else if(secondCommonGoalCard.getPointsTiles().get(secondCommonGoalCard.getPointsTiles().size()-1)== PointsTile.FOUR_2 || secondCommonGoalCard.getPointsTiles().get(secondCommonGoalCard.getPointsTiles().size()-1)== PointsTile.FOUR_1){
+                secondCommonGoalPoints.setImage(points4Image);
+            }else if(secondCommonGoalCard.getPointsTiles().get(secondCommonGoalCard.getPointsTiles().size()-1)== PointsTile.TWO_2 || secondCommonGoalCard.getPointsTiles().get(secondCommonGoalCard.getPointsTiles().size()-1)== PointsTile.TWO_1) {
+                secondCommonGoalPoints.setImage(points2Image);
+            }
         }else{
             secondCommonGoalPoints.setImage(null);
         }
@@ -1162,9 +1170,9 @@ public class GUI extends Application implements View {
         Parent newRoot = fxmlLoader.load();
 
         nomePrimo.setText(tmpPlayer.getPlayerNickName());
-        Punteggio=String.valueOf(match.getScores().get(tmpPlayer));
+        Punteggio=String.valueOf(match.getScores().get(tmpPlayer.getPlayerID()));
         punteggioPrimo.setText(Punteggio);
-        tmpPlayer= tmpPlayer.getNextPlayer();
+        tmpPlayer=players.get(0).getPlayerID()==tmpPlayer.getPlayerID()?players.get(1):players.get(0);
         if(numberPlayers==2){
             terzo.setVisible(false);
             nomeTerzo.setVisible(false);
@@ -1173,7 +1181,7 @@ public class GUI extends Application implements View {
             nomeQuarto.setVisible(false);
             punteggioQuarto.setVisible(false);
             nomeSecondo.setText(tmpPlayer.getPlayerNickName());
-            Punteggio=String.valueOf(match.getScores().get(tmpPlayer));
+            Punteggio=String.valueOf(match.getScores().get(tmpPlayer.getPlayerID()));
             punteggioSecondo.setText(Punteggio);
         }else if(numberPlayers==3){
             quarto.setVisible(false);
