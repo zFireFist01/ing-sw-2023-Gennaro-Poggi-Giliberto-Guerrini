@@ -741,7 +741,11 @@ public class GUI extends Application implements View {
                 });
             }
             case "onModifiedMatchEndedEvent" -> {
-                onModifiedMatchEndedEvent(event.getMatch());
+                try {
+                    onModifiedMatchEndedEvent(event.getMatch());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             case "onModifiedPointsEvent" -> {
                 Platform.runLater(() -> {
@@ -1147,11 +1151,15 @@ public class GUI extends Application implements View {
 
     }
 
-    private void onModifiedMatchEndedEvent(LightMatch match) {
+    private void onModifiedMatchEndedEvent(LightMatch match) throws IOException {
         Player tmpPlayer=match.getWinner();
         String Punteggio;
         Integer max=0;
         this.MatchEnded= true;
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/MatchEndedView.fxml"));
+        fxmlLoader.setController(this);
+        Parent newRoot = fxmlLoader.load();
+
         nomePrimo.setText(tmpPlayer.getPlayerNickName());
         Punteggio=String.valueOf(match.getScores().get(tmpPlayer));
         punteggioPrimo.setText(Punteggio);
@@ -1249,6 +1257,9 @@ public class GUI extends Application implements View {
             punteggioQuarto.setText(Punteggio);
 
         }
+        Scene newScene = new Scene(newRoot);
+        primaryStage.setScene(newScene);
+        primaryStage.show();
     }
 
     private void onModifiedBookshelfEvent(LightMatch match) {
