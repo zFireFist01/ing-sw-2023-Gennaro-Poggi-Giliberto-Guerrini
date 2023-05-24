@@ -25,7 +25,6 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-<?import javafx.scene.text.TextFlow?>
 
 <AnchorPane id="MainPane" prefHeight="838.0" prefWidth="1214.0" style="-fx-background-image: url('Publisher material/Display_4.jpg');" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
@@ -767,9 +766,9 @@
                            <content>
                               <VBox prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="349.0" prefWidth="340.0">
+                                    <ScrollPane id="scrollchat" fitToHeight="true" fitToWidth="true" prefHeight="349.0" prefWidth="340.0">
                                        <content>
-                                          <TextFlow id="chatframe" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="317.0" prefWidth="325.0" />
+                                          <VBox id="chatBox" prefHeight="200.0" prefWidth="100.0" spacing="5.0" />
                                        </content>
                                     </ScrollPane>
                                     <HBox alignment="CENTER" prefHeight="60.0" prefWidth="340.0">

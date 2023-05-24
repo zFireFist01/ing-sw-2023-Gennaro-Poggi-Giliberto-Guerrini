@@ -1,6 +1,7 @@
 package Client;
 
 import Client.View.CLI.CLI;
+import Client.View.GUI.GUI;
 
 import java.util.Scanner;
 
@@ -72,19 +73,26 @@ public class Client {
 
         while(flag){
             System.out.println("Enter 1 for CLI and 2 for GUI");
+            System.out.print("> ");
             Scanner sc = new Scanner(System.in);
-            choice = sc.nextInt();
-            if(choice==1){
-                new CLI();
-                flag=false;
+            try{
+                choice = sc.nextInt();
+                if(choice==1){
+                    new CLI();
+                    flag=false;
+                }
+                else if(choice==2){
+                    //TODO gui
+                    flag=false;
+                }
+                else {
+                    System.out.println("Invalid choice: the number must be 1 or 2!");
+                }
+            }catch (Exception e){
+                System.out.println("Invalid choice: Please insert a number!");
+                continue;
             }
-            else if(choice==2){
-                //TODO gui
-                flag=false;
-            }
-            else {
-                System.out.println("Invalid choice");
-            }
+
         }
     }
 

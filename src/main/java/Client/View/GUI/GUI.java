@@ -282,6 +282,7 @@ public class GUI extends Application implements View {
     @FXML
     private Button checkoutbutton;
 
+
     //LastView
     @FXML
     private Label primo;
@@ -307,6 +308,7 @@ public class GUI extends Application implements View {
     private Label punteggioTerzo;
     @FXML
     private Label punteggioQuarto;
+
 
 
     private Parent gameRoot;
@@ -373,6 +375,13 @@ public class GUI extends Application implements View {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Re_Connection_Requests.fxml"));
         fxmlLoader.setController(this);
         Parent root = fxmlLoader.load();
+        AnchorPane pane = (AnchorPane) root.lookup("#wallpaper");
+        ImageView wallpaper =(ImageView) root.lookup("#parquet") ;
+
+
+        wallpaper.fitHeightProperty().bind(pane.heightProperty());
+        wallpaper.fitWidthProperty().bind(pane.widthProperty());
+
         Scene newScene = new Scene(root);
         primaryStage.setScene(newScene);
         primaryStage.show();
@@ -774,6 +783,8 @@ public class GUI extends Application implements View {
         }
 
         Scene scene = new Scene(gameRoot);
+        scene.getStylesheets().add(getClass().getResource("/Style.css").toExternalForm());
+
 
 
         numberPlayers = match.getPlayers().size();
@@ -1329,23 +1340,45 @@ public class GUI extends Application implements View {
     }
 
 
-
-
-
-
     //CHAT
     public void onModifiedChatEvent(Message message){
 
         String s = MessageToString(message);
-        TextFlow guichat = (TextFlow)gameRoot.lookup("#chatframe");
+        VBox guichat = (VBox)gameRoot.lookup("#chatBox");
+        HBox messageBox;
 
 
         chat.add(s);
         if(message.getReceiver() != null) {
-            guichat.getChildren().add(new Text( "[" + message.getTimeSent() + "]" + " " + message.getSender().getPlayerNickName() + " " + "to @" + message.getReceiver().getPlayerNickName()+ ":" + " " + message.getContent()+"\n"));
+            Text messageText = new Text( "[" + message.getTimeSent() + "]" + " " + message.getSender().getPlayerNickName() + " " + "to @" + message.getReceiver().getPlayerNickName()+ ":" + " " + message.getContent()+"\n");
+            TextFlow messageFlow = new TextFlow(messageText);
+            if(message.getSender().getPlayerNickName().equals(me.getPlayerNickName()))
+                messageFlow.getStyleClass().add( "message-box-from-them");
+            else
+                messageFlow.getStyleClass().add( "message-box-from-me");
+            messageFlow.setMaxWidth(200);
+
+            messageBox = new HBox(messageFlow);
+            messageBox.setAlignment(message.getSender().getPlayerNickName().equals(me.getPlayerNickName())? Pos.CENTER_RIGHT : Pos.CENTER_LEFT);
+
         }else{
-            guichat.getChildren().add(new Text("[" + message.getTimeSent() + "]" + " " + message.getSender().getPlayerNickName() + " " + "to @All:" + " " + message.getContent()+"\n"));
+            Text messageText = new Text("[" + message.getTimeSent() + "]" + " " + message.getSender().getPlayerNickName() + " " + "to @All:" + " " + message.getContent()+"\n");
+            TextFlow messageFlow = new TextFlow(messageText);
+            if(message.getSender().getPlayerNickName().equals(me.getPlayerNickName()))
+                messageFlow.getStyleClass().add( "message-box-from-them");
+            else
+                messageFlow.getStyleClass().add( "message-box-from-me");
+            messageFlow.setMaxWidth(200);
+
+            messageBox = new HBox(messageFlow);
+            messageBox.setAlignment(message.getSender().getPlayerNickName().equals(me.getPlayerNickName())? Pos.CENTER_RIGHT : Pos.CENTER_LEFT);
         }
+
+        guichat.getChildren().add(messageBox);
+
+        // Scroll to the bottom
+        guichat.layout();
+        //scrollChat.setVvalue(1.0);
 
     }
 
@@ -1396,6 +1429,7 @@ public class GUI extends Application implements View {
 
 
     //Buttons Methods
+
     @FXML
     private void onClickYesReconnect(ActionEvent event) throws IOException {
         this.isReconnecting = true;
@@ -1490,9 +1524,19 @@ public class GUI extends Application implements View {
 
     @FXML
     private void onClickConnectButton(ActionEvent event) throws IOException {
+
         String host = addressServer.getText();
-        int port = Integer.parseInt(portServer.getText());
-        this.networkHandler = new NetworkSocketHandler(host, port, this);
+        try {
+            int port = Integer.parseInt(portServer.getText());
+            this.networkHandler = new NetworkSocketHandler(host, port, this);
+        }catch (NumberFormatException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Invalid port");
+            alert.setContentText("Please insert a valid port");
+            alert.showAndWait();
+            return;
+        }
 
         String localIP = null;
         try {
@@ -1524,8 +1568,16 @@ public class GUI extends Application implements View {
 
     @FXML
     private void onClickConnectRMIButton(ActionEvent event) throws IOException {
-        int port = Integer.parseInt(portServerRMI.getText());
-
+        try {
+            int port = Integer.parseInt(portServerRMI.getText());
+        }catch (NumberFormatException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Invalid port");
+            alert.setContentText("Please insert a valid port");
+            alert.showAndWait();
+            return;
+        }
 
         try{
             networkHandler = new NetworkRMIHandler(this);
