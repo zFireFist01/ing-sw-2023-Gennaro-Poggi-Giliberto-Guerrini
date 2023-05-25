@@ -1188,41 +1188,41 @@ public class GUI extends Application implements View {
             nomeQuarto.setVisible(false);
             punteggioQuarto.setVisible(false);
             nomePrimo.setText(tmpPlayer.getPlayerNickName());
-            Punteggio=String.valueOf(match.getScores().get(tmpPlayer));
+            Punteggio=String.valueOf(match.getScores().get(tmpPlayer.getPlayerID()));
             punteggioPrimo.setText(Punteggio);
             tmpPlayer= tmpPlayer.getNextPlayer();
-            if(match.getScores().get(tmpPlayer)>match.getScores().get(tmpPlayer.getNextPlayer())){
+            if(match.getScores().get(tmpPlayer.getPlayerID())>match.getScores().get(tmpPlayer.getNextPlayer().getPlayerID())){
                 nomeSecondo.setText(tmpPlayer.getPlayerNickName());
-                Punteggio=String.valueOf(match.getScores().get(tmpPlayer));
+                Punteggio=String.valueOf(match.getScores().get(tmpPlayer.getPlayerID()));
                 punteggioSecondo.setText(Punteggio);
                 tmpPlayer= tmpPlayer.getNextPlayer();
                 nomeTerzo.setText(tmpPlayer.getPlayerNickName());
-                Punteggio=String.valueOf(match.getScores().get(tmpPlayer));
+                Punteggio=String.valueOf(match.getScores().get(tmpPlayer.getPlayerID()));
                 punteggioTerzo.setText(Punteggio);
-            }else if(match.getScores().get(tmpPlayer)<match.getScores().get(tmpPlayer.getNextPlayer())){
+            }else if(match.getScores().get(tmpPlayer.getPlayerID())<match.getScores().get(tmpPlayer.getNextPlayer().getPlayerID())){
                 nomeTerzo.setText(tmpPlayer.getPlayerNickName());
-                Punteggio=String.valueOf(match.getScores().get(tmpPlayer));
+                Punteggio=String.valueOf(match.getScores().get(tmpPlayer.getPlayerID()));
                 punteggioTerzo.setText(Punteggio);
                 tmpPlayer= tmpPlayer.getNextPlayer();
                 nomeSecondo.setText(tmpPlayer.getPlayerNickName());
-                Punteggio=String.valueOf(match.getScores().get(tmpPlayer));
+                Punteggio=String.valueOf(match.getScores().get(tmpPlayer.getPlayerID()));
                 punteggioSecondo.setText(Punteggio);
-            }else if(match.getScores().get(tmpPlayer)==match.getScores().get(tmpPlayer.getNextPlayer())) {
-                if (match.getFirstPlayer().getPlayerNickName().equals(tmpPlayer.getNextPlayer().getPlayerNickName())) {
+            }else if(match.getScores().get(tmpPlayer.getPlayerID())==match.getScores().get(tmpPlayer.getNextPlayer().getPlayerID())) {
+                if (match.getFirstPlayer().equals(tmpPlayer.getNextPlayer())) {
                     nomeSecondo.setText(tmpPlayer.getPlayerNickName());
-                    Punteggio = String.valueOf(match.getScores().get(tmpPlayer));
+                    Punteggio = String.valueOf(match.getScores().get(tmpPlayer.getPlayerID()));
                     punteggioSecondo.setText(Punteggio);
                     tmpPlayer = tmpPlayer.getNextPlayer();
                     nomeTerzo.setText(tmpPlayer.getPlayerNickName());
-                    Punteggio = String.valueOf(match.getScores().get(tmpPlayer));
+                    Punteggio = String.valueOf(match.getScores().get(tmpPlayer.getPlayerID()));
                     punteggioTerzo.setText(Punteggio);
-                }else if((match.getFirstPlayer().equals(tmpPlayer.getPlayerNickName()))||(match.getFirstPlayer().equals(tmpPlayer.getNextPlayer().getNextPlayer()))) {
+                }else if((match.getFirstPlayer().equals(tmpPlayer))||(match.getFirstPlayer().equals(tmpPlayer.getNextPlayer().getNextPlayer()))) {
                     nomeTerzo.setText(tmpPlayer.getPlayerNickName());
-                    Punteggio = String.valueOf(match.getScores().get(tmpPlayer));
+                    Punteggio = String.valueOf(match.getScores().get(tmpPlayer.getPlayerID()));
                     punteggioTerzo.setText(Punteggio);
                     tmpPlayer = tmpPlayer.getNextPlayer();
                     nomeSecondo.setText(tmpPlayer.getPlayerNickName());
-                    Punteggio = String.valueOf(match.getScores().get(tmpPlayer));
+                    Punteggio = String.valueOf(match.getScores().get(tmpPlayer.getPlayerID()));
                     punteggioSecondo.setText(Punteggio);
                 }
             }
@@ -1232,8 +1232,8 @@ public class GUI extends Application implements View {
                 if(tmpPlayer.equals(match.getWinner())){
                     tmpPlayer=tmpPlayer.getNextPlayer();
                 }else{
-                    if(match.getScores().get(tmpPlayer)>=max){
-                        max=match.getScores().get(tmpPlayer);
+                    if(match.getScores().get(tmpPlayer.getPlayerID())>=max){
+                        max=match.getScores().get(tmpPlayer.getPlayerID());
                         nomeSecondo.setText(tmpPlayer.getPlayerNickName());
                     }
                     tmpPlayer=tmpPlayer.getNextPlayer();
@@ -1247,8 +1247,8 @@ public class GUI extends Application implements View {
                 if(tmpPlayer.equals(match.getWinner())||tmpPlayer.equals(nomeSecondo.getText())) {
                     tmpPlayer = tmpPlayer.getNextPlayer();
                 }else{
-                    if(match.getScores().get(tmpPlayer)>=max){
-                        max=match.getScores().get(tmpPlayer);
+                    if(match.getScores().get(tmpPlayer.getPlayerID())>=max){
+                        max=match.getScores().get(tmpPlayer.getPlayerID());
                         nomeTerzo.setText(tmpPlayer.getPlayerNickName());
                     }
                     tmpPlayer=tmpPlayer.getNextPlayer();
@@ -1262,7 +1262,7 @@ public class GUI extends Application implements View {
                 tmpPlayer=tmpPlayer.getNextPlayer();
             }
             nomeQuarto.setText(tmpPlayer.getPlayerNickName());
-            Punteggio=String.valueOf(match.getScores().get(tmpPlayer));
+            Punteggio=String.valueOf(match.getScores().get(tmpPlayer.getPlayerID()));
             punteggioQuarto.setText(Punteggio);
 
         }
