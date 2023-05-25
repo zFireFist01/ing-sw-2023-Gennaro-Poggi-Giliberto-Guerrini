@@ -251,7 +251,7 @@ public class Controller implements VCEventListener {
 
         } catch (UnsupportedOperationException e){
 
-            currentPlayerView.onSelectViewEvent(new InsertingTilesGameView("This column is already full|"));
+            currentPlayerView.onSelectViewEvent(new InsertingTilesGameView("This column is already full|\nPlease select another one!"));
         } catch (IndexOutOfBoundsException e){
 
             currentPlayerView.onSelectViewEvent(new InsertingTilesGameView( "This column does not exists!"));
@@ -364,6 +364,12 @@ public class Controller implements VCEventListener {
         LivingRoom livingRoom = match.getLivingRoom();
         TileType[] tiles;
 
+        if((selectedTiles.length/2) > currentPlayer.getBookshelf().maxInsertableTiles()){ //We've got to divide by 2 because every element of the array is a coordinate
+            match.clearSelectedTiles();
+            currentPlayerView.onSelectViewEvent(new PickingTilesGameView("You can't pick more than "
+                    +currentPlayer.getBookshelf().maxInsertableTiles()+" tiles!"+ "\nSelect the tiles again!"));
+            return;
+        }
         switch(selectedTiles.length){
             case 0 ->{
                 match.clearSelectedTiles();

@@ -110,11 +110,66 @@ public class LivingRoom {
     }
 
     private boolean livingroomneedRefresh(){
-        for(int i = 0; i < LIVINGROOMHEIGHT; i++){
-            for(int j = 0; j < LIVINGROOOMWIDTH; j++){
+        for(int i=0;i<LIVINGROOMHEIGHT;i++){
+            for(int j=0;j<LIVINGROOOMWIDTH;j++){
                 if(tileMatrix[i][j].isReal() && !tileMatrix[i][j].isEmpty()){
-                    if((tileMatrix[i+1][j].isReal() && !tileMatrix[i+1][j].isEmpty()) || (tileMatrix[i-1][j].isReal() && !tileMatrix[i-1][j].isEmpty()) || (tileMatrix[i][j+1].isReal() && !tileMatrix[i][j+1].isEmpty()) || (tileMatrix[i][j-1].isReal() && !tileMatrix[i][j-1].isEmpty())){
-                        return false;
+                    if(i==0){
+                        if(j==0){
+                            if((tileMatrix[i+1][j].isReal() && !tileMatrix[i+1][j].isEmpty())
+                                    || (tileMatrix[i][j+1].isReal() && !tileMatrix[i][j+1].isEmpty())){
+                                return false;
+                            }
+                        }else if(j==LIVINGROOOMWIDTH-1){
+                            if((tileMatrix[i+1][j].isReal() && !tileMatrix[i+1][j].isEmpty())
+                                    || (tileMatrix[i][j-1].isReal() && !tileMatrix[i][j-1].isEmpty())){
+                                return false;
+                            }
+                        }else{
+                            if((tileMatrix[i+1][j].isReal() && !tileMatrix[i+1][j].isEmpty())
+                                    || (tileMatrix[i][j+1].isReal() && !tileMatrix[i][j+1].isEmpty())
+                                    || (tileMatrix[i][j-1].isReal() && !tileMatrix[i][j-1].isEmpty())){
+                                return false;
+                            }
+                        }
+                    }else if(i==LIVINGROOMHEIGHT-1){
+                        if(j==0){
+                            if((tileMatrix[i-1][j].isReal() && !tileMatrix[i-1][j].isEmpty())
+                                    || (tileMatrix[i][j+1].isReal() && !tileMatrix[i][j+1].isEmpty())){
+                                return false;
+                            }
+                        }else if(j==LIVINGROOOMWIDTH-1){
+                            if((tileMatrix[i-1][j].isReal() && !tileMatrix[i-1][j].isEmpty())
+                                    || (tileMatrix[i][j-1].isReal() && !tileMatrix[i][j-1].isEmpty())){
+                                return false;
+                            }
+                        }else{
+                            if((tileMatrix[i-1][j].isReal() && !tileMatrix[i-1][j].isEmpty())
+                                    || (tileMatrix[i][j+1].isReal() && !tileMatrix[i][j+1].isEmpty())
+                                    || (tileMatrix[i][j-1].isReal() && !tileMatrix[i][j-1].isEmpty())){
+                                return false;
+                            }
+                        }
+                    }else{
+                        if(j==0){
+                            if((tileMatrix[i-1][j].isReal() && !tileMatrix[i-1][j].isEmpty())
+                                    || (tileMatrix[i+1][j].isReal() && !tileMatrix[i+1][j].isEmpty())
+                                    || (tileMatrix[i][j+1].isReal() && !tileMatrix[i][j+1].isEmpty())){
+                                return false;
+                            }
+                        }else if(j==LIVINGROOOMWIDTH-1){
+                            if((tileMatrix[i-1][j].isReal() && !tileMatrix[i-1][j].isEmpty())
+                                    || (tileMatrix[i+1][j].isReal() && !tileMatrix[i+1][j].isEmpty())
+                                    || (tileMatrix[i][j-1].isReal() && !tileMatrix[i][j-1].isEmpty())){
+                                return false;
+                            }
+                        }else{
+                            if((tileMatrix[i-1][j].isReal() && !tileMatrix[i-1][j].isEmpty())
+                                    || (tileMatrix[i+1][j].isReal() && !tileMatrix[i+1][j].isEmpty())
+                                    || (tileMatrix[i][j+1].isReal() && !tileMatrix[i][j+1].isEmpty())
+                                    || (tileMatrix[i][j-1].isReal() && !tileMatrix[i][j-1].isEmpty())){
+                                return false;
+                            }
+                        }
                     }
                 }
             }

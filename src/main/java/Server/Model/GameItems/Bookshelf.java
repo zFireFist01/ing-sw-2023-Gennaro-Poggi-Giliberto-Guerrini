@@ -97,6 +97,20 @@ public class Bookshelf {
         return lastIndexes;
     }
 
+    /**
+     * Iterates over every column and then returns the maximum number of insertible tiles, thus the
+     * number of empty spots of the "emptier" column
+     * @return
+     */
+    public int maxInsertableTiles(){
+        int max = -1;
+        for(Integer i: lastIndexes.keySet()){
+            if(lastIndexes.get(i) > max){
+                max = lastIndexes.get(i);
+            }
+        }
+        return (max+1); //Adding 1 because the index starts from 0
+    }
 
     public void notifyMVEventListeners(MVEvent event){
         this.m.notifyMVEventListeners(event);

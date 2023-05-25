@@ -29,6 +29,7 @@ import Server.Model.LightMatch;
 import Server.Model.Player.Player;
 import Utils.ConnectionInfo;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -255,13 +256,13 @@ public class CLI implements Runnable , View {
             }
             case "onMatchStartedEvent" -> {
                 onMatchStartedEvent(event.getMatch());
-
             }
             case "onModifiedTurnEvent" -> {
                 onModifiedTurnEvent(event.getMatch());
             }
 
         }
+
         if(!chatIsOpened && !MatchEnded){
             print();
         }
@@ -283,6 +284,7 @@ public class CLI implements Runnable , View {
         }
         System.out.println("Match started");
         System.out.println("You are " + myNick );
+        //printHelp();
         printLivingRoom(renderLivingroom(match.getLivingRoom().getTileMatrix()));
         printPersonalGoal(renderPersonalGoalCard(me.getPersonalGoalCard().getTileMatrix(),
                 me.getPersonalGoalCard().getCardID()));
@@ -343,8 +345,6 @@ public class CLI implements Runnable , View {
         }
 
         printNames(names, match.getCurrentPlayer().getPlayerNickName());
-
-
 
     }
 
@@ -532,7 +532,7 @@ public class CLI implements Runnable , View {
         if (!matchStarted) {
             System.out.print(ANSIParameters.CLEAR_SCREEN + ANSIParameters.CURSOR_HOME);
             System.out.flush();
-            System.out.println("Hi"+ ANSIParameters.BLUE + myNick+ ANSIParameters.CRESET+"Welcome to MyShelfie");
+            System.out.println("Hi "+ ANSIParameters.BLUE + myNick+ ANSIParameters.CRESET+" Welcome to MyShelfie");
             System.out.println("Please wait for the other players to join the match");
         }
         print();
@@ -615,7 +615,7 @@ public class CLI implements Runnable , View {
     }
 
 
-    private void printHelp(){
+    private void printInfo(){
         if(currentView == null){
             System.out.println("info        : show this message\n"+
                                "play        : login to the server\n"+
@@ -638,6 +638,14 @@ public class CLI implements Runnable , View {
         System.out.print("> ");
     }
 
+    public void printHelp(){
+        System.out.println(ANSIParameters.CYAN + "Commands:" + ANSIParameters.CRESET);
+        System.out.println( ANSIParameters.CYAN+
+                            "\"pick row_letter,livingroom_column_index\"      : to pick a tile\n"+
+                            "\"checkout\"                                    : to checkout selected tiles\n"+
+                            "\"select bookshelf_column_index\"               : to select the column of the bookshelf\n"+
+                            ANSIParameters.CRESET);
+    }
     /**
      * This method parses the input and calls/gives the right method/output after it
      * @param input the input from the user
@@ -700,7 +708,7 @@ public class CLI implements Runnable , View {
         }else{
             switch (inputArray[0]){
                 case "info" -> {
-                    printHelp();
+                    printInfo();
                 }
                 case "play" -> {
                     //you can only use this command if the game is not started yet
@@ -760,14 +768,10 @@ public class CLI implements Runnable , View {
                                 try {
                                     networkHandler.onVCEvent(new ClickOnTile(coordinatesInt));
                                     countOfPicks++;
-                                } catch (NoSuchMethodException e) {
-                                    throw new RuntimeException(e);
-                                } catch (InvocationTargetException e) {
-                                    throw new RuntimeException(e);
-                                } catch (IllegalAccessException e) {
-                                    throw new RuntimeException(e);
+                                } catch (Exception e){
+                                    System.out.println("Invalid input");
+                                    System.out.print("> ");
                                 }
-
                             }
                         }else{
                             System.out.println("Invalid input");
