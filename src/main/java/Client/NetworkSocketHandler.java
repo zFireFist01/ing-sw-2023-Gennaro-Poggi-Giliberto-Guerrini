@@ -109,6 +109,13 @@ public class NetworkSocketHandler implements NetworkHandler{
                 );
                 out.flush();
                 String welcomeMessage = in.nextLine(); //Devo prima aspettare il messaggio di benvenuto
+                //Potrebbe non essere il messaggio di benvenuto, ma un evento per dirmi che devo aspettare di essere
+                // gestito perché il match opener non ha ancora deciso con quante persone giocare
+                if(welcomeMessage.contains("Waiting")){
+                    receiveSelectViewEvent(welcomeMessage);
+                    welcomeMessage = in.nextLine();
+                    System.out.println(welcomeMessage);
+                }
             }
             System.out.println("Connected to the socket server!");
             //System.out.println("Ricevuto messaggio di benvenuto: " + welcomeMessage);

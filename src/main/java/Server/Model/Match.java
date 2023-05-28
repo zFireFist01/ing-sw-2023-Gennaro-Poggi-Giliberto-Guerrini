@@ -195,6 +195,9 @@ public class Match {
             players.add(newPlayer);
             scores.put(newPlayer, 0);
             try {
+                /*if(this.matchStatus instanceof NotRunning){
+                    matchStatus = matchStatus.evolve(); //diventa waiting for players
+                }*/
                 matchStatus = matchStatus.evolve();
                 this.commonGoalDeck = new CommonGoalCardsDeck(numberOfPlayers);
                 this.personalGoalDeck = new PersonalGoalCardsDeck(numberOfPlayers);
@@ -578,6 +581,10 @@ public class Match {
         //TODO: check
         this.disconnectedPlayers.remove(player);
         this.disconnectedPlayersVirtualViews.remove(virtualView);
+    }
+
+    public void evolveStatus() throws UnsupportedOperationException{
+       this.matchStatus = this.matchStatus.evolve();
     }
 
     public void triggerMVUpdate(){

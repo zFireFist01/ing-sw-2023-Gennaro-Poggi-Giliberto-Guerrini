@@ -1,6 +1,8 @@
 package Server.Network;
 
 import Server.Controller.Controller;
+import Server.Events.SelectViewEvents.LoginView;
+import Server.Events.SelectViewEvents.SelectViewEvent;
 import Server.Model.Match;
 import Server.Model.MatchStatus.NotRunning;
 import Server.Model.MatchStatus.WaitingForPlayers;
@@ -12,10 +14,7 @@ import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -35,6 +34,8 @@ public class Server implements Runnable{
     PingManager pingManager;
     Map<ConnectionInfo, Boolean> clientsConnectionStatuses;
 
+    Queue<VirtualView> clientsWaitingForMatch;
+
     public Server() throws IOException{
         boolean done = false;
         this.matches = new ArrayList<>();
@@ -43,6 +44,7 @@ public class Server implements Runnable{
         this.clientsConnectionStatuses = new HashMap<>();
         pingManager = new PingManager(this, new ArrayList<>(), new HashMap<>());
         this.socketWaiter = new SocketWaiter(this,1098);
+        this.clientsWaitingForMatch = new LinkedList<>();
         while(!done){
             try{
                 this.rmiWaiter = new RMIWaiter(this);
@@ -111,7 +113,19 @@ public class Server implements Runnable{
     protected synchronized boolean waitingMatch(){
         if(matches.size() == 0)
             return false;
-        return (matches.get(matches.size()-1).getMatchStatus() instanceof WaitingForPlayers) || (matches.get(matches.size()-1).getMatchStatus() instanceof NotRunning) ;
+        //return (matches.get(matches.size()-1).getMatchStatus() instanceof WaitingForPlayers) || (matches.get(matches.size()-1).getMatchStatus() instanceof NotRunning) ;
+        return (matches.get(matches.size()-1).getMatchStatus() instanceof WaitingForPlayers);
+    }
+
+    public synchronized boolean matchWaitingForInit(){
+        if(matches.size()==0){
+            return false;
+        }
+        return (matches.get(matches.size()-1).getMatchStatus() instanceof NotRunning);
+    }
+
+    public synchronized Match getMatchWaitingForInit(){
+        return matches.get(matches.size()-1);
     }
 
     /**
@@ -152,6 +166,64 @@ public class Server implements Runnable{
         //matchesViews.put(m,vv);
         matchesViews.get(m).add(vv);
         pingManager.addVirtualView(vv, macthesControllers.get(m));
+    }
+
+    public synchronized void subscribeNewWaitingClient(VirtualView waitingClient){
+        this.clientsWaitingForMatch.add(waitingClient);
+    }
+
+    public Queue<VirtualView> dequeueWaitingClients(){
+        Match lastMatch = matches.get(matches.size()-1);
+        synchronized (matches){
+            lastMatch = matches.get(matches.size()-1);
+        }
+        Queue<VirtualView> noMoreWaitingClients = new LinkedList<>();
+        if(lastMatch.getMatchStatus() instanceof WaitingForPlayers){
+            int numbeOfMissingPlayers = lastMatch.getNumberOfPlayers()-lastMatch.getPlayers().size();
+            while(numbeOfMissingPlayers>0){
+                VirtualView vv;
+                synchronized (clientsWaitingForMatch){
+                    vv = clientsWaitingForMatch.poll();
+                }
+                if(vv == null){
+                    System.err.println("Server.evolveLastMatch(): There are no more clients waiting for a match");
+                    return noMoreWaitingClients;
+                }
+                noMoreWaitingClients.add(vv);
+                lastMatch.addMVEventListener(vv);
+                this.subscribeNewViewToExistingMatch(lastMatch, vv);
+                this.updateConnectionStatus(vv.getConnectionInfo(), true);
+                numbeOfMissingPlayers--;
+            }
+            //If there are still clients waiting for joining a match, the first one will be a match opener and the others
+            //wil continue waiting
+            if(!clientsWaitingForMatch.isEmpty()){
+                VirtualView vv;
+                synchronized (clientsWaitingForMatch){
+                    vv = clientsWaitingForMatch.poll();
+                }
+                if(vv == null){
+                    throw new RuntimeException("[Server.dequeueWaitingClients()]: " +
+                            "There seem to be clients waiting for a match, but the queue is empty");
+                }
+                vv.setIsFirstToJoin(true);
+                Match m = new Match();
+                Controller c = new Controller(m, this);
+                m.addMVEventListener(vv);
+                vv.addVCEventListener(c);
+                c.addSelectViewEventListener(vv);
+                this.subscribeNewMatch(m, c, vv);
+                this.updateConnectionStatus(vv.getConnectionInfo(), true);
+                vv.onSelectViewEvent(new LoginView(true));
+            }
+        }else{
+            throw new RuntimeException("Are you sure the match has been initiazlied?");
+        }
+        return noMoreWaitingClients;
+    }
+
+    public Queue<VirtualView> getClientsWaitingForMatch(){
+        return clientsWaitingForMatch;
     }
 
     public Map<ConnectionInfo, Boolean> getClientsConnectionStatuses() {

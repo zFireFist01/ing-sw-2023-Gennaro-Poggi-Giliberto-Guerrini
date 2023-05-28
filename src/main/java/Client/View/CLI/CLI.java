@@ -515,13 +515,23 @@ public class CLI implements Runnable , View {
         System.out.println("Welcome to MyShelfie!");
 
         if(loginEvent.isFirstToJoin()) {
-            System.out.println("You are the first player to join the match");
-            System.out.println("Please insert your nickname and the number of players for the match: ");
-            System.out.print("> ");
+            if(event.getMessage().contains("Insert")){
+                System.out.println("You are the first player to join the match");
+                System.out.println("Please insert your nickname and the number of players for the match: ");
+                System.out.print("> ");
+            }else{
+                System.out.println(event.getMessage());
+                System.out.print("> ");
+            }
 
 
         }else{
-            System.out.println("Please insert your nickname: ");
+            if(event.getMessage()!=null && event.getMessage().contains("Waiting")){
+                System.out.println(ANSIParameters.RED + event.getMessage()+ANSIParameters.CRESET);
+            }else{
+                System.out.println("Please insert your nickname: ");
+            }
+            //System.out.println(ANSIParameters.RED + event.getMessage()+ANSIParameters.CRESET);
             System.out.print("> ");
         }
 

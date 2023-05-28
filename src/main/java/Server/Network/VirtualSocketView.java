@@ -254,6 +254,15 @@ public class VirtualSocketView implements VirtualView{
         }
     }
 
+    /**
+     * Must be used only by server inside "dequeueWaitingClients" method
+     * @param isFirstToJoin
+     */
+    @Override
+    public void setIsFirstToJoin(boolean isFirstToJoin) {
+        this.isFirstToJoin = isFirstToJoin;
+    }
+
     public void setSocket(Socket socket, Scanner in){
         this.socket = socket;
         synchronized (this.in){
@@ -266,6 +275,10 @@ public class VirtualSocketView implements VirtualView{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public boolean isFirstToJoin() {
+        return isFirstToJoin;
     }
 
 }

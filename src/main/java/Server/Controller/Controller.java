@@ -8,7 +8,6 @@ import Server.Listeners.SelectViewEventListener;
 
 import Server.Listeners.VCEventListener;
 import Server.Model.Chat.Message;
-import Server.Model.Chat.PlayersChat;
 import Server.Model.GameItems.LivingRoom;
 import Server.Model.GameItems.LivingRoomTileSpot;
 
@@ -20,6 +19,7 @@ import Server.Model.MatchStatus.Running;
 import Server.Model.MatchStatus.WaitingForPlayers;
 import Server.Model.Player.Player;
 import Server.Network.Server;
+import Server.Network.VirtualRMIView;
 import Server.Network.VirtualView;
 import Utils.MathUtils.*;
 
@@ -61,6 +61,7 @@ public class Controller implements VCEventListener {
         ArrayList<Player> players = match.getPlayers();
 
         if(players.size()==0 && numberofPlayers!=0){
+            //This means that the match has no players and this login event is from the match opener (firstToJoin = true)
             if(nickname.length() > 20) {
                 caller.onSelectViewEvent(new LoginView(true,"Nickname too long, max 20 characters"));
             }else if(nickname.length() < 3) {
@@ -71,12 +72,31 @@ public class Controller implements VCEventListener {
                 match.setNumberOfPlayers(numberofPlayers);
                 Player newPlayer = new Player(match, nickname.hashCode(), nickname);
                 match.addContestant(newPlayer);
+
                 PlayerViews.put(nickname.hashCode(), caller);
                 hashNicknames.put(nickname.hashCode(), newPlayer);
                 caller.onSelectViewEvent(new GameView());
                 caller.getConnectionInfo().setNickname(nickname);
                 //server.updateConnectionStatus(caller.getConnectionInfo(), true);
                 System.out.println("Controller connection info.nickname: " + caller.getConnectionInfo().getNickname());
+
+                //Now that the match opener has joined, deciding how many players the match will have,
+                //we have to check if there were any clients waiting for the match to start accepting players
+                if(!server.getClientsWaitingForMatch().isEmpty()){
+                    //This means there actually were some clients waiting
+                    //Now the match will be in WaitingForPlsayers since the method addContestant evolves the match
+                    Queue<VirtualView> noMoreWaitingClients = null;
+                    noMoreWaitingClients =  server.dequeueWaitingClients();
+                    for(VirtualView vv : noMoreWaitingClients){
+                        this.addSelectViewEventListener(vv);
+                        vv.addVCEventListener(this);
+                        if(vv instanceof VirtualRMIView){
+                            vv.run();
+                        }else{
+                            new Thread(vv).start();
+                        }
+                    }
+                }
             }
         }else{
             for(Player player : players){

@@ -4,9 +4,12 @@ import Client.ConnectionType;
 import Client.View.RemoteNetworkHandler;
 import Server.Controller.Controller;
 import Server.Events.SelectViewEvents.GameView;
+import Server.Events.SelectViewEvents.LoginView;
+import Server.Events.SelectViewEvents.SelectViewEvent;
 import Server.Model.Match;
 import Server.Model.Player.Player;
 import Utils.ConnectionInfo;
+import com.google.gson.Gson;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -34,7 +37,7 @@ public class RMIWaiter extends UnicastRemoteObject implements RMIWaiterInterface
      */
     public synchronized RemoteVirtualView giveConnection(RemoteNetworkHandler requestingClient) throws RemoteException{
         //VirtualView clientsVV = new VirtualRMIView((NetworkRMIHandler) requestingClient);
-        VirtualRMIView clientsVV;
+        VirtualRMIView clientsVV = null;
         if(server.waitingMatch()){
             clientsVV = new VirtualRMIView(requestingClient, false);
             clientsVV.setConnectionInfo(new ConnectionInfo(requestingClient.getConnectionInfo().getIp(),
@@ -49,18 +52,30 @@ public class RMIWaiter extends UnicastRemoteObject implements RMIWaiterInterface
             server.subscribeNewViewToExistingMatch(m, clientsVV);
             server.updateConnectionStatus(clientsVV.getConnectionInfo(), true);
         }else{
-            //We need to create a new match
-            clientsVV = new VirtualRMIView(requestingClient, true);
-            clientsVV.setConnectionInfo(new ConnectionInfo(requestingClient.getConnectionInfo().getIp(),
-                    ConnectionType.RMI));
-            Match m = new Match();
-            Controller c = new Controller(m, server);
-            clientsVV.run();
-            m.addMVEventListener(clientsVV);
-            clientsVV.addVCEventListener(c);
-            c.addSelectViewEventListener(clientsVV);
-            server.subscribeNewMatch(m,c, clientsVV);
-            server.updateConnectionStatus(clientsVV.getConnectionInfo(), true);
+            if(server.matchWaitingForInit()){
+                //This means that the current connection request must wait for the match opener to decide the number of players
+                clientsVV = new VirtualRMIView(requestingClient, false);
+                clientsVV.setConnectionInfo(new ConnectionInfo(requestingClient.getConnectionInfo().getIp(),
+                        ConnectionType.RMI));
+                server.subscribeNewWaitingClient(clientsVV);
+                (clientsVV).onSelectViewEvent(
+                        new LoginView(false, "Waiting for the match opener to decide the number of " +
+                                "players, please wait...")
+                );
+            }else{
+                //We need to create a new match
+                clientsVV = new VirtualRMIView(requestingClient, true);
+                clientsVV.setConnectionInfo(new ConnectionInfo(requestingClient.getConnectionInfo().getIp(),
+                        ConnectionType.RMI));
+                Match m = new Match();
+                Controller c = new Controller(m, server);
+                clientsVV.run();
+                m.addMVEventListener(clientsVV);
+                clientsVV.addVCEventListener(c);
+                c.addSelectViewEventListener(clientsVV);
+                server.subscribeNewMatch(m,c, clientsVV);
+                server.updateConnectionStatus(clientsVV.getConnectionInfo(), true);
+            }
         }
         return (RemoteVirtualView)clientsVV;
     }

@@ -98,7 +98,11 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
                 .registerTypeAdapterFactory(new EventTypeAdapterFactory())
                 .create();
         VCEvent vcEvent = gson.fromJson(json,VCEvent.class);
-        for(VCEventListener listener : vcEventListeners){
+        List<VCEventListener> localVCEventListeners;
+        synchronized (vcEventListeners){
+            localVCEventListeners = new ArrayList<>(vcEventListeners);
+        }
+        for(VCEventListener listener : localVCEventListeners){
             listener.onVCEvent(vcEvent,this);
         }
         /*
@@ -212,6 +216,16 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
             pongReceived = true;
         }
     }
+
+    /**
+     * Must be used only by server inside "dequeueWaitingClients" method
+     * @param isFirstToJoin
+     */
+    @Override
+    public void setIsFirstToJoin(boolean isFirstToJoin) {
+        this.isFirsToJoin = isFirstToJoin;
+    }
+
     public ConnectionInfo getConnectionInfo() {
         //TODO: check if we need a method get/setConnectionInfoNickname, since the point of this method is to read/write
         // the nickname from the controller
@@ -226,6 +240,13 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
         synchronized (client){
             this.client = client;
         }
+    }
+
+    /**
+     * @return true iff this client is the first to join the game
+     */
+    public boolean isFirsToJoin() {
+        return isFirsToJoin;
     }
 
 }

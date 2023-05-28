@@ -6,6 +6,7 @@ import java.util.Enumeration;
 import Client.ConnectionType;
 import Server.Controller.Controller;
 import Server.Events.SelectViewEvents.GameView;
+import Server.Events.SelectViewEvents.LoginView;
 import Server.Model.Match;
 import Utils.ConnectionInfo;
 import com.google.gson.Gson;
@@ -67,7 +68,7 @@ public class SocketWaiter implements Runnable{
                             new Gson().fromJson(localIn.nextLine(), ConnectionInfo.class);
                     if(server.waitingMatch()){
                         clientVV = new VirtualSocketView(socket,false);
-                        ((VirtualSocketView )clientVV).setConnectionInfo(connectionInfo);
+                        (clientVV).setConnectionInfo(connectionInfo);
                         new Thread(clientVV).start();
                         Match m = server.getWaitingMatch();
                         m.addMVEventListener(clientVV);
@@ -76,15 +77,27 @@ public class SocketWaiter implements Runnable{
                         c.addSelectViewEventListener(clientVV);
                         server.subscribeNewViewToExistingMatch(m, clientVV);
                     }else{
-                        clientVV = new VirtualSocketView(socket,true);
-                        ((VirtualSocketView )clientVV).setConnectionInfo(connectionInfo);
-                        new Thread(clientVV).start();
-                        Match m = new Match();
-                        Controller c = new Controller(m, server);
-                        m.addMVEventListener(clientVV);
-                        clientVV.addVCEventListener(c);
-                        c.addSelectViewEventListener(clientVV);
-                        server.subscribeNewMatch(m,c, clientVV);
+                        if(server.matchWaitingForInit()){
+                            //This means that the current connection request must wait for the match opener to decide the number of players
+                            clientVV = new VirtualSocketView(socket, false);
+                            clientVV.setConnectionInfo(connectionInfo);
+                            server.subscribeNewWaitingClient(clientVV);
+                            (clientVV).onSelectViewEvent(
+                                    new LoginView(false, "Waiting for the match opener to decide the number of " +
+                                            "players, please wait...")
+                            );
+                        }else{
+                            //We need to create a new match
+                            clientVV = new VirtualSocketView(socket,true);
+                            (clientVV).setConnectionInfo(connectionInfo);
+                            new Thread(clientVV).start();
+                            Match m = new Match();
+                            Controller c = new Controller(m, server);
+                            m.addMVEventListener(clientVV);
+                            clientVV.addVCEventListener(c);
+                            c.addSelectViewEventListener(clientVV);
+                            server.subscribeNewMatch(m,c, clientVV);
+                        }
                     }
                     server.updateConnectionStatus(clientVV.getConnectionInfo(), true);
                 }else{
