@@ -29,6 +29,8 @@ public class LightMatch {
     @Expose
     private final Player firstToFinish;//ok
     @Expose
+    private final Player firstPlayer;
+    @Expose
     private ArrayList<Player> players;//ok
     @Expose
     private final int numberOfPlayers; //ok
@@ -52,6 +54,7 @@ public class LightMatch {
         this.commonGoals = match.getCommonGoals();
         this.matchStatus = match.getMatchStatus();
         this.scores = match.getIDScores();
+        this.firstPlayer = match.getFirstPlayer();
     }
 
     public MatchStatus getMatchStatus() {
@@ -65,6 +68,7 @@ public class LightMatch {
     public ArrayList<Player> getPlayers() {
         return players;
     }
+    public Player getFirstPlayer() {return firstPlayer;}
 
     public int getNumberOfPlayers() {
         return numberOfPlayers;

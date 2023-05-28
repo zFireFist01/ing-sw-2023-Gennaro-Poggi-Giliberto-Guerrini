@@ -67,6 +67,9 @@ public class Client {
         }
     }
 
+    /**
+     * This method is used to setup the client and choose the interface
+     */
     public void Setup(){
         boolean flag=true;
         int choice;

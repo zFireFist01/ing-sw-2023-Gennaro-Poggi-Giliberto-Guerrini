@@ -67,7 +67,7 @@
                                        <children>
                                           <ImageView id="secondcommongoal" fitHeight="131.0" fitWidth="200.0">
                                              <image>
-                                                <Image url="@common%20goal%20cards/back.jpg" />
+                                                <Image url="@common goal cards/back.jpg" />
                                              </image>
                                              <effect>
                                                 <DropShadow />

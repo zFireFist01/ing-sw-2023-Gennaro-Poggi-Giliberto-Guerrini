@@ -1,3 +1,4 @@
+
 package Server.Controller;
 
 import Server.Events.MVEvents.MatchStartedEvent;
@@ -187,33 +188,35 @@ public class Controller implements VCEventListener {
      * @author Paolo Gennaro
      */
     private void onSelectColumnEvent(int column) throws RemoteException{
-        //check if is the player turn
+        boolean flag=false;
         if(PlayerViews.get(match.getCurrentPlayer().getPlayerID())!=caller){
             caller.onSelectViewEvent(new GameView("It's not your turn!"));
+            flag=true;
         }
 
 
         Player currentPlayer = match.getCurrentPlayer();
         int numberTakenTiles=0;
-
-        for(int i=0; i<currentPlayer.getTakenTiles().length; i++){
-            if(currentPlayer.getTakenTiles()[i] != null){
-                numberTakenTiles++;
+        if(currentPlayer.getTakenTiles() != null) {
+            for (int i = 0; i < currentPlayer.getTakenTiles().length; i++) {
+                if (currentPlayer.getTakenTiles()[i] != null) {
+                    numberTakenTiles++;
+                }
             }
         }
 
-        //if(numberTakenTiles == 0){
-        //    throw new NoTilesSelectedException();
-        //    return new SelectViewEvent(new PickingTilesGameView(è));
-        //}
+        if(numberTakenTiles == 0){
+            currentPlayerView.onSelectViewEvent(new GameView());
+            flag=true;
+        }
 
         if(currentPlayer.getBookshelf().getLastIndexes().get(column) < numberTakenTiles){
-
             currentPlayerView.onSelectViewEvent(new InsertingTilesGameView("No space for this tiles!"));
+            flag=true;
         }
 
         try{
-            for(int i=0; i<match.getCurrentPlayer().getTakenTiles().length; i++){
+            for(int i=0; !flag && i<match.getCurrentPlayer().getTakenTiles().length; i++){
                 if(match.getCurrentPlayer().getTakenTiles()[i] != null) {
                     match.getCurrentPlayer().getBookshelf().insertTile(column, match.getCurrentPlayer().getTakenTiles()[i]);
                 }
@@ -230,7 +233,7 @@ public class Controller implements VCEventListener {
             if(match.getFirstToFinish()==null){
                 if(match.checkIfBookshelfIsFull(currentPlayer)){
                     try{
-                        match.assignMatchEndedTile();
+                        //match.assignMatchEndedTile();
                         if(currentPlayer.getNextPlayer().equals(match.getFirstPlayer())){
                             match.calculateFinalScores();
                             for(int i=0; i<numberOfPlayers; i++){
@@ -269,14 +272,12 @@ public class Controller implements VCEventListener {
                 }
             }
 
-        } catch (UnsupportedOperationException e){
-
+        } catch (UnsupportedOperationException e) {
             currentPlayerView.onSelectViewEvent(new InsertingTilesGameView("This column is already full|\nPlease select another one!"));
         } catch (IndexOutOfBoundsException e){
-
             currentPlayerView.onSelectViewEvent(new InsertingTilesGameView( "This column does not exists!"));
-
         }
+
     }
     /**
      * Method to manage the selected tile event, the selected tiles are added to the match if there is space for them
@@ -359,7 +360,7 @@ public class Controller implements VCEventListener {
             selectedTiles=new int[tmp.length];
             System.arraycopy(tmp, 0, selectedTiles, 0, tmp.length);
 
-            messageTiles += "You can't select more than 6 tiles!";
+            messageTiles += "You can't select more than 3 tiles!";
         }
         messageTiles += "Tiles Selected: ";
         for (int i = 0; i < selectedTiles.length; i+=2) {
