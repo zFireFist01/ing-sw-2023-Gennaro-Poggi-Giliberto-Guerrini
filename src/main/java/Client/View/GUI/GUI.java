@@ -150,6 +150,8 @@ public class GUI extends Application implements View {
     @FXML
     private TextField portServerRMI;
     @FXML
+    private TextField addressServerRMI;
+    @FXML
     private Button quitButton;
     @FXML
     private Button playButton;
@@ -521,8 +523,10 @@ public class GUI extends Application implements View {
     private void showRMIConnectionWindow(Stage primaryStage) {
 
         Stage loginStage = new Stage();
-        loginStage.setTitle("Insert Port");
+        loginStage.setTitle("Insert RMI Server address and port");
 
+        TextField hostField = new TextField();
+        hostField.setPromptText("Server IP Address");
 
         TextField portField = new TextField();
         portField.setPromptText("Server Port");
@@ -530,9 +534,9 @@ public class GUI extends Application implements View {
         Button loginButton = new Button("Connect");
         loginButton.setOnAction(e -> {
             int port = Integer.parseInt(portField.getText());
-
+            String host = hostField.getText();
             try{
-                networkHandler = new NetworkRMIHandler(this);
+                networkHandler = new NetworkRMIHandler(host,port,this);
             } catch (RemoteException e1) {
                 e1.printStackTrace();
             }
@@ -1588,8 +1592,9 @@ public class GUI extends Application implements View {
 
     @FXML
     private void onClickConnectRMIButton(ActionEvent event) throws IOException {
+        int port;
         try {
-            int port = Integer.parseInt(portServerRMI.getText());
+            port = Integer.parseInt(portServerRMI.getText());
         }catch (NumberFormatException e){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -1598,9 +1603,10 @@ public class GUI extends Application implements View {
             alert.showAndWait();
             return;
         }
+        String host = addressServerRMI.getText();
 
         try{
-            networkHandler = new NetworkRMIHandler(this);
+            networkHandler = new NetworkRMIHandler(host, port,this);
             String localIP = null;
             try {
                 InetAddress ipAddress = InetAddress.getLocalHost();

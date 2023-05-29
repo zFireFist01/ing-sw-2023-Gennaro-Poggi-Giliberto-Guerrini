@@ -20,11 +20,15 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class NetworkRMIHandler extends UnicastRemoteObject implements RemoteNetworkHandler, NetworkHandler {
 
+    String host;
+    int port;
     View view;
     RemoteVirtualView virtualRMIView;
 
-    public NetworkRMIHandler(View view) throws RemoteException {
+    public NetworkRMIHandler(String host, int port, View view) throws RemoteException {
         super();
+        this.host = host;
+        this.port = port;
         this.view = view;
     }
 
@@ -33,9 +37,13 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements RemoteNetw
         Registry registry;
         RMIWaiterInterface rmiWaiter;
         try {
-            registry = LocateRegistry.getRegistry();
+            registry = LocateRegistry.getRegistry(host, port);
         } catch (RemoteException e) {
             System.err.println("Error while getting registry");
+            throw new RuntimeException(e);
+        }catch (Exception e){
+            System.err.println("Error while getting registry");
+            System.err.println(e.getMessage()+"\n"+e.getCause()+"\n"+e.getStackTrace());
             throw new RuntimeException(e);
         }
 

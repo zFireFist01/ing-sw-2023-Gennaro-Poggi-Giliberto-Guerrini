@@ -172,11 +172,11 @@ public class CLI implements Runnable , View {
         }
 
         String host = null;
-        if(connection.equals("1")) {
+        //if(connection.equals("1")) {
             System.out.println("Server Address:");
             System.out.print("> ");
             host = scanner.nextLine();
-        }
+        //}
 
         System.out.println("ServerPort:");
         System.out.print("> ");
@@ -205,7 +205,7 @@ public class CLI implements Runnable , View {
             if(connectionType == ConnectionType.SOCKET) {
                 networkHandler = new NetworkSocketHandler(host, port, this);
             }else{
-                networkHandler = new NetworkRMIHandler(this);
+                networkHandler = new NetworkRMIHandler(host, port,this);
             }
         }catch (Exception e){
             System.out.println("Connection failed");
