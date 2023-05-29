@@ -51,4 +51,8 @@ public interface VirtualView extends Runnable, MVEventListener, SelectViewEventL
 
     public void setPongReceived();
 
+    public void setIsFirstToJoin(boolean isFirstToJoin);
+
+    public void setConnectionInfo(ConnectionInfo connectionInfo);
+
 }

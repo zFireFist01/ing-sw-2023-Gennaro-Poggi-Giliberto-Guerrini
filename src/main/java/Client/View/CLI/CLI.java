@@ -28,6 +28,7 @@ import Server.Model.LightMatch;
 import Server.Model.Player.Player;
 import Utils.ConnectionInfo;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -254,13 +255,13 @@ public class CLI implements Runnable , View {
             }
             case "onMatchStartedEvent" -> {
                 onMatchStartedEvent(event.getMatch());
-
             }
             case "onModifiedTurnEvent" -> {
                 onModifiedTurnEvent(event.getMatch());
             }
 
         }
+
         if(!chatIsOpened && !MatchEnded){
             print();
         }
@@ -282,6 +283,7 @@ public class CLI implements Runnable , View {
         }
         System.out.println("Match started");
         System.out.println("You are " + myNick );
+        //printHelp();
         printLivingRoom(renderLivingroom(match.getLivingRoom().getTileMatrix()));
         printPersonalGoal(renderPersonalGoalCard(me.getPersonalGoalCard().getTileMatrix(),
                 me.getPersonalGoalCard().getCardID()));
@@ -342,8 +344,6 @@ public class CLI implements Runnable , View {
         }
 
         printNames(names, match.getCurrentPlayer().getPlayerNickName());
-
-
 
     }
 
@@ -526,13 +526,23 @@ public class CLI implements Runnable , View {
         System.out.println("Welcome to MyShelfie!");
 
         if(loginEvent.isFirstToJoin()) {
-            System.out.println("You are the first player to join the match");
-            System.out.println("Please insert your nickname and the number of players for the match: ");
-            System.out.print("> ");
+            if(event.getMessage().contains("Insert")){
+                System.out.println("You are the first player to join the match");
+                System.out.println("Please insert your nickname and the number of players for the match: ");
+                System.out.print("> ");
+            }else{
+                System.out.println(event.getMessage());
+                System.out.print("> ");
+            }
 
 
         }else{
-            System.out.println("Please insert your nickname: ");
+            if(event.getMessage()!=null && event.getMessage().contains("Waiting")){
+                System.out.println(ANSIParameters.RED + event.getMessage()+ANSIParameters.CRESET);
+            }else{
+                System.out.println("Please insert your nickname: ");
+            }
+            //System.out.println(ANSIParameters.RED + event.getMessage()+ANSIParameters.CRESET);
             System.out.print("> ");
         }
 
@@ -547,7 +557,7 @@ public class CLI implements Runnable , View {
         if (!matchStarted) {
             System.out.print(ANSIParameters.CLEAR_SCREEN + ANSIParameters.CURSOR_HOME);
             System.out.flush();
-            System.out.println("Hi"+ ANSIParameters.BLUE + myNick+ ANSIParameters.CRESET+"Welcome to MyShelfie");
+            System.out.println("Hi "+ ANSIParameters.BLUE + myNick+ ANSIParameters.CRESET+" Welcome to MyShelfie");
             System.out.println("Please wait for the other players to join the match");
         }
         print();
@@ -649,7 +659,7 @@ public class CLI implements Runnable , View {
     /**
      * This method is used when the user types "info" to show the available commands
      */
-    private void printHelp(){
+    private void printInfo(){
         if(currentView == null){
             System.out.println("info        : show this message\n"+
                                "play        : login to the server\n"+
@@ -672,6 +682,14 @@ public class CLI implements Runnable , View {
         System.out.print("> ");
     }
 
+    public void printHelp(){
+        System.out.println(ANSIParameters.CYAN + "Commands:" + ANSIParameters.CRESET);
+        System.out.println( ANSIParameters.CYAN+
+                            "\"pick row_letter,livingroom_column_index\"      : to pick a tile\n"+
+                            "\"checkout\"                                    : to checkout selected tiles\n"+
+                            "\"select bookshelf_column_index\"               : to select the column of the bookshelf\n"+
+                            ANSIParameters.CRESET);
+    }
     /**
      * This method parses the input and calls/gives the right method/output after it
      * @param input the input from the user
@@ -734,7 +752,7 @@ public class CLI implements Runnable , View {
         }else{
             switch (inputArray[0]){
                 case "info" -> {
-                    printHelp();
+                    printInfo();
                 }
                 case "play" -> {
                     //you can only use this command if the game is not started yet
@@ -812,14 +830,10 @@ public class CLI implements Runnable , View {
                                 try {
                                     networkHandler.onVCEvent(new ClickOnTile(coordinatesInt));
                                     countOfPicks++;
-                                } catch (NoSuchMethodException e) {
-                                    throw new RuntimeException(e);
-                                } catch (InvocationTargetException e) {
-                                    throw new RuntimeException(e);
-                                } catch (IllegalAccessException e) {
-                                    throw new RuntimeException(e);
+                                } catch (Exception e){
+                                    System.out.println("Invalid input");
+                                    System.out.print("> ");
                                 }
-
                             }
                         }else{
                             System.out.println("Invalid input");
