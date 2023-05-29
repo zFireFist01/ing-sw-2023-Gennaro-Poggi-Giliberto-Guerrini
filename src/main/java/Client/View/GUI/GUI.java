@@ -308,6 +308,8 @@ public class GUI extends Application implements View {
     private Label punteggioTerzo;
     @FXML
     private Label punteggioQuarto;
+    @FXML
+    private AnchorPane anchorPane;
 
 
 
@@ -1161,115 +1163,121 @@ public class GUI extends Application implements View {
     }
 
     private void onModifiedMatchEndedEvent(LightMatch match) throws IOException {
-        Player tmpPlayer=match.getWinner();
-        String Punteggio;
-        Integer max=0;
-        this.MatchEnded= true;
+        Player tmpPlayer = match.getWinner();
+        String Punteggio= null;
+        String maxPlayer=null;
+        Integer max = 0;
+        Boolean flag= false;
+        this.MatchEnded = true;
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/MatchEndedView.fxml"));
         fxmlLoader.setController(this);
         Parent newRoot = fxmlLoader.load();
 
-        nomePrimo.setText(tmpPlayer.getPlayerNickName());
-        Punteggio=String.valueOf(match.getScores().get(tmpPlayer.getPlayerID()));
-        punteggioPrimo.setText(Punteggio);
-        tmpPlayer=players.get(0).getPlayerID()==tmpPlayer.getPlayerID()?players.get(1):players.get(0);
-        if(numberPlayers==2){
+
+        if (numberPlayers == 2) {
             terzo.setVisible(false);
             nomeTerzo.setVisible(false);
             punteggioTerzo.setVisible(false);
             quarto.setVisible(false);
             nomeQuarto.setVisible(false);
             punteggioQuarto.setVisible(false);
+
+            nomePrimo.setText(tmpPlayer.getPlayerNickName());
+            Punteggio = String.valueOf(match.getScores().get(tmpPlayer.getPlayerID()));
+            punteggioPrimo.setText(Punteggio);
+            tmpPlayer = players.get(0).getPlayerID() == tmpPlayer.getPlayerID() ? players.get(1) : players.get(0);
+
             nomeSecondo.setText(tmpPlayer.getPlayerNickName());
-            Punteggio=String.valueOf(match.getScores().get(tmpPlayer.getPlayerID()));
+            Punteggio = String.valueOf(match.getScores().get(tmpPlayer.getPlayerID()));
             punteggioSecondo.setText(Punteggio);
-        }else if(numberPlayers==3){
+        } else if (numberPlayers == 3) {
+
             quarto.setVisible(false);
             nomeQuarto.setVisible(false);
             punteggioQuarto.setVisible(false);
+
             nomePrimo.setText(tmpPlayer.getPlayerNickName());
-            Punteggio=String.valueOf(match.getScores().get(tmpPlayer.getPlayerID()));
+            Punteggio = String.valueOf(match.getScores().get(tmpPlayer.getPlayerID()));
             punteggioPrimo.setText(Punteggio);
-            tmpPlayer= tmpPlayer.getNextPlayer();
-            if(match.getScores().get(tmpPlayer.getPlayerID())>match.getScores().get(tmpPlayer.getNextPlayer().getPlayerID())){
-                nomeSecondo.setText(tmpPlayer.getPlayerNickName());
-                Punteggio=String.valueOf(match.getScores().get(tmpPlayer.getPlayerID()));
-                punteggioSecondo.setText(Punteggio);
-                tmpPlayer= tmpPlayer.getNextPlayer();
-                nomeTerzo.setText(tmpPlayer.getPlayerNickName());
-                Punteggio=String.valueOf(match.getScores().get(tmpPlayer.getPlayerID()));
-                punteggioTerzo.setText(Punteggio);
-            }else if(match.getScores().get(tmpPlayer.getPlayerID())<match.getScores().get(tmpPlayer.getNextPlayer().getPlayerID())){
-                nomeTerzo.setText(tmpPlayer.getPlayerNickName());
-                Punteggio=String.valueOf(match.getScores().get(tmpPlayer.getPlayerID()));
-                punteggioTerzo.setText(Punteggio);
-                tmpPlayer= tmpPlayer.getNextPlayer();
-                nomeSecondo.setText(tmpPlayer.getPlayerNickName());
-                Punteggio=String.valueOf(match.getScores().get(tmpPlayer.getPlayerID()));
-                punteggioSecondo.setText(Punteggio);
-            }else if(match.getScores().get(tmpPlayer.getPlayerID())==match.getScores().get(tmpPlayer.getNextPlayer().getPlayerID())) {
-                if (match.getFirstPlayer().equals(tmpPlayer.getNextPlayer())) {
-                    nomeSecondo.setText(tmpPlayer.getPlayerNickName());
-                    Punteggio = String.valueOf(match.getScores().get(tmpPlayer.getPlayerID()));
-                    punteggioSecondo.setText(Punteggio);
-                    tmpPlayer = tmpPlayer.getNextPlayer();
-                    nomeTerzo.setText(tmpPlayer.getPlayerNickName());
-                    Punteggio = String.valueOf(match.getScores().get(tmpPlayer.getPlayerID()));
-                    punteggioTerzo.setText(Punteggio);
-                }else if((match.getFirstPlayer().equals(tmpPlayer))||(match.getFirstPlayer().equals(tmpPlayer.getNextPlayer().getNextPlayer()))) {
-                    nomeTerzo.setText(tmpPlayer.getPlayerNickName());
-                    Punteggio = String.valueOf(match.getScores().get(tmpPlayer.getPlayerID()));
-                    punteggioTerzo.setText(Punteggio);
-                    tmpPlayer = tmpPlayer.getNextPlayer();
-                    nomeSecondo.setText(tmpPlayer.getPlayerNickName());
-                    Punteggio = String.valueOf(match.getScores().get(tmpPlayer.getPlayerID()));
-                    punteggioSecondo.setText(Punteggio);
+
+            max=0;
+            for(Player p : match.getOrderOfPlayers()){
+                if(!(p.getPlayerNickName().equals(nomePrimo.getText()))){
+                    if(match.getScores().get(p.getPlayerID()) >= max){
+                        max = match.getScores().get(p.getPlayerID());
+                        maxPlayer= p.getPlayerNickName();
+                    }
+                }
+            }
+            nomeSecondo.setText(maxPlayer);
+            Punteggio = String.valueOf(max);
+            punteggioSecondo.setText(Punteggio);
+
+            while(!flag) {
+                for (Player p : match.getOrderOfPlayers()) {
+
+                    if (!(p.getPlayerNickName().equals(nomePrimo.getText())) && !(p.getPlayerNickName().equals(nomeSecondo.getText()))) {
+                        flag = true;
+                        nomeTerzo.setText(p.getPlayerNickName());
+                        Punteggio = String.valueOf(match.getScores().get(p.getPlayerID()));
+                        punteggioTerzo.setText(Punteggio);
+                    }
                 }
             }
         }else if(numberPlayers==4){
-            tmpPlayer= match.getFirstPlayer();
-            for(int i=0; i<4; i++){
-                if(tmpPlayer.equals(match.getWinner())){
-                    tmpPlayer=tmpPlayer.getNextPlayer();
-                }else{
-                    if(match.getScores().get(tmpPlayer.getPlayerID())>=max){
-                        max=match.getScores().get(tmpPlayer.getPlayerID());
-                        nomeSecondo.setText(tmpPlayer.getPlayerNickName());
+            nomePrimo.setText(tmpPlayer.getPlayerNickName());
+            Punteggio = String.valueOf(match.getScores().get(tmpPlayer.getPlayerID()));
+            punteggioPrimo.setText(Punteggio);
+
+            max=0;
+            for(Player p : match.getOrderOfPlayers()){
+                if(!(p.getPlayerNickName().equals(nomePrimo.getText()))){
+                    if(match.getScores().get(p.getPlayerID()) >= max){
+                        max = match.getScores().get(p.getPlayerID());
+                        maxPlayer= p.getPlayerNickName();
                     }
-                    tmpPlayer=tmpPlayer.getNextPlayer();
                 }
             }
-            Punteggio=String.valueOf(max);
+            nomeSecondo.setText(maxPlayer);
+            Punteggio = String.valueOf(max);
             punteggioSecondo.setText(Punteggio);
-            max=0;
-            tmpPlayer= match.getFirstPlayer();
-            for(int i=0; i<4;i++){
-                if(tmpPlayer.equals(match.getWinner())||tmpPlayer.equals(nomeSecondo.getText())) {
-                    tmpPlayer = tmpPlayer.getNextPlayer();
-                }else{
-                    if(match.getScores().get(tmpPlayer.getPlayerID())>=max){
-                        max=match.getScores().get(tmpPlayer.getPlayerID());
-                        nomeTerzo.setText(tmpPlayer.getPlayerNickName());
+
+            max = 0;
+            for(Player p : match.getOrderOfPlayers()){
+                if(!(p.getPlayerNickName().equals(nomePrimo.getText())) && !(p.getPlayerNickName().equals(nomeSecondo.getText()))) {
+                    if(match.getScores().get(p.getPlayerID()) >=max){
+                        max = match.getScores().get(p.getPlayerID());
+                        maxPlayer= p.getPlayerNickName();
                     }
-                    tmpPlayer=tmpPlayer.getNextPlayer();
                 }
             }
-            Punteggio=String.valueOf(max);
+            nomeTerzo.setText(maxPlayer);
+            Punteggio = String.valueOf(max);
             punteggioTerzo.setText(Punteggio);
-            max=0;
-            tmpPlayer=match.getFirstPlayer();
-            while(tmpPlayer.equals(match.getWinner())||tmpPlayer.equals(nomeSecondo.getText())||tmpPlayer.equals(nomeTerzo.getText())){
-                tmpPlayer=tmpPlayer.getNextPlayer();
+            while(!flag) {
+                for (Player p : match.getOrderOfPlayers()) {
+                    if (!(p.getPlayerNickName().equals(nomePrimo.getText())) && !(p.getPlayerNickName().equals(nomeSecondo.getText())) && !(p.getPlayerNickName().equals(nomeTerzo.getText()))) {
+                        flag = true;
+                        nomeQuarto.setText(p.getPlayerNickName());
+                        Punteggio = String.valueOf(match.getScores().get(p.getPlayerID()));
+                        punteggioQuarto.setText(Punteggio);
+                    }
+                }
             }
-            nomeQuarto.setText(tmpPlayer.getPlayerNickName());
-            Punteggio=String.valueOf(match.getScores().get(tmpPlayer.getPlayerID()));
-            punteggioQuarto.setText(Punteggio);
 
         }
+
         Scene newScene = new Scene(newRoot);
         primaryStage.setScene(newScene);
+        primaryStage.setResizable(true);
+        primaryStage.setFullScreen(true);
+
+        anchorPane.prefWidthProperty().bind(primaryStage.widthProperty());
+        anchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
+
         primaryStage.show();
     }
+
 
     private void onModifiedBookshelfEvent(LightMatch match) {
         for(Player p : match.getPlayers()){
