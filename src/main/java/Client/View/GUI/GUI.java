@@ -150,7 +150,7 @@ public class GUI extends Application implements View {
     @FXML
     private TextField portServerRMI;
     @FXML
-    private TextField addressServerRMI;
+    private TextField addressServerRMI1;
     @FXML
     private Button quitButton;
     @FXML
@@ -1611,7 +1611,7 @@ public class GUI extends Application implements View {
             alert.showAndWait();
             return;
         }
-        String host = addressServerRMI.getText();
+        String host = addressServerRMI1.getText();
 
         try{
             networkHandler = new NetworkRMIHandler(host, port,this);
