@@ -39,6 +39,8 @@ public class LightMatch {
     private MatchStatus matchStatus;
     @Expose
     private Map<Integer, Integer> scores; //PlayerID, score
+    @Expose
+    private  ArrayList<Player> orderOfPlayers;
 
 
     public LightMatch(Match match){
@@ -55,6 +57,8 @@ public class LightMatch {
         this.matchStatus = match.getMatchStatus();
         this.scores = match.getIDScores();
         this.firstPlayer = match.getFirstPlayer();
+        this.orderOfPlayers = new ArrayList<Player>();
+        setOrderOfPlayers();
     }
 
     public MatchStatus getMatchStatus() {
@@ -104,5 +108,16 @@ public class LightMatch {
 
     public Player getFirstToFinish() {
         return firstToFinish;
+    }
+    private void setOrderOfPlayers() {
+        Player p= this.getFirstPlayer();
+        for (int i=0; i<numberOfPlayers; i++){
+            orderOfPlayers.add(p);
+            p=p.getNextPlayer();
+        }
+    }
+
+    public ArrayList<Player> getOrderOfPlayers() {
+        return orderOfPlayers;
     }
 }

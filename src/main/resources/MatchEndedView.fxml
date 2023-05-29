@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="anchorpane" fx:id="anchorpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="anchorPane" fx:id="anchorpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ImageView id="sfondo" fx:id="sfondo" fitHeight="400.0" fitWidth="600.0">
          <image>
@@ -83,10 +83,22 @@
       </Label>
       <VBox id="punteggi" fx:id="punteggi" layoutX="349.0" layoutY="91.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="100.0">
          <children>
-            <Label id="punteggioPrimo" fx:id="punteggioPrimo" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="100.0" />
-            <Label id="punteggioSecondo" fx:id="punteggioSecondo" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="100.0" />
-            <Label id="punteggioTerzo" fx:id="punteggioTerzo" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="100.0" />
-            <Label id="punteggioQuarto" fx:id="punteggioQuarto" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="100.0" />
+            <Label id="punteggioPrimo" fx:id="punteggioPrimo" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="100.0" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="Calibri Bold" size="18.0" />
+               </font></Label>
+            <Label id="punteggioSecondo" fx:id="punteggioSecondo" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="100.0" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="Calibri Bold" size="18.0" />
+               </font></Label>
+            <Label id="punteggioTerzo" fx:id="punteggioTerzo" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="100.0" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="Calibri Bold" size="18.0" />
+               </font></Label>
+            <Label id="punteggioQuarto" fx:id="punteggioQuarto" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="100.0" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="Calibri Bold" size="18.0" />
+               </font></Label>
          </children>
       </VBox>
       <Label id="finalscores" fx:id="finalscores" layoutX="349.0" layoutY="63.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="28.0" prefWidth="100.0" text="FINAL SCORES" textFill="WHITE">
