@@ -1,6 +1,7 @@
 package Server.Model.Decks;
 
 import Server.Model.Cards.Card;
+import Server.Model.Cards.CommonGoalCard;
 import Server.Model.Cards.CommonGoalCards.*;
 
 /**
@@ -21,6 +22,7 @@ public class CommonGoalCardsDeck extends Deck {
      */
     @Override
     public Card drawOne() {
+        CommonGoalCard tmp;
 
         int index=0;
         for(int i=0;i<size;i++){
@@ -31,34 +33,36 @@ public class CommonGoalCardsDeck extends Deck {
             }
         }
 
-        secondIstance=true;
+
         shuffle();
 
         if(index==1) {
-            return new CommonGoalCard1(playersNum, secondIstance);
+            tmp = new CommonGoalCard1(playersNum, secondIstance);
         }else if(index==2) {
-            return new CommonGoalCard2(playersNum, secondIstance);
+            tmp = new CommonGoalCard2(playersNum, secondIstance);
         }else if(index==3) {
-            return new CommonGoalCard3(playersNum, secondIstance);
+            tmp = new CommonGoalCard3(playersNum, secondIstance);
         }else if(index==4) {
-            return new CommonGoalCard4(playersNum, secondIstance);
+            tmp = new CommonGoalCard4(playersNum, secondIstance);
         }else if(index==5) {
-            return new CommonGoalCard5(playersNum, secondIstance);
+            tmp = new CommonGoalCard5(playersNum, secondIstance);
         }else if (index==6) {
-            return new CommonGoalCard6(playersNum, secondIstance);
+            tmp = new CommonGoalCard6(playersNum, secondIstance);
         }else if(index==7) {
-            return new CommonGoalCard7(playersNum, secondIstance);
+            tmp = new CommonGoalCard7(playersNum, secondIstance);
         }else if(index==8) {
-            return new CommonGoalCard8(playersNum, secondIstance);
+            tmp = new CommonGoalCard8(playersNum, secondIstance);
         } else if (index==9) {
-            return new CommonGoalCard9(playersNum, secondIstance);
+            tmp = new CommonGoalCard9(playersNum, secondIstance);
         }else if(index==10) {
-            return new CommonGoalCard10(playersNum, secondIstance);
+            tmp = new CommonGoalCard10(playersNum, secondIstance);
         }else if(index==11) {
-            return new CommonGoalCard11(playersNum, secondIstance);
+            tmp = new CommonGoalCard11(playersNum, secondIstance);
         }else{
-            return new CommonGoalCard12(playersNum, secondIstance);
+            tmp = new CommonGoalCard12(playersNum, secondIstance);
         }
+        secondIstance=true;
+        return tmp;
 
     }
 }
