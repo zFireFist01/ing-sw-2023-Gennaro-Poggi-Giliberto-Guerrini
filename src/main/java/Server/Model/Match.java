@@ -141,7 +141,8 @@ public class Match {
     public void checkCommonGoals(Player player) {
         if (commonGoals[0].check(player.getBookshelf())) {
             try {
-                player.assignPointTile(commonGoals[0].pickPointsTile());
+                player.assignPointTile(commonGoals[0].getPointsTile());
+                commonGoals[0].removePointsTile();
                 notifyMVEventListeners(new ModifiedPointsEvent(new LightMatch(this)));
             } catch (UnsupportedOperationException e) {
                 //do nothing
@@ -151,7 +152,8 @@ public class Match {
 
         if (commonGoals[1].check(player.getBookshelf())) {
             try {
-                player.assignPointTile(commonGoals[1].pickPointsTile());
+                player.assignPointTile(commonGoals[1].getPointsTile());
+                commonGoals[1].removePointsTile();
                 notifyMVEventListeners(new ModifiedPointsEvent(new LightMatch(this)));
             } catch (UnsupportedOperationException e) {
                 //do nothing

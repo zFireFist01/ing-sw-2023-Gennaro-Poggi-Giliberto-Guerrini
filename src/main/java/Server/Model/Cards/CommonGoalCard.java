@@ -65,18 +65,25 @@ public abstract class CommonGoalCard implements Card {
     /**
      * This method returns the laste points tile of the common goal card
      *
-     * @return the points tiles of the common goal card
      * @throws UnsupportedOperationException if the common goal card doesn't have points tiles
      */
-    public PointsTile pickPointsTile() throws UnsupportedOperationException {
+    public void  removePointsTile() throws UnsupportedOperationException {
+        if(pointsTiles.isEmpty()){
+            throw new UnsupportedOperationException("this cards doesn't have points tiles!");
+        }else {
+            pointsTiles.remove(pointsTiles.size() - 1);
+        }
+    }
+
+    public PointsTile getPointsTile() throws UnsupportedOperationException {
         if(pointsTiles.isEmpty()){
             throw new UnsupportedOperationException("this cards doesn't have points tiles!");
         }else {
             PointsTile tmp = pointsTiles.get(pointsTiles.size() - 1);
-            pointsTiles.remove(pointsTiles.size() - 1);
             return tmp;
         }
     }
+
 
 
     public abstract String[] getCommonGoalDescription();
