@@ -56,8 +56,9 @@ public class CommonGoalCard3 extends CommonGoalCard {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 5; j++) {
                 if(verifier[i][j] != 0) {
-                    int tmp =countAdjacentTiles(verifier, i, j, verifier[i][j])+1;
-
+                    int tile=verifier[i][j];
+                    verifier[i][j]=0;
+                    int tmp =countAdjacentTiles(verifier, i, j, tile)+1;
                     count+=(int)(tmp/4);
 
                 }

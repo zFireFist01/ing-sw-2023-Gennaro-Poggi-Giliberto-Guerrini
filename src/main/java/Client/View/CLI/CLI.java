@@ -631,12 +631,12 @@ public class CLI implements Runnable , View {
             if(message.getReceiver() != null) {
                 System.out.print("\b\b\b");
                 System.out.println("[" + message.getTimeSent() + "]" + " " + ANSIParameters.RED + message.getSender().getPlayerNickName()  + ANSIParameters.CRESET + " " + ANSIParameters.BLUE + "to @" + message.getReceiver().getPlayerNickName()+ ":" + ANSIParameters.CRESET + " " + message.getContent());
-                System.out.print("> ");
+
             }else{
                 System.out.print("\b\b\b");
                 System.out.println("[" + message.getTimeSent() + "]" + " " + ANSIParameters.RED + message.getSender().getPlayerNickName() + ANSIParameters.CRESET + " " + ANSIParameters.BLUE + "to @All:" + ANSIParameters.CRESET + " " + message.getContent());
-                System.out.print("> ");
             }
+            System.out.print("> ");
         }
     }
 

@@ -2,15 +2,17 @@ package Client;
 
 import Client.View.CLI.CLI;
 import Client.View.GUI.GUI;
+import javafx.application.Application;
 
 import java.util.Scanner;
 
+
 public class Client {
-    public static void main(String[] args) {
+    public static void main(String[] args){
         if (args.length > 1) {
             switch (args[0]) {
                 case "-gui" :
-                    //TODO GUI
+                    Application.launch(GUI.class);
                 case "-cli" :
                 System.out.println("Welcome to");
                     System.out.println("                                                                                                    \n" +
@@ -67,8 +69,9 @@ public class Client {
         }
     }
 
+
     /**
-     * This method is used to setup the client and choose the interface
+     * This method is used to set up the client and choose the interface
      */
     public void Setup(){
         boolean flag=true;
@@ -85,7 +88,7 @@ public class Client {
                     flag=false;
                 }
                 else if(choice==2){
-                    //TODO gui
+                    Application.launch(GUI.class);
                     flag=false;
                 }
                 else {
@@ -93,6 +96,7 @@ public class Client {
                 }
             }catch (Exception e){
                 System.out.println("Invalid choice: Please insert a number!");
+                e.printStackTrace();
                 continue;
             }
 

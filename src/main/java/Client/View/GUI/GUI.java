@@ -936,68 +936,80 @@ public class GUI extends Application implements View {
                     switch(matrix[i][j].getTileType()) {
                         case CATS -> {
                             ImageView tmp = getImageViewAt(grid, i, j);
-                            random = (int) (Math.random() * 3 + 1);
-                            if (random == 1) {
-                                tmp.setImage(catImage1);
-                            } else if (random == 2) {
-                                tmp.setImage(catImage2);
-                            } else {
-                                tmp.setImage(catImage3);
+                            if(tmp.getImage()==null) {
+                                random = (int) (Math.random() * 3 + 1);
+                                if (random == 1) {
+                                    tmp.setImage(catImage1);
+                                } else if (random == 2) {
+                                    tmp.setImage(catImage2);
+                                } else {
+                                    tmp.setImage(catImage3);
+                                }
                             }
                         }
                         case PLANTS -> {
                             ImageView tmp = getImageViewAt(grid, i, j);
-                            random = (int) (Math.random() * 3 + 1);
-                            if (random == 1) {
-                                tmp.setImage(plantsImage1);
-                            } else if (random == 2) {
-                                tmp.setImage(plantsImage2);
-                            } else {
-                                tmp.setImage(plantsImage3);
+                            if(tmp.getImage()==null) {
+                                random = (int) (Math.random() * 3 + 1);
+                                if (random == 1) {
+                                    tmp.setImage(plantsImage1);
+                                } else if (random == 2) {
+                                    tmp.setImage(plantsImage2);
+                                } else {
+                                    tmp.setImage(plantsImage3);
+                                }
                             }
                         }
                         case GAMES -> {
                             ImageView tmp = getImageViewAt(grid, i, j);
-                            random = (int) (Math.random() * 3 + 1);
-                            if (random == 1) {
-                                tmp.setImage(gamesImage1);
-                            } else if (random == 2) {
-                                tmp.setImage(gamesImage2);
-                            } else {
-                                tmp.setImage(gamesImage3);
+                            if(tmp.getImage()==null) {
+                                random = (int) (Math.random() * 3 + 1);
+                                if (random == 1) {
+                                    tmp.setImage(gamesImage1);
+                                } else if (random == 2) {
+                                    tmp.setImage(gamesImage2);
+                                } else {
+                                    tmp.setImage(gamesImage3);
+                                }
                             }
                         }
                         case BOOKS -> {
                             ImageView tmp = getImageViewAt(grid, i, j);
-                            random = (int) (Math.random() * 3 + 1);
-                            if (random == 1) {
-                                tmp.setImage(bookImage1);
-                            } else if (random == 2) {
-                                tmp.setImage(bookImage2);
-                            } else {
-                                tmp.setImage(bookImage3);
+                            if(tmp.getImage()==null) {
+                                random = (int) (Math.random() * 3 + 1);
+                                if (random == 1) {
+                                    tmp.setImage(bookImage1);
+                                } else if (random == 2) {
+                                    tmp.setImage(bookImage2);
+                                } else {
+                                    tmp.setImage(bookImage3);
+                                }
                             }
                         }
                         case FRAMES -> {
                             ImageView tmp = getImageViewAt(grid, i, j);
-                            random = (int) (Math.random() * 3 + 1);
-                            if (random == 1) {
-                                tmp.setImage(frameImage1);
-                            } else if (random == 2) {
-                                tmp.setImage(frameImage2);
-                            } else {
-                                tmp.setImage(frameImage3);
+                            if(tmp.getImage()==null) {
+                                random = (int) (Math.random() * 3 + 1);
+                                if (random == 1) {
+                                    tmp.setImage(frameImage1);
+                                } else if (random == 2) {
+                                    tmp.setImage(frameImage2);
+                                } else {
+                                    tmp.setImage(frameImage3);
+                                }
                             }
                         }
                         case TROPHIES -> {
                             ImageView tmp = getImageViewAt(grid, i, j);
-                            random = (int) (Math.random() * 3 + 1);
-                            if (random == 1) {
-                                tmp.setImage(trophyImage1);
-                            } else if (random == 2) {
-                                tmp.setImage(trophyImage2);
-                            } else {
-                                tmp.setImage(trophyImage3);
+                            if(tmp.getImage()==null) {
+                                random = (int) (Math.random() * 3 + 1);
+                                if (random == 1) {
+                                    tmp.setImage(trophyImage1);
+                                } else if (random == 2) {
+                                    tmp.setImage(trophyImage2);
+                                } else {
+                                    tmp.setImage(trophyImage3);
+                                }
                             }
                         }
                     }
@@ -1018,63 +1030,76 @@ public class GUI extends Application implements View {
             for(int j=0; j<9;j++){
                 if(livingroom[i][j].getTileType()== TileType.CATS){
                     ImageView tmp= getImageViewAt(grid,i,j);
-                    random = (int)(Math.random() * 3 + 1);
-                    if (random == 1) {
-                        tmp.setImage(catImage1);
-                    }else if(random == 2){
-                        tmp.setImage(catImage2);
-                    }else{
-                        tmp.setImage(catImage3);
+                    if(tmp.getImage()==null) {
+                        random = (int) (Math.random() * 3 + 1);
+                        if (random == 1) {
+                            tmp.setImage(catImage1);
+                        } else if (random == 2) {
+                            tmp.setImage(catImage2);
+                        } else {
+                            tmp.setImage(catImage3);
+                        }
                     }
                 }else if(livingroom[i][j].getTileType()== TileType.TROPHIES){
                     ImageView tmp= getImageViewAt(grid,i,j);
-                    random = (int)(Math.random() * 3 + 1);
-                    if (random == 1) {
-                        tmp.setImage(trophyImage1);
-                    }else if(random == 2){
-                        tmp.setImage(trophyImage2);
-                    }else{
-                        tmp.setImage(trophyImage3);
+                    if(tmp.getImage()==null) {
+                        random = (int) (Math.random() * 3 + 1);
+                        if (random == 1) {
+                            tmp.setImage(trophyImage1);
+                        } else if (random == 2) {
+                            tmp.setImage(trophyImage2);
+                        } else {
+                            tmp.setImage(trophyImage3);
+                        }
                     }
                 }else if(livingroom[i][j].getTileType()== TileType.FRAMES){
                     ImageView tmp= getImageViewAt(grid,i,j);
-                    random = (int)(Math.random() * 3 + 1);
-                    if (random == 1) {
-                        tmp.setImage(frameImage1);
-                    }else if(random == 2){
-                        tmp.setImage(frameImage2);
-                    }else{
-                        tmp.setImage(frameImage3);
+                    if(tmp.getImage()==null) {
+                        random = (int) (Math.random() * 3 + 1);
+                        if (random == 1) {
+                            tmp.setImage(frameImage1);
+                        } else if (random == 2) {
+                            tmp.setImage(frameImage2);
+                        } else {
+                            tmp.setImage(frameImage3);
+                        }
                     }
                 }else if(livingroom[i][j].getTileType()== TileType.PLANTS){
                     ImageView tmp= getImageViewAt(grid,i,j);
-                    random = (int)(Math.random() * 3 + 1);
-                    if (random == 1) {
-                        tmp.setImage(plantsImage1);
-                    }else if(random == 2){
-                        tmp.setImage(plantsImage2);
-                    }else{
-                        tmp.setImage(plantsImage3);
+                    if(tmp.getImage()==null) {
+                        random = (int) (Math.random() * 3 + 1);
+                        if (random == 1) {
+                            tmp.setImage(plantsImage1);
+                        } else if (random == 2) {
+                            tmp.setImage(plantsImage2);
+                        } else {
+                            tmp.setImage(plantsImage3);
+                        }
                     }
                 }else if(livingroom[i][j].getTileType()== TileType.GAMES){
                     ImageView tmp= getImageViewAt(grid,i,j);
-                    random = (int)(Math.random() * 3 + 1);
-                    if (random == 1) {
-                        tmp.setImage(gamesImage1);
-                    }else if(random == 2){
-                        tmp.setImage(gamesImage2);
-                    }else{
-                        tmp.setImage(gamesImage3);
+                    if(tmp.getImage()==null) {
+
+                        random = (int) (Math.random() * 3 + 1);
+                        if (random == 1) {
+                            tmp.setImage(gamesImage1);
+                        } else if (random == 2) {
+                            tmp.setImage(gamesImage2);
+                        } else {
+                            tmp.setImage(gamesImage3);
+                        }
                     }
                 }else if(livingroom[i][j].getTileType()== TileType.BOOKS){
                     ImageView tmp= getImageViewAt(grid,i,j);
-                    random = (int)(Math.random() * 3 + 1);
-                    if (random == 1) {
-                        tmp.setImage(bookImage1);
-                    }else if(random == 2){
-                        tmp.setImage(bookImage2);
-                    }else{
-                        tmp.setImage(bookImage3);
+                    if(tmp.getImage()==null) {
+                        random = (int) (Math.random() * 3 + 1);
+                        if (random == 1) {
+                            tmp.setImage(bookImage1);
+                        } else if (random == 2) {
+                            tmp.setImage(bookImage2);
+                        } else {
+                            tmp.setImage(bookImage3);
+                        }
                     }
                 }else{
                     ImageView tmp= getImageViewAt(grid,i,j);
