@@ -83,7 +83,6 @@ public class Client {
             Scanner sc = new Scanner(System.in);
             try{
                 choice = sc.nextInt();
-                System.out.print(choice);
                 if(choice==1){
                     new CLI();
                     flag=false;
