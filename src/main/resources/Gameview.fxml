@@ -50,7 +50,7 @@
                                        <children>
                                           <ImageView id="firstcommongoal" fitHeight="131.0" fitWidth="200.0">
                                              <image>
-                                                <Image url="@common%20goal%20cards/back.jpg" />
+                                                <Image url="@common goal cards/back.jpg" />
                                              </image>
                                              <effect>
                                                 <DropShadow />
@@ -87,7 +87,7 @@
                                                 <DropShadow />
                                              </effect>
                                              <image>
-                                                <Image url="@personal%20goal%20cards/back.jpg" />
+                                                <Image url="@personal goal cards/back.jpg" />
                                              </image>
                                           </ImageView>
                                        </children>
@@ -383,7 +383,7 @@
                                           </ImageView>
                                           <ImageView fitHeight="54.0" fitWidth="54.0" layoutX="375.0" layoutY="385.0" pickOnBounds="true" preserveRatio="true" rotate="9.8">
                                              <image>
-                                                <Image url="@scoring%20tokens/end%20game.jpg" />
+                                                <Image url="@scoring tokens/end game.jpg" />
                                              </image>
                                              <effect>
                                                 <InnerShadow />
@@ -391,22 +391,22 @@
                                           </ImageView>
                                           <ImageView fitHeight="36.0" fitWidth="31.0" layoutX="39.0" layoutY="103.0" pickOnBounds="true" preserveRatio="true" rotate="95.7">
                                              <image>
-                                                <Image url="@item%20tiles/Cornici1.2.png" />
+                                                <Image url="@item tiles/Cornici1.2.png" />
                                              </image>
                                           </ImageView>
                                           <ImageView fitHeight="36.0" fitWidth="31.0" layoutX="58.0" layoutY="91.0" pickOnBounds="true" preserveRatio="true" rotate="-69.4">
                                              <image>
-                                                <Image url="@item%20tiles/Piante1.3.png" />
+                                                <Image url="@item tiles/Piante1.3.png" />
                                              </image>
                                           </ImageView>
                                           <ImageView fitHeight="36.0" fitWidth="31.0" layoutX="69.0" layoutY="68.0" pickOnBounds="true" preserveRatio="true" rotate="153.4">
                                              <image>
-                                                <Image url="@item%20tiles/Giochi1.3.png" />
+                                                <Image url="@item tiles/Giochi1.3.png" />
                                              </image>
                                           </ImageView>
                                           <ImageView fitHeight="125.0" fitWidth="122.0" layoutX="-42.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true" rotate="146.1">
                                              <image>
-                                                <Image url="@misc/Sacchetto%20Aperto.png" />
+                                                <Image url="@misc/Sacchetto Aperto.png" />
                                              </image>
                                           </ImageView>
                                        </children>
@@ -503,6 +503,7 @@
                                     </BorderPane>
                                  </children>
                               </StackPane>
+                              <Button fx:id="checkoutbutton" mnemonicParsing="false" onAction="#onCheckout" prefHeight="43.0" prefWidth="66.0" text="Checkout" />
                            </children>
                         </HBox>
                         <HBox id="bookshelfContainer" prefHeight="152.0" prefWidth="1280.0" spacing="30.0">
@@ -777,7 +778,7 @@
                                           <VBox prefHeight="200.0" prefWidth="100.0">
                                              <children>
                                                 <ChoiceBox fx:id="chatChoiceBox" prefWidth="150.0" />
-                                                <Button id="sendButton" fx:id="sendButton" mnemonicParsing="false" onAction="#onSendMessage" text="Button" />
+                                                <Button id="sendButton" fx:id="sendButton" mnemonicParsing="false" onAction="#onSendMessage" text="Send" />
                                              </children>
                                           </VBox>
                                        </children>
@@ -936,7 +937,6 @@
                         <ImageView id="player0point1" fitHeight="66.0" fitWidth="66.0" pickOnBounds="true" preserveRatio="true" />
                         <ImageView id="player0point2" fitHeight="66.0" fitWidth="66.0" layoutX="67.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
                         <ImageView id="player0finish" fitHeight="66.0" fitWidth="66.0" layoutX="135.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
-                        <Button fx:id="checkoutbutton" mnemonicParsing="false" onAction="#onCheckout" text="Button" />
                      </children>
                   </HBox>
                </children>

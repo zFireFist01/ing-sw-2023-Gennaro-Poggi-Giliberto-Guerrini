@@ -55,7 +55,7 @@
                   </Label>
                   <Label id="nomeTerzo" fx:id="nomeTerzo" prefHeight="70.0" prefWidth="291.0" textFill="#ffb91c">
                      <font>
-                        <Font name="Calibri" size="16.0" />
+                        <Font name="Calibri Bold" size="16.0" />
                      </font>
                   </Label>
                </children>
@@ -69,7 +69,7 @@
                   </Label>
                   <Label id="nomeQuarto" fx:id="nomeQuarto" prefHeight="70.0" prefWidth="294.0" textFill="#ffdb4d">
                      <font>
-                        <Font size="16.0" />
+                        <Font name="Calibri Bold" size="16.0" />
                      </font>
                   </Label>
                </children>
@@ -112,6 +112,7 @@
          </image>
       </ImageView>
       <Button id="quitButton" fx:id="quitButton" layoutX="548.0" layoutY="371.0" mnemonicParsing="false" onAction="#onQuitButton" text="QUIT" />
-      <Button id="playButton" fx:id="playButton" layoutX="455.0" layoutY="371.0" mnemonicParsing="false" onAction="#onPlayButton" text="PLAY AGAIN" />
+      <Button id="playButton" fx:id="playButton" layoutX="457.0" layoutY="371.0" mnemonicParsing="false" onAction="#onPlayButton" text="PLAY AGAIN" />
+      <Button fx:id="showBookshelf" layoutX="329.0" layoutY="371.0" mnemonicParsing="false" onAction="#onShowBookshelf" prefHeight="25.0" prefWidth="119.0" text="SHOW BOOKSHELF" />
    </children>
 </AnchorPane>
