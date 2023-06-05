@@ -586,6 +586,7 @@ public class CLI implements Runnable , View {
 
         }
         System.out.println("The winner is: " + ANSIParameters.YELLOW + winner.getPlayerNickName() + ANSIParameters.CRESET );
+        System.out.println("> ");
     }
 
     //CHAT

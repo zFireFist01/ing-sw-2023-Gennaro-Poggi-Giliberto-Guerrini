@@ -22,76 +22,101 @@ import static org.junit.Assert.*;
  */
 public class CommonGoalCardsTests {
 
+    CommonGoalCard testCard;
+    Bookshelf testBookshelf;
+
     /**
-     * This method tests the pickPountTile method in the commonGoalCard abstract class
-     * @author due2
+     * This method tests the pickPointTile method in the commonGoalCard abstract class
+     * @author due2, Paolo Gennaro
      */
     @Test
-    public void pickPointsTile_work_Test(){
+    public void getPointsTile_work_Test(){
         CommonGoalCard testcard_2player = new CommonGoalCard1(2,false);
         CommonGoalCard testcard_3player = new CommonGoalCard1(3,false);
         CommonGoalCard testcard_4player = new CommonGoalCard1(4,false);
 
         //test with 2 players
 
-        assertEquals(testcard_2player.pickPointsTile(), PointsTile.EIGHT_1);
-        assertEquals(testcard_2player.pickPointsTile(), PointsTile.FOUR_1);
+        assertEquals(testcard_2player.getPointsTile(), PointsTile.EIGHT_1);
+        testcard_2player.removePointsTile();
+        assertEquals(testcard_2player.getPointsTile(), PointsTile.FOUR_1);
+        testcard_2player.removePointsTile();
 
         testcard_2player = new CommonGoalCard1(2,true);
 
-        assertEquals(testcard_2player.pickPointsTile(), PointsTile.EIGHT_2);
-        assertEquals(testcard_2player.pickPointsTile(), PointsTile.FOUR_2);
+        assertEquals(testcard_2player.getPointsTile(), PointsTile.EIGHT_2);
+        testcard_2player.removePointsTile();
+        assertEquals(testcard_2player.getPointsTile(), PointsTile.FOUR_2);
+        testcard_2player.removePointsTile();
 
         //test with 3 players
 
-        assertEquals(testcard_3player.pickPointsTile(), PointsTile.EIGHT_1);
-        assertEquals(testcard_3player.pickPointsTile(), PointsTile.SIX_1);
-        assertEquals(testcard_3player.pickPointsTile(), PointsTile.FOUR_1);
+        assertEquals(testcard_3player.getPointsTile(), PointsTile.EIGHT_1);
+        testcard_3player.removePointsTile();
+        assertEquals(testcard_3player.getPointsTile(), PointsTile.SIX_1);
+        testcard_3player.removePointsTile();
+        assertEquals(testcard_3player.getPointsTile(), PointsTile.FOUR_1);
+        testcard_3player.removePointsTile();
 
         testcard_3player = new CommonGoalCard1(3,true);
 
-        assertEquals(testcard_3player.pickPointsTile(), PointsTile.EIGHT_2);
-        assertEquals(testcard_3player.pickPointsTile(), PointsTile.SIX_2);
-        assertEquals(testcard_3player.pickPointsTile(), PointsTile.FOUR_2);
+        assertEquals(testcard_3player.getPointsTile(), PointsTile.EIGHT_2);
+        testcard_3player.removePointsTile();
+        assertEquals(testcard_3player.getPointsTile(), PointsTile.SIX_2);
+        testcard_3player.removePointsTile();
+        assertEquals(testcard_3player.getPointsTile(), PointsTile.FOUR_2);
+        testcard_3player.removePointsTile();
 
         //test with 4 players
 
-        assertEquals(testcard_4player.pickPointsTile(), PointsTile.EIGHT_1);
-        assertEquals(testcard_4player.pickPointsTile(), PointsTile.SIX_1);
-        assertEquals(testcard_4player.pickPointsTile(), PointsTile.FOUR_1);
-        assertEquals(testcard_4player.pickPointsTile(), PointsTile.TWO_1);
+        assertEquals(testcard_4player.getPointsTile(), PointsTile.EIGHT_1);
+        testcard_4player.removePointsTile();
+        assertEquals(testcard_4player.getPointsTile(), PointsTile.SIX_1);
+        testcard_4player.removePointsTile();
+        assertEquals(testcard_4player.getPointsTile(), PointsTile.FOUR_1);
+        testcard_4player.removePointsTile();
+        assertEquals(testcard_4player.getPointsTile(), PointsTile.TWO_1);
+        testcard_4player.removePointsTile();
 
         testcard_4player = new CommonGoalCard1(4,true);
 
-        assertEquals(testcard_4player.pickPointsTile(), PointsTile.EIGHT_2);
-        assertEquals(testcard_4player.pickPointsTile(), PointsTile.SIX_2);
-        assertEquals(testcard_4player.pickPointsTile(), PointsTile.FOUR_2);
-        assertEquals(testcard_4player.pickPointsTile(), PointsTile.TWO_2);
+        assertEquals(testcard_4player.getPointsTile(), PointsTile.EIGHT_2);
+        testcard_4player.removePointsTile();
+        assertEquals(testcard_4player.getPointsTile(), PointsTile.SIX_2);
+        testcard_4player.removePointsTile();
+        assertEquals(testcard_4player.getPointsTile(), PointsTile.FOUR_2);
+        testcard_4player.removePointsTile();
+        assertEquals(testcard_4player.getPointsTile(), PointsTile.TWO_2);
+        testcard_4player.removePointsTile();
 
         //test pickpointstile throws exception when no more points tiles are available
 
         CommonGoalCard finalTestcard_2player = testcard_2player;
         assertThrows(UnsupportedOperationException.class, () -> {
-            finalTestcard_2player.pickPointsTile();
+            finalTestcard_2player.getPointsTile();
+            finalTestcard_2player.removePointsTile();
         });
 
         CommonGoalCard finalTestcard_3player = testcard_3player;
         assertThrows(UnsupportedOperationException.class, () -> {
-            finalTestcard_3player.pickPointsTile();
+            finalTestcard_3player.getPointsTile();
+            finalTestcard_3player.removePointsTile();
         });
 
         CommonGoalCard finalTestcard_4player = testcard_4player;
         assertThrows(UnsupportedOperationException.class, () -> {
-            finalTestcard_4player.pickPointsTile();
+            finalTestcard_4player.getPointsTile();
+            finalTestcard_4player.removePointsTile();
         });
 
     }
+
     /**
      * This method tests the getPointsTiles method in the commonGoalCard abstract class
-     * @author due2
+     * @author due2, Paolo Gennaro
      */
     @Test
-    public void GetPointsTiles_return_Test(){
+    public void getPointsTiles_return_Test(){
         CommonGoalCard testcard_2player = new CommonGoalCard1(2,false);
         CommonGoalCard testcard_3player = new CommonGoalCard1(3,false);
         CommonGoalCard testcard_4player = new CommonGoalCard1(4,false);
@@ -99,49 +124,49 @@ public class CommonGoalCardsTests {
         //test with 2 players
 
         assertEquals(testcard_2player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.FOUR_1,PointsTile.EIGHT_1)));
-        testcard_2player.pickPointsTile();
+        testcard_2player.removePointsTile();
         assertEquals(testcard_2player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.FOUR_1)));
-        testcard_2player.pickPointsTile();
+        testcard_2player.removePointsTile();
         assertEquals(testcard_2player.getPointsTiles(), new ArrayList<>());
 
         testcard_2player = new CommonGoalCard1(2,true);
 
         assertEquals(testcard_2player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.FOUR_2,PointsTile.EIGHT_2)));
-        testcard_2player.pickPointsTile();
+        testcard_2player.removePointsTile();
         assertEquals(testcard_2player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.FOUR_2)));
-        testcard_2player.pickPointsTile();
+        testcard_2player.removePointsTile();
         assertEquals(testcard_2player.getPointsTiles(), new ArrayList<>());
 
         //test with 3 players
 
         assertEquals(testcard_3player.getPointsTiles(), new ArrayList<>(Arrays.asList( PointsTile.FOUR_1, PointsTile.SIX_1,PointsTile.EIGHT_1)));
-        testcard_3player.pickPointsTile();
+        testcard_3player.removePointsTile();
         assertEquals(testcard_3player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.FOUR_1,PointsTile.SIX_1)));
-        testcard_3player.pickPointsTile();
+        testcard_3player.removePointsTile();
         assertEquals(testcard_3player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.FOUR_1)));
-        testcard_3player.pickPointsTile();
+        testcard_3player.removePointsTile();
         assertEquals(testcard_3player.getPointsTiles(), new ArrayList<>());
 
         testcard_3player = new CommonGoalCard1(3,true);
 
         assertEquals(testcard_3player.getPointsTiles(), new ArrayList<>(Arrays.asList( PointsTile.FOUR_2, PointsTile.SIX_2,PointsTile.EIGHT_2)));
-        testcard_3player.pickPointsTile();
+        testcard_3player.removePointsTile();
         assertEquals(testcard_3player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.FOUR_2,PointsTile.SIX_2)));
-        testcard_3player.pickPointsTile();
+        testcard_3player.removePointsTile();
         assertEquals(testcard_3player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.FOUR_2)));
-        testcard_3player.pickPointsTile();
+        testcard_3player.removePointsTile();
         assertEquals(testcard_3player.getPointsTiles(), new ArrayList<>());
 
         //test with 4 players
 
         assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.TWO_1, PointsTile.FOUR_1,PointsTile.SIX_1 , PointsTile.EIGHT_1)));
-        testcard_4player.pickPointsTile();
+        testcard_4player.removePointsTile();
         assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.TWO_1,PointsTile.FOUR_1,PointsTile.SIX_1)));
-        testcard_4player.pickPointsTile();
+        testcard_4player.removePointsTile();
         assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.TWO_1,PointsTile.FOUR_1)));
-        testcard_4player.pickPointsTile();
+        testcard_4player.removePointsTile();
         assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.TWO_1)));
-        testcard_4player.pickPointsTile();
+        testcard_4player.removePointsTile();
         assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>());
 
 
@@ -150,20 +175,17 @@ public class CommonGoalCardsTests {
         testcard_4player = new CommonGoalCard1(4,true);
 
         assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.TWO_2, PointsTile.FOUR_2,PointsTile.SIX_2 , PointsTile.EIGHT_2)));
-        testcard_4player.pickPointsTile();
+        testcard_4player.removePointsTile();
         assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.TWO_2,PointsTile.FOUR_2,PointsTile.SIX_2)));
-        testcard_4player.pickPointsTile();
+        testcard_4player.removePointsTile();
         assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.TWO_2,PointsTile.FOUR_2)));
-        testcard_4player.pickPointsTile();
+        testcard_4player.removePointsTile();
         assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>(Arrays.asList(PointsTile.TWO_2)));
-        testcard_4player.pickPointsTile();
+        testcard_4player.removePointsTile();
         assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>());
 
 
     }
-
-    CommonGoalCard testCard;
-    Bookshelf testBookshelf;
 
     /**
      * This method tests the 1st common goal card in an environment where the check function
@@ -739,14 +761,16 @@ public class CommonGoalCardsTests {
         for(int i=0;i<6;i++){
             for(int j=0;j<5;j++) {
                 testBookshelf.insertTile(j, currentTile[j].getTileType());
-                if(precedentTile[j]==null)
-                    precedentTile[j]=new BookshelfTileSpot(currentTile[j].getTileType());
-                else
+
+                if(precedentTile[j]==null) {
+                    precedentTile[j] = new BookshelfTileSpot(currentTile[j].getTileType());
+                }else {
                     precedentTile[j].setTile(currentTile[j].getTileType());
+                }
+
                 do {
                     currentTile[j].setTile(TileType.randomTileType());
                 }while(currentTile[j].getTileType()==precedentTile[j].getTileType());
-
             }
 
             if(count<6){
@@ -754,7 +778,7 @@ public class CommonGoalCardsTests {
                     rnd2 = (int) (Math.random() * 5);
                     rnd1=rnd2+1;
                 }while(rnd2==index || rnd1==index);
-                if(count ==3){
+                if(count==3){
                     currentTile[rnd1].setTile(precedentTile[rnd1].getTileType());
                 }
                 index=rnd2;
@@ -985,7 +1009,7 @@ public class CommonGoalCardsTests {
      * @author due2
      */
     @Test
-public void CommonGoalCard6_expectedTrue_Test() {
+    public void CommonGoalCard6_expectedTrue_Test() {
         testCard = new CommonGoalCard6(4, false);
         testBookshelf = new Bookshelf(new Match());
         BookshelfTileSpot[] row1 = new BookshelfTileSpot[5];
@@ -1040,9 +1064,6 @@ public void CommonGoalCard6_expectedTrue_Test() {
         assertTrue(testCard.check(testBookshelf));
 
     }
-
-
-
 
     /**
      * This method tests the 7th common goal card in an environment where the check function
@@ -1305,7 +1326,7 @@ public void CommonGoalCard6_expectedTrue_Test() {
 
         //BookshelfTileSpot[][] threeOkOneNotMatrix = new BookshelfTileSpot[6][5]; //(0,0) is not ok
         //Only (0,0) is different from the others 3 corners
-        for(int i=0;i<testBookshelf.getBookshelfWidth();i++){                   //las row
+        for(int i=0;i<testBookshelf.getBookshelfWidth();i++){                   //last row
             if(i==0 || i == testBookshelf.getBookshelfWidth()-1){
                 testBookshelf.insertTile(i, tt);
             }else{
@@ -1548,18 +1569,19 @@ public void CommonGoalCard6_expectedTrue_Test() {
     /**
      * This method tests the 10th common goal card in an environment where the check function
      * should return true
-     * @author patrickpoggi
+     * @author patrickpoggi, Paolo Gennaro
      */
     @Test
     public void CommonGoalCard10_expectedTrue_Test(){
         testCard = new CommonGoalCard10(4, false);
         testBookshelf = new Bookshelf(new Match());
+        TileType othertt;
         Random r = new Random();
 
         for(TileType tt : TileType.values()){
             for(int k=0;k<5;k++){                       //Doing 5 tries for every type
                 Couple<Integer, Integer> startingPos = new Couple<Integer, Integer>(r.nextInt(4), r.nextInt(3));
-                for(int i= testBookshelf.getBookshelfHeight();i>=0;i--){
+                for(int i= testBookshelf.getBookshelfHeight()-1;i>=0;i--){
                     for(int j=0;j< testBookshelf.getBookshelfWidth();j++){
                         if(     (i == startingPos.getA() && j == startingPos.getB()) ||
                                 (i == startingPos.getA() && j == (startingPos.getB()+2)) ||
@@ -1569,10 +1591,10 @@ public void CommonGoalCard6_expectedTrue_Test() {
                         ){
                             testBookshelf.insertTile(j,tt);
                         }else{
-                            TileType othertt;
                             do{
                                 othertt = TileType.randomTileType();
                             }while(othertt == tt);
+                            testBookshelf.insertTile(j,othertt);
                         }
                     }
                 }

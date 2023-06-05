@@ -30,7 +30,7 @@ public class CommonGoalCard9 extends CommonGoalCard {
             for(int j=0;j< bookshelf.getBookshelfWidth();j++){
                 if(bsmat[i][j].isEmpty() == false){
                     TileType tt = bsmat[i][j].getTileType();
-                    if (count.get(tt) >= 8) {
+                    if (count.get(tt) >= 7) {
                         return true;
                     }
                     int temp = count.get(tt);
