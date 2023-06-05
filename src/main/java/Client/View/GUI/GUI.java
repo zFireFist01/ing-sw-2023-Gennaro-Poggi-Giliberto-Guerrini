@@ -58,6 +58,8 @@ public class GUI extends Application implements View {
     private NetworkHandler networkHandler;
     private Stage primaryStage;
 
+    private Scene previousScene;
+
     private SelectViewEvent currentView;
     private boolean matchStarted = false;
 
@@ -155,6 +157,8 @@ public class GUI extends Application implements View {
     private Button quitButton;
     @FXML
     private Button playButton;
+    @FXML
+    private Button showBookshelf;
     @FXML
     private TextField onlyUsernameField;
     @FXML
@@ -312,6 +316,7 @@ public class GUI extends Application implements View {
     private Label punteggioQuarto;
     @FXML
     private AnchorPane anchorPane;
+
 
 
 
@@ -660,7 +665,10 @@ public class GUI extends Application implements View {
         livingroomgridbuttons.setDisable(false);
         checkoutbutton.setDisable(false);
         checkoutbutton.setVisible(true);
+        checkoutbutton.setStyle("-fx-background-color: #FFD700; -fx-font-weight: bold; -fx-font-size: 10px;");
         mybookshelf.setDisable(true);
+        mybookshelf.setStyle("-fx-background-color: #FFD700;");
+        mybookshelf.setOpacity(0.2);
 
         String[] message = event.getMessage().split(" ");
         if(message[0].equals("Tiles") && message[1].equals("Selected:")){
@@ -1296,14 +1304,21 @@ public class GUI extends Application implements View {
 
         }
 
+        previousScene = primaryStage.getScene();
         Scene newScene = new Scene(newRoot);
         primaryStage.setScene(newScene);
+
+
+        AnchorPane pane = (AnchorPane) newRoot.lookup("#anchorPane");
+        ImageView imageView =(ImageView) newRoot.lookup("#sfondo") ;
+
+
+        imageView.fitHeightProperty().bind(anchorPane.heightProperty());
+        imageView.fitWidthProperty().bind(anchorPane.widthProperty());
+        primaryStage.setMaximized(true);
+        anchorPane.setPrefWidth(600);
+        anchorPane.setPrefHeight(400);
         primaryStage.setResizable(true);
-        primaryStage.setFullScreen(true);
-
-        anchorPane.prefWidthProperty().bind(primaryStage.widthProperty());
-        anchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
-
         primaryStage.show();
     }
 
@@ -1349,6 +1364,8 @@ public class GUI extends Application implements View {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+
+        mybookshelf.setStyle("-fx-background-color: transparent;");
 
 
     }
@@ -1705,6 +1722,13 @@ public class GUI extends Application implements View {
     @FXML
     private void onPlayButton(ActionEvent event) throws IOException{
         new Thread(this.networkHandler).start();
+    }
+
+    @FXML
+    private void onShowBookshelf(ActionEvent event) throws IOException{
+        Stage newStage = new Stage();
+        newStage.setScene(previousScene);
+        newStage.show();
     }
 
     @FXML
