@@ -237,7 +237,7 @@ public class CommonGoalCardsTests {
                 else
                     precedentTile = new BookshelfTileSpot(currentTile.getTileType());
             }
-            if ((!flag && i >= 1 && Math.random() >= 0.5) || !flag && i == 1) {
+            if ((!flag && i >= 1 && Math.random() >= 0.5) || !flag && i == 2) {
                 flag = true;
                 index = (int) (Math.random() * 3);
                 matchingTile.setTile(TileType.randomTileType());
@@ -731,7 +731,7 @@ public class CommonGoalCardsTests {
             rnd1=(int)(Math.random()*6);
             if(count<5 && rnd1%3==0){
                 do {
-                    rnd2 = (int) (Math.random() * 6);
+                    rnd2 = (int) (Math.random() * 5);
                 }while(rnd2==index);
                 index=rnd2;
                 currentTile[index].setTile(precedentTile[index].getTileType());
@@ -775,9 +775,9 @@ public class CommonGoalCardsTests {
 
             if(count<6){
                 do {
-                    rnd2 = (int) (Math.random() * 5);
+                    rnd2 = (int) (Math.random() * 4);
                     rnd1=rnd2+1;
-                }while(rnd2==index || rnd1==index);
+                }while(rnd2==index || rnd1==index || rnd2==index+1);
                 if(count==3){
                     currentTile[rnd1].setTile(precedentTile[rnd1].getTileType());
                 }
@@ -985,7 +985,7 @@ public class CommonGoalCardsTests {
         //create a bookshelf with only one row of different tiletypes
         rnd1=(int)(Math.random()*5);
         for(int i=0;i<6;i++){
-            rnd2=(int)(Math.random()*5);
+            rnd2=(int)(Math.random()*4);
             for(int j=0;j<5;j++){
                 if(i==rnd1)
                     testBookshelf.insertTile(j,row[j].getTileType());
