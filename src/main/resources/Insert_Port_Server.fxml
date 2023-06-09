@@ -15,8 +15,8 @@
             <Image url="@misc/sfondo parquet.jpg" />
          </image>
       </ImageView>
-      <TextField fx:id="addressServerRMI1" layoutX="159.0" layoutY="174.0" prefHeight="25.0" prefWidth="281.0" text="Server IP address" />
-      <TextField fx:id="portServerRMI" layoutX="159.0" layoutY="220.0" prefHeight="25.0" prefWidth="281.0" text="Server Port:" />
+      <TextField fx:id="addressServerRMI1" layoutX="159.0" layoutY="174.0" prefHeight="25.0" prefWidth="281.0" promptText="Server IP address:" />
+      <TextField fx:id="portServerRMI" layoutX="159.0" layoutY="220.0" prefHeight="25.0" prefWidth="281.0" promptText="Server Port:" />
       <ImageView fitHeight="94.0" fitWidth="247.0" layoutX="177.0" layoutY="60.0">
          <image>
             <Image url="@Publisher material/Title 2000x618px.png" />
