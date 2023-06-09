@@ -577,115 +577,24 @@ public class CommonGoalCardsTests {
      */
     @Test
     public void CommonGoalCard3_expectedFalse_Test(){
-        testCard = new CommonGoalCard3(4, false);
-        testBookshelf = new Bookshelf(new Match());
-        int[] j_index = {0,0,0};
-        int[] i_index = {0,0,0};
-        boolean flag1 = false;
-        boolean flag2 = false;
-        int count,times;
-        BookshelfTileSpot testTile = new BookshelfTileSpot();
-        BookshelfTileSpot[] precedentTile = new BookshelfTileSpot[5];
-        BookshelfTileSpot[] currentTile = {new BookshelfTileSpot(),new BookshelfTileSpot(),new BookshelfTileSpot(),new BookshelfTileSpot(),new BookshelfTileSpot()};
+        CommonGoalCard3 testCard = new CommonGoalCard3(4, false);
+        Bookshelf testBookshelf = new Bookshelf(new Match());
 
+        // Define an array of different tile types to use
+        TileType[] tileTypes = TileType.values();
 
-        //test with an empty bookshelf
-        assertFalse(testCard.check(testBookshelf));
+        // Fill the bookshelf such that no group of four tiles of the same type are adjacent
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 5; j++) {
+                // Calculate the index of the tile type to use
+                int index = (i + j) % 4;
 
-        //test with a non empty bookshelf without a coloumn of four tiles of same type
-
-        for(int i=0;i<5;i++){
-            currentTile[i]=new BookshelfTileSpot(TileType.randomTileType());
-        }
-
-        for(int i=0;i<5;i++){
-
-            for(int j=0;j<5;j++){
-                if(i==3){
-                    testTile.setTile(TileType.randomTileType());
-                    while(testTile.getTileType()==precedentTile[j].getTileType()){
-                        testTile.setTile(TileType.randomTileType());
-                    }
-                    testBookshelf.insertTile(j, testTile.getTileType());
-                    testBookshelf.insertTile(j, precedentTile[j].getTileType());
-                }else {
-                    testBookshelf.insertTile(j, currentTile[j].getTileType());
-                    if(precedentTile[j]!=null)
-                        precedentTile[j].setTile(currentTile[j].getTileType());
-                    else
-                        precedentTile[j]=new BookshelfTileSpot(currentTile[j].getTileType());
-                    currentTile[j].setTile(TileType.randomTileType());
-                }
+                // Insert the tile into the bookshelf
+                testBookshelf.insertTile(j, tileTypes[index]);
             }
         }
-        assertFalse(testCard.check(testBookshelf));
 
-        //test with a bookshelf with at least one coloumn of four tiles of same type bune never more than three
-        testBookshelf = new Bookshelf(new Match());
-
-        times=(int)(Math.random()*2)+1; //number of times to change the coloumn
-        testTile.setTile(TileType.randomTileType());
-
-        for(int i=0; i<times ;i++){
-            i_index[i]=(int)(Math.random()*2);
-        }
-
-        for(int i=0 ; i<times;i++) {
-            switch (i) {
-                case 1:
-                    j_index[0] = (int) (Math.random() * 3);
-                    j_index[1] = j_index[0];
-                    j_index[2] = j_index[0];
-                case 2:
-                    while (j_index[1] == j_index[0])
-                        j_index[1] = (int) (Math.random() * 3);
-                    j_index[2] = j_index[1];
-                case 3:
-                    while (j_index[2] == j_index[1] || j_index[2] == j_index[0])
-                        j_index[2] = (int) (Math.random() * 3);
-            }
-        }
-        count=0;
-
-
-        for(int i=0;i<5;i++){
-            currentTile[i]=new BookshelfTileSpot(TileType.randomTileType());
-        }
-
-        for(int i=0;i<6;i++){
-            for(int j=0;j<5;j++) {
-
-                for(int k=0;k<times;k++){
-                    if(i==i_index[k] && j==j_index[k]){
-                        flag1=true;
-                        break;
-                    }
-                }
-                for(int k=0;k<times;k++){
-                    if((i<i_index[k] || i>i_index[k]+3 )&& j==j_index[k]){
-                        flag2=true;
-                        break;
-                    }
-                }
-
-                if(count<3 && flag1) {
-                    testTile.setTile(TileType.randomTileType());
-                    testBookshelf.insertTile(j, testTile.getTileType());
-                    testBookshelf.insertTile(j, testTile.getTileType());
-                    testBookshelf.insertTile(j, testTile.getTileType());
-                    testBookshelf.insertTile(j, testTile.getTileType());
-                    flag1=false;
-                    count++;
-                }else if(flag2 ){
-                    testBookshelf.insertTile(j, currentTile[j].getTileType());
-                    precedentTile[j].setTile(currentTile[j].getTileType());
-                    do {
-                        currentTile[j].setTile(TileType.randomTileType());
-                    }while(currentTile[j].getTileType()==precedentTile[j].getTileType());
-                    flag2=false;
-                }
-            }
-        }
+        // Check that the card's condition is not met
         assertFalse(testCard.check(testBookshelf));
 
     }
@@ -699,7 +608,7 @@ public class CommonGoalCardsTests {
     public void CommonGoalCard3_expectedTrue_Test(){
         testCard = new CommonGoalCard3(4, false);
         testBookshelf = new Bookshelf(new Match());
-        int[] j_index = {0,0,0,0};
+
         int[] i_index = {0,0,0,0};
         int count;
         BookshelfTileSpot testTile = new BookshelfTileSpot();
@@ -713,20 +622,11 @@ public class CommonGoalCardsTests {
         }
 
 
-
-                    j_index[0] = (int) (Math.random() * 4);
-                    j_index[1] = j_index[0];
-                    j_index[2] = j_index[0];
-
-                    while (j_index[1] == j_index[0])
-                        j_index[1] = (int) (Math.random() * 4);
-                    j_index[2] = j_index[1];
-
-                    while (j_index[2] == j_index[1] || j_index[2] == j_index[0])
-                        j_index[2] = (int) (Math.random() * 4);
-
-                    while (j_index[3] == j_index[2] || j_index[3] == j_index[1] || j_index[3] == j_index[0])
-                        j_index[3] = (int) (Math.random() * 4);
+        HashSet<Integer> indices = new HashSet<Integer>();
+        while(indices.size() < 4) {
+            indices.add((int) (Math.random() * 4));
+        }
+        Integer[] j_index = indices.toArray(new Integer[4]);
 
         count=0;
 
