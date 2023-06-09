@@ -46,10 +46,5 @@ public class TileSpot {
         TileSpot tileSpot = (TileSpot) o;
         return tile.compareTo(tileSpot.tile)==0;
     }
-
-
-    public void setTileType(TileType tileType) {
-        this.tile = tileType;
-    }
 }
 

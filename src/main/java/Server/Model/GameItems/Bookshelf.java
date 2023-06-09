@@ -50,6 +50,10 @@ public class Bookshelf {
         return copy;
     }
 
+    public void setTileMatrix(BookshelfTileSpot[][] tileMatrix) {
+        this.tileMatrix = tileMatrix;
+    }
+
     /**
      * For test usage only
      * @return

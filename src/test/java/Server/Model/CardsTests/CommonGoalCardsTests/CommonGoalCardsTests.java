@@ -394,6 +394,7 @@ public class CommonGoalCardsTests {
         int index1, index2;
         BookshelfTileSpot[] precedentTile = new BookshelfTileSpot[6];
         BookshelfTileSpot currentTile = new BookshelfTileSpot();
+        BookshelfTileSpot[][] help = new BookshelfTileSpot[6][5];
 
         //test with an empty bookshelf
         assertFalse(testCard.check(testBookshelf));
@@ -431,6 +432,7 @@ public class CommonGoalCardsTests {
             boolean colonnaUguale = false;
             TileType elementoUguale = testBookshelf.getTileMatrix()[0][j].getTileType();
 
+
             //Searching if elementoUguale is present more than once in the column
             for(int i = 1; i<6; i++){
                 if(testBookshelf.getTileMatrix()[i][j].getTileType() == elementoUguale){
@@ -438,13 +440,14 @@ public class CommonGoalCardsTests {
                     break;
                 }
             }
-
+            help = testBookshelf.getTileMatrix();
             //If there is a column an element of the same type as elementoUguale we change a random element of the column and set it to elementoUguale's type
             if(!colonnaUguale){
                 do {
                     rigaDaModificare = (int) (Math.random() * 6);
-                }while( rigaDaModificare != 0);
-                testBookshelf.getTileMatrix()[rigaDaModificare][j].setTileType(elementoUguale);
+                }while( rigaDaModificare == 0);
+                help[rigaDaModificare][j].setTile(elementoUguale);
+                testBookshelf.setTileMatrix(help);
             }
         }
 
@@ -509,12 +512,14 @@ public class CommonGoalCardsTests {
                 }
             }
 
+            help = testBookshelf.getTileMatrix();
             //If there is a column an element of the same type as elementoUguale we change a random element of the column and set it to elementoUguale's type
             if(!colonnaUguale){
                 do {
                     rigaDaModificare = (int) (Math.random() * 6);
-                }while( rigaDaModificare != 0);
-                testBookshelf.getTileMatrix()[rigaDaModificare][j].setTile(elementoUguale);
+                }while( rigaDaModificare == 0);
+                help[rigaDaModificare][j].setTile(elementoUguale);
+                testBookshelf.setTileMatrix(help);
             }
         }
         
