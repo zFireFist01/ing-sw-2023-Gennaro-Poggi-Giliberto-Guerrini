@@ -42,8 +42,8 @@ public class Controller implements VCEventListener {
     private final Map<Integer,VirtualView > PlayerViews=new HashMap<>();
     private List<SelectViewEventListener> selectViewEventListeners;
     private Map<Integer, Player> hashNicknames = new HashMap<>();
-
     private Server server;
+
     public Controller(Match match, Server server){
         this.match = match;
         this.server = server;
@@ -56,7 +56,6 @@ public class Controller implements VCEventListener {
      * @param nickname nickname of the player
      * @author ValentinoGuerrini
      */
-
     private void onLoginEvent(String nickname,int numberofPlayers) throws RemoteException{
 
         ArrayList<Player> players = match.getPlayers();
@@ -160,7 +159,7 @@ public class Controller implements VCEventListener {
     }
 
     /**
-     * Method to manage the send message event, it adds the message to the chat
+     * Method to manage the "send message" event, it adds the message to the chat
      * @param message to be added to the chat
      * @author ValentinoGuerrini
      */

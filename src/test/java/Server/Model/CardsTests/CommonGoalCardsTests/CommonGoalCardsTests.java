@@ -7,7 +7,7 @@ import Server.Model.GameItems.BookshelfTileSpot;
 import Server.Model.GameItems.PointsTile;
 import Server.Model.GameItems.TileType;
 import Server.Model.Match;
-
+import java.util.Random;
 import Utils.MathUtils.*;
 //import org.junit.jupiter.api.*;
 import org.junit.Test;
@@ -384,7 +384,7 @@ public class CommonGoalCardsTests {
     /**
      * This method tests the 2nd common goal card in an environment where the check function
      * should return false
-     * @author due2
+     * @author due2, Paolo Gennaro
      */
     @Test
     public void CommonGoalCard2_expectedFalse_Test() {
@@ -398,8 +398,10 @@ public class CommonGoalCardsTests {
         //test with an empty bookshelf
         assertFalse(testCard.check(testBookshelf));
 
-        //test with a non empty bookshelf without a row of different tile types
+        //test with a non empty bookshelf without a column of different tile types
 
+
+        /*
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 5; j++) {
                 currentTile.setTile(TileType.randomTileType());
@@ -414,9 +416,47 @@ public class CommonGoalCardsTests {
                 }
             }
         }
+        */
+
+        //Fill a matrix with random tile types
+        for(int i = 0; i<6; i++){
+            for(int j = 0; j < 5; j++){
+                testBookshelf.insertTile(j, TileType.randomTileType());
+            }
+        }
+
+        int rigaDaModificare;
+        //Check if there is a column with all different tile types
+        for(int j = 0; j < 5; j++){
+            boolean colonnaUguale = false;
+            TileType elementoUguale = testBookshelf.getTileMatrix()[0][j].getTileType();
+
+            //Searching if elementoUguale is present more than once in the column
+            for(int i = 1; i<6; i++){
+                if(testBookshelf.getTileMatrix()[i][j].getTileType() == elementoUguale){
+                    colonnaUguale = true;
+                    break;
+                }
+            }
+
+            //If there is a column an element of the same type as elementoUguale we change a random element of the column and set it to elementoUguale's type
+            if(!colonnaUguale){
+                do {
+                    rigaDaModificare = (int) (Math.random() * 6);
+                }while( rigaDaModificare != 0);
+                testBookshelf.getTileMatrix()[rigaDaModificare][j].setTileType(elementoUguale);
+            }
+        }
+
+
+        //boolean flag2 = testCard.check(testBookshelf);
         assertFalse(testCard.check(testBookshelf));
-        //test with a bookshelf with only one row of different tile types
+
+
+        //test with a bookshelf with only one column of different tile types
+        precedentTile = new BookshelfTileSpot[6];
         testBookshelf = new Bookshelf(new Match());
+        /*
         flag = new boolean[]{false, false, false, false, false, false};
         index1 = (int) (Math.random() * 4);
         for (int i = 0; i < 6; i++) {
@@ -426,7 +466,7 @@ public class CommonGoalCardsTests {
                     testBookshelf.insertTile(j, precedentTile[j].getTileType());
                     flag[j] = true;
                 } else {
-                    if (precedentTile[j].equals(currentTile) && j != index1)
+                    if (i > 0 && precedentTile[j].equals(currentTile) && j != index1)
                         flag[j] = true;
                     precedentTile[j] = currentTile;
                     if (j != index1) {
@@ -437,6 +477,47 @@ public class CommonGoalCardsTests {
                 }
             }
         }
+        */
+        index1 = (int) (Math.random() * 5);
+        TileType tileType = null;
+        TileType[] tileTypes = TileType.values();
+        for (int i = 0; i < 6; i++) {
+            tileType = tileTypes[i];
+            testBookshelf.insertTile(index1, tileType);
+        }
+        for(int i = 0; i<6; i++) {
+            for (int j = 0; j < 5; j++) {
+                if (j == index1) {
+                    continue;
+                }
+                testBookshelf.insertTile(j, TileType.randomTileType());
+            }
+        }
+        //Check if there is a column with all different tile types that is not index1 column
+        for(int j = 0; j < 5; j++){
+            if (j == index1) {
+                continue;
+            }
+            boolean colonnaUguale = false;
+            TileType elementoUguale = testBookshelf.getTileMatrix()[0][j].getTileType();
+
+            //Searching if elementoUguale is present more than once in the column
+            for(int i = 1; i<6; i++){
+                if(testBookshelf.getTileMatrix()[i][j].getTileType() == elementoUguale){
+                    colonnaUguale = true;
+                    break;
+                }
+            }
+
+            //If there is a column an element of the same type as elementoUguale we change a random element of the column and set it to elementoUguale's type
+            if(!colonnaUguale){
+                do {
+                    rigaDaModificare = (int) (Math.random() * 6);
+                }while( rigaDaModificare != 0);
+                testBookshelf.getTileMatrix()[rigaDaModificare][j].setTile(elementoUguale);
+            }
+        }
+        
         assertFalse(testCard.check(testBookshelf));
     }
     /**
@@ -731,7 +812,7 @@ public class CommonGoalCardsTests {
             rnd1=(int)(Math.random()*6);
             if(count<5 && rnd1%3==0){
                 do {
-                    rnd2 = (int) (Math.random() * 6);
+                    rnd2 = (int) (Math.random() * 5);
                 }while(rnd2==index);
                 index=rnd2;
                 currentTile[index].setTile(precedentTile[index].getTileType());
@@ -1320,6 +1401,7 @@ public class CommonGoalCardsTests {
         testCard = new CommonGoalCard8(4, false);
         testBookshelf = new Bookshelf(new Match());
         TileType tt = TileType.randomTileType();
+        TileType wrongtt = TileType.randomTileType();
 
         //Checking the empty bookshelf
         assertFalse(testCard.check(testBookshelf));
@@ -1346,7 +1428,6 @@ public class CommonGoalCardsTests {
             testBookshelf.insertTile(i,TileType.randomTileType());
         }
         for(int i=0;i< testBookshelf.getBookshelfWidth();i++){                  //1st row
-            TileType wrongtt;
             do{
                 wrongtt = TileType.randomTileType();
             }while(wrongtt == tt);
@@ -1383,7 +1464,6 @@ public class CommonGoalCardsTests {
             testBookshelf.insertTile(i,TileType.randomTileType());
         }
         for(int i=0;i< testBookshelf.getBookshelfWidth();i++){                  //1st row
-            TileType wrongtt;
             do{
                 wrongtt = TileType.randomTileType();
             }while(wrongtt == tt);
@@ -1399,8 +1479,7 @@ public class CommonGoalCardsTests {
 
         //Only (testBookShelf.getHeight()-1,0) is different from the others 3 corners
         testBookshelf = new Bookshelf(new Match());
-        for(int i=0;i<testBookshelf.getBookshelfWidth();i++){                   //las row
-            TileType wrongtt;
+        for(int i=0;i<testBookshelf.getBookshelfWidth();i++){                   //las rowwrongtt;
             do{
                 wrongtt = TileType.randomTileType();
             }while(wrongtt == tt);
@@ -1435,36 +1514,35 @@ public class CommonGoalCardsTests {
 
         //Only (testBookShelf.getHeight()-1,testBookShelf.getHeight()-1) is different from the others 3 corners
         testBookshelf = new Bookshelf(new Match());
+        do{
+            wrongtt = TileType.randomTileType();
+        }while(wrongtt == tt);
         for(int i=0;i<testBookshelf.getBookshelfWidth();i++){                   //las row
-            TileType wrongtt;
-            do{
-                wrongtt = TileType.randomTileType();
-            }while(wrongtt == tt);
             if(i==testBookshelf.getBookshelfHeight()-1){
                 testBookshelf.insertTile(i, wrongtt);
-            }else if(i== 0){
+            }else if(i==0){
                 testBookshelf.insertTile(i,tt);
             }else{
-                testBookshelf.insertTile(i,TileType.randomTileType());
+                testBookshelf.insertTile(i,wrongtt);
             }
         }
         for(int i=0;i< testBookshelf.getBookshelfWidth();i++){                  //2nd to last row
-            testBookshelf.insertTile(i,TileType.randomTileType());
+            testBookshelf.insertTile(i,wrongtt);
         }
         for(int i=0;i< testBookshelf.getBookshelfWidth();i++){                  //3rd to last row
-            testBookshelf.insertTile(i,TileType.randomTileType());
+            testBookshelf.insertTile(i,wrongtt);
         }
         for(int i=0;i< testBookshelf.getBookshelfWidth();i++){                  //4th to last row
-            testBookshelf.insertTile(i,TileType.randomTileType());
+            testBookshelf.insertTile(i,wrongtt);
         }
         for(int i=0;i< testBookshelf.getBookshelfWidth();i++){                  //2nd row
-            testBookshelf.insertTile(i,TileType.randomTileType());
+            testBookshelf.insertTile(i,wrongtt);
         }
         for(int i=0;i< testBookshelf.getBookshelfWidth();i++){                  //1st row
             if(i==0 || i == testBookshelf.getBookshelfWidth()-1){
                 testBookshelf.insertTile(i, tt);
             }else{
-                testBookshelf.insertTile(i,TileType.randomTileType());
+                testBookshelf.insertTile(i,wrongtt);
             }
         }
         assertFalse(testCard.check(testBookshelf));

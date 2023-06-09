@@ -48,5 +48,8 @@ public class TileSpot {
     }
 
 
+    public void setTileType(TileType tileType) {
+        this.tile = tileType;
+    }
 }
 
