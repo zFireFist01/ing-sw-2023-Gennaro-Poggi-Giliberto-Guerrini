@@ -700,7 +700,7 @@ public class CommonGoalCardsTests {
 
         //test with less than 6 2x1 columns of same tiles and no 3x1 columns of same tiles
         for(int i=0;i<5;i++){
-            currentTile[i]=new BookshelfTileSpot(TileType.randomTileType());
+            currentTile[i]=new BookshelfTileSpot(TileType.values()[i]);
         }
         for(int i=0;i<6;i++){
             for(int j=0;j<5;j++) {
@@ -711,7 +711,7 @@ public class CommonGoalCardsTests {
                     precedentTile[j].setTile(currentTile[j].getTileType());
                 do {
                     currentTile[j].setTile(TileType.randomTileType());
-                }while(currentTile[j].getTileType()==precedentTile[j].getTileType());
+                }while(currentTile[j].getTileType()==precedentTile[j].getTileType() || currentTile[j].getTileType()==currentTile[(j+1)%5].getTileType());
 
             }
             rnd1=(int)(Math.random()*6);
