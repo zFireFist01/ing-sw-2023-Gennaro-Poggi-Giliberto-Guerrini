@@ -672,7 +672,7 @@ public class GUI extends Application implements View {
         checkoutbutton.setDisable(false);
         checkoutbutton.setVisible(true);
         checkoutbutton.setStyle("-fx-background-color: #FFD700; -fx-font-weight: bold; -fx-font-size: 10px;");
-        //mybookshelf.setDisable(true);
+        mybookshelf.setDisable(true);
         //mybookshelf.setStyle("-fx-background-color: #FFD700;");
         //mybookshelf.setOpacity(0.2);
 
@@ -732,7 +732,7 @@ public class GUI extends Application implements View {
         livingroomgridbuttons.setDisable(true);
         checkoutbutton.setDisable(true);
         checkoutbutton.setVisible(false);
-        //mybookshelf.setDisable(false);
+        mybookshelf.setDisable(false);
 
 
     }
