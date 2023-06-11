@@ -91,7 +91,6 @@ public class MatchTest {
      * checkIfBookshelfIsFull test2 checks if a bookshelf with just one spot free results empty
      *  @author Marta Giliberto
      */
-
     @Test
     public void checkIfBookshelfIsFull_test2(){
         Match match = new Match();
@@ -119,7 +118,6 @@ public class MatchTest {
      * checkIfBookshelfIsFull test3 checks if an empty bookshelf  results empty
      *  @author Marta Giliberto
      */
-
     @Test
     public void checkIfBookshelfIsFull_test3(){
         Match match = new Match();
