@@ -316,6 +316,8 @@ public class GUI extends Application implements View {
     private Label punteggioQuarto;
     @FXML
     private AnchorPane anchorPane;
+    @FXML
+    private Label servermessage;
 
 
 
@@ -595,6 +597,10 @@ public class GUI extends Application implements View {
     @Override
     public void onSelectViewEvent(SelectViewEvent event) {
         String view = event.getType();
+        if(servermessage != null)
+            Platform.runLater(() -> {
+                servermessage.setText(event.getMessage());
+            });
         switch(view){
 
             case "LoginView" -> {
@@ -666,9 +672,9 @@ public class GUI extends Application implements View {
         checkoutbutton.setDisable(false);
         checkoutbutton.setVisible(true);
         checkoutbutton.setStyle("-fx-background-color: #FFD700; -fx-font-weight: bold; -fx-font-size: 10px;");
-        mybookshelf.setDisable(true);
-        mybookshelf.setStyle("-fx-background-color: #FFD700;");
-        mybookshelf.setOpacity(0.2);
+        //mybookshelf.setDisable(true);
+        //mybookshelf.setStyle("-fx-background-color: #FFD700;");
+        //mybookshelf.setOpacity(0.2);
 
         String[] message = event.getMessage().split(" ");
         if(message[0].equals("Tiles") && message[1].equals("Selected:")){
@@ -726,7 +732,7 @@ public class GUI extends Application implements View {
         livingroomgridbuttons.setDisable(true);
         checkoutbutton.setDisable(true);
         checkoutbutton.setVisible(false);
-        mybookshelf.setDisable(false);
+        //mybookshelf.setDisable(false);
 
 
     }

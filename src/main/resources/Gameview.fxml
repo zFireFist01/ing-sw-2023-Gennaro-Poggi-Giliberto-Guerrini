@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TitledPane?>
@@ -22,6 +23,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -415,9 +419,6 @@
                                        <top>
                                           <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="84.0" stroke="TRANSPARENT" strokeType="INSIDE" width="467.0" BorderPane.alignment="CENTER" />
                                        </top>
-                                       <bottom>
-                                          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="83.0" stroke="TRANSPARENT" strokeType="INSIDE" width="467.0" BorderPane.alignment="CENTER" />
-                                       </bottom>
                                        <center>
                                           <GridPane fx:id="livingroomgridbuttons" hgap="2.0" vgap="2.0" BorderPane.alignment="CENTER">
                                              <columnConstraints>
@@ -500,6 +501,51 @@
                                        <right>
                                           <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="425.0" stroke="TRANSPARENT" strokeType="INSIDE" width="23.0" BorderPane.alignment="CENTER" />
                                        </right>
+                                       <bottom>
+                                          <StackPane alignment="BOTTOM_CENTER" prefHeight="40.0" prefWidth="467.0" BorderPane.alignment="CENTER">
+                                             <children>
+                                                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="83.0" layoutX="10.0" layoutY="10.0" opacity="0.0" stroke="TRANSPARENT" strokeType="INSIDE" width="467.0" />
+                                                <Rectangle arcHeight="5.0" arcWidth="5.0" height="61.0" stroke="#ffffff00" strokeLineCap="ROUND" strokeLineJoin="ROUND" width="467.0">
+                                                   <fill>
+                                                      <RadialGradient centerX="0.5166666666666667" centerY="0.5" focusDistance="0.06976744186046524" radius="0.6744186046511628">
+                                                         <stops>
+                                                            <Stop>
+                                                               <color>
+                                                                  <Color red="1.0" green="1.0" blue="1.0" />
+                                                               </color>
+                                                            </Stop>
+                                                            <Stop offset="1.0">
+                                                               <color>
+                                                                  <Color red="1.0" green="1.0" blue="1.0" opacity="0.0" />
+                                                               </color>
+                                                            </Stop>
+                                                         </stops>
+                                                      </RadialGradient>
+                                                   </fill>
+                                                   <effect>
+                                                      <GaussianBlur radius="0.0" />
+                                                   </effect></Rectangle>
+                                                <Label id="servermessage" fx:id="servermessage" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="18.0" prefWidth="454.0" style="-fx-: white;" text="Match Started!" textAlignment="CENTER" textFill="#c00fff" wrapText="true">
+                                                   <StackPane.margin>
+                                                      <Insets top="20.0" />
+                                                   </StackPane.margin>
+                                                   <font>
+                                                      <Font size="19.0" />
+                                                   </font>
+                                                   <effect>
+                                                      <Lighting diffuseConstant="0.91" specularExponent="27.91" surfaceScale="3.48">
+                                                         <bumpInput>
+                                                            <Shadow />
+                                                         </bumpInput>
+                                                         <light>
+                                                            <Light.Distant azimuth="82.67" />
+                                                         </light>
+                                                      </Lighting>
+                                                   </effect>
+                                                </Label>
+                                             </children>
+                                          </StackPane>
+                                       </bottom>
                                     </BorderPane>
                                  </children>
                               </StackPane>
@@ -893,7 +939,7 @@
                   </VBox>
                </children>
             </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="2.0">
                      <children>
