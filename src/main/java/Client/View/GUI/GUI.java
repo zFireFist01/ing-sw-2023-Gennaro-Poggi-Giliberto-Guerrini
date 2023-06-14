@@ -52,6 +52,7 @@ public class GUI extends Application implements View {
     ImageView titleImageView;
     private String myNick;
 
+    private String currentPlayerNickname;
     ImageView wallpaperImageView;
 
     ConnectionType connectionType = null;
@@ -599,7 +600,9 @@ public class GUI extends Application implements View {
         String view = event.getType();
         if(servermessage != null)
             Platform.runLater(() -> {
-                servermessage.setText(event.getMessage());
+                if(event.getMessage().equals("please, select the coloumn where you want to insert the tiles")) {
+                    servermessage.setText("Select a column on your bookshelf where to put the tiles!");
+                }
             });
         switch(view){
 
@@ -742,7 +745,7 @@ public class GUI extends Application implements View {
     @Override
     public void onMVEvent(MVEvent event) {
         String methodName = event.getMethodName();
-
+        this.currentPlayerNickname = event.getMatch().getCurrentPlayer().getPlayerNickName();
 
         switch(methodName) {
             case "onModifiedChatEvent" -> {
@@ -778,16 +781,22 @@ public class GUI extends Application implements View {
                 });
             }
             case "onMatchStartedEvent" -> {
-
                 Platform.runLater(() -> {
-
                     onMatchStartedEvent(event.getMatch());
+                    if(event.getMatch().getCurrentPlayer().getPlayerNickName().equals(this.myNick))
+                        servermessage.setText("Match Started! It's your turn!");
+                    else
+                        servermessage.setText("Match Started! It's " + event.getMatch().getCurrentPlayer().getPlayerNickName() + "'s turn!");
                 });
 
             }
             case "onModifiedTurnEvent" -> {
                 Platform.runLater(() -> {
                         onModifiedTurnEvent(event.getMatch());
+                        if(event.getMatch().getCurrentPlayer().getPlayerNickName().equals(this.myNick))
+                            servermessage.setText("It's your turn! Pick some tiles and then click checkout!");
+                        else
+                            servermessage.setText("It's " + event.getMatch().getCurrentPlayer().getPlayerNickName() + "'s turn! Wait for your turn!");
                 });
 
             }
