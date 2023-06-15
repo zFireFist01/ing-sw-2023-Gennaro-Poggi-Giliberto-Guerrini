@@ -557,8 +557,7 @@ public class CLI implements Runnable , View {
         if (!matchStarted) {
             System.out.print(ANSIParameters.CLEAR_SCREEN + ANSIParameters.CURSOR_HOME);
             System.out.flush();
-            System.out.println("Hi "+ ANSIParameters.BLUE + myNick+ ANSIParameters.CRESET+" Welcome to MyShelfie");
-            System.out.println("Please wait for the other players to join the match");
+            System.out.println("Hi "+ ANSIParameters.BLUE + myNick+ ANSIParameters.CRESET+" welcome to MyShelfie!");
         }
         print();
 
@@ -575,7 +574,7 @@ public class CLI implements Runnable , View {
         System.out.print(ANSIParameters.CLEAR_SCREEN + ANSIParameters.CURSOR_HOME);
         System.out.flush();
 
-        System.out.println("Match ended");
+        System.out.println("Match ended!");
 
         System.out.println("The final scores are: ");
         Player p;
@@ -666,19 +665,19 @@ public class CLI implements Runnable , View {
                                "play        : login to the server\n"+
                                "quit        : quit the game\n");
         }else if(currentView.getType().equals("LoginView")){
-            System.out.println("info play \n quit");
+            System.out.println("info play\n quit");
         }else if(currentView.getType().equals("PickingTilesGameView")) {
-            System.out.println("info pick \n checkout open \n close send \n quit");
+            System.out.println("info pick\ncheckout open\nclose send\nquit");
         }else if(currentView.getType().equals("InsertingTilesGameView")){
-            System.out.println("info select \n open close \n send quit");
+            System.out.println("info select\nopen close\nsend quit");
         }else if(currentView.getType().equals("EndedMatchView")) {
-            System.out.println("info open \n close send \n quit");
+            System.out.println("info open\nclose send\nquit");
         }else if(currentView.getType().equals("GameView")) {
-            System.out.println("info open \n close send \n quit");
+            System.out.println("info open\nclose send\nquit");
         }else if(currentView.getType().equals("ChatONView")) {
-            System.out.println("info close \n send quit");
+            System.out.println("info close\nsend quit");
         }else if(currentView.getType().equals("ChatOFFView")) {
-            System.out.println("info open \n quit");
+            System.out.println("info open\nquit");
         }
         System.out.print("> ");
     }
@@ -2245,10 +2244,6 @@ public class CLI implements Runnable , View {
 
         return res;
     }
-    //refresh the CLI
-
-    //update()
-
 
     public ConnectionInfo getConnectionInfo(){
         return connectionInfo;

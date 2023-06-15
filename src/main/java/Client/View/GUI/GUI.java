@@ -598,12 +598,6 @@ public class GUI extends Application implements View {
     @Override
     public void onSelectViewEvent(SelectViewEvent event) {
         String view = event.getType();
-        if(servermessage != null)
-            Platform.runLater(() -> {
-                if(event.getMessage().equals("please, select the coloumn where you want to insert the tiles")) {
-                    servermessage.setText("Select a column on your bookshelf where to put the tiles!");
-                }
-            });
         switch(view){
 
             case "LoginView" -> {
@@ -622,9 +616,12 @@ public class GUI extends Application implements View {
                 onPickingTilesGameView(event);
             });
             case "InsertingTilesGameView" -> Platform.runLater(() -> {
-                InsertingTilesGameView(event);
+                onInsertingTilesGameView(event);
             });
-
+            default -> {
+                currentView = event;
+                servermessage.setText(currentView.getMessage());
+            }
 
         }
 
@@ -661,16 +658,18 @@ public class GUI extends Application implements View {
     }
 
     private void onGameViewEvent(SelectViewEvent event){
+        currentView = event;
         if(matchStarted) {
             livingroomgridbuttons.setDisable(true);
             mybookshelf.setDisable(true);
             checkoutbutton.setDisable(true);
             checkoutbutton.setVisible(false);
         }
-
+        servermessage.setText(currentView.getMessage());
     }
 
     private void onPickingTilesGameView(SelectViewEvent event){
+        currentView = event;
         livingroomgridbuttons.setDisable(false);
         checkoutbutton.setDisable(false);
         checkoutbutton.setVisible(true);
@@ -678,7 +677,7 @@ public class GUI extends Application implements View {
         mybookshelf.setDisable(true);
         //mybookshelf.setStyle("-fx-background-color: #FFD700;");
         //mybookshelf.setOpacity(0.2);
-
+        servermessage.setText(currentView.getMessage());
         String[] message = event.getMessage().split(" ");
         if(message[0].equals("Tiles") && message[1].equals("Selected:")){
             clearGrid(livingroomgridbuttons);
@@ -698,7 +697,6 @@ public class GUI extends Application implements View {
                 selected.setOpacity(0.5);
 
                 selected.setText(String.valueOf(i));
-
             }
 
 
@@ -730,14 +728,14 @@ public class GUI extends Application implements View {
         return null;
     }
 
-    private void InsertingTilesGameView(SelectViewEvent event) {
+    private void onInsertingTilesGameView(SelectViewEvent event) {
         clearGrid(livingroomgridbuttons);
         livingroomgridbuttons.setDisable(true);
         checkoutbutton.setDisable(true);
         checkoutbutton.setVisible(false);
         mybookshelf.setDisable(false);
-
-
+        currentView = event;
+        servermessage.setText(currentView.getMessage());
     }
 
 
@@ -746,7 +744,6 @@ public class GUI extends Application implements View {
     public void onMVEvent(MVEvent event) {
         String methodName = event.getMethodName();
         this.currentPlayerNickname = event.getMatch().getCurrentPlayer().getPlayerNickName();
-
         switch(methodName) {
             case "onModifiedChatEvent" -> {
 
@@ -783,20 +780,12 @@ public class GUI extends Application implements View {
             case "onMatchStartedEvent" -> {
                 Platform.runLater(() -> {
                     onMatchStartedEvent(event.getMatch());
-                    if(event.getMatch().getCurrentPlayer().getPlayerNickName().equals(this.myNick))
-                        servermessage.setText("Match Started! It's your turn!");
-                    else
-                        servermessage.setText("Match Started! It's " + event.getMatch().getCurrentPlayer().getPlayerNickName() + "'s turn!");
                 });
 
             }
             case "onModifiedTurnEvent" -> {
                 Platform.runLater(() -> {
                         onModifiedTurnEvent(event.getMatch());
-                        if(event.getMatch().getCurrentPlayer().getPlayerNickName().equals(this.myNick))
-                            servermessage.setText("It's your turn! Pick some tiles and then click checkout!");
-                        else
-                            servermessage.setText("It's " + event.getMatch().getCurrentPlayer().getPlayerNickName() + "'s turn! Wait for your turn!");
                 });
 
             }

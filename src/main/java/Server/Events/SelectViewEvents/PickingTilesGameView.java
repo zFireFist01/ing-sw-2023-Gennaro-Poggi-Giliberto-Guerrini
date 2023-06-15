@@ -17,7 +17,7 @@ public class PickingTilesGameView extends GameView{
 
 
     public PickingTilesGameView( ){
-        super("please, select a tile or check out selected tiles");
+        super("Pick some tiles and then checkout!");
 
     }
     public PickingTilesGameView(String message){
