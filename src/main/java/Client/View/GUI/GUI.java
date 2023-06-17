@@ -743,10 +743,9 @@ public class GUI extends Application implements View {
     @Override
     public void onMVEvent(MVEvent event) {
         String methodName = event.getMethodName();
-        this.currentPlayerNickname = event.getMatch().getCurrentPlayer().getPlayerNickName();
+        //this.currentPlayerNickname = event.getMatch().getCurrentPlayer().getPlayerNickName();
         switch(methodName) {
             case "onModifiedChatEvent" -> {
-
                 Platform.runLater(() -> {
                     onModifiedChatEvent((Message)event.getValue());
                 });
@@ -762,7 +761,6 @@ public class GUI extends Application implements View {
                 });
             }
             case "onModifiedMatchEndedEvent" -> {
-
                     Platform.runLater(() -> {
                         try {
                             onModifiedMatchEndedEvent(event.getMatch());
@@ -770,7 +768,6 @@ public class GUI extends Application implements View {
                             e.printStackTrace();
                         }
                     });
-
             }
             case "onModifiedPointsEvent" -> {
                 Platform.runLater(() -> {
