@@ -102,7 +102,7 @@ public class Bookshelf {
     }
 
     /**
-     * Iterates over every column and then returns the maximum number of insertible tiles, thus the
+     * Iterates over every column and then returns the maximum number of insertable tiles, thus the
      * number of empty spots of the "emptier" column
      * @return
      */
@@ -113,7 +113,7 @@ public class Bookshelf {
                 max = lastIndexes.get(i);
             }
         }
-        return (max+1); //Adding 1 because the index starts from 0
+        return (max); //Adding 1 because the index starts from 0
     }
 
     public void notifyMVEventListeners(MVEvent event){

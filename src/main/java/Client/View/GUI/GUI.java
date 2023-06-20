@@ -664,8 +664,8 @@ public class GUI extends Application implements View {
             mybookshelf.setDisable(true);
             checkoutbutton.setDisable(true);
             checkoutbutton.setVisible(false);
+            servermessage.setText(currentView.getMessage());
         }
-        servermessage.setText(currentView.getMessage());
     }
 
     private void onPickingTilesGameView(SelectViewEvent event){

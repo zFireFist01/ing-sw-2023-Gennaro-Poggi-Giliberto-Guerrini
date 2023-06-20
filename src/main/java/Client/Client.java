@@ -4,6 +4,7 @@ import Client.View.CLI.CLI;
 import Client.View.GUI.GUI;
 import javafx.application.Application;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 
@@ -94,9 +95,8 @@ public class Client {
                 else {
                     System.out.println("Invalid choice: the number must be 1 or 2!");
                 }
-            }catch (Exception e){
+            }catch (InputMismatchException e){
                 System.out.println("Invalid choice: Please insert a number!");
-                e.printStackTrace();
                 continue;
             }
 

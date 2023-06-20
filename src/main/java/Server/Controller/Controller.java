@@ -211,7 +211,7 @@ public class Controller implements VCEventListener {
         }
 
         if(currentPlayer.getBookshelf().getLastIndexes().get(column) < numberTakenTiles){
-            currentPlayerView.onSelectViewEvent(new InsertingTilesGameView("No space for this tiles!"));
+            currentPlayerView.onSelectViewEvent(new InsertingTilesGameView("Not enough space in this column!"));
             return;
         }
 
