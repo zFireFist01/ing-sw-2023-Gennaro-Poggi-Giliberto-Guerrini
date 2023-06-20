@@ -15,7 +15,7 @@
             <Image url="@misc/sfondo parquet.jpg" />
          </image>
       </ImageView>
-      <TextField fx:id="onlyUsernameField" layoutX="187.0" layoutY="184.0" prefHeight="39.0" prefWidth="226.0" text="Username">
+      <TextField fx:id="onlyUsernameField" layoutX="187.0" layoutY="184.0" prefHeight="39.0" prefWidth="226.0" promptText="Username">
          <font>
             <Font size="14.0" />
          </font>
