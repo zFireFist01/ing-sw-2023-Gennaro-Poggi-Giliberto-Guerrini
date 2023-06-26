@@ -1,5 +1,6 @@
 package Client;
 
+import Client.View.CLI.ANSIParameters;
 import Client.View.View;
 import Server.Events.Event;
 import Server.Events.EventTypeAdapterFactory;
@@ -15,6 +16,7 @@ import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 
@@ -100,7 +102,8 @@ public class NetworkSocketHandler implements NetworkHandler{
                 );
                 out.flush();
                 //In queso caso non devo aspettare il messaggio di benvenuto
-                System.out.println("Reconnecting to the socket server!: connection info sent:\n"+new Gson().toJson(view.getConnectionInfo())+"\n");
+                System.out.println("Reconnecting to the socket server...");
+                //System.out.println("Reconnecting to the socket server!: connection info sent:\n"+new Gson().toJson(view.getConnectionInfo())+"\n");
             } else{
                 out.write("Connecting\n".getBytes());
                 out.flush();
@@ -108,20 +111,23 @@ public class NetworkSocketHandler implements NetworkHandler{
                         (new Gson().toJson(view.getConnectionInfo())+"\n").getBytes()
                 );
                 out.flush();
-                String welcomeMessage = in.nextLine(); //Devo prima aspettare il messaggio di benvenuto
+                String firstMessage = in.nextLine(); //Devo prima aspettare il messaggio di benvenuto
+                System.out.println("Connected to the socket server!");
+                receiveSelectViewEvent(firstMessage);
                 //Potrebbe non essere il messaggio di benvenuto, ma un evento per dirmi che devo aspettare di essere
                 // gestito perché il match opener non ha ancora deciso con quante persone giocare
-                if(welcomeMessage.contains("Waiting")){
+                /*if(firstMessage.contains("Waiting")){
                     receiveSelectViewEvent(welcomeMessage);
                     welcomeMessage = in.nextLine();
-                    System.out.println(welcomeMessage);
                 }
+                System.out.println(welcomeMessage);*/
             }
-            System.out.println("Connected to the socket server!");
             //System.out.println("Ricevuto messaggio di benvenuto: " + welcomeMessage);
         } catch (IOException e) {
-            System.err.println(e.getStackTrace());
-            throw new RuntimeException("Error while connecting to server");
+            //System.err.println(e.getStackTrace());
+            //throw new RuntimeException("Error while connecting to server");
+            System.out.print("Error while connecting to server: please wait a few seconds and try again.\n> ");
+            return;
         }
         Gson gson = new GsonBuilder()
                 .registerTypeAdapterFactory(new EventTypeAdapterFactory())
@@ -129,26 +135,41 @@ public class NetworkSocketHandler implements NetworkHandler{
 
 
         while (true) {
-            message = in.nextLine();
-            //System.out.println("Received message: " + message);
-            if(message.equals("ping")){
-                //System.out.println("Received ping message");
-                //message = message.replace("ping", "");
-                pong();
-            }else{
-                event = gson.fromJson(message, Event.class);
-                primaryType = event.getPrimaryType();
+            try{
+                message = in.nextLine();
+            }catch(NoSuchElementException e){
+                System.out.println(ANSIParameters.CLEAR_SCREEN+ANSIParameters.CURSOR_HOME+
+                        "Lost connection with server.\nPlease wait a few seconds and try to reconnect.");
+                //view.setConnectionToReset();
+                view.resetConnection();
+                break;
+            }
 
-                switch (primaryType) {
-                    case "MVEvent":
-                        receiveMVEvent(message);
-                        break;
-                    case "SelectViewEvent":
-                        receiveSelectViewEvent(message);
+            if(message != null){
+                //System.out.println("Received message: " + message);
+                if(message.equals("ping")){
+                    //System.out.println("Received ping message");
+                    //message = message.replace("ping", "");
+                    pong();
+                }else{
+                    if(message.contains("deleted")){
+                        System.out.println(message);
+                        System.exit(0);
+                    }
+                    event = gson.fromJson(message, Event.class);
+                    primaryType = event.getPrimaryType();
 
-                        break;
-                    default:
-                        throw new RuntimeException("Unknown event type");
+                    switch (primaryType) {
+                        case "MVEvent":
+                            receiveMVEvent(message);
+                            break;
+                        case "SelectViewEvent":
+                            receiveSelectViewEvent(message);
+
+                            break;
+                        default:
+                            throw new RuntimeException("Unknown event type");
+                    }
                 }
             }
         }

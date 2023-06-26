@@ -97,11 +97,12 @@ src/main/resources/scoring\ tokens
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
 
+.idea/
+
 .DS_Store
 UML diagram/.DS_Store
 UML\ diagram/.DS_Store
 
 .gitignore
 mvc.txt
-
 target/

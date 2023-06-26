@@ -711,8 +711,6 @@ public class GUI extends Application implements View {
 
                 selected.setText(String.valueOf(i));
             }
-
-
         }
     }
 
@@ -1837,4 +1835,10 @@ public class GUI extends Application implements View {
         primaryStage.setScene(newScene);
         primaryStage.show();
     }
+
+    @Override
+    public void resetConnection() {
+        return;
+    }
+
 }

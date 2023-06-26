@@ -1,6 +1,7 @@
 package Utils;
 
 import Client.ConnectionType;
+import com.google.gson.Gson;
 
 import java.util.Objects;
 
@@ -81,6 +82,17 @@ public class ConnectionInfo implements java.io.Serializable{
     @Override
     public int hashCode() {
         return Objects.hash(ip, nickname);
+    }
+
+    @Override
+    public String toString() {
+        /*return "ConnectionInfo{" +
+                "ip='" + ip + '\'' +
+                ", port=" + port +
+                ", nickname='" + nickname + '\'' +
+                ", connectionType=" + connectionType +
+                '}';*/
+        return new Gson().toJson(this);
     }
 }
 

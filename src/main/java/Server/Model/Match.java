@@ -13,6 +13,8 @@ import Server.Model.GameItems.PointsTile;
 import Server.Model.GameItems.TileType;
 import Server.Model.MatchStatus.MatchStatus;
 import Server.Model.MatchStatus.NotRunning;
+import Server.Model.MatchStatus.Running;
+import Server.Model.MatchStatus.WaitingForPlayers;
 import Server.Model.Player.Player;
 import Server.Network.VirtualView;
 
@@ -34,7 +36,7 @@ public class Match {
     private int width;
     private int height;
     private int numberOfPlayers;
-    private final CommonGoalCard[] commonGoals;
+    private /*final*/ CommonGoalCard[] commonGoals;
     private MatchStatus matchStatus;
     private Player matchOpener;
     private Player firstPlayer;
@@ -47,7 +49,8 @@ public class Match {
     private Time matchDuration;
     private Player firstToFinish;
     private int count = 0;
-
+    private boolean allPlayersDisconnected = false;
+    private MatchStatus oldMatchStatus;
     private List<MVEventListener> mvEventListeners = new ArrayList<>();
 
 
@@ -240,6 +243,20 @@ public class Match {
     }
 
     /**
+     * This method is used to remove a player from a match only if the match is in Waiting For Players status.
+     *
+     * @param p who wants to leave the match
+     */
+    public void removeContestant(Player p){
+        //We have to remove this player from all the data structures
+        if(matchStatus instanceof WaitingForPlayers){
+            players.remove(p);
+            scores.remove(p);
+            matchStatus = matchStatus.devolve();
+        }
+    }
+
+    /**
      * this method checks if a player has ended the match
      *
      * @param player who has just ended his move
@@ -414,6 +431,10 @@ public class Match {
      */
     public void setCurrentPlayer() {
         //this.currentPlayer = currentPlayer.getNextPlayer();
+        /*if(allPlayersDisconnected){
+            currentPlayer = null;
+            return;
+        }*/
         Player localFirst = currentPlayer;
         currentPlayer = currentPlayer.getNextPlayer();
         while (disconnectedPlayers.contains(currentPlayer)) {
@@ -541,11 +562,36 @@ public class Match {
 
     public void disconnectPlayer(Player player, VirtualView virtualView) {
         //TODO: check
+        if(matchStatus instanceof NotRunning){
+            mvEventListeners.clear();
+            //We clear and set to null all the data structures
+            return;
+        }else if (matchStatus instanceof WaitingForPlayers) {
+            //matchStatus = ((WaitingForPlayers) matchStatus).devolve();
+            removeContestant(player);
+            if(matchStatus==null){
+                //The match is now empty, we can remove it
+                //We clear and set to null all the data structures (?) I don't think this is actually needed thanks to
+                //what the controller and the server do in this case.
+            }
+            return;
+        }
+        //If I reach this point, the match is running
         if (!disconnectedPlayers.contains(player)) {
             disconnectedPlayers.add(player);
         }
+        if(disconnectedPlayers.size() == numberOfPlayers){
+            //All the players are disconnected
+            //allPlayersDisconnected = true;
+            oldMatchStatus = matchStatus;
+            //matchStatus = null;
+            allPlayersDisconnected = true;
+            return;
+        }
         if(player.equals(currentPlayer)){
             setCurrentPlayer();
+            clearSelectedTiles();       //Only if the current player is the disconnected one, otherwise we will
+                                        //clear the selected tiles of a player who is still connected, that is wrong
         }
         System.out.println("DISCONNECTED PLAYERS: " + disconnectedPlayers);
         disconnectedPlayersVirtualViews.put(virtualView, player);
@@ -555,6 +601,15 @@ public class Match {
         //TODO: check
         this.disconnectedPlayers.remove(player);
         this.disconnectedPlayersVirtualViews.remove(virtualView);
+        if(/*matchStatus == null*/ allPlayersDisconnected){
+            //All te players were disconnected
+            //matchStatus = new Running(this);
+            //matchStatus = oldMatchStatus;
+            allPlayersDisconnected = false;
+            setCurrentPlayer();
+        }
+        //allPlayersDisconnected = false;
+        //currentPlayer = player;
     }
 
     public void evolveStatus() throws UnsupportedOperationException{
@@ -563,5 +618,9 @@ public class Match {
 
     public void triggerMVUpdate(){
         notifyMVEventListeners(new MatchStartedEvent(new LightMatch(this)));
+    }
+
+    public boolean areAllPlayersDisconnected(){
+        return allPlayersDisconnected;
     }
 }

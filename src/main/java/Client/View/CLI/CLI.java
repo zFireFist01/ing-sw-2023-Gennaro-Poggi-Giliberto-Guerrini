@@ -27,15 +27,18 @@ import Server.Model.GameItems.TileType;
 import Server.Model.LightMatch;
 import Server.Model.Player.Player;
 import Utils.ConnectionInfo;
+import com.google.gson.Gson;
 
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.rmi.RemoteException;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 
 /**
@@ -107,6 +110,14 @@ public class CLI implements Runnable , View {
     private boolean isReconnecting = false;
     private ConnectionInfo connectionInfo = null;
 
+    private FileReader fileReader;
+    private FileWriter fileWriter;
+    private BufferedReader bufferedReader;
+    private BufferedWriter bufferedWriter;
+    private File connectionFile = null;
+    private String directoryPath = null;
+    private final String CONNECTION_INFO_DIRECTORY_NAME = "ClientFiles";
+
     public CLI(){
         scanner = new Scanner(System.in);
         connect();
@@ -121,46 +132,116 @@ public class CLI implements Runnable , View {
 
     @Override
     public void run() {
-        String input;
-        input = scanner.nextLine();
-        while(input != null){
+        String input = "";
+        do{
             this.parseInput(input);
-
-
             input = scanner.nextLine();
-        }
-
+        }while(input!=null);
+        manageQuitting();
 
     }
 
     //connect to the server
+    private File getDirectory(){
+        // gettin absolute path of the jar file
+        String jarFilePath = CLI.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 
+        // Getting its parent's file path
+        String jarFolder = new File(jarFilePath).getParent();
 
-    /**
-     * This method is used to connect to the server
-     * @author Valentino Guerrini & Paolo Gennaro & Patrick Poggi
-     */
-    private void connect(){
+        // Crea un oggetto File per la nuova directory nella cartella del file .jar
+        File newDirectory = new File(jarFolder, CONNECTION_INFO_DIRECTORY_NAME);
+
+        // Crea la directory
+        if(!newDirectory.exists()) {
+            newDirectory.mkdir();
+        }
+        //Get person's name in order to create a directory
+        System.out.print("Insert your name:\n> ");
+        String name = scanner.nextLine();
+        // Creating the directory
+        //directoryPath = "src/main/resources/ClientFiles/Client_"+name;
+        directoryPath = jarFolder+"/"+CONNECTION_INFO_DIRECTORY_NAME+"/Client_"+name;
+        File directory = new File(directoryPath);
+        int i = 1;
+        if(directory.exists() && directory.isDirectory()){
+            try {
+                ConnectionInfo ci = new Gson().fromJson(
+                        new BufferedReader(
+                                new FileReader(directoryPath+"/ConnectionInfo.txt")),
+                        ConnectionInfo.class
+                );
+                if(     ci!=null &&
+                        ci.getNickname()!=null
+                ){
+                    System.out.print("It seems you were already connected, is that right? (y/n)\n> ");
+                    if(scanner.nextLine().equalsIgnoreCase("y")){
+                        int j=1;
+                        List<String> listDirectoryPath = new ArrayList<>();
+                        listDirectoryPath.add(directoryPath);
+                        File tempDirectory = new File(directoryPath+"_"+j);
+                        while(tempDirectory.exists() && tempDirectory.isDirectory()){
+                            listDirectoryPath.add(directoryPath+"_"+j);
+                            //directory = new File(listDirectoryPath);
+                            j++;
+                            tempDirectory = new File(directoryPath+"_"+j);
+                        }
+                        System.out.println("If you remember which of the following directories is the right one," +
+                                " please insert the number of it, otherwise type \'n\' and you will be connected as " +
+                                "a new client.");
+                        for(int k=0;k<listDirectoryPath.size();k++){
+                            System.out.println(k+" - "+listDirectoryPath.get(k));
+                        }
+                        System.out.print("> ");
+                        String choice = scanner.nextLine();
+                        if(choice.equalsIgnoreCase("n")) {
+                            System.out.println("Ok");
+                            isReconnecting = false;
+                        }else{
+                            boolean ok = false;
+                            while(!ok){
+                                try{
+                                    directoryPath = listDirectoryPath.get(Integer.parseInt(choice));
+                                    ok = true;
+                                }catch (NumberFormatException e) {
+                                    System.out.println("Please insert a number");
+                                    System.out.print("> ");
+                                    choice = scanner.nextLine();
+                                }
+                            }
+                            System.out.print("Do you want to reconnect? (y/n)\n> ");
+                            if(scanner.nextLine().equalsIgnoreCase("y")){
+                                isReconnecting = true;
+                                System.out.println("Ok");
+                                //break;
+                            }else{
+                                isReconnecting = false;
+                                System.out.println("Ok");
+                                //break;
+                            }
+                        }
+
+                    }else{
+                        System.out.println("Ok");
+                        //break;
+                    }
+                }
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        while(!isReconnecting && directory.exists() && directory.isDirectory()){
+            directoryPath = jarFolder+"/"+CONNECTION_INFO_DIRECTORY_NAME+"/Client_"+name+"_"+i;
+            directory = new File(directoryPath);
+            i++;
+        }
+        return directory;
+    }
+
+    private void connectionProcess(){
         boolean flag = true;
+        String localIP = null;
         ConnectionType connectionType = null;
-        System.out.println("Are you re-connecting because of a disconnection? (y/n)");
-        System.out.print("> ");
-        String answer = scanner.nextLine();
-        String previousNickname = null;
-        while(!answer.equalsIgnoreCase("y") && !answer.equalsIgnoreCase("n")){
-            System.out.println("Invalid input: please insert y or n!");
-            System.out.print("> ");
-            answer = scanner.nextLine();
-        }
-        if(answer.equalsIgnoreCase("y")){
-            System.out.println("You will now proceed to the reconnection process, " +
-                    "please use the same nickname you used before and the same connection type (Socket or RMI)");
-            System.out.println("What was your nickname?:");
-            System.out.print("> ");
-            previousNickname = scanner.nextLine();
-            myNick = new String(previousNickname);
-            isReconnecting = true;
-        }
         System.out.println("Select connection type: ");
         System.out.println("1) Socket 2) RMI");
         System.out.print("> ");
@@ -172,15 +253,69 @@ public class CLI implements Runnable , View {
         }
 
         String host = null;
-        //if(connection.equals("1")) {
+        String numbers[] = null;
+        Integer numbersInt[] = new Integer[4];
+        boolean flag2 = true;
+        boolean parseOk = true;
+        while(flag2){
             System.out.println("Server Address:");
             System.out.print("> ");
             host = scanner.nextLine();
-        //}
+            numbers = host.split("\\.");
+            if(numbers.length == 4) {
+                for (int j = 0; j < 4; j++) {
+                    try {
+                        numbersInt[j] = Integer.parseInt(numbers[j]);
+                    } catch (NumberFormatException e) {
+                        parseOk = false;
+                        System.out.println("Invalid IP address");
+                        break;
+                    }
+                }
+                if(     parseOk &&
+                        (numbersInt[0]>255
+                                || numbersInt[1]>255
+                                || numbersInt[2]>255
+                                || numbersInt[3]>255
+                                ||
+                                numbersInt[0]<0
+                                || numbersInt[1]<0
+                                || numbersInt[2]<0
+                                || numbersInt[3]<0)
+                ) {
+                    System.out.println("Invalid IP address");
+                }else{
+                    flag2 = !parseOk;
+                }
+            }else{
+                System.out.println("Invalid IP address");
+            }
+        }
 
-        System.out.println("ServerPort:");
-        System.out.print("> ");
-        int port = scanner.nextInt();
+        String portString = null;
+        int port = 0;
+        flag2 = true;
+        while (flag2){
+            System.out.println("ServerPort:");
+            System.out.print("> ");
+            portString = scanner.nextLine();
+
+            if(portString == null){
+                System.out.println("Invalid port number");
+            }else{
+                try{
+                    port = Integer.parseInt(portString);
+                    if(port < 1024 || port > 65535) {
+                        System.out.println("Invalid port number");
+                    }else{
+                        flag2 = false;
+                    }
+                }catch (NumberFormatException e){
+                    System.out.println("Invalid port number");
+                }
+            }
+        }
+
 
         while(flag){
             switch (connection){
@@ -193,7 +328,7 @@ public class CLI implements Runnable , View {
                     flag = false;
                     break;
                 default:
-                    System.out.println("Invalid connection type");
+                    System.out.println("Invalid connection type, try again");
                     System.out.println("1) Socket 2) RMI");
                     System.out.print("> ");
                     connection =scanner.nextLine();
@@ -212,19 +347,100 @@ public class CLI implements Runnable , View {
             System.err.println(e.getMessage()+"\n"+e.getStackTrace());
             System.exit(1);
         }
-        String localIP = null;
+        localIP = null;
         try {
             InetAddress ipAddress = InetAddress.getLocalHost();
             localIP = ipAddress.getHostAddress();
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-        connectionInfo = new ConnectionInfo(localIP,connectionType, previousNickname);
-        //connectionInfo.setNickname(previousNickname);
-        //networkHandler.setConnectionInfo(connectionInfo);
-        //System.out.println("Connection successful");
-
+        connectionInfo = new ConnectionInfo(localIP,port, null, connectionType);
+        try {
+            bufferedWriter = new BufferedWriter(new FileWriter(connectionFile, false));
+            bufferedWriter.write(new Gson().toJson(connectionInfo)+"\n");
+            bufferedWriter.flush();
+            bufferedWriter.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+    private void reconnectionProcess(){
+        String json = null;
+        try {
+            try {
+                fileReader = new FileReader(connectionFile);
+                bufferedReader = new BufferedReader(fileReader);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            json  = bufferedReader.readLine();
+            connectionInfo = new Gson().fromJson(json, ConnectionInfo.class);
+            bufferedReader.close();
+            fileReader.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        if(connectionInfo == null){
+            System.err.println("AAAAAAAAAAA: "+json);
+        }else{
+            switch(connectionInfo.getConnectionType()){
+                case SOCKET:
+                    networkHandler = new NetworkSocketHandler(connectionInfo.getIp(), connectionInfo.getPort(), this);
+                    break;
+                case RMI:
+                    try {
+                        networkHandler = new NetworkRMIHandler(connectionInfo.getIp(), connectionInfo.getPort(), this);
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+            }
+            //previousNickname = connectionInfo.getNickname();
+            myNick = connectionInfo.getNickname();
+        }
+    }
+    /**
+     * This method is used to connect to the server
+     * @author Valentino Guerrini & Paolo Gennaro & Patrick Poggi
+     */
+    private void connect(){
+        //ConnectionType connectionType = null;
+        File directory = this.getDirectory();
+        System.out.println("Alright, your connection info will be stored locally at: "
+                +ANSIParameters.CYAN
+                +directoryPath
+                +ANSIParameters.CRESET
+                +"\n"
+                +ANSIParameters.RED
+                +"Please, try to remember it, you might need it in the future."
+                +ANSIParameters.CRESET);
+        try {
+            connectionFile = new File(directoryPath+"/ConnectionInfo.txt");
+            if(!isReconnecting){
+                if (directory.mkdir()) {
+                    System.out.println("The directory was created successfully.");
+                    if(connectionFile.createNewFile()==false){
+                        System.out.println("File already exists, but it should not.");
+                    }
+                } else {
+                    System.out.println("Failed to create the directory.");
+                }
+            }
+
+        } catch (IOException e) {
+            System.out.println("An error occurred."+e.getMessage());
+        }
+
+
+        String localIP = null;
+        if(!isReconnecting){
+            connectionProcess();
+        }else{
+            reconnectionProcess();
+        }
+    }
+
 
     /**
      * This method is used to manage the MVEvents sent by the model
@@ -661,41 +877,102 @@ public class CLI implements Runnable , View {
      * This method is used when the user types "info" to show the available commands
      */
     private void printInfo(){
+        System.out.println(ANSIParameters.GREEN);
         if(currentView == null){
-            System.out.println("info        : show this message\n"+
-                               "play        : login to the server\n"+
-                               "quit        : quit the game\n");
-        }else if(currentView.getType().equals("LoginView")){
-            System.out.println("info play\n quit");
-        }else if(currentView.getType().equals("PickingTilesGameView")) {
-            System.out.println("info pick\ncheckout open\nclose send\nquit");
-        }else if(currentView.getType().equals("InsertingTilesGameView")){
-            System.out.println("info select\nopen close\nsend quit");
-        }else if(currentView.getType().equals("EndedMatchView")) {
-            System.out.println("info open\nclose send\nquit");
-        }else if(currentView.getType().equals("GameView")) {
-            System.out.println("info open\nclose send\nquit");
-        }else if(currentView.getType().equals("ChatONView")) {
-            System.out.println("info close\nsend quit");
-        }else if(currentView.getType().equals("ChatOFFView")) {
-            System.out.println("info open\nquit");
+            System.out.println( "info        : show this message\n"+
+                                "help        : show commands' syntax\n"+
+                                "play        : connect to the server\n"+
+                                "quit        : quit the game\n");
+        }else if (currentView.getType().equals("LoginView")) {
+            System.out.printf("%-10s%s%n", "info", "play");
+            System.out.printf("%-10s%s%n", "help","quit");
+        } else if (currentView.getType().equals("PickingTilesGameView")) {
+            System.out.printf("%-10s%s%n", "info", "pick");
+            System.out.printf("%-10s%s%n", "checkout", "open");
+            System.out.printf("%-10s%s%n", "close", "send");
+            System.out.printf("%-10s%s%n", "help", "quit");
+        } else if (currentView.getType().equals("InsertingTilesGameView")) {
+            System.out.printf("%-10s%s%n", "info", "select");
+            System.out.printf("%-10s%s%n", "open", "close");
+            System.out.printf("%-10s%s%n", "send", "help");
+            System.out.printf("%-10s%s%n", "quit", "");
+        } else if (currentView.getType().equals("EndedMatchView")) {
+            System.out.printf("%-10s%s%n", "info", "open");
+            System.out.printf("%-10s%s%n", "close", "send");
+            System.out.printf("%-10s%s%n", "help", "quit");
+        } else if (currentView.getType().equals("GameView")) {
+            System.out.printf("%-10s%s%n", "info", "open");
+            System.out.printf("%-10s%s%n", "close", "send");
+            System.out.printf("%-10s%s%n", "help", "quit");
+        } else if (currentView.getType().equals("ChatONView")) {
+            System.out.printf("%-10s%s%n", "info", "close");
+            System.out.printf("%-10s%s%n", "send", "help");
+            System.out.printf("%-10s%s%n", "quit", "");
+        } else if (currentView.getType().equals("ChatOFFView")) {
+            System.out.printf("%-10s%s%n", "info", "open");
+            System.out.printf("%-10s%s%n", "send", "help");
+            System.out.printf("%-10s%s%n", "quit", "");
         }
+        System.out.println(ANSIParameters.CRESET);
         System.out.print("> ");
     }
 
     public void printHelp(){
-        System.out.println(ANSIParameters.CYAN + "Commands:" + ANSIParameters.CRESET);
-        System.out.println( ANSIParameters.CYAN+
+        System.out.println(ANSIParameters.YELLOW + "Commands:" + ANSIParameters.CRESET);
+        System.out.println( ANSIParameters.YELLOW+
                             "\"pick row_letter,livingroom_column_index\"      : to pick a tile\n"+
-                            "\"checkout\"                                    : to checkout selected tiles\n"+
-                            "\"select bookshelf_column_index\"               : to select the column of the bookshelf\n"+
+                            "\"checkout\"                                     : to checkout selected tiles\n"+
+                            "\"select bookshelf_column_index\"                : to select the column of the bookshelf\n"+
+                            "\"open\"                                         : to open the chat\n"+
+                            "\"close\"                                        : to close the chat\n"+
+                            "\"send \"message\"\"                             : to send a message\n"+
                             ANSIParameters.CRESET);
     }
+
+    private void deleteDirectory(){
+        File directory = new File(directoryPath);
+        File[] files = directory.listFiles();
+        if(files != null) {
+            for (File f : files) {
+                f.delete();
+            }
+        }
+        directory.delete();
+    }
+    private void manageQuitting(){
+        if(myNick == null || myNick.equals("")){
+            System.out.println(ANSIParameters.RED+"ATTENTION:"+ANSIParameters.CRESET+
+                    "Since you haven't logged in yet, you won't be remembered");
+            deleteDirectory();
+        }else{
+            System.out.println("Would you like to remember you've been connected and playing this match? (y/n)");
+            String input = scanner.nextLine();
+            if(input.equalsIgnoreCase("n")){
+                deleteDirectory();
+            }
+        }
+    }
+
     /**
      * This method parses the input and calls/gives the right method/output after it
      * @param input the input from the user
      */
     private void parseInput(String input){
+        if(input.equals("info")) {
+            printInfo();
+            return;
+        }
+        if(input.equals("help")){
+            printHelp();
+            return;
+        }
+        if(input.equals("quit")){
+            //TODO: manage quitting
+            manageQuitting();
+            System.out.println("Ok, bye!");
+            System.exit(0);
+            return;
+        }
         String[] inputArray = input.split(" ");
         if(currentView!=null && currentView.getType().equals("LoginView")) {
             LoginView loginview = (LoginView) currentView;
@@ -703,6 +980,15 @@ public class CLI implements Runnable , View {
                 if(inputArray.length == 2){
                     if(inputArray[0].length() <= 20){
                         myNick = inputArray[0];
+                        connectionInfo.setNickname(myNick);
+                        try {
+                            bufferedWriter = new BufferedWriter(new FileWriter(connectionFile, false));
+                            bufferedWriter.write(new Gson().toJson(connectionInfo)+"\n");
+                            bufferedWriter.flush();
+                            bufferedWriter.close();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         try {
                             numberPlayers = Integer.parseInt(inputArray[1]);
                             if(numberPlayers < 2 || numberPlayers > 4){
@@ -731,6 +1017,15 @@ public class CLI implements Runnable , View {
                 if (inputArray.length == 1) {
                     if(inputArray[0].length() <= 20){
                         myNick = inputArray[0];
+                        connectionInfo.setNickname(myNick);
+                        try {
+                            bufferedWriter = new BufferedWriter(new FileWriter(connectionFile, false));
+                            bufferedWriter.write(new Gson().toJson(connectionInfo)+"\n");
+                            bufferedWriter.flush();
+                            bufferedWriter.close();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         try {
                             networkHandler.onVCEvent(new LoginEvent(myNick));
                         } catch (NoSuchMethodException e) {
@@ -986,8 +1281,6 @@ public class CLI implements Runnable , View {
                 }
             }
         }
-
-
     }
 
 
@@ -2264,4 +2557,17 @@ public class CLI implements Runnable , View {
     public boolean isReconnecting() {
         return isReconnecting;
     }
+
+    @Override
+    public void resetConnection() {
+        boolean storeData = false;
+        System.out.println(ANSIParameters.CLEAR_SCREEN+ANSIParameters.CURSOR_HOME);
+        storeData = true;
+        //Erasing all data structures referring to network and conenction
+        isReconnecting = true;
+        reconnectionProcess();
+        currentView = null;
+        printInfo();
+    }
+
 }

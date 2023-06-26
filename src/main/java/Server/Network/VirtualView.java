@@ -12,6 +12,7 @@ import Utils.ConnectionInfo;
 
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
+import java.util.List;
 
 /**
  * This interface is used to generalize the VirtualView
@@ -54,5 +55,9 @@ public interface VirtualView extends Runnable, MVEventListener, SelectViewEventL
     public void setIsFirstToJoin(boolean isFirstToJoin);
 
     public void setConnectionInfo(ConnectionInfo connectionInfo);
+
+    public void removeAllVCEventListeners();
+
+    public List<VCEventListener> getVCEventListeners();
 
 }

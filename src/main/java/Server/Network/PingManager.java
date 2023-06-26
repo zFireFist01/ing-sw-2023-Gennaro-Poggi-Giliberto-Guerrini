@@ -11,6 +11,8 @@ public class PingManager implements Runnable{
     Timer timer;
     Server server;
 
+    Object pingManagerLocker = new Object();
+
     public PingManager(Server server, List<VirtualView> virtualViews, Map<VirtualView, Controller> virtualViewControllerMap){
         this.virtualViews = virtualViews;
         this.virtualViewControllerMap = virtualViewControllerMap;
@@ -20,14 +22,37 @@ public class PingManager implements Runnable{
     }
 
     public void addVirtualView(VirtualView virtualView, Controller controller){
-        this.virtualViews.add(virtualView);
-        this.virtualViewControllerMap.put(virtualView, controller);
-        this.virtualViewStatuses.put(virtualView, true);
+        //synchronized (server) {
+        /*synchronized (virtualViews){
+            this.virtualViews.add(virtualView);
+        }*/
+            this.virtualViews.add(virtualView);
+        /*synchronized (virtualViewControllerMap){
+            this.virtualViewControllerMap.put(virtualView, controller);
+        }*/
+            this.virtualViewControllerMap.put(virtualView, controller);
+        /*synchronized (virtualViewStatuses){
+            this.virtualViewStatuses.put(virtualView, true);
+        }*/
+            this.virtualViewStatuses.put(virtualView, true);
+        //}
     }
     public void removeVirtualView(VirtualView virtualView, Controller controller){
-        this.virtualViews.remove(virtualView);
-        this.virtualViewControllerMap.remove(virtualView, controller);
-        this.virtualViewStatuses.remove(virtualView);
+        //synchronized (server) {
+        /*synchronized (virtualViews){
+            this.virtualViews.remove(virtualView);
+        }*/
+            this.virtualViews.remove(virtualView);
+        /*synchronized (virtualViewControllerMap){
+            this.virtualViewControllerMap.remove(virtualView, controller);
+        }*/
+            this.virtualViewControllerMap.remove(virtualView, controller);
+        /*synchronized (virtualViewStatuses){
+            this.virtualViewStatuses.remove(virtualView);
+        }*/
+            this.virtualViewStatuses.remove(virtualView);
+        //}
+
     }
     @Override
     public void run(){
@@ -48,30 +73,44 @@ public class PingManager implements Runnable{
                             + e.getMessage()+"\n" + e.getStackTrace());
                     throw new RuntimeException(e);
                 }
-                for(VirtualView virtualView : virtualViews){
-                    resp = virtualView.checkPongResponse();
-                    if(resp){
-                        System.out.println("pong received from vv: "+ ((virtualView instanceof VirtualSocketView) ? "socket": "RMI"));
-                    }
-                    if(resp == false && virtualViewStatuses.get(virtualView) == true){
-                        //The player lost connection
-                        System.err.println("Ciao ciao ciao");
-                        virtualViewStatuses.put(virtualView, false);
-                        virtualViewControllerMap.get(virtualView).playerDisconnected(virtualView);
-                        //server.updateConnectionStatus(virtualView.getConnectionInfo(), false);
-                        //synchronized (server){
-                            server.updateConnectionStatus(virtualView.getConnectionInfo(), false);
-                        //}
-                    }else{
-                        if(resp == true && virtualViewStatuses.get(virtualView) == false){
-                            //The player lost connection and then reconnected
-                            virtualViewStatuses.put(virtualView, true);
-                            //virtualViewControllerMap.get(virtualView).playerConnected(virtualView);
-                            //server.setClientsConnectionStatuses(virtualView.getConnectionInfo(), true);
-                            //server.updateConnectionStatus(virtualView.getConnectionInfo(), true);
+                //synchronized (this){
+                    List<VirtualView> toRemove = new ArrayList<>();
+                    for(VirtualView virtualView : virtualViews){
+                        if(toRemove==null || (toRemove!= null && !toRemove.contains(virtualView))){
+                            resp = virtualView.checkPongResponse();
+                            if(resp){
+                                System.out.println("pong received from vv: "+ ((virtualView instanceof VirtualSocketView) ? "socket": "RMI"));
+                            }
+                            if(resp == false && (   virtualViewStatuses.get(virtualView) != null &&
+                                                    virtualViewStatuses.get(virtualView) == true
+                                                )
+                            ){
+                                //The player lost connection
+                                System.err.println("Ciao ciao ciao");
+                                virtualViewStatuses.put(virtualView, false);
+                                List ptr = virtualViewControllerMap.get(virtualView).playerDisconnected(virtualView);
+                                if(ptr != null){
+                                    toRemove.addAll(ptr);
+                                }
+                                server.updateConnectionStatus(virtualView.getConnectionInfo(), false);
+                            }else{
+                                if(resp == true &&  (   virtualViewStatuses.get(virtualView) != null &&
+                                                        virtualViewStatuses.get(virtualView) == false
+                                                    )
+                                ){
+                                    //The player lost connection and then reconnected
+                                    virtualViewStatuses.put(virtualView, true);
+                                }
+                            }
                         }
                     }
-                }
+                    if(toRemove != null){
+                        for(VirtualView virtualView : toRemove) {
+                            removeVirtualView(virtualView, virtualViewControllerMap.get(virtualView));
+                        }
+                        toRemove.clear();
+                    }
+                //}
             }
         }, 5000, 1000); // 1 s
         System.out.println("Started ping manager");
