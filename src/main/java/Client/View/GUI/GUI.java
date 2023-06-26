@@ -618,10 +618,10 @@ public class GUI extends Application implements View {
             case "InsertingTilesGameView" -> Platform.runLater(() -> {
                 onInsertingTilesGameView(event);
             });
-            default -> {
+            default -> Platform.runLater(() ->{
                 currentView = event;
                 servermessage.setText(currentView.getMessage());
-            }
+            });
 
         }
 
@@ -1326,11 +1326,11 @@ public class GUI extends Application implements View {
         ImageView imageView =(ImageView) newRoot.lookup("#sfondo") ;
 
 
-        imageView.fitHeightProperty().bind(anchorPane.heightProperty());
-        imageView.fitWidthProperty().bind(anchorPane.widthProperty());
+        imageView.fitHeightProperty().bind(pane.heightProperty());
+        imageView.fitWidthProperty().bind(pane.widthProperty());
         primaryStage.setMaximized(true);
-        anchorPane.setPrefWidth(600);
-        anchorPane.setPrefHeight(400);
+        pane.setPrefWidth(600);
+        pane.setPrefHeight(400);
         primaryStage.setResizable(true);
         primaryStage.show();
     }

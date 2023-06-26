@@ -189,9 +189,10 @@ public class Controller implements VCEventListener {
      */
     private void onSelectColumnEvent(int column) throws RemoteException{
         boolean flag=false;
+
         if(PlayerViews.get(match.getCurrentPlayer().getPlayerID())!=caller){
             caller.onSelectViewEvent(new GameView("It's " + match.getCurrentPlayer().getPlayerNickName() + "'s turn! Wait for your turn!"));
-            flag=true;
+            return;
         }
 
 
@@ -212,6 +213,7 @@ public class Controller implements VCEventListener {
 
         if(currentPlayer.getBookshelf().getLastIndexes().get(column) < numberTakenTiles){
             currentPlayerView.onSelectViewEvent(new InsertingTilesGameView("Not enough space in this column!"));
+
             return;
         }
 
@@ -241,7 +243,14 @@ public class Controller implements VCEventListener {
                             }
 
                         }else{
-                            currentPlayerView.onSelectViewEvent(new GameView("It's " + match.getCurrentPlayer().getNextPlayer().getPlayerNickName() + "'s turn! Wait for your turn!"));
+                            for(int i=0; i<numberOfPlayers; i++){
+                                if(PlayerViews.get(match.getPlayers().get(i).getPlayerID())!=currentPlayerView && PlayerViews.get(match.getPlayers().get(i).getPlayerID())!=PlayerViews.get(currentPlayer.getNextPlayer().getPlayerID())){
+                                    PlayerViews.get(match.getPlayers().get(i).getPlayerID()).onSelectViewEvent(new GameView("It's " + match.getCurrentPlayer().getNextPlayer().getPlayerNickName() + "'s turn! Wait for your turn!"));
+                                }
+                            }
+
+                            currentPlayerView.onSelectViewEvent(new GameView("It's " + match.getCurrentPlayer().getNextPlayer().getPlayerNickName() + "'s turn! Wait for match to finish"));
+
                             currentPlayerView = PlayerViews.get(currentPlayer.getNextPlayer().getPlayerID());
                             match.setCurrentPlayer();
                             currentPlayerView.onSelectViewEvent(new PickingTilesGameView("This is your last turn!"));
@@ -251,7 +260,13 @@ public class Controller implements VCEventListener {
                         //do nothing
                     }
                 }else{
-                    currentPlayerView.onSelectViewEvent(new GameView("It's " + match.getCurrentPlayer().getNextPlayer().getPlayerNickName() + "'s turn! Wait for your turn!" ));
+                    for(int i=0; i<numberOfPlayers; i++){
+                        if(!flag && PlayerViews.get(match.getPlayers().get(i).getPlayerID())!=PlayerViews.get(currentPlayer.getNextPlayer().getPlayerID())){
+                            PlayerViews.get(match.getPlayers().get(i).getPlayerID()).onSelectViewEvent(new GameView("It's " + match.getCurrentPlayer().getNextPlayer().getPlayerNickName() + "'s turn! Wait for your turn!"));
+                        }
+                    }
+
+
                     currentPlayerView = PlayerViews.get(currentPlayer.getNextPlayer().getPlayerID());
                     match.setCurrentPlayer();
                     currentPlayerView.onSelectViewEvent(new PickingTilesGameView());
@@ -265,7 +280,13 @@ public class Controller implements VCEventListener {
                     }
 
                 }else{
-                    currentPlayerView.onSelectViewEvent(new GameView("It's " + match.getCurrentPlayer().getNextPlayer().getPlayerNickName() + "'s turn! Wait for your turn!" ));
+                    for(int i=0; i<numberOfPlayers; i++){
+                        if(PlayerViews.get(match.getPlayers().get(i).getPlayerID())!=currentPlayerView && PlayerViews.get(match.getPlayers().get(i).getPlayerID())!=PlayerViews.get(currentPlayer.getNextPlayer().getPlayerID())){
+                            PlayerViews.get(match.getPlayers().get(i).getPlayerID()).onSelectViewEvent(new GameView("It's " + match.getCurrentPlayer().getNextPlayer().getPlayerNickName() + "'s turn! Wait for match to finish" ));
+                        }
+                    }
+
+                    currentPlayerView.onSelectViewEvent(new GameView("It's " + match.getCurrentPlayer().getNextPlayer().getPlayerNickName() + "'s turn! Wait for match to finish" ));
                     currentPlayerView = PlayerViews.get(currentPlayer.getNextPlayer().getPlayerID());
                     match.setCurrentPlayer();
                     currentPlayerView.onSelectViewEvent(new PickingTilesGameView("This is your last turn!"));
