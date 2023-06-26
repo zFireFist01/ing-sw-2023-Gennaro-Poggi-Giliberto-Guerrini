@@ -635,6 +635,12 @@ public class GUI extends Application implements View {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Select_Number_Of_Players.fxml"));
             fxmlLoader.setController(this);
             Parent newRoot = fxmlLoader.load();
+            AnchorPane pane = (AnchorPane) newRoot.lookup("#pane_wall");
+            ImageView wallpaper =(ImageView) newRoot.lookup("#parquet") ;
+
+
+            wallpaper.fitHeightProperty().bind(pane.heightProperty());
+            wallpaper.fitWidthProperty().bind(pane.widthProperty());
             Text tmp = (Text)newRoot.lookup("#errormessage");
             if(!loginView.getMessage().equals("Insert your username")){
                 tmp.setText(loginView.getMessage());
@@ -647,6 +653,12 @@ public class GUI extends Application implements View {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Insert_Username.fxml"));
             fxmlLoader.setController(this);
             Parent newRoot = fxmlLoader.load();
+            AnchorPane pane = (AnchorPane) newRoot.lookup("#pane_wall");
+            ImageView wallpaper =(ImageView) newRoot.lookup("#parquet") ;
+
+
+            wallpaper.fitHeightProperty().bind(pane.heightProperty());
+            wallpaper.fitWidthProperty().bind(pane.widthProperty());
             Text tmp = (Text)newRoot.lookup("#errormessage");
             if(!loginView.getMessage().equals("Insert your username")){
                 tmp.setText(loginView.getMessage());
@@ -1514,6 +1526,13 @@ public class GUI extends Application implements View {
         Button rmiButton = (Button) newRoot.lookup("#rmibutton");
         Button socketButton = (Button) newRoot.lookup("#socketbutton");
 
+        AnchorPane pane = (AnchorPane) newRoot.lookup("#pane_wall");
+        ImageView wallpaper =(ImageView) newRoot.lookup("#parquet") ;
+
+
+        wallpaper.fitHeightProperty().bind(pane.heightProperty());
+        wallpaper.fitWidthProperty().bind(pane.widthProperty());
+
         rmiButton.setMinWidth(100);
         rmiButton.setMinHeight(50);
 
@@ -1537,7 +1556,7 @@ public class GUI extends Application implements View {
         socketButton.setOnMouseEntered(e -> socketButton.setStyle(hoverStyle2));
         socketButton.setOnMouseExited(e -> socketButton.setStyle("-fx-background-color: #ADD8E6; -fx-border-radius: 15; -fx-background-radius: 15;"));
 
-        ImageView wallpaper = (ImageView) newRoot.lookup("#wallpaper");
+
         Scene newScene = new Scene(newRoot);
         Stage currentStage = (Stage) yesButtonReConnection.getScene().getWindow();
         currentStage.setScene(newScene);
@@ -1550,6 +1569,13 @@ public class GUI extends Application implements View {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Socket_RMI_Requests.fxml"));
         fxmlLoader.setController(this);
         Parent newRoot = fxmlLoader.load();
+
+        AnchorPane pane = (AnchorPane) newRoot.lookup("#pane_wall");
+        ImageView wallpaper =(ImageView) newRoot.lookup("#parquet") ;
+
+
+        wallpaper.fitHeightProperty().bind(pane.heightProperty());
+        wallpaper.fitWidthProperty().bind(pane.widthProperty());
 
         Button rmiButton = (Button) newRoot.lookup("#rmibutton");
         Button socketButton = (Button) newRoot.lookup("#socketbutton");
@@ -1577,7 +1603,7 @@ public class GUI extends Application implements View {
         socketButton.setOnMouseEntered(e -> socketButton.setStyle(hoverStyle2));
         socketButton.setOnMouseExited(e -> socketButton.setStyle("-fx-background-color: #ADD8E6; -fx-border-radius: 15; -fx-background-radius: 15;"));
 
-        ImageView wallpaper = (ImageView) newRoot.lookup("#wallpaper");
+
 
         Scene newScene = new Scene(newRoot);
         Stage currentStage = (Stage) noButtonReConnection.getScene().getWindow();
@@ -1590,6 +1616,12 @@ public class GUI extends Application implements View {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Insert_IP_Port_Server.fxml"));
         fxmlLoader.setController(this);
         Parent newRoot = fxmlLoader.load();
+        AnchorPane pane = (AnchorPane) newRoot.lookup("#pane_wall");
+        ImageView wallpaper =(ImageView) newRoot.lookup("#parquet") ;
+
+
+        wallpaper.fitHeightProperty().bind(pane.heightProperty());
+        wallpaper.fitWidthProperty().bind(pane.widthProperty());
         Scene newScene = new Scene(newRoot);
         Stage currentStage = (Stage) socketButton.getScene().getWindow();
         this.connectionType = ConnectionType.SOCKET;
@@ -1624,6 +1656,13 @@ public class GUI extends Application implements View {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/FirstView.fxml"));
         fxmlLoader.setController(this);
         Parent newRoot = fxmlLoader.load();
+        AnchorPane pane = (AnchorPane) newRoot.lookup("#wallpaper");
+        ImageView wallpaper =(ImageView) newRoot.lookup("#parquet") ;
+
+
+        wallpaper.fitHeightProperty().bind(pane.heightProperty());
+        wallpaper.fitWidthProperty().bind(pane.widthProperty());
+
         Scene newScene = new Scene(newRoot);
         Stage currentStage = (Stage) connectButton.getScene().getWindow();
         currentStage.setScene(newScene);
@@ -1635,6 +1674,12 @@ public class GUI extends Application implements View {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Insert_Port_Server.fxml"));
         fxmlLoader.setController(this);
         Parent newRoot = fxmlLoader.load();
+        AnchorPane pane = (AnchorPane) newRoot.lookup("#pane_wall");
+        ImageView wallpaper =(ImageView) newRoot.lookup("#parquet") ;
+
+
+        wallpaper.fitHeightProperty().bind(pane.heightProperty());
+        wallpaper.fitWidthProperty().bind(pane.widthProperty());
         Scene newScene = new Scene(newRoot);
         Stage currentStage = (Stage) RMIButton.getScene().getWindow();
         currentStage.setScene(newScene);
@@ -1672,6 +1717,12 @@ public class GUI extends Application implements View {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/FirstView.fxml"));
         fxmlLoader.setController(this);
         Parent newRoot = fxmlLoader.load();
+        AnchorPane pane = (AnchorPane) newRoot.lookup("#wallpaper");
+        ImageView wallpaper =(ImageView) newRoot.lookup("#parquet") ;
+
+
+        wallpaper.fitHeightProperty().bind(pane.heightProperty());
+        wallpaper.fitWidthProperty().bind(pane.widthProperty());
         Scene newScene = new Scene(newRoot);
         Stage currentStage = (Stage) connectButtonRMI.getScene().getWindow();
         currentStage.setScene(newScene);
@@ -1691,6 +1742,12 @@ public class GUI extends Application implements View {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/WaitingPlayersToConnect.fxml"));
         fxmlLoader.setController(this);
         Parent newRoot = fxmlLoader.load();
+        AnchorPane pane = (AnchorPane) newRoot.lookup("#pane_wall");
+        ImageView wallpaper =(ImageView) newRoot.lookup("#parquet") ;
+
+
+        wallpaper.fitHeightProperty().bind(pane.heightProperty());
+        wallpaper.fitWidthProperty().bind(pane.widthProperty());
         Scene newScene = new Scene(newRoot);
         Stage currentStage = (Stage) submitUsernameAndPlayersButton.getScene().getWindow();
         currentStage.setScene(newScene);
@@ -1708,6 +1765,12 @@ public class GUI extends Application implements View {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/WaitingPlayersToConnect.fxml"));
         fxmlLoader.setController(this);
         Parent newRoot = fxmlLoader.load();
+        AnchorPane pane = (AnchorPane) newRoot.lookup("#pane_wall");
+        ImageView wallpaper =(ImageView) newRoot.lookup("#parquet") ;
+
+
+        wallpaper.fitHeightProperty().bind(pane.heightProperty());
+        wallpaper.fitWidthProperty().bind(pane.widthProperty());
         Scene newScene = new Scene(newRoot);
         Stage currentStage = (Stage) submitUsernameButton.getScene().getWindow();
         currentStage.setScene(newScene);
@@ -1739,6 +1802,13 @@ public class GUI extends Application implements View {
         Parent newRoot = fxmlLoader.load();
         Button rmiButton = (Button) newRoot.lookup("#rmibutton");
         Button socketButton = (Button) newRoot.lookup("#socketbutton");
+
+        AnchorPane pane = (AnchorPane) newRoot.lookup("#pane_wall");
+        ImageView wallpaper =(ImageView) newRoot.lookup("#parquet") ;
+
+
+        wallpaper.fitHeightProperty().bind(pane.heightProperty());
+        wallpaper.fitWidthProperty().bind(pane.widthProperty());
 
         rmiButton.setMinWidth(100);
         rmiButton.setMinHeight(50);

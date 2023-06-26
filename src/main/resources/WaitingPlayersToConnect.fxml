@@ -5,28 +5,37 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="pane_wall" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ImageView fitHeight="400.0" fitWidth="600.0">
+      <ImageView id="parquet" fitHeight="400.0" fitWidth="600.0">
          <image>
             <Image url="@Publisher material/Display_3.jpg" />
          </image>
       </ImageView>
-      <Pane layoutX="145.0" layoutY="175.0" opacity="0.8" prefHeight="50.0" prefWidth="310.0" style="-fx-background-color: lightgray; -fx-border-radius: 0.1;">
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-      </Pane>
-      <ProgressIndicator layoutX="143.0" layoutY="178.0" prefHeight="43.0" prefWidth="53.0" />
-      <Text layoutX="198.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Waiting For Other Players To Connect" textAlignment="CENTER">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-      </Text>
+      <HBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <StackPane prefHeight="400.0" prefWidth="299.0">
+               <children>
+                  <Pane maxHeight="-Infinity" maxWidth="-Infinity" opacity="0.8" prefHeight="50.0" prefWidth="330.0" style="-fx-background-color: lightgray; -fx-border-radius: 0.1;">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </Pane>
+                  <ProgressIndicator prefHeight="43.0" prefWidth="53.0" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Waiting For Other Players To Connect" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Text>
+               </children>
+            </StackPane>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

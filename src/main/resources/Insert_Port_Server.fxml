@@ -1,36 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="pane_wall" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ImageView fitHeight="400.0" fitWidth="600.0">
+      <ImageView id="parquet" fitHeight="400.0" fitWidth="600.0">
          <image>
             <Image url="@misc/sfondo parquet.jpg" />
          </image>
       </ImageView>
-      <TextField fx:id="addressServerRMI1" layoutX="159.0" layoutY="174.0" prefHeight="25.0" prefWidth="281.0" promptText="Server IP address:" />
-      <TextField fx:id="portServerRMI" layoutX="159.0" layoutY="220.0" prefHeight="25.0" prefWidth="281.0" promptText="Server Port:" />
-      <ImageView fitHeight="94.0" fitWidth="247.0" layoutX="177.0" layoutY="60.0">
-         <image>
-            <Image url="@Publisher material/Title 2000x618px.png" />
-         </image>
-      </ImageView>
-      <Button fx:id="connectButtonRMI" layoutX="259.0" layoutY="261.0" mnemonicParsing="false" onAction="#onClickConnectRMIButton" prefHeight="41.0" prefWidth="81.0" style="-fx-background-color: #ffc033; -fx-border-radius: 15; -fx-background-radius: 15;" text="Connect">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font></Button>
-      <Button fx:id="backRMI" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#onBackButtonClicked" style="-fx-background-color: #ffc033; -fx-border-radius: 15; -fx-background-radius: 15;" text="&lt;-back" />
-      <Text fill="RED" layoutX="130.0" layoutY="347.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="338.6665852864585">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-      </Text>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <AnchorPane maxHeight="-Infinity" prefHeight="338.0" prefWidth="99.0">
+               <children>
+                  <Button fx:id="backRMI" mnemonicParsing="false" onAction="#onBackButtonClicked" style="-fx-background-color: #ffc033; -fx-border-radius: 15; -fx-background-radius: 15;" text="&lt;-back" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="200.0" />
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </AnchorPane>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0">
+               <children>
+                  <ImageView fitHeight="94.0" fitWidth="247.0">
+                     <image>
+                        <Image url="@Publisher material/Title 2000x618px.png" />
+                     </image>
+                  </ImageView>
+                  <TextField fx:id="addressServerRMI1" maxWidth="-Infinity" prefHeight="25.0" prefWidth="200.0" promptText="Server IP address:" />
+                  <TextField fx:id="portServerRMI" maxWidth="-Infinity" prefHeight="25.0" prefWidth="200.0" promptText="Server Port:" />
+                  <Button fx:id="connectButtonRMI" mnemonicParsing="false" onAction="#onClickConnectRMIButton" prefHeight="41.0" prefWidth="81.0" style="-fx-background-color: #ffc033; -fx-border-radius: 15; -fx-background-radius: 15;" text="Connect">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="338.6665852864585">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Text>
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="95.0" top="5.0" />
+         </padding>
+      </HBox>
    </children>
 </AnchorPane>
