@@ -49,7 +49,7 @@ public class VirtualSocketView implements VirtualView{
     @Override
     public void run(){
 
-        String welcomeMessage = "Benvenuto nel server!\n";
+        /*String welcomeMessage = "Benvenuto nel server!\n";
         try {
             out.write(welcomeMessage.getBytes());
             out.flush();
@@ -57,7 +57,7 @@ public class VirtualSocketView implements VirtualView{
         } catch (IOException e) {
             System.err.println(e.getStackTrace());
             throw new RuntimeException(e);
-        }
+        }*/
 
         Gson gson = new Gson();
         String mess = gson.toJson(new LoginView(isFirstToJoin));
@@ -208,13 +208,17 @@ public class VirtualSocketView implements VirtualView{
                 System.out.println("Ping sent: "+pingMessage);
                 System.out.flush();
             }catch (SocketException e){
-                System.out.println("Lost connection with the client");
+                //System.out.println("Lost connection with the client");
+                System.err.println("[Socket Exception]: One Socket client has disconnected, its nickname was: "
+                        +connectionInfo.getNickname());
                 //We don't need to notify the controller because it will be notified by the PingManager
                 // checking the checkPongResponse method. We just wait.
                 //throw new RuntimeException(e);
             }catch (IOException e) {
-                System.err.println(e.getStackTrace());
-                throw new RuntimeException(e);
+                /*System.err.println(e.getStackTrace());
+                throw new RuntimeException(e);*/
+                System.err.println("[IOException] Lost connection with one Socket client, its nickname was: "
+                        +connectionInfo.getNickname());
             }
         }
     }
@@ -223,14 +227,8 @@ public class VirtualSocketView implements VirtualView{
     public boolean checkPongResponse() {
         synchronized (pongLocker){
             if(!pongReceived){
-                System.out.println("Client disconnected");
+                //System.out.println("Client disconnected");
                 return false;
-            /*try {
-                socket.close();
-            } catch (IOException e) {
-                System.err.println(e.getStackTrace());
-                throw new RuntimeException(e);
-            }*/
             }else{
                 pongReceived = false;
                 System.out.println("Pong received");
@@ -281,4 +279,15 @@ public class VirtualSocketView implements VirtualView{
         return isFirstToJoin;
     }
 
+    @Override
+    public void removeAllVCEventListeners() {
+        synchronized (vcEventListeners){
+            vcEventListeners.clear();
+        }
+    }
+
+    @Override
+    public List<VCEventListener> getVCEventListeners() {
+        return vcEventListeners;
+    }
 }

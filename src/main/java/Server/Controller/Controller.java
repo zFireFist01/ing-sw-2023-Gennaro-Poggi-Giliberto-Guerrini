@@ -16,6 +16,7 @@ import Server.Model.GameItems.TileType;
 import Server.Model.LightMatch;
 import Server.Model.Match;
 import Server.Events.VCEvents.VCEvent;
+import Server.Model.MatchStatus.NotRunning;
 import Server.Model.MatchStatus.Running;
 import Server.Model.MatchStatus.WaitingForPlayers;
 import Server.Model.Player.Player;
@@ -35,14 +36,14 @@ import java.util.*;
  */
 public class Controller implements VCEventListener {
 
-    private final Match match;
+    private /*final*/ Match match;
     //private VirtualView[] virtualViews;
     private VirtualView caller;
     private VirtualView currentPlayerView;
-    private final Map<Integer,VirtualView > PlayerViews=new HashMap<>();
+    private Map<Integer,VirtualView > PlayerViews=new HashMap<>();
     private List<SelectViewEventListener> selectViewEventListeners;
     private Map<Integer, Player> hashNicknames = new HashMap<>();
-
+    private boolean everyoneOffline = false;
     private Server server;
     public Controller(Match match, Server server){
         this.match = match;
@@ -122,7 +123,11 @@ public class Controller implements VCEventListener {
                 System.out.println("Controller connection info.nickname: " + caller.getConnectionInfo().getNickname());
                 if(match.getMatchStatus() instanceof WaitingForPlayers){
                     caller.onSelectViewEvent(new GameView());
+                    //caller.onSelectViewEvent(new GameView());
                 }else if (match.getMatchStatus() instanceof Running){
+                    if(!server.getClientsWaitingForMatch().isEmpty()){
+                        server.dequeueWaitingClients();
+                    }
                     Player firstPlayer = match.getFirstPlayer();
                     currentPlayerView = PlayerViews.get(firstPlayer.getPlayerID());
                     currentPlayerView.onSelectViewEvent(new PickingTilesGameView());
@@ -131,7 +136,6 @@ public class Controller implements VCEventListener {
                             vv.onSelectViewEvent(new GameView("Match started "+ firstPlayer.getPlayerNickName() + " is the first player"));
                         }
                     }
-
                 }
 
             }
@@ -454,6 +458,9 @@ public class Controller implements VCEventListener {
      */
     @Override
     public void onVCEvent(VCEvent event, VirtualView view) throws NoSuchMethodException, IllegalAccessException {
+        if(everyoneOffline){
+            return;
+        }
         String methodName = event.getMethodName();
         caller= view;
 
@@ -521,9 +528,25 @@ public class Controller implements VCEventListener {
         selectViewEventListeners.remove(listener);
     }
 
-    public void playerDisconnected(VirtualView vv){
+    public List<VirtualView> playerDisconnected(VirtualView vv){
+        List<VirtualView> virtualViewsToRemove = new ArrayList<>();
         //TODO: check
-        if(PlayerViews.containsValue(vv)){
+        //First: Is the match in NotRunning status?
+        if(match.getMatchStatus() instanceof NotRunning){
+            //It necessarily means that there was only one player in the match, who wasn't logged in
+            //We must clear all the data structures and return
+            PlayerViews.clear();
+            PlayerViews = null;
+            hashNicknames.clear();
+            hashNicknames = null;
+            selectViewEventListeners.clear();
+            selectViewEventListeners = null;
+            server.eraseMatch(match);
+            match = null;
+            virtualViewsToRemove.add(vv);
+            return virtualViewsToRemove;
+        }
+        if(PlayerViews.containsValue(vv)){ //PlayerViews only contains players that are logged in
             Integer playerHash = null;
             for(Integer i : PlayerViews.keySet()){
                 if(PlayerViews.get(i).equals(vv)){
@@ -532,12 +555,73 @@ public class Controller implements VCEventListener {
                 }
             }
 
-            match.disconnectPlayer(hashNicknames.get(playerHash), PlayerViews.get(playerHash));
-            match.clearSelectedTiles();
-            Player currentPlayer = match.getCurrentPlayer();
-            currentPlayerView = PlayerViews.get(currentPlayer.getPlayerID());
-            currentPlayerView.onSelectViewEvent(new PickingTilesGameView());
+            if(match.getMatchStatus() instanceof WaitingForPlayers){
+                //This means that we were waiting for players and the disconnected player was logged in
+                match.disconnectPlayer(hashNicknames.get(playerHash), PlayerViews.get(playerHash));
+                if(match.getMatchStatus() == null){
+                    //He was the last player in the match
+                    //We erase everything
+                    PlayerViews.clear();
+                    PlayerViews = null;
+                    hashNicknames.clear();
+                    hashNicknames = null;
+                    selectViewEventListeners.clear();
+                    selectViewEventListeners = null;
+                    server.eraseMatch(match);
+                    virtualViewsToRemove.add(vv);
+                    match = null;
+                }else{
+                    //We only forget him
+                    PlayerViews.remove(playerHash);
+                    hashNicknames.remove(playerHash);
+                    selectViewEventListeners.remove(vv);
+                    server.disconnectClient(vv);
+                    virtualViewsToRemove.add(vv);
+                }
+                return virtualViewsToRemove;
+            }
 
+            //If I reach this point it means that the match is in Running status and the disconnected player was logged in
+            Player previousCurrentPlayer = match.getCurrentPlayer();
+            match.disconnectPlayer(hashNicknames.get(playerHash), PlayerViews.get(playerHash));
+            /*if(match.getMatchStatus() == null){
+                //All the players disconnected, we erase the match
+                for(Player p : match.getDisconnectedPlayers()){
+                    server.disconnectClient(PlayerViews.get(p.getPlayerID()));
+                    virtualViewsToRemove.add(PlayerViews.get(p.getPlayerID()));
+                } //vv should be in the list of disconnected players... no need to add it explicitly
+                PlayerViews.clear();
+                PlayerViews = null;
+                hashNicknames.clear();
+                hashNicknames = null;
+                selectViewEventListeners.clear();
+                selectViewEventListeners = null;
+                server.eraseMatch(match);
+                match = null;
+                return virtualViewsToRemove;
+            }*/
+            if(/*match.getMatchStatus() == null*/ match.areAllPlayersDisconnected() == true){
+                everyoneOffline = true;
+                return null;
+            }
+            Player currentPlayer = match.getCurrentPlayer();
+            /*if(currentPlayer == null){
+                //It means that every player is disconnected
+            }*/
+            currentPlayerView = PlayerViews.get(currentPlayer.getPlayerID());
+            if(previousCurrentPlayer != null && previousCurrentPlayer.getPlayerID() == playerHash) {
+                /*If the current player before the disconnection is registered is different from null and is equal to
+                the disconnected one then match.disconnectPlayer called below will update the current player
+                and we will have to send the new current player a PickingTilesGameView, otherwise we don't
+                 */
+
+                //match.clearSelectedTiles(); //rimosso perché gestito dal match solo nel caso in cui il player disconnesso
+                // sia il current player
+                currentPlayerView.onSelectViewEvent(new PickingTilesGameView("A player has lost connection,"+
+                        "so now it's your turn!\nPlease select some tiles and then checkout"));
+            }
+
+            //TODO: Serve veramente?
             for(Integer i  : PlayerViews.keySet()){
                 if(!match.getDisconnectedPlayersVirtualViews().containsKey(PlayerViews.get(i))
                         && !PlayerViews.get(i).equals(currentPlayerView)){
@@ -545,10 +629,18 @@ public class Controller implements VCEventListener {
                 }
             }
         }else{
-            throw new RuntimeException("PingPongManager tells me a player has lost connection but" +
-                    " he was not in the match");
+            //This will happen if the disconnected player was not logged in
+            //If I reach this point the match was not in NotRunning status and the disconnected player was not logged in
+            //Since in order for the match to be Running all the players need to be logged in, we can be sure that
+            //the match is in WaitingForPlayers status
+            //The client was not logged in => was not in the match as a contestant but only as a listener
+            match.removeMVEventListener(vv);
+            removeSelectViewEventListener(vv);
+            server.disconnectClient(vv);
+            virtualViewsToRemove.add(vv);
+            return virtualViewsToRemove;
         }
-
+        return null;
     }
 
     public void playerConnected(VirtualView vv) {
@@ -558,9 +650,16 @@ public class Controller implements VCEventListener {
                 if (PlayerViews.get(i).equals(vv)) {
                     match.reconnectPlayer(hashNicknames.get(i), PlayerViews.get(i));
                     //match.triggerMVUpdate();
-                    PlayerViews.get(i).onMVEvent(new MatchStartedEvent(new LightMatch(match)));
+                    if(everyoneOffline){
+                        everyoneOffline = false;
+                        Player p = match.getCurrentPlayer();
+                        currentPlayerView = PlayerViews.get(p.getPlayerID());
+                        PlayerViews.get(p.getPlayerID()).onSelectViewEvent(new PickingTilesGameView());
+                    }
+                    //PlayerViews.get(i).onMVEvent(new MatchStartedEvent(new LightMatch(match)));
                 }
             }
+            match.triggerMVUpdate();
             //match.reconnectPlayer(hashNicknames.get(playerHash), PlayerViews.get(playerHash));
         }
     }

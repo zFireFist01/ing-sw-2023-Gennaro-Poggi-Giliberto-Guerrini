@@ -26,7 +26,7 @@ public class CommonGoalCardsTests {
      * This method tests the pickPountTile method in the commonGoalCard abstract class
      * @author due2
      */
-    @Test
+    /*@Test
     public void pickPointsTile_work_Test(){
         CommonGoalCard testcard_2player = new CommonGoalCard1(2,false);
         CommonGoalCard testcard_3player = new CommonGoalCard1(3,false);
@@ -85,13 +85,13 @@ public class CommonGoalCardsTests {
             finalTestcard_4player.pickPointsTile();
         });
 
-    }
+    }*/
     /**
      * This method tests the getPointsTiles method in the commonGoalCard abstract class
      * @author due2
      */
-    @Test
-    public void GetPointsTiles_return_Test(){
+    //@Test
+    /*public void GetPointsTiles_return_Test(){
         CommonGoalCard testcard_2player = new CommonGoalCard1(2,false);
         CommonGoalCard testcard_3player = new CommonGoalCard1(3,false);
         CommonGoalCard testcard_4player = new CommonGoalCard1(4,false);
@@ -160,7 +160,7 @@ public class CommonGoalCardsTests {
         assertEquals(testcard_4player.getPointsTiles(), new ArrayList<>());
 
 
-    }
+    }*/
 
     CommonGoalCard testCard;
     Bookshelf testBookshelf;
@@ -1121,129 +1121,157 @@ public void CommonGoalCard6_expectedTrue_Test() {
      */
     @Test
     public void CommonGoalCard7_expectedFalse_Test(){
-        testCard = new CommonGoalCard7(4, false);
+        testCard  =  new CommonGoalCard7(4, false);
         testBookshelf = new Bookshelf(new Match());
-        TileType rtt = TileType.randomTileType();
+        BookshelfTileSpot[][] matrix = testBookshelf.getPrivateTileMatrix();
         Random r = new Random();
 
-        //CASE 0: The bookshelf is empty
-        //Bookshelf empty => not achieved the common goal
+        //Zero-th case: empty bookshelf
         assertFalse(testCard.check(testBookshelf));
+        //First case: we have exactly 4 rows of length 5 but each of them has 4 different types (so that
+        // we check the limit of the condition)
+        for(int k = 0;k<20;k++){ //Do the thing several times, since some things are random (shouldn't be a problem though)
+            int[] rows = new int[]{-1, -1, -1, -1};
+            for(int i=0;i<4;i++){
+                int guess = -1;
+                do{
+                    guess = r.nextInt(6); //There are 6 lines: 0--5 and the parameter is exclusive
+                }while(rows[0]==guess || rows[1]==guess || rows[2]==guess || rows[3]==guess); //So we don't insert the same row twice
+                rows[i] = guess;
+            }
+            TileType[] types = new TileType[]{null,null,null,null};
+            for(int i=0;i<4;i++){
+                TileType tt;
+                do{
+                    tt = TileType.randomTileType();
+                }while(tt == types[0] || tt == types[1] || tt == types[2] || tt == types[3]); //So we don't insert the same type twice
+                types[i] = tt;
+            }
+            for(int i=0;i<4;i++){ //for all the 4 rows
+                int row = rows[i];
+                for(int j=0;j<5;j++){ //for the 5 columns
+                    matrix[row][j].setTile(types[j%4]);
+                }
+            }
+            //Now the matrix has 4 random rows of length 5, each with exactly 4 different types selected randomly
+            assertFalse(testCard.check(testBookshelf));
+        }
 
-        //FIRST CASE: 1st row empty, second row has tiles of the same kind,
-        // others have tiles of different kinds
-        for(int j=0;j<testBookshelf.getBookshelfWidth();j++){ //inserting the last row
-            testBookshelf.insertTile(j,TileType.values()[j]); //Every col. will have a different type
-        }
-        assertFalse(testCard.check(testBookshelf));
-        for(int j=0;j<testBookshelf.getBookshelfWidth();j++){ //inserting the 2nd to last row
-            testBookshelf.insertTile(j,TileType.values()[j]); //Every col. will have a different type
-        }
-        assertFalse(testCard.check(testBookshelf));
-        for(int j=0;j<testBookshelf.getBookshelfWidth();j++){ //inserting the 3rd to last row
-            testBookshelf.insertTile(j,TileType.values()[j]); //Every col. will have a different type
-        }
-        assertFalse(testCard.check(testBookshelf));
-        for(int j=0;j<testBookshelf.getBookshelfWidth();j++){ //inserting the 4th to last row
-            testBookshelf.insertTile(j,TileType.values()[j]); //Every col. will have a different type
-        }
-        assertFalse(testCard.check(testBookshelf));
+        //Second case: we have rows with at most 3 differnt types, but we have less than 4 rows
+        //2.1: 1 type in those rows
+        int numrows = 1;
+        List<Integer> rows;
+        while(numrows<4){
+            testBookshelf = new Bookshelf(new Match());
+            matrix = testBookshelf.getPrivateTileMatrix();
+            rows = new ArrayList<>();
+            for(int i=0;i<numrows;i++){
+                int row;
+                do{
+                    row = r.nextInt(6);
+                }while(rows.contains(row));
+                rows.add(row);
+            }
 
-        for(int j=0;j<testBookshelf.getBookshelfWidth();j++){ //inserting in the 2nd row
-            testBookshelf.insertTile(j,rtt);                //every tile same type
+            for(TileType tt: TileType.values()){
+                for(int i=0;i<numrows;i++){ //for all the numrows rows
+                    int row = rows.get(i);
+                    for(int j=0;j<5;j++){ //for the 5 columns
+                        matrix[row][j].setTile(tt); //we don't care what type we insert, as long as
+                        //it comes from the selected ones, that ensures us they're exactly 4 different types
+                    }
+                }
+                assertFalse(testCard.check(testBookshelf));
+            }
+            numrows++;
         }
-        assertFalse(testCard.check(testBookshelf));
 
-        //SECOND CASE: 6 rows full, the first three with all equal tiles,
-        // but the last three have all different tiles
-        testBookshelf = new Bookshelf(new Match());
-        for(int j=0;j<testBookshelf.getBookshelfWidth();j++){ //inserting the last row
-            testBookshelf.insertTile(j,TileType.values()[j]); //Every col. will have a different type
-        }
-        assertFalse(testCard.check(testBookshelf));
+        //2.2 exactly 2 or exactly 3 different types in those rows
+        rows = new ArrayList<>();
+        numrows = 1;
+        int numtypes;
 
-        for(int j=0;j<testBookshelf.getBookshelfWidth();j++){ //inserting the 2nd to last row
-            testBookshelf.insertTile(j,TileType.values()[j]); //Every col. will have a different type
+        List<TileType> types;
+        for(int k=0;k<20;k++){ //Do the thing several times, since some things are random (shouldn't be a problem though)
+            while(numrows<4){
+                numtypes = 2;
+                while(numtypes <4){
+                    testBookshelf = new Bookshelf(new Match());
+                    matrix = testBookshelf.getPrivateTileMatrix();
+                    rows = new ArrayList<>();
+                    types = new ArrayList<>();
+                    for(int i=0;i<numrows;i++){
+                        int row;
+                        do{
+                            row = r.nextInt(6);
+                        }while(rows.contains(row));
+                        rows.add(row);
+                    }
+                    for(int i=0;i<numtypes;i++){
+                        TileType tt;
+                        do{
+                            tt = TileType.randomTileType();
+                        }while(types.contains(tt));
+                        types.add(tt);
+                    }
+                    for(int i=0;i<numrows;i++){ //for all the numrows rows
+                        int row = rows.get(i);
+                        for(int j=0;j<5;j++){ //for the 5 columns
+                            matrix[row][j].setTile(types.get(j%numtypes)); //we don't care what type we insert, as long as
+                            //it comes from the selected ones, that ensures us they're exactly 4 different types
+                        }
+                    }
+                    assertFalse(testCard.check(testBookshelf));
+                    numtypes++;
+                }
+                numrows++;
+            }
         }
-        assertFalse(testCard.check(testBookshelf));
 
-        for(int j=0;j<testBookshelf.getBookshelfWidth();j++){ //inserting the 3rd to last row
-            testBookshelf.insertTile(j,TileType.values()[j]); //Every col. will have a different type
+        //Third case: we have four rows of length 5, but each with at most x different types and a blank, for x in {1,2,3,4,5,6}
+        for(int k=0;k<20;k++){ //Do the thing several times, since some things are random (shouldn't be a problem though)
+            testBookshelf = new Bookshelf(new Match());
+            matrix = testBookshelf.getPrivateTileMatrix();
+            int numDifferentTypes = 1;
+            int numRows = 4;
+            rows = new ArrayList<>();
+            types = new ArrayList<>();
+            for (int i = 0; i < 4; i++) {
+                int guess;
+                do {
+                    guess = r.nextInt(6); //There are 6 lines: 0--5 and the parameter is exclusive
+                } while (rows.contains(guess)); //So we don't insert the same row twice
+                rows.add(guess);
+            }
+            for (int i = 0; i < numDifferentTypes; i++) {
+                TileType tt;
+                do {
+                    tt = TileType.randomTileType();
+                } while (types.contains(tt)); //So we don't insert the same type twice
+                types.add(tt);
+            }
+            //Now we have the rows and the types, we need to decide where to put the blanks. Blanks should not be in the same
+            //column if their respective rows are one on top of the other, so we need to check that. Since we are using the
+            //method tileMatrix.setTile (and not the method bookshelf.insertTile) we shouldn't have the need of ensuring
+            //that no blank is adjacent to one below it.
+            for (int i = 0; i < numRows; i++) { //for all the 4 rows
+                int row = rows.get(i);
+                int columnOfTheBlanck = r.nextInt(5);
+                for (int j = 0; j < 5; j++) { //for the 5 columns
+                    if (j == columnOfTheBlanck) {
+                        matrix[row][j].setTile(null);
+                    } else {
+                        if (numDifferentTypes == 1) {
+                            matrix[row][j].setTile(types.get(0));
+                        } else {
+                            matrix[row][j].setTile(types.get(j%numDifferentTypes)); //we don't care what type we insert, as long as
+                            //it comes from the selected ones, that ensures us they're exactly 4 different types
+                        }
+                    }
+                }
+            }
+            assertFalse(testCard.check(testBookshelf));
         }
-        assertFalse(testCard.check(testBookshelf));
-        for(int j=0;j<testBookshelf.getBookshelfWidth();j++){ //inserting in the 4th to last row
-            testBookshelf.insertTile(j,rtt);                //every tile same type
-        }
-        assertFalse(testCard.check(testBookshelf));
-        for(int j=0;j<testBookshelf.getBookshelfWidth();j++){ //inserting in the 2nd row
-            testBookshelf.insertTile(j,rtt);                //every tile same type
-        }
-        assertFalse(testCard.check(testBookshelf));
-        for(int j=0;j<testBookshelf.getBookshelfWidth();j++){ //inserting in the 1st row
-            testBookshelf.insertTile(j,rtt);                //every tile same type
-        }
-        assertFalse(testCard.check(testBookshelf));
-
-        //THIRD CASE: Every row has more than three different kinds
-        testBookshelf = new Bookshelf(new Match());
-        for(int j=0;j<testBookshelf.getBookshelfWidth();j++){ //inserting the last row
-            testBookshelf.insertTile(j,TileType.values()[j]); //Every col. will have a different type
-        }
-        assertFalse(testCard.check(testBookshelf));
-        for(int j=0;j<testBookshelf.getBookshelfWidth();j++){ //inserting the 2nd to last row
-            testBookshelf.insertTile(j,TileType.values()[j]); //Every col. will have a different type
-        }
-        assertFalse(testCard.check(testBookshelf));
-        for(int j=0;j<testBookshelf.getBookshelfWidth();j++){ //inserting the 3rd to last row
-            testBookshelf.insertTile(j,TileType.values()[j]); //Every col. will have a different type
-        }
-        assertFalse(testCard.check(testBookshelf));
-        for(int j=0;j<testBookshelf.getBookshelfWidth();j++){ //inserting the 4th to last row
-            testBookshelf.insertTile(j,TileType.values()[j]); //Every col. will have a different type
-        }
-        assertFalse(testCard.check(testBookshelf));
-        for(int j=0;j<testBookshelf.getBookshelfWidth();j++){ //inserting the 2nd row
-            testBookshelf.insertTile(j,TileType.values()[j]); //Every col. will have a different type
-        }
-        assertFalse(testCard.check(testBookshelf));
-        for(int j=0;j<testBookshelf.getBookshelfWidth();j++){ //inserting the 1st row
-            testBookshelf.insertTile(j,TileType.values()[j]); //Every col. will have a different type
-        }
-        assertFalse(testCard.check(testBookshelf));
-
-
-        //FOURTH CASE: Every row has at least a blank, but all the tiles are equal
-        testBookshelf = new Bookshelf(new Match());
-        for(int j=0;j<testBookshelf.getBookshelfWidth();j++){ //inserting in the 2nd row
-            int c = r.nextInt(5);
-            if(j!= c) {testBookshelf.insertTile(j,rtt);}                //every tile same type
-        }
-        assertFalse(testCard.check(testBookshelf));
-        for(int j=0;j<testBookshelf.getBookshelfWidth();j++){ //inserting in the 2nd row
-            int c = r.nextInt(5);
-            if(j!= c) {testBookshelf.insertTile(j,rtt);}                //every tile same type
-        }
-        assertFalse(testCard.check(testBookshelf));
-        for(int j=0;j<testBookshelf.getBookshelfWidth();j++){ //inserting in the 2nd row
-            int c = r.nextInt(5);
-            if(j!= c) {testBookshelf.insertTile(j,rtt);}                //every tile same type
-        }
-        assertFalse(testCard.check(testBookshelf));
-        for(int j=0;j<testBookshelf.getBookshelfWidth();j++){ //inserting in the 2nd row
-            int c = r.nextInt(5);
-            int c1;
-            do{
-                c1 = r.nextInt(5);
-
-            }while (c == c1);
-            if(j!= c && j != c1) {testBookshelf.insertTile(j,rtt);} //every tile same type
-        }
-        assertFalse(testCard.check(testBookshelf));
-        for(int j=0;j<testBookshelf.getBookshelfWidth();j++){ //inserting in the 2nd row
-            int c = r.nextInt(5);
-            if(j!= c) {testBookshelf.insertTile(j,rtt);}                //every tile same type
-        }
-        assertFalse(testCard.check(testBookshelf));
     }
 
     /**

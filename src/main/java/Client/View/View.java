@@ -9,4 +9,7 @@ public interface View extends SelectViewEventListener, Runnable, MVEventListener
     boolean isReconnecting();
 
     public ConnectionInfo getConnectionInfo();
+
+    public void resetConnection();
+
 }

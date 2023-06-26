@@ -1,5 +1,6 @@
 package Client;
 
+import Client.View.CLI.ANSIParameters;
 import Client.View.RemoteNetworkHandler;
 import Client.View.View;
 import Server.Events.EventTypeAdapterFactory;
@@ -12,11 +13,15 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.lang.reflect.InvocationTargetException;
+import java.rmi.AccessException;
+import java.rmi.ConnectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class NetworkRMIHandler extends UnicastRemoteObject implements RemoteNetworkHandler, NetworkHandler {
 
@@ -24,59 +29,102 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements RemoteNetw
     int port;
     View view;
     RemoteVirtualView virtualRMIView;
+    private boolean connected;
+    Timer timer;
 
     public NetworkRMIHandler(String host, int port, View view) throws RemoteException {
         super();
         this.host = host;
         this.port = port;
         this.view = view;
+        connected = false;
+        timer = new Timer();
     }
 
     @Override
     public void run(){
-        Registry registry;
-        RMIWaiterInterface rmiWaiter;
+        Registry registry = null;
+        RMIWaiterInterface rmiWaiter = null;
         try {
             registry = LocateRegistry.getRegistry(host, port);
         } catch (RemoteException e) {
             System.err.println("Error while getting registry");
             throw new RuntimeException(e);
         }catch (Exception e){
-            System.err.println("Error while getting registry");
-            System.err.println(e.getMessage()+"\n"+e.getCause()+"\n"+e.getStackTrace());
-            throw new RuntimeException(e);
+            System.out.println("Error while getting the RMI registry, please wait and try again.");
+            return;
+        }
+
+        if(registry == null){
+            System.out.println("Error while getting the RMI registry, please wait and try again.");
+            return;
+        }
+
+        int tries = 0;
+        boolean flag = false;
+        while(!flag && tries <2){
+            try {
+                tries++;
+                rmiWaiter = (RMIWaiterInterface)registry.lookup("RMIWaiter");
+                System.out.println("RMIWaiter found");
+                flag = true;
+            } catch (RemoteException e) {
+                System.out.println("[Try #"+(tries)+"]: Error while getting the RMI waiter, please wait and try again.");
+            } catch (NotBoundException e) {
+                System.out.println("Failed to bind with RMIWaiter (RMIWaiter not bound)");
+            }
+        }
+
+        if(rmiWaiter == null){
+            System.out.print("Error while connecting to the server, please wait and try again.\n> ");
+            return;
         }
 
         try {
-            rmiWaiter = (RMIWaiterInterface) registry.lookup("RMIWaiter");
-            System.out.println("RMIWaiter found");
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        } catch (NotBoundException e) {
-            System.err.println("Failed to bind with RMIWaiter (RMIWaiter not bound)");
-            throw new RuntimeException(e);
-        }
-
-        try {
-            //virtualRMIView = rmiWaiter.giveConnection(this);
             if(view.isReconnecting()){
-                virtualRMIView = rmiWaiter.reGiveConnection(this, view.getConnectionInfo());
-                System.out.println("called reGiveConnection");
+                try{
+                    virtualRMIView = rmiWaiter.reGiveConnection(this, view.getConnectionInfo());
+                }catch(UnsupportedOperationException e){
+                    System.out.println(e.getMessage());
+                    System.exit(0);
+                }
+                //System.out.println("called reGiveConnection");
             }else{
                 virtualRMIView = rmiWaiter.giveConnection(this);
             }
         } catch (RemoteException e) {
-            throw new RuntimeException(e);
+            //throw new RuntimeException(e);
+            System.err.print("Error while getting connection through RMI, please wait anc try again.\n> ");
+            return;
         }
+        connected = true;
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    //this.ping();
+                    if(virtualRMIView!=null){
+                        virtualRMIView.pong();
+                        connected = true;
+                    }else{
+                        connected = false;
+                    }
+                } catch (RemoteException e) {
+                    if(connected){
+                        connected = false;
+                        System.out.println(ANSIParameters.CLEAR_SCREEN+ANSIParameters.CURSOR_HOME+
+                                "Lost connection with server.\nPlease wait a few seconds and try to reconnect.");
+                        view.resetConnection();
+                    }
+                    return;
+                }
+            }
+        }, 0, 1000);
     }
 
 
     @Override
     public void receiveMVEvent(String json) throws RemoteException{
-        /*Gson gson = new GsonBuilder()
-                .excludeFieldsWithoutExposeAnnotation()
-                .registerTypeAdapter(CommonGoalCard.class, new CommonGoalCardAdapter())
-                .create();*/
         Gson gson = new GsonBuilder()
                 .registerTypeAdapterFactory(new EventTypeAdapterFactory())
                 .create();
@@ -122,8 +170,18 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements RemoteNetw
         json+="\n";
         try {
             virtualRMIView.receiveVCEvent(json);
+        } catch(ConnectException e){
+            System.out.println(ANSIParameters.CLEAR_SCREEN+ANSIParameters.CURSOR_HOME+
+                    "Lost connection with server.\nPlease wait a few seconds and try to reconnect.");
+            //view.setConnectionToReset();
+            view.resetConnection();
+            return;
         } catch (RemoteException e) {
-            throw new RuntimeException(e);
+            System.out.println(ANSIParameters.CLEAR_SCREEN+ANSIParameters.CURSOR_HOME+
+                    "Lost connection with server.\nPlease wait a few seconds and try to reconnect.");
+            //view.setConnectionToReset();
+            view.resetConnection();
+            return;
         }
     }
 

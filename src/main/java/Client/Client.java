@@ -92,7 +92,8 @@ public class Client {
                     System.out.println("Invalid choice: the number must be 1 or 2!");
                 }
             }catch (Exception e){
-                System.out.println("Invalid choice: Please insert a number!");
+                System.out.println(e.getMessage());
+                //System.out.println("Invalid choice: Please insert a number!");
                 continue;
             }
 

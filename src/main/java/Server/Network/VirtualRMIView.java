@@ -190,9 +190,11 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
             }
             System.out.println("Pong received");
         } catch (ConnectException e){
-            System.err.println("Client disconnected: " + e.getMessage() + "\n" + e.getStackTrace());
+            //System.err.println("Client disconnected: " + e.getMessage() + "\n" + e.getStackTrace());
+            System.err.println("One RMI client has disconnected. The nickname of that client was: " + connectionInfo.getNickname());
         }catch (RemoteException e){
-            System.err.println("Remote exception: " + e.getMessage() + "\n" + e.getStackTrace());
+            //System.err.println("Remote exception: " + e.getMessage() + "\n" + e.getStackTrace());
+            System.err.println("Lost connection with one RMI client");
         }
     }
 
@@ -249,4 +251,21 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
         return isFirsToJoin;
     }
 
+    @Override
+    public void removeAllVCEventListeners() {
+        synchronized (vcEventListeners){
+            vcEventListeners.clear();
+        }
+    }
+
+    @Override
+    public List<VCEventListener> getVCEventListeners() {
+        return vcEventListeners;
+    }
+
+    @Override
+    public void pong() {
+        System.out.println("Ponged RMI client");
+        return;
+    }
 }

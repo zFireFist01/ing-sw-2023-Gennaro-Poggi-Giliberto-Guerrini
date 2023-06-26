@@ -67,17 +67,43 @@ public class SocketWaiter implements Runnable{
                     ConnectionInfo connectionInfo =
                             new Gson().fromJson(localIn.nextLine(), ConnectionInfo.class);
                     if(server.waitingMatch()){
-                        clientVV = new VirtualSocketView(socket,false);
-                        (clientVV).setConnectionInfo(connectionInfo);
-                        new Thread(clientVV).start();
-                        Match m = server.getWaitingMatch();
-                        m.addMVEventListener(clientVV);
-                        Controller c = server.getMatchsController(m);
-                        clientVV.addVCEventListener(c);
-                        c.addSelectViewEventListener(clientVV);
-                        server.subscribeNewViewToExistingMatch(m, clientVV);
+                        if(!server.isWaitingQueueEmpty()){
+                            /*There is someone that was waiting to log in as a consequence to someone being too slow logging in: we must
+                            enqueue this client to it*/
+                            clientVV = new VirtualSocketView(socket,false);
+                            clientVV.setConnectionInfo(new ConnectionInfo(connectionInfo.getIp(),ConnectionType.SOCKET));
+                            server.subscribeNewWaitingClient(clientVV);
+                            (clientVV).onSelectViewEvent(
+                                    new LoginView(false, "Waiting for a player to login in order to insert you " +
+                                            "in the right match, please wait... "));
+                        }else{
+                            clientVV = new VirtualSocketView(socket,false);
+                            (clientVV).setConnectionInfo(connectionInfo);
+                            /*It is possible that this client is trying to connect to a match where an already connected
+                            client hasn't logged in yet*/
+                            if(server.mayOverloadLastMatch(clientVV)){
+                                /*This is the case of a client being waiting for an already connected client to login,
+                                since he has a "spot" reserved in the last match. We must enqueue this client to the
+                                waiting queue, to make it wait for the other client to login (or quit).
+                                */
+                                server.subscribeNewWaitingClient(clientVV);
+                                clientVV.onSelectViewEvent(new LoginView(false, "Waiting for a player to login in order to insert you " +
+                                        "in the right match, please wait... "));
+                            }else{
+                                new Thread(clientVV).start();
+                                Match m = server.getWaitingMatch();
+                                m.addMVEventListener(clientVV);
+                                Controller c = server.getMatchsController(m);
+                                clientVV.addVCEventListener(c);
+                                c.addSelectViewEventListener(clientVV);
+                                server.subscribeNewViewToExistingMatch(m, clientVV);
+                            }
+                        }
                     }else{
+                        /*No match waiting for players means: (1) there is a match waiting for initialization,
+                        but already istantiated or (2) there is no match istantiated*/
                         if(server.matchWaitingForInit()){
+                            //(1)
                             //This means that the current connection request must wait for the match opener to decide the number of players
                             clientVV = new VirtualSocketView(socket, false);
                             clientVV.setConnectionInfo(connectionInfo);
@@ -87,6 +113,7 @@ public class SocketWaiter implements Runnable{
                                             "players, please wait...")
                             );
                         }else{
+                            //(2)
                             //We need to create a new match
                             clientVV = new VirtualSocketView(socket,true);
                             (clientVV).setConnectionInfo(connectionInfo);
@@ -106,13 +133,13 @@ public class SocketWaiter implements Runnable{
                             new Gson().fromJson(localIn.nextLine(), ConnectionInfo.class);
 
                     boolean found = false;
-                    for(Match m : server.getMacthesControllers().keySet()){
-                        for(Integer i: server.getMacthesControllers().get(m).getPlayerViews().keySet()){
-                            if(server.getMacthesControllers().get(m).getPlayerViews()
+                    for(Match m : server.getmatchesControllers().keySet()){
+                        for(Integer i: server.getmatchesControllers().get(m).getPlayerViews().keySet()){
+                            if(server.getmatchesControllers().get(m).getPlayerViews()
                                     .get(i).getConnectionInfo().getSignature().equals(connectionInfo.getSignature())){
                                 //We found the player that is trying to reconnect
                                 //We have to use the already existing VirtualView
-                                clientVV = server.getMacthesControllers().get(m).getPlayerViews().get(i);
+                                clientVV = server.getmatchesControllers().get(m).getPlayerViews().get(i);
                                 clientVV.setPongReceived();
                                 if(clientVV instanceof VirtualSocketView){
                                     System.err.println("BLAH BLAH BLAH");
@@ -127,7 +154,7 @@ public class SocketWaiter implements Runnable{
 
                                 server.updateConnectionStatus(connectionInfo, true);
 
-                                server.getMacthesControllers().get(m).playerConnected(clientVV);
+                                server.getmatchesControllers().get(m).playerConnected(clientVV);
                                 System.out.println("Hello world!");
                                 found = true;
                                 break;
@@ -136,6 +163,11 @@ public class SocketWaiter implements Runnable{
                         if(found){
                             break;
                         }
+                    }
+                    if(!found){
+                        localOut.write(("The match in which you were playing has been deleted. " +
+                                "Please restart the game and login as a new player.\n").getBytes());
+                        localOut.flush();
                     }
                 }
             } catch (IOException e) {
