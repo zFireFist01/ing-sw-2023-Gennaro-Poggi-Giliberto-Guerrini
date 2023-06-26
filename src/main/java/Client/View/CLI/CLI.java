@@ -231,7 +231,7 @@ public class CLI implements Runnable , View {
             }
         }
         while(!isReconnecting && directory.exists() && directory.isDirectory()){
-            directoryPath = "src/main/resources/ClientFiles/Client_"+name+"_"+i;
+            directoryPath = jarFolder+"/"+CONNECTION_INFO_DIRECTORY_NAME+"/Client_"+name+"_"+i;
             directory = new File(directoryPath);
             i++;
         }
