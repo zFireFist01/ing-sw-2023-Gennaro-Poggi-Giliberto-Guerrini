@@ -13,7 +13,7 @@ public class InsertingTilesGameView extends GameView{
 
 
     public InsertingTilesGameView(){
-        super("please, select the coloumn where you want to insert the tiles");
+        super("Select the column where you want to insert the tiles!");
     }
     public InsertingTilesGameView(String message){
         super(message);

@@ -1,1 +1,0 @@
-{"ip":"192.168.1.193","port":1098,"nickname":"pat","connectionType":"SOCKET"}

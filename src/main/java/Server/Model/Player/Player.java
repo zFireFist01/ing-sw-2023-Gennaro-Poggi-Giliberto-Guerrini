@@ -27,7 +27,6 @@ public class Player {
     private final String playerNickName; //ok
     @Expose
     private PersonalGoalCard personalGoalCard;//ok
-    private PlayerStatus playerStatus; //ok
     @Expose
     private final ArrayList<PointsTile> pointsTiles; //ok
     //@Expose
@@ -43,7 +42,6 @@ public class Player {
         this.bookshelf = new Bookshelf(m);
         this.playerNickName = playerNickName;
         this.pointsTiles = new ArrayList<PointsTile>();
-        this.playerStatus = new Connected();
     }
 
     public void setTakenTiles(TileType[] takenTiles) {
@@ -113,32 +111,7 @@ public class Player {
         this.personalGoalCard = personalGoalCard;
     }
 
-    /**
-     * The Getter for the PlayerStatus
-     * @return is the playerStatus in which the player is
-     */
-    public PlayerStatus getPlayerStatus() {
-        return playerStatus;
-    }
 
-    /**
-     * This method is to toggle the Status of the player either if it's connected or disconnected
-     */
-    public void togglePlayerStatus() {
-        if (this.playerStatus instanceof Connected) {
-            this.playerStatus = new Disconnected();
-        } else {
-            this.playerStatus = new Connected();
-        }
-    }
-
-    /**
-     * Method to know if the player is connected or not
-     * @return 1 if connected, 0 if not
-     */
-    public boolean isConnected(){
-        return this.playerStatus instanceof Connected;
-    }
 
     /**
      * The Getter for the NickName
@@ -176,7 +149,6 @@ public class Player {
                 && Objects.equals(bookshelf, player.bookshelf)
                 && Objects.equals(playerNickName, player.playerNickName)
                 && personalGoalCard == player.personalGoalCard
-                && Objects.equals(playerStatus, player.playerStatus)
                 && Objects.equals(pointsTiles, player.pointsTiles)
                 && Objects.equals(nextPlayer, player.nextPlayer)
                 && Arrays.equals(takenTiles, player.takenTiles)

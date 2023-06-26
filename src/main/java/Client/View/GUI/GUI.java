@@ -52,11 +52,14 @@ public class GUI extends Application implements View {
     ImageView titleImageView;
     private String myNick;
 
+    private String currentPlayerNickname;
     ImageView wallpaperImageView;
 
     ConnectionType connectionType = null;
     private NetworkHandler networkHandler;
     private Stage primaryStage;
+
+    private Scene previousScene;
 
     private SelectViewEvent currentView;
     private boolean matchStarted = false;
@@ -155,6 +158,8 @@ public class GUI extends Application implements View {
     private Button quitButton;
     @FXML
     private Button playButton;
+    @FXML
+    private Button showBookshelf;
     @FXML
     private TextField onlyUsernameField;
     @FXML
@@ -312,6 +317,9 @@ public class GUI extends Application implements View {
     private Label punteggioQuarto;
     @FXML
     private AnchorPane anchorPane;
+    @FXML
+    private Label servermessage;
+
 
 
 
@@ -608,9 +616,12 @@ public class GUI extends Application implements View {
                 onPickingTilesGameView(event);
             });
             case "InsertingTilesGameView" -> Platform.runLater(() -> {
-                InsertingTilesGameView(event);
+                onInsertingTilesGameView(event);
             });
-
+            default -> Platform.runLater(() ->{
+                currentView = event;
+                servermessage.setText(currentView.getMessage());
+            });
 
         }
 
@@ -624,6 +635,12 @@ public class GUI extends Application implements View {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Select_Number_Of_Players.fxml"));
             fxmlLoader.setController(this);
             Parent newRoot = fxmlLoader.load();
+            AnchorPane pane = (AnchorPane) newRoot.lookup("#pane_wall");
+            ImageView wallpaper =(ImageView) newRoot.lookup("#parquet") ;
+
+
+            wallpaper.fitHeightProperty().bind(pane.heightProperty());
+            wallpaper.fitWidthProperty().bind(pane.widthProperty());
             Text tmp = (Text)newRoot.lookup("#errormessage");
             if(!loginView.getMessage().equals("Insert your username")){
                 tmp.setText(loginView.getMessage());
@@ -636,6 +653,12 @@ public class GUI extends Application implements View {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Insert_Username.fxml"));
             fxmlLoader.setController(this);
             Parent newRoot = fxmlLoader.load();
+            AnchorPane pane = (AnchorPane) newRoot.lookup("#pane_wall");
+            ImageView wallpaper =(ImageView) newRoot.lookup("#parquet") ;
+
+
+            wallpaper.fitHeightProperty().bind(pane.heightProperty());
+            wallpaper.fitWidthProperty().bind(pane.widthProperty());
             Text tmp = (Text)newRoot.lookup("#errormessage");
             if(!loginView.getMessage().equals("Insert your username")){
                 tmp.setText(loginView.getMessage());
@@ -647,21 +670,26 @@ public class GUI extends Application implements View {
     }
 
     private void onGameViewEvent(SelectViewEvent event){
+        currentView = event;
         if(matchStarted) {
             livingroomgridbuttons.setDisable(true);
             mybookshelf.setDisable(true);
             checkoutbutton.setDisable(true);
             checkoutbutton.setVisible(false);
+            servermessage.setText(currentView.getMessage());
         }
-
     }
 
     private void onPickingTilesGameView(SelectViewEvent event){
+        currentView = event;
         livingroomgridbuttons.setDisable(false);
         checkoutbutton.setDisable(false);
         checkoutbutton.setVisible(true);
+        checkoutbutton.setStyle("-fx-background-color: #FFD700; -fx-font-weight: bold; -fx-font-size: 10px;");
         mybookshelf.setDisable(true);
-
+        //mybookshelf.setStyle("-fx-background-color: #FFD700;");
+        //mybookshelf.setOpacity(0.2);
+        servermessage.setText(currentView.getMessage());
         String[] message = event.getMessage().split(" ");
         if(message[0].equals("Tiles") && message[1].equals("Selected:")){
             clearGrid(livingroomgridbuttons);
@@ -681,7 +709,6 @@ public class GUI extends Application implements View {
                 selected.setOpacity(0.5);
 
                 selected.setText(String.valueOf(i));
-
             }
         }
     }
@@ -711,14 +738,14 @@ public class GUI extends Application implements View {
         return null;
     }
 
-    private void InsertingTilesGameView(SelectViewEvent event) {
+    private void onInsertingTilesGameView(SelectViewEvent event) {
         clearGrid(livingroomgridbuttons);
         livingroomgridbuttons.setDisable(true);
         checkoutbutton.setDisable(true);
         checkoutbutton.setVisible(false);
         mybookshelf.setDisable(false);
-
-
+        currentView = event;
+        servermessage.setText(currentView.getMessage());
     }
 
 
@@ -726,11 +753,9 @@ public class GUI extends Application implements View {
     @Override
     public void onMVEvent(MVEvent event) {
         String methodName = event.getMethodName();
-
-
+        //this.currentPlayerNickname = event.getMatch().getCurrentPlayer().getPlayerNickName();
         switch(methodName) {
             case "onModifiedChatEvent" -> {
-
                 Platform.runLater(() -> {
                     onModifiedChatEvent((Message)event.getValue());
                 });
@@ -746,7 +771,6 @@ public class GUI extends Application implements View {
                 });
             }
             case "onModifiedMatchEndedEvent" -> {
-
                     Platform.runLater(() -> {
                         try {
                             onModifiedMatchEndedEvent(event.getMatch());
@@ -754,7 +778,6 @@ public class GUI extends Application implements View {
                             e.printStackTrace();
                         }
                     });
-
             }
             case "onModifiedPointsEvent" -> {
                 Platform.runLater(() -> {
@@ -762,9 +785,7 @@ public class GUI extends Application implements View {
                 });
             }
             case "onMatchStartedEvent" -> {
-
                 Platform.runLater(() -> {
-
                     onMatchStartedEvent(event.getMatch());
                 });
 
@@ -926,68 +947,80 @@ public class GUI extends Application implements View {
                     switch(matrix[i][j].getTileType()) {
                         case CATS -> {
                             ImageView tmp = getImageViewAt(grid, i, j);
-                            random = (int) (Math.random() * 3 + 1);
-                            if (random == 1) {
-                                tmp.setImage(catImage1);
-                            } else if (random == 2) {
-                                tmp.setImage(catImage2);
-                            } else {
-                                tmp.setImage(catImage3);
+                            if(tmp.getImage()==null) {
+                                random = (int) (Math.random() * 3 + 1);
+                                if (random == 1) {
+                                    tmp.setImage(catImage1);
+                                } else if (random == 2) {
+                                    tmp.setImage(catImage2);
+                                } else {
+                                    tmp.setImage(catImage3);
+                                }
                             }
                         }
                         case PLANTS -> {
                             ImageView tmp = getImageViewAt(grid, i, j);
-                            random = (int) (Math.random() * 3 + 1);
-                            if (random == 1) {
-                                tmp.setImage(plantsImage1);
-                            } else if (random == 2) {
-                                tmp.setImage(plantsImage2);
-                            } else {
-                                tmp.setImage(plantsImage3);
+                            if(tmp.getImage()==null) {
+                                random = (int) (Math.random() * 3 + 1);
+                                if (random == 1) {
+                                    tmp.setImage(plantsImage1);
+                                } else if (random == 2) {
+                                    tmp.setImage(plantsImage2);
+                                } else {
+                                    tmp.setImage(plantsImage3);
+                                }
                             }
                         }
                         case GAMES -> {
                             ImageView tmp = getImageViewAt(grid, i, j);
-                            random = (int) (Math.random() * 3 + 1);
-                            if (random == 1) {
-                                tmp.setImage(gamesImage1);
-                            } else if (random == 2) {
-                                tmp.setImage(gamesImage2);
-                            } else {
-                                tmp.setImage(gamesImage3);
+                            if(tmp.getImage()==null) {
+                                random = (int) (Math.random() * 3 + 1);
+                                if (random == 1) {
+                                    tmp.setImage(gamesImage1);
+                                } else if (random == 2) {
+                                    tmp.setImage(gamesImage2);
+                                } else {
+                                    tmp.setImage(gamesImage3);
+                                }
                             }
                         }
                         case BOOKS -> {
                             ImageView tmp = getImageViewAt(grid, i, j);
-                            random = (int) (Math.random() * 3 + 1);
-                            if (random == 1) {
-                                tmp.setImage(bookImage1);
-                            } else if (random == 2) {
-                                tmp.setImage(bookImage2);
-                            } else {
-                                tmp.setImage(bookImage3);
+                            if(tmp.getImage()==null) {
+                                random = (int) (Math.random() * 3 + 1);
+                                if (random == 1) {
+                                    tmp.setImage(bookImage1);
+                                } else if (random == 2) {
+                                    tmp.setImage(bookImage2);
+                                } else {
+                                    tmp.setImage(bookImage3);
+                                }
                             }
                         }
                         case FRAMES -> {
                             ImageView tmp = getImageViewAt(grid, i, j);
-                            random = (int) (Math.random() * 3 + 1);
-                            if (random == 1) {
-                                tmp.setImage(frameImage1);
-                            } else if (random == 2) {
-                                tmp.setImage(frameImage2);
-                            } else {
-                                tmp.setImage(frameImage3);
+                            if(tmp.getImage()==null) {
+                                random = (int) (Math.random() * 3 + 1);
+                                if (random == 1) {
+                                    tmp.setImage(frameImage1);
+                                } else if (random == 2) {
+                                    tmp.setImage(frameImage2);
+                                } else {
+                                    tmp.setImage(frameImage3);
+                                }
                             }
                         }
                         case TROPHIES -> {
                             ImageView tmp = getImageViewAt(grid, i, j);
-                            random = (int) (Math.random() * 3 + 1);
-                            if (random == 1) {
-                                tmp.setImage(trophyImage1);
-                            } else if (random == 2) {
-                                tmp.setImage(trophyImage2);
-                            } else {
-                                tmp.setImage(trophyImage3);
+                            if(tmp.getImage()==null) {
+                                random = (int) (Math.random() * 3 + 1);
+                                if (random == 1) {
+                                    tmp.setImage(trophyImage1);
+                                } else if (random == 2) {
+                                    tmp.setImage(trophyImage2);
+                                } else {
+                                    tmp.setImage(trophyImage3);
+                                }
                             }
                         }
                     }
@@ -1008,63 +1041,76 @@ public class GUI extends Application implements View {
             for(int j=0; j<9;j++){
                 if(livingroom[i][j].getTileType()== TileType.CATS){
                     ImageView tmp= getImageViewAt(grid,i,j);
-                    random = (int)(Math.random() * 3 + 1);
-                    if (random == 1) {
-                        tmp.setImage(catImage1);
-                    }else if(random == 2){
-                        tmp.setImage(catImage2);
-                    }else{
-                        tmp.setImage(catImage3);
+                    if(tmp.getImage()==null) {
+                        random = (int) (Math.random() * 3 + 1);
+                        if (random == 1) {
+                            tmp.setImage(catImage1);
+                        } else if (random == 2) {
+                            tmp.setImage(catImage2);
+                        } else {
+                            tmp.setImage(catImage3);
+                        }
                     }
                 }else if(livingroom[i][j].getTileType()== TileType.TROPHIES){
                     ImageView tmp= getImageViewAt(grid,i,j);
-                    random = (int)(Math.random() * 3 + 1);
-                    if (random == 1) {
-                        tmp.setImage(trophyImage1);
-                    }else if(random == 2){
-                        tmp.setImage(trophyImage2);
-                    }else{
-                        tmp.setImage(trophyImage3);
+                    if(tmp.getImage()==null) {
+                        random = (int) (Math.random() * 3 + 1);
+                        if (random == 1) {
+                            tmp.setImage(trophyImage1);
+                        } else if (random == 2) {
+                            tmp.setImage(trophyImage2);
+                        } else {
+                            tmp.setImage(trophyImage3);
+                        }
                     }
                 }else if(livingroom[i][j].getTileType()== TileType.FRAMES){
                     ImageView tmp= getImageViewAt(grid,i,j);
-                    random = (int)(Math.random() * 3 + 1);
-                    if (random == 1) {
-                        tmp.setImage(frameImage1);
-                    }else if(random == 2){
-                        tmp.setImage(frameImage2);
-                    }else{
-                        tmp.setImage(frameImage3);
+                    if(tmp.getImage()==null) {
+                        random = (int) (Math.random() * 3 + 1);
+                        if (random == 1) {
+                            tmp.setImage(frameImage1);
+                        } else if (random == 2) {
+                            tmp.setImage(frameImage2);
+                        } else {
+                            tmp.setImage(frameImage3);
+                        }
                     }
                 }else if(livingroom[i][j].getTileType()== TileType.PLANTS){
                     ImageView tmp= getImageViewAt(grid,i,j);
-                    random = (int)(Math.random() * 3 + 1);
-                    if (random == 1) {
-                        tmp.setImage(plantsImage1);
-                    }else if(random == 2){
-                        tmp.setImage(plantsImage2);
-                    }else{
-                        tmp.setImage(plantsImage3);
+                    if(tmp.getImage()==null) {
+                        random = (int) (Math.random() * 3 + 1);
+                        if (random == 1) {
+                            tmp.setImage(plantsImage1);
+                        } else if (random == 2) {
+                            tmp.setImage(plantsImage2);
+                        } else {
+                            tmp.setImage(plantsImage3);
+                        }
                     }
                 }else if(livingroom[i][j].getTileType()== TileType.GAMES){
                     ImageView tmp= getImageViewAt(grid,i,j);
-                    random = (int)(Math.random() * 3 + 1);
-                    if (random == 1) {
-                        tmp.setImage(gamesImage1);
-                    }else if(random == 2){
-                        tmp.setImage(gamesImage2);
-                    }else{
-                        tmp.setImage(gamesImage3);
+                    if(tmp.getImage()==null) {
+
+                        random = (int) (Math.random() * 3 + 1);
+                        if (random == 1) {
+                            tmp.setImage(gamesImage1);
+                        } else if (random == 2) {
+                            tmp.setImage(gamesImage2);
+                        } else {
+                            tmp.setImage(gamesImage3);
+                        }
                     }
                 }else if(livingroom[i][j].getTileType()== TileType.BOOKS){
                     ImageView tmp= getImageViewAt(grid,i,j);
-                    random = (int)(Math.random() * 3 + 1);
-                    if (random == 1) {
-                        tmp.setImage(bookImage1);
-                    }else if(random == 2){
-                        tmp.setImage(bookImage2);
-                    }else{
-                        tmp.setImage(bookImage3);
+                    if(tmp.getImage()==null) {
+                        random = (int) (Math.random() * 3 + 1);
+                        if (random == 1) {
+                            tmp.setImage(bookImage1);
+                        } else if (random == 2) {
+                            tmp.setImage(bookImage2);
+                        } else {
+                            tmp.setImage(bookImage3);
+                        }
                     }
                 }else{
                     ImageView tmp= getImageViewAt(grid,i,j);
@@ -1269,14 +1315,21 @@ public class GUI extends Application implements View {
 
         }
 
+        previousScene = primaryStage.getScene();
         Scene newScene = new Scene(newRoot);
         primaryStage.setScene(newScene);
+
+
+        AnchorPane pane = (AnchorPane) newRoot.lookup("#anchorPane");
+        ImageView imageView =(ImageView) newRoot.lookup("#sfondo") ;
+
+
+        imageView.fitHeightProperty().bind(pane.heightProperty());
+        imageView.fitWidthProperty().bind(pane.widthProperty());
+        primaryStage.setMaximized(true);
+        pane.setPrefWidth(600);
+        pane.setPrefHeight(400);
         primaryStage.setResizable(true);
-        primaryStage.setFullScreen(true);
-
-        anchorPane.prefWidthProperty().bind(primaryStage.widthProperty());
-        anchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
-
         primaryStage.show();
     }
 
@@ -1322,6 +1375,8 @@ public class GUI extends Application implements View {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+
+        mybookshelf.setStyle("-fx-background-color: transparent;");
 
 
     }
@@ -1469,6 +1524,13 @@ public class GUI extends Application implements View {
         Button rmiButton = (Button) newRoot.lookup("#rmibutton");
         Button socketButton = (Button) newRoot.lookup("#socketbutton");
 
+        AnchorPane pane = (AnchorPane) newRoot.lookup("#pane_wall");
+        ImageView wallpaper =(ImageView) newRoot.lookup("#parquet") ;
+
+
+        wallpaper.fitHeightProperty().bind(pane.heightProperty());
+        wallpaper.fitWidthProperty().bind(pane.widthProperty());
+
         rmiButton.setMinWidth(100);
         rmiButton.setMinHeight(50);
 
@@ -1492,7 +1554,7 @@ public class GUI extends Application implements View {
         socketButton.setOnMouseEntered(e -> socketButton.setStyle(hoverStyle2));
         socketButton.setOnMouseExited(e -> socketButton.setStyle("-fx-background-color: #ADD8E6; -fx-border-radius: 15; -fx-background-radius: 15;"));
 
-        ImageView wallpaper = (ImageView) newRoot.lookup("#wallpaper");
+
         Scene newScene = new Scene(newRoot);
         Stage currentStage = (Stage) yesButtonReConnection.getScene().getWindow();
         currentStage.setScene(newScene);
@@ -1505,6 +1567,13 @@ public class GUI extends Application implements View {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Socket_RMI_Requests.fxml"));
         fxmlLoader.setController(this);
         Parent newRoot = fxmlLoader.load();
+
+        AnchorPane pane = (AnchorPane) newRoot.lookup("#pane_wall");
+        ImageView wallpaper =(ImageView) newRoot.lookup("#parquet") ;
+
+
+        wallpaper.fitHeightProperty().bind(pane.heightProperty());
+        wallpaper.fitWidthProperty().bind(pane.widthProperty());
 
         Button rmiButton = (Button) newRoot.lookup("#rmibutton");
         Button socketButton = (Button) newRoot.lookup("#socketbutton");
@@ -1532,7 +1601,7 @@ public class GUI extends Application implements View {
         socketButton.setOnMouseEntered(e -> socketButton.setStyle(hoverStyle2));
         socketButton.setOnMouseExited(e -> socketButton.setStyle("-fx-background-color: #ADD8E6; -fx-border-radius: 15; -fx-background-radius: 15;"));
 
-        ImageView wallpaper = (ImageView) newRoot.lookup("#wallpaper");
+
 
         Scene newScene = new Scene(newRoot);
         Stage currentStage = (Stage) noButtonReConnection.getScene().getWindow();
@@ -1545,6 +1614,12 @@ public class GUI extends Application implements View {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Insert_IP_Port_Server.fxml"));
         fxmlLoader.setController(this);
         Parent newRoot = fxmlLoader.load();
+        AnchorPane pane = (AnchorPane) newRoot.lookup("#pane_wall");
+        ImageView wallpaper =(ImageView) newRoot.lookup("#parquet") ;
+
+
+        wallpaper.fitHeightProperty().bind(pane.heightProperty());
+        wallpaper.fitWidthProperty().bind(pane.widthProperty());
         Scene newScene = new Scene(newRoot);
         Stage currentStage = (Stage) socketButton.getScene().getWindow();
         this.connectionType = ConnectionType.SOCKET;
@@ -1579,6 +1654,13 @@ public class GUI extends Application implements View {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/FirstView.fxml"));
         fxmlLoader.setController(this);
         Parent newRoot = fxmlLoader.load();
+        AnchorPane pane = (AnchorPane) newRoot.lookup("#wallpaper");
+        ImageView wallpaper =(ImageView) newRoot.lookup("#parquet") ;
+
+
+        wallpaper.fitHeightProperty().bind(pane.heightProperty());
+        wallpaper.fitWidthProperty().bind(pane.widthProperty());
+
         Scene newScene = new Scene(newRoot);
         Stage currentStage = (Stage) connectButton.getScene().getWindow();
         currentStage.setScene(newScene);
@@ -1590,6 +1672,12 @@ public class GUI extends Application implements View {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Insert_Port_Server.fxml"));
         fxmlLoader.setController(this);
         Parent newRoot = fxmlLoader.load();
+        AnchorPane pane = (AnchorPane) newRoot.lookup("#pane_wall");
+        ImageView wallpaper =(ImageView) newRoot.lookup("#parquet") ;
+
+
+        wallpaper.fitHeightProperty().bind(pane.heightProperty());
+        wallpaper.fitWidthProperty().bind(pane.widthProperty());
         Scene newScene = new Scene(newRoot);
         Stage currentStage = (Stage) RMIButton.getScene().getWindow();
         currentStage.setScene(newScene);
@@ -1627,6 +1715,12 @@ public class GUI extends Application implements View {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/FirstView.fxml"));
         fxmlLoader.setController(this);
         Parent newRoot = fxmlLoader.load();
+        AnchorPane pane = (AnchorPane) newRoot.lookup("#wallpaper");
+        ImageView wallpaper =(ImageView) newRoot.lookup("#parquet") ;
+
+
+        wallpaper.fitHeightProperty().bind(pane.heightProperty());
+        wallpaper.fitWidthProperty().bind(pane.widthProperty());
         Scene newScene = new Scene(newRoot);
         Stage currentStage = (Stage) connectButtonRMI.getScene().getWindow();
         currentStage.setScene(newScene);
@@ -1646,6 +1740,12 @@ public class GUI extends Application implements View {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/WaitingPlayersToConnect.fxml"));
         fxmlLoader.setController(this);
         Parent newRoot = fxmlLoader.load();
+        AnchorPane pane = (AnchorPane) newRoot.lookup("#pane_wall");
+        ImageView wallpaper =(ImageView) newRoot.lookup("#parquet") ;
+
+
+        wallpaper.fitHeightProperty().bind(pane.heightProperty());
+        wallpaper.fitWidthProperty().bind(pane.widthProperty());
         Scene newScene = new Scene(newRoot);
         Stage currentStage = (Stage) submitUsernameAndPlayersButton.getScene().getWindow();
         currentStage.setScene(newScene);
@@ -1663,6 +1763,12 @@ public class GUI extends Application implements View {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/WaitingPlayersToConnect.fxml"));
         fxmlLoader.setController(this);
         Parent newRoot = fxmlLoader.load();
+        AnchorPane pane = (AnchorPane) newRoot.lookup("#pane_wall");
+        ImageView wallpaper =(ImageView) newRoot.lookup("#parquet") ;
+
+
+        wallpaper.fitHeightProperty().bind(pane.heightProperty());
+        wallpaper.fitWidthProperty().bind(pane.widthProperty());
         Scene newScene = new Scene(newRoot);
         Stage currentStage = (Stage) submitUsernameButton.getScene().getWindow();
         currentStage.setScene(newScene);
@@ -1681,12 +1787,26 @@ public class GUI extends Application implements View {
     }
 
     @FXML
+    private void onShowBookshelf(ActionEvent event) throws IOException{
+        Stage newStage = new Stage();
+        newStage.setScene(previousScene);
+        newStage.show();
+    }
+
+    @FXML
     private void onBackButtonClicked(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Socket_RMI_Requests.fxml"));
         fxmlLoader.setController(this);
         Parent newRoot = fxmlLoader.load();
         Button rmiButton = (Button) newRoot.lookup("#rmibutton");
         Button socketButton = (Button) newRoot.lookup("#socketbutton");
+
+        AnchorPane pane = (AnchorPane) newRoot.lookup("#pane_wall");
+        ImageView wallpaper =(ImageView) newRoot.lookup("#parquet") ;
+
+
+        wallpaper.fitHeightProperty().bind(pane.heightProperty());
+        wallpaper.fitWidthProperty().bind(pane.widthProperty());
 
         rmiButton.setMinWidth(100);
         rmiButton.setMinHeight(50);

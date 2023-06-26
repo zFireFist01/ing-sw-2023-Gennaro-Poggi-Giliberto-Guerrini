@@ -116,6 +116,7 @@ public class CLI implements Runnable , View {
     private BufferedWriter bufferedWriter;
     private File connectionFile = null;
     private String directoryPath = null;
+    private final String CONNECTION_INFO_DIRECTORY_NAME = "ClientFiles";
 
     public CLI(){
         scanner = new Scanner(System.in);
@@ -142,11 +143,25 @@ public class CLI implements Runnable , View {
 
     //connect to the server
     private File getDirectory(){
+        // gettin absolute path of the jar file
+        String jarFilePath = CLI.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+
+        // Getting its parent's file path
+        String jarFolder = new File(jarFilePath).getParent();
+
+        // Crea un oggetto File per la nuova directory nella cartella del file .jar
+        File newDirectory = new File(jarFolder, CONNECTION_INFO_DIRECTORY_NAME);
+
+        // Crea la directory
+        if(!newDirectory.exists()) {
+            newDirectory.mkdir();
+        }
         //Get person's name in order to create a directory
         System.out.print("Insert your name:\n> ");
         String name = scanner.nextLine();
         // Creating the directory
-        directoryPath = "src/main/resources/ClientFiles/Client_"+name;
+        //directoryPath = "src/main/resources/ClientFiles/Client_"+name;
+        directoryPath = jarFolder+"/"+CONNECTION_INFO_DIRECTORY_NAME+"/Client_"+name;
         File directory = new File(directoryPath);
         int i = 1;
         if(directory.exists() && directory.isDirectory()){
@@ -711,7 +726,6 @@ public class CLI implements Runnable , View {
 
          }
 
-
     }
 
 
@@ -724,9 +738,9 @@ public class CLI implements Runnable , View {
         LoginView loginEvent = (LoginView) event;
         System.out.print(ANSIParameters.CLEAR_SCREEN + ANSIParameters.CURSOR_HOME);
         System.out.flush();
-        System.out.println("Welcome to MyShelfie!");
 
         if(loginEvent.isFirstToJoin()) {
+            System.out.println("Welcome to MyShelfie!");
             if(event.getMessage().contains("Insert")){
                 System.out.println("You are the first player to join the match");
                 System.out.println("Please insert your nickname and the number of players for the match: ");
@@ -736,14 +750,17 @@ public class CLI implements Runnable , View {
                 System.out.print("> ");
             }
 
-
         }else{
-            if(event.getMessage()!=null && event.getMessage().contains("Waiting")){
-                System.out.println(ANSIParameters.RED + event.getMessage()+ANSIParameters.CRESET);
+            if(event.getMessage()!=null && event.getMessage().contains("Waiting")) {
+                System.out.println(ANSIParameters.RED + event.getMessage() + ANSIParameters.CRESET);
+
+            }else if (!event.getMessage().equals("Insert your username")) {
+                System.out.println(ANSIParameters.RED + event.getMessage() + ANSIParameters.CRESET);
+
             }else{
+                System.out.println("Welcome to MyShelfie!");
                 System.out.println("Please insert your nickname: ");
             }
-            //System.out.println(ANSIParameters.RED + event.getMessage()+ANSIParameters.CRESET);
             System.out.print("> ");
         }
 
@@ -758,8 +775,7 @@ public class CLI implements Runnable , View {
         if (!matchStarted) {
             System.out.print(ANSIParameters.CLEAR_SCREEN + ANSIParameters.CURSOR_HOME);
             System.out.flush();
-            System.out.println("Hi "+ ANSIParameters.BLUE + myNick+ ANSIParameters.CRESET+" Welcome to MyShelfie");
-            System.out.println("Please wait for the other players to join the match");
+            System.out.println("Hi "+ ANSIParameters.BLUE + myNick+ ANSIParameters.CRESET+" welcome to MyShelfie!");
         }
         print();
 
@@ -776,7 +792,7 @@ public class CLI implements Runnable , View {
         System.out.print(ANSIParameters.CLEAR_SCREEN + ANSIParameters.CURSOR_HOME);
         System.out.flush();
 
-        System.out.println("Match ended");
+        System.out.println("Match ended!");
 
         System.out.println("The final scores are: ");
         Player p;
@@ -787,6 +803,7 @@ public class CLI implements Runnable , View {
 
         }
         System.out.println("The winner is: " + ANSIParameters.YELLOW + winner.getPlayerNickName() + ANSIParameters.CRESET );
+        System.out.println("> ");
     }
 
     //CHAT
@@ -832,12 +849,11 @@ public class CLI implements Runnable , View {
             if(message.getReceiver() != null) {
                 System.out.print("\b\b\b");
                 System.out.println("[" + message.getTimeSent() + "]" + " " + ANSIParameters.RED + message.getSender().getPlayerNickName()  + ANSIParameters.CRESET + " " + ANSIParameters.BLUE + "to @" + message.getReceiver().getPlayerNickName()+ ":" + ANSIParameters.CRESET + " " + message.getContent());
-                System.out.print("> ");
             }else{
                 System.out.print("\b\b\b");
                 System.out.println("[" + message.getTimeSent() + "]" + " " + ANSIParameters.RED + message.getSender().getPlayerNickName() + ANSIParameters.CRESET + " " + ANSIParameters.BLUE + "to @All:" + ANSIParameters.CRESET + " " + message.getContent());
-                System.out.print("> ");
             }
+            System.out.print("> ");
         }
     }
 
@@ -1195,6 +1211,11 @@ public class CLI implements Runnable , View {
                 case "send" ->{
                     //If current view is not null, it means that the game has started
                     if(currentView != null) {
+                        if(!chatIsOpened){
+                            System.out.println("You cannot use this command now! Open the chat first!");
+                            System.out.print("> ");
+                            break;
+                        }
                         //If you are the only one connected you cannot write in the chat
                         if(players.size()<=1){
                             System.out.println("You cannot use this command now! Wait for other players to join!");
@@ -1214,8 +1235,14 @@ public class CLI implements Runnable , View {
                                     flag = true;
                                 } else {
 
+                                    if(("@" + this.me.getPlayerNickName()).equals(inputArray[1])){
+                                        System.out.println("You cannot send a message to yourself");
+                                        System.out.print("> ");
+                                        break;
+                                    }
+
                                     for (Integer i : this.players.keySet()) {
-                                        if (("@" + this.players.get(i).getPlayerNickName()).equals(inputArray[1])) {
+                                        if (("@" + this.players.get(i).getPlayerNickName()).equals(inputArray[1])){
                                             messageToSend = new Message(this.me, message, LocalTime.now(), this.players.get(i));
                                             flag = true;
                                         }
@@ -1228,7 +1255,6 @@ public class CLI implements Runnable , View {
                                 }
                                 if (flag) {
                                     networkHandler.onVCEvent(new SendMessage(messageToSend));
-                                    System.out.print("> ");
                                 }
                             } catch (NoSuchMethodException e) {
                                 throw new RuntimeException(e);
@@ -2522,10 +2548,6 @@ public class CLI implements Runnable , View {
 
         return res;
     }
-    //refresh the CLI
-
-    //update()
-
 
     public ConnectionInfo getConnectionInfo(){
         return connectionInfo;

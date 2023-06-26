@@ -56,8 +56,9 @@ public class CommonGoalCard3 extends CommonGoalCard {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 5; j++) {
                 if(verifier[i][j] != 0) {
-                    int tmp =countAdjacentTiles(verifier, i, j, verifier[i][j])+1;
-
+                    int tile=verifier[i][j];
+                    //verifier[i][j]=0;
+                    int tmp =countAdjacentTiles(verifier, i, j, tile)+1;
                     count+=(int)(tmp/4);
 
                 }
@@ -105,45 +106,18 @@ public class CommonGoalCard3 extends CommonGoalCard {
      */
 
     private int countAdjacentTiles(int[][] shelf, int i, int j, int tileType) {
-        int count = 0;
-        if (i < 5 && j<4 && shelf[i][j+1]==tileType && shelf[i + 1][j] == tileType) {
-            shelf[i + 1][j] = 0;
-            shelf[i][j+1] = 0;
-            if(i>0 && j>0 && shelf[i-1][j] == tileType && shelf[i][j-1] == tileType){
-                shelf[i - 1][j] = 0;
-                shelf[i][j-1] = 0;
-                return 4 + countAdjacentTiles(shelf, i + 1, j, tileType)+countAdjacentTiles(shelf, i , j+1, tileType)+ countAdjacentTiles(shelf, i -1, j, tileType)+countAdjacentTiles(shelf, i , j-1, tileType);
-            }else if(i>0 && shelf[i-1][j] == tileType){
-                shelf[i - 1][j] = 0;
-                return 3 + countAdjacentTiles(shelf, i + 1, j, tileType)+countAdjacentTiles(shelf, i , j+1, tileType)+ countAdjacentTiles(shelf, i -1, j, tileType);
-            }else if(j>0 && shelf[i][j-1] == tileType){
-                shelf[i][j-1] = 0;
-                return 3 + countAdjacentTiles(shelf, i + 1, j, tileType)+countAdjacentTiles(shelf, i , j+1, tileType)+countAdjacentTiles(shelf, i , j-1, tileType);
-            }
-
-            return 2 + countAdjacentTiles(shelf, i + 1, j, tileType)+countAdjacentTiles(shelf, i , j+1, tileType);
-
-        } else if (i < 5 && shelf[i + 1][j] == tileType) {
-            shelf[i + 1][j] = 0;
-            if(i>0 && shelf[i-1][j] == tileType) {
-                shelf[i-1][j]=0;
-                return 2 + countAdjacentTiles(shelf, i + 1, j, tileType) + countAdjacentTiles(shelf, i - 1, j, tileType);
-            }
-
-            return 1 + countAdjacentTiles(shelf, i + 1, j, tileType);
-        } else if (j < 4 && shelf[i][j + 1] == tileType) {
-            shelf[i][j + 1] = 0;
-            if(j>0 && shelf[i][j-1] == tileType) {
-                shelf[i][j-1]=0;
-                return 2 + countAdjacentTiles(shelf, i, j + 1, tileType) + countAdjacentTiles(shelf, i, j - 1, tileType);
-            }
-
-            return 1 + countAdjacentTiles(shelf, i, j + 1, tileType);
-        } else {
+        if (i < 0 || i >= shelf.length || j < 0 || j >= shelf[0].length || shelf[i][j] != tileType) {
             return 0;
-
         }
 
+        // Mark the tile as visited
+        shelf[i][j] = 0;
+
+        // Count the tile and look for more in each direction
+        return 1 + countAdjacentTiles(shelf, i + 1, j, tileType)
+                + countAdjacentTiles(shelf, i - 1, j, tileType)
+                + countAdjacentTiles(shelf, i, j + 1, tileType)
+                + countAdjacentTiles(shelf, i, j - 1, tileType);
     }
     /**
      * This method returns the ID of the common goal card

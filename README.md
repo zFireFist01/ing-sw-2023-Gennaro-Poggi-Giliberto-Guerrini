@@ -26,7 +26,7 @@ Project requirements: [link](https://github.com/IoSonoDue2/ing-sw-2023-Gennaro-P
 | RMI                              |   ✅    |
 | Socket                           |   ✅    |
 | CLI _(Command Line Interface)_   |   ✅    |
-| GUI _(Graphical User Interface)_ |   ⛔    |
+| GUI _(Graphical User Interface)_ |   ✅    |
 
 
 ### Advanced functionalities

@@ -1,36 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="pane_wall" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ImageView fitHeight="400.0" fitWidth="600.0">
+      <ImageView id="parquet" fitHeight="400.0" fitWidth="600.0">
          <image>
             <Image url="@misc/sfondo parquet.jpg" />
          </image>
       </ImageView>
-      <TextField fx:id="addressServer" layoutX="200.0" layoutY="161.0" prefHeight="25.0" prefWidth="200.0" promptText="Server Address:" />
-      <TextField fx:id="portServer" layoutX="200.0" layoutY="214.0" prefHeight="25.0" prefWidth="200.0" promptText="Server Port:" />
-      <ImageView fitHeight="95.0" fitWidth="256.0" layoutX="172.0" layoutY="39.0">
-         <image>
-            <Image url="@Publisher material/Title 2000x618px.png" />
-         </image>
-      </ImageView>
-      <Button fx:id="connectButton" layoutX="260.0" layoutY="276.0" mnemonicParsing="false" onAction="#onClickConnectButton" prefHeight="39.0" prefWidth="79.0" style="-fx-background-color: #ffc033; -fx-border-radius: 15; -fx-background-radius: 15;" text="Connect">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font></Button>
-      <Button fx:id="backSocket" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#onBackButtonClicked" style="-fx-background-color: #ffc033; -fx-border-radius: 15; -fx-background-radius: 15;" text="&lt;-back" />
-      <Text fx:id="errorSocket" fill="RED" layoutX="100.0" layoutY="348.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="400.1365966796875">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-      </Text>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <AnchorPane maxHeight="-Infinity" prefHeight="338.0" prefWidth="99.0">
+               <children>
+                  <Button fx:id="backSocket" layoutX="20.0" layoutY="182.0" mnemonicParsing="false" onAction="#onBackButtonClicked" style="-fx-background-color: #ffc033; -fx-border-radius: 15; -fx-background-radius: 15;" text="&lt;-back" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="200.0" />
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </AnchorPane>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0">
+               <children>
+                  <ImageView fitHeight="95.0" fitWidth="256.0">
+                     <image>
+                        <Image url="@Publisher material/Title 2000x618px.png" />
+                     </image>
+                  </ImageView>
+                  <TextField fx:id="addressServer" maxWidth="-Infinity" prefHeight="25.0" prefWidth="200.0" promptText="Server Address:" />
+                  <TextField fx:id="portServer" maxWidth="-Infinity" prefHeight="25.0" prefWidth="200.0" promptText="Server Port:" />
+                  <Button fx:id="connectButton" mnemonicParsing="false" onAction="#onClickConnectButton" prefHeight="39.0" prefWidth="79.0" style="-fx-background-color: #ffc033; -fx-border-radius: 15; -fx-background-radius: 15;" text="Connect">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Text fx:id="errorSocket" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="400.1365966796875">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Text>
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="95.0" top="5.0" />
+         </padding>
+      </HBox>
    </children>
 </AnchorPane>

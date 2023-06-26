@@ -3,40 +3,45 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="465.0" prefWidth="675.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="pane_wall" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ImageView fitHeight="471.2" fitWidth="684.0">
+      <ImageView id="parquet" fitHeight="471.2" fitWidth="684.0">
          <image>
             <Image url="@Publisher material/Display_3.jpg" />
          </image>
       </ImageView>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+      <StackPane layoutX="4.0" layoutY="3.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="465.0" prefWidth="675.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fitHeight="88.0" fitWidth="310.0">
-               <image>
-                  <Image url="@Publisher material/Title 2000x618px.png" />
-               </image>
-            </ImageView>
-            <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="91.0" prefWidth="205.0" spacing="10.0">
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                <children>
-                  <Button id="socketbutton" fx:id="socketButton" mnemonicParsing="false" onAction="#onClickSocketButton" prefHeight="49.0" prefWidth="101.0" text="Socket">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Button>
-                  <Button id="rmibutton" fx:id="RMIButton" mnemonicParsing="false" onAction="#onClickRMIButton" prefHeight="49.0" prefWidth="101.0" text="RMI">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Button>
+                  <ImageView fitHeight="88.0" fitWidth="310.0">
+                     <image>
+                        <Image url="@Publisher material/Title 2000x618px.png" />
+                     </image>
+                  </ImageView>
+                  <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="91.0" prefWidth="205.0" spacing="10.0">
+                     <children>
+                        <Button id="socketbutton" fx:id="socketButton" mnemonicParsing="false" onAction="#onClickSocketButton" prefHeight="49.0" prefWidth="101.0" text="Socket">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                        <Button id="rmibutton" fx:id="RMIButton" mnemonicParsing="false" onAction="#onClickRMIButton" prefHeight="49.0" prefWidth="101.0" text="RMI">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
                </children>
-            </HBox>
+            </VBox>
          </children>
-      </VBox>
+      </StackPane>
    </children>
-</StackPane>
+</AnchorPane>

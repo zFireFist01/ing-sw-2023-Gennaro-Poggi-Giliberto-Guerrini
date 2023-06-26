@@ -66,8 +66,8 @@ public class Server implements Runnable{
             System.err.println("Error occurred when trying to istantiate the socket waiter");
             System.err.println(e.getStackTrace());
         }
-
     }
+
 
     /**
      * This method is used to start the server. It will bind the RMI waiter to the RMI registry and start the socket

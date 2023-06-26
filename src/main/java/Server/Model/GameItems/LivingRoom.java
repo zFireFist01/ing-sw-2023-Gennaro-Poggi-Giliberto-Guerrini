@@ -278,7 +278,7 @@ public class LivingRoom {
     }
 
     /**
-     * This methods allows the controller to send an "order" of picking more than one tile with only one call
+     * This method allows the controller to send an "order" of picking more than one tile with only one call
      * @param couples is an array of couples (Integer, Integer) that each represent the position of one selected tile
      * @return an array of TileType(s) where the i-th element corresponds to the type of the i-th tile picked
      * @throws UnsupportedOperationException whenever at least one of the tiles is not pick-able according to game rules
@@ -309,6 +309,37 @@ public class LivingRoom {
         if(!(inRow || inCol)){
             throw new UnsupportedOperationException("The tiles you selected are not aligned!");
         }else{
+            if(inCol){
+                if(len == 2){
+                    if(!(couples[0].getA() == couples[1].getA()+1 || couples[0].getA()+1 == couples[1].getA())){
+                        throw new UnsupportedOperationException("The tiles you selected are not adjacent!");
+                    }
+                }else if(len == 3){
+                    if(!((couples[0].getA() == couples[1].getA()+1 && couples[0].getA() == couples[2].getA()+2) ||
+                            (couples[0].getA() == couples[1].getA()+2 && couples[0].getA() == couples[2].getA()+1) ||
+                            (couples[0].getA() == couples[1].getA()-1 && couples[0].getA() == couples[2].getA()+1) ||
+                            (couples[0].getA() == couples[1].getA()+1 && couples[0].getA() == couples[2].getA()-1) ||
+                            (couples[0].getA() == couples[1].getA()-2 && couples[0].getA() == couples[2].getA()-1) ||
+                            (couples[0].getA() == couples[1].getA()-1 && couples[0].getA() == couples[2].getA()-2))){
+                        throw new UnsupportedOperationException("The tiles you selected are not adjacent!");
+                    }
+                }
+            }else if(inRow){
+                if(len == 2){
+                    if(!(couples[0].getB() == couples[1].getB()+1 || couples[0].getB()+1 == couples[1].getB())){
+                        throw new UnsupportedOperationException("The tiles you selected are not adjacent!");
+                    }
+                }else if(len == 3){
+                    if(!((couples[0].getB() == couples[1].getB()+1 && couples[0].getB() == couples[2].getB()+2) ||
+                            (couples[0].getB() == couples[1].getB()+2 && couples[0].getB() == couples[2].getB()+1) ||
+                            (couples[0].getB() == couples[1].getB()-1 && couples[0].getB() == couples[2].getB()+1) ||
+                            (couples[0].getB() == couples[1].getB()+1 && couples[0].getB() == couples[2].getB()-1) ||
+                            (couples[0].getB() == couples[1].getB()-2 && couples[0].getB() == couples[2].getB()-1) ||
+                            (couples[0].getB() == couples[1].getB()-1 && couples[0].getB() == couples[2].getB()-2))){
+                        throw new UnsupportedOperationException("The tiles you selected are not adjacent!");
+                    }
+                }
+            }
             i=0;
             for(Couple c : couples){
                 try{

@@ -1,1 +1,0 @@
-{"ip":"192.168.1.193","port":1099,"nickname":"paolo","connectionType":"RMI"}

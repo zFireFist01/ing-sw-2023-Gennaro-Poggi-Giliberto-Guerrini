@@ -12,8 +12,7 @@ public class GameView extends SelectViewEvent{
 
 
     public GameView(){
-        this.message = "wait for your turn";
-
+        this.message = "";
     }
 
     public GameView(String message){
