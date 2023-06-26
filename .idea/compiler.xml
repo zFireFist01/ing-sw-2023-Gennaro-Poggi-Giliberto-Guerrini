@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <excludeFromCompile>
-      <directory url="file://$PROJECT_DIR$/src/test/java/Server/Model/CardsTests" includeSubdirectories="false" />
-      <directory url="file://$PROJECT_DIR$/src/test/java/Server/Model/Chat" includeSubdirectories="true" />
-      <directory url="file://$PROJECT_DIR$/src/test/java/Server/Model/DecksTests" includeSubdirectories="true" />
-      <directory url="file://$PROJECT_DIR$/src/test/java/Server/Model/MatchStatus" includeSubdirectories="true" />
-      <file url="file://$PROJECT_DIR$/src/test/java/Server/Model/MatchTest.java" />
-      <directory url="file://$PROJECT_DIR$/src/test/java/Server/Model/Player" includeSubdirectories="true" />
-      <directory url="file://$PROJECT_DIR$/src/test/java/Server/Model/CardsTests/PersonalGoalCardTests" includeSubdirectories="true" />
-    </excludeFromCompile>
     <annotationProcessing>
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />

@@ -406,6 +406,20 @@ public class Controller implements VCEventListener {
         LivingRoom livingRoom = match.getLivingRoom();
         TileType[] tiles;
 
+        if(selectedTiles==null){
+            match.clearSelectedTiles();
+            match.setCurrentPlayer();
+            currentPlayerView = PlayerViews.get(match.getCurrentPlayer().getPlayerID());
+            currentPlayerView.onSelectViewEvent(new PickingTilesGameView());
+            for(int i=0; i< match.getNumberOfPlayers(); i++){
+                if(PlayerViews.get(match.getPlayers().get(i).getPlayerID())!=currentPlayerView ){
+                    PlayerViews.get(match.getPlayers().get(i).getPlayerID()).onSelectViewEvent(new GameView("It's " + match.getCurrentPlayer().getNextPlayer().getPlayerNickName() + "'s turn! Wait for your turn!" ));
+                }
+            }
+
+            return;
+        }
+
         if((selectedTiles.length/2) > currentPlayer.getBookshelf().maxInsertableTiles()){ //We've got to divide by 2 because every element of the array is a coordinate
             match.clearSelectedTiles();
             currentPlayerView.onSelectViewEvent(new PickingTilesGameView("You can't pick more than "
@@ -432,7 +446,7 @@ public class Controller implements VCEventListener {
 
                 }catch(UnsupportedOperationException e){
                     match.clearSelectedTiles();
-                    currentPlayerView.onSelectViewEvent(new PickingTilesGameView(e.getMessage()));
+                    currentPlayerView.onSelectViewEvent(new PickingTilesGameView("Tiles Selected: "));
                 }
             }
             case 4 -> {
@@ -446,7 +460,7 @@ public class Controller implements VCEventListener {
                     currentPlayerView.onSelectViewEvent(new InsertingTilesGameView());
                 }catch(UnsupportedOperationException e){
                     match.clearSelectedTiles();
-                    currentPlayerView.onSelectViewEvent(new PickingTilesGameView(e.getMessage()));
+                    currentPlayerView.onSelectViewEvent(new PickingTilesGameView("Tiles Selected: "));
                 }
             }
             case 6 -> {
@@ -461,7 +475,7 @@ public class Controller implements VCEventListener {
                     currentPlayerView.onSelectViewEvent(new InsertingTilesGameView());
                 }catch(UnsupportedOperationException e){
                     match.clearSelectedTiles();
-                    currentPlayerView.onSelectViewEvent(new PickingTilesGameView(e.getMessage()));
+                    currentPlayerView.onSelectViewEvent(new PickingTilesGameView("Tiles Selected: "));
                 }
             }
         }

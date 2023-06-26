@@ -16,6 +16,7 @@ assets/*
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+.idea/compiler.xml
 
 # AWS User-specific
 .idea/**/aws.xml
@@ -70,6 +71,7 @@ atlassian-ide-plugin.xml
 
 # Cursive Clojure plugin
 .idea/replstate.xml
+.idea/compiler.xml
 
 # SonarLint plugin
 .idea/sonarlint/

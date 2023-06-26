@@ -672,6 +672,7 @@ public class GUI extends Application implements View {
     private void onGameViewEvent(SelectViewEvent event){
         currentView = event;
         if(matchStarted) {
+            clearGrid(livingroomgridbuttons);
             livingroomgridbuttons.setDisable(true);
             mybookshelf.setDisable(true);
             checkoutbutton.setDisable(true);
