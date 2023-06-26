@@ -35,7 +35,7 @@ Project requirements: [link](https://github.com/IoSonoDue2/ing-sw-2023-Gennaro-P
 | Chat                         |   ✅    |
 | Simultaneous games           |   ✅    |
 | Persistence                  |   ⛔    |
-| Resilience to disconnections |   ⛔    |
+| Resilience to disconnections |   ✅    |
 
 
 ⛔ Not implemented(or Work in Progress) &nbsp;&nbsp;&nbsp;&nbsp; ✅ Implemented
