@@ -103,7 +103,6 @@ public class NetworkSocketHandler implements NetworkHandler{
                 out.flush();
                 //In queso caso non devo aspettare il messaggio di benvenuto
                 System.out.println("Reconnecting to the socket server...");
-                //System.out.println("Reconnecting to the socket server!: connection info sent:\n"+new Gson().toJson(view.getConnectionInfo())+"\n");
             } else{
                 out.write("Connecting\n".getBytes());
                 out.flush();
@@ -116,16 +115,8 @@ public class NetworkSocketHandler implements NetworkHandler{
                 receiveSelectViewEvent(firstMessage);
                 //Potrebbe non essere il messaggio di benvenuto, ma un evento per dirmi che devo aspettare di essere
                 // gestito perché il match opener non ha ancora deciso con quante persone giocare
-                /*if(firstMessage.contains("Waiting")){
-                    receiveSelectViewEvent(welcomeMessage);
-                    welcomeMessage = in.nextLine();
-                }
-                System.out.println(welcomeMessage);*/
             }
-            //System.out.println("Ricevuto messaggio di benvenuto: " + welcomeMessage);
         } catch (IOException e) {
-            //System.err.println(e.getStackTrace());
-            //throw new RuntimeException("Error while connecting to server");
             System.out.print("Error while connecting to server: please wait a few seconds and try again.\n> ");
             return;
         }
@@ -140,16 +131,12 @@ public class NetworkSocketHandler implements NetworkHandler{
             }catch(NoSuchElementException e){
                 System.out.println(ANSIParameters.CLEAR_SCREEN+ANSIParameters.CURSOR_HOME+
                         "Lost connection with server.\nPlease wait a few seconds and try to reconnect.");
-                //view.setConnectionToReset();
                 view.resetConnection();
                 break;
             }
 
             if(message != null){
-                //System.out.println("Received message: " + message);
                 if(message.equals("ping")){
-                    //System.out.println("Received ping message");
-                    //message = message.replace("ping", "");
                     pong();
                 }else{
                     if(message.contains("deleted")){

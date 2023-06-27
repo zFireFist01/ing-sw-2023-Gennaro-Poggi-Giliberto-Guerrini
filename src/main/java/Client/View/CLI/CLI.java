@@ -499,7 +499,6 @@ public class CLI implements Runnable , View {
         }
         System.out.println("Match started");
         System.out.println("You are " + myNick );
-        //printHelp();
         printLivingRoom(renderLivingroom(match.getLivingRoom().getTileMatrix()));
         printPersonalGoal(renderPersonalGoalCard(me.getPersonalGoalCard().getTileMatrix(),
                 me.getPersonalGoalCard().getCardID()));
@@ -967,7 +966,6 @@ public class CLI implements Runnable , View {
             return;
         }
         if(input.equals("quit")){
-            //TODO: manage quitting
             manageQuitting();
             System.out.println("Ok, bye!");
             System.exit(0);

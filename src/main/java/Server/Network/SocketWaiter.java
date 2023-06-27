@@ -49,6 +49,29 @@ public class SocketWaiter implements Runnable{
         }
     }
 
+    /**
+     * This method is used to wait for new connection requests (A) and create a new VirtualSocketView for each one.
+     * It also handles the reconnection of a client (B).
+     *
+     * (A):
+     *  One of the following cases may happen:
+     *   (1): there is a match waiting for players and the waiting queue is not empty
+     *   (2): there is a match waiting for players and the waiting queue is empty
+     *   (3): there is a match waiting for initialization
+     *   (4): there is no match waiting for players, nor waiting for initialization
+     *  How do we deal with them:
+     *   (1): We instantiate the virtual view for the client and we enqueue it to the waiting queue, sending a proper view
+     *        to the client
+     *   (2): We instantiate the virtual view for the client and if it may overload the last match, we enqueue it to the
+     *        waiting queue, sending a proper view to the client; otherwise we add it to the last match.
+     *   (3): We instantiate the virtual view for the client and we enqueue it to the waiting queue, sending a proper view
+     *        to the client
+     *   (4): We instantiate the virtual view for the client, a new match, a new controller and we link them through
+     *        their listener-listenable relationship.
+     *
+     * (B):
+     *  We retrieve the already existing virtual view corresponding to the client using its connection info object.
+     */
     @Override
     public void run(){
         //TODO: Deal with the connection and reconnection using a thread pool because the function has become a bit too long
@@ -101,7 +124,7 @@ public class SocketWaiter implements Runnable{
                         }
                     }else{
                         /*No match waiting for players means: (1) there is a match waiting for initialization,
-                        but already istantiated or (2) there is no match istantiated*/
+                        but already instantiated or (2) there is no match instantiated*/
                         if(server.matchWaitingForInit()){
                             //(1)
                             //This means that the current connection request must wait for the match opener to decide the number of players

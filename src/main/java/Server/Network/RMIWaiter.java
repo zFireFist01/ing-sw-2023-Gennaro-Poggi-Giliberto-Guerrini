@@ -28,11 +28,24 @@ public class RMIWaiter extends UnicastRemoteObject implements RMIWaiterInterface
     }
 
     /**
-     * This method is used to give a connection to a client that is waiting for one
-     *
+     * This method is used to give a connection to a client that is waiting for one.
+     * One of the following cases may happen:
+     *  (1): there is a match waiting for players and the waiting queue is not empty
+     *  (2): there is a match waiting for players and the waiting queue is empty
+     *  (3): there is a match waiting for initialization
+     *  (4): there is no match waiting for players, nor waiting for initialization
+     * How do we deal with them:
+     *  (1): We instantiate the virtual view for the client and we enqueue it to the waiting queue, sending a proper view
+     *     to the client
+     *  (2): We instantiate the virtual view for the client and if it may overload the last match, we enqueue it to the
+     *      waiting queue, sending a proper view to the client; otherwise we add it to the last match.
+     *  (3): We instantiate the virtual view for the client and we enqueue it to the waiting queue, sending a proper view
+     *      to the client
+     *  (4): We instantiate the virtual view for the client, a new match, a new controller and we link them through
+     *      their listener-listenable relationship.
      * @param requestingClient the NetworkHandler interface, which we know to be a NetworkRMIHandler, that we will
      *                         use to communicate with the client
-     * @return the VirtualView that we have istantiated for the client
+     * @return the VirtualView that we have instantiated for the client
      * @throws RemoteException if the connection with the client goes wrong, see {@link RemoteException}
      */
     public synchronized RemoteVirtualView giveConnection(RemoteNetworkHandler requestingClient) throws RemoteException{
@@ -76,8 +89,8 @@ public class RMIWaiter extends UnicastRemoteObject implements RMIWaiterInterface
                 }
             }
         }else{
-            /*No match waiting for players means: (1) there is a match waiting for initialization, but already istantiated
-            or (2) there is no match istantiated*/
+            /*No match waiting for players means: (1) there is a match waiting for initialization, but already instantiated
+            or (2) there is no match instantiated*/
             if(server.matchWaitingForInit()){
                 //(1)
                 //This means that the current connection request must wait for the match opener to decide the number of players
@@ -108,6 +121,15 @@ public class RMIWaiter extends UnicastRemoteObject implements RMIWaiterInterface
         return (RemoteVirtualView)clientsVV;
     }
 
+    /**
+     * This method is used to give a connection to a client that is reconnecting, by retrieving its already existing
+     * virtual view through its connection info object.
+     * @param requestingClient the client waiting for the connection
+     * @param connectionInfo the connectionInfo object of the client that is trying to reconnect
+     * @return the VirtualView that we have instantiated for the client. Note that this VirtualView has been instantiated 
+     * at the first connection of the client, now the only thing we do is retrieving it.
+     * @throws RemoteException
+     */
     public synchronized RemoteVirtualView reGiveConnection(RemoteNetworkHandler requestingClient,
                                                            ConnectionInfo connectionInfo) throws RemoteException{
         VirtualView clientsVV = null;
@@ -131,10 +153,7 @@ public class RMIWaiter extends UnicastRemoteObject implements RMIWaiterInterface
                         }
 
                         clientsVV.setPongReceived();
-                        //server.updateConnectionStatus(connectionInfo, true);
-                        //synchronized (server){
-                            server.updateConnectionStatus(connectionInfo, true);
-                        //}
+                        server.updateConnectionStatus(connectionInfo, true);
                         server.getmatchesControllers().get(m).playerConnected(clientsVV);
                         System.out.println("Hello world!");
                         found = true;

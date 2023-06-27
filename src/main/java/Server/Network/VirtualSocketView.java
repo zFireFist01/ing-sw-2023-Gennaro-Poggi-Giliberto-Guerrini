@@ -49,16 +49,6 @@ public class VirtualSocketView implements VirtualView{
     @Override
     public void run(){
 
-        /*String welcomeMessage = "Benvenuto nel server!\n";
-        try {
-            out.write(welcomeMessage.getBytes());
-            out.flush();
-            System.out.println("Messaggio di benvenuto inviato");
-        } catch (IOException e) {
-            System.err.println(e.getStackTrace());
-            throw new RuntimeException(e);
-        }*/
-
         Gson gson = new Gson();
         String mess = gson.toJson(new LoginView(isFirstToJoin));
         mess += "\n";
@@ -152,21 +142,6 @@ public class VirtualSocketView implements VirtualView{
 
     }
 
-    /*
-    public void sendVCEvent(VCEvent vcEvent){
-        for(VCEventListener listener: vcEventListeners){
-            try {
-                listener.onVCEvent(vcEvent,this);
-            } catch (NoSuchMethodException e) {
-                throw new RuntimeException(e);
-            } catch (InvocationTargetException e) {
-                throw new RuntimeException(e);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }*/
-
     @Override
     public void receiveVCEvent(String json) throws NoSuchMethodException, InvocationTargetException,
             IllegalAccessException {
@@ -213,10 +188,7 @@ public class VirtualSocketView implements VirtualView{
                         +connectionInfo.getNickname());
                 //We don't need to notify the controller because it will be notified by the PingManager
                 // checking the checkPongResponse method. We just wait.
-                //throw new RuntimeException(e);
             }catch (IOException e) {
-                /*System.err.println(e.getStackTrace());
-                throw new RuntimeException(e);*/
                 System.err.println("[IOException] Lost connection with one Socket client, its nickname was: "
                         +connectionInfo.getNickname());
             }

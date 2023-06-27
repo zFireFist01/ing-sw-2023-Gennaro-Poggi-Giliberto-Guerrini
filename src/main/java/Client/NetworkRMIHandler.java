@@ -88,12 +88,10 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements RemoteNetw
                     System.out.println(e.getMessage());
                     System.exit(0);
                 }
-                //System.out.println("called reGiveConnection");
             }else{
                 virtualRMIView = rmiWaiter.giveConnection(this);
             }
         } catch (RemoteException e) {
-            //throw new RuntimeException(e);
             System.err.print("Error while getting connection through RMI, please wait anc try again.\n> ");
             return;
         }

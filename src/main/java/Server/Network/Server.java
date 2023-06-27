@@ -118,6 +118,11 @@ public class Server implements Runnable{
         return (matches.get(matches.size()-1).getMatchStatus() instanceof WaitingForPlayers);
     }
 
+    /**
+     * This method is used from both the RMI waiter and the Socket waiter to see if there is a match which is
+     * in the NotRunning status, which means that its opener hasn't logged in yet.
+     * @return true if and only if there is one match that is in the NotRunning status.
+     */
     public synchronized boolean matchWaitingForInit(){
         if(matches.size()==0){
             return false;
@@ -125,6 +130,15 @@ public class Server implements Runnable{
         return (matches.get(matches.size()-1).getMatchStatus() instanceof NotRunning);
     }
 
+
+    /**
+     * This is the getter for the match in the NotRunning status, which is implemented as a getter for the last match in
+     * our collection since as a constraint of our implementation we know that every match that is not the last one
+     * in the collection is in the Running status, and thus only the last one can be in the NotRunning or in the
+     * WaitingForPlayers status.
+     * @return the last match of the collection, that must have been checked to be in the NotRunning status using the
+     * method above.
+     */
     public synchronized Match getMatchWaitingForInit(){
         return matches.get(matches.size()-1);
     }
@@ -152,7 +166,7 @@ public class Server implements Runnable{
      * created and that it must be added to the list of matches.
      * @param m is the new match
      * @param c is the controller of the new match
-     * @param vv is the first virtual view we have istantiated for the new match, since if we had to create a new match
+     * @param vv is the first virtual view we have instantiated for the new match, since if we had to create a new match
      *           there must have been one client connected to the server.
      */
     protected synchronized void subscribeNewMatch(Match m, Controller c, VirtualView vv){
@@ -163,6 +177,13 @@ public class Server implements Runnable{
         pingManager.addVirtualView(vv, c);
     }
 
+    /**
+     * This method is used from both the RMI waiter and the Socket waiter to tell the server that a new client has
+     * connected to the server and that we must reserve a spot in the last match for him. The client will actually
+     * become a contestant and thus occupy that spot only when he logs in.
+     * @param m the match in which we must reserve a spot for the new client.
+     * @param vv the virtual view of the new client.
+     */
     protected synchronized void subscribeNewViewToExistingMatch(Match m, VirtualView vv){
         //matchesViews.put(m,vv);
         /*If the match has at least one client "attached" to it but not logged in yet (thus not a contestant), we must
@@ -172,6 +193,12 @@ public class Server implements Runnable{
         pingManager.addVirtualView(vv, matchesControllers.get(m));
     }
 
+    /**
+     * Since we reserve a spot in a match for every client that connects to the server, waiting for it to login,
+     * before doing so we must check if the match would already be full if all the clients to which we have reserved
+     * a spot actually become contestants. In this case we have to wait for them to login or quit the game, disconnectiing
+     * from the server, before we can add a new client to the match.
+     */
     public boolean mayOverloadLastMatch(VirtualView vv){
         Match m = matches.get(matches.size()-1);
         if(matchesViews.get(m).size() > m.getPlayers().size()){
@@ -181,33 +208,44 @@ public class Server implements Runnable{
             int notLoggedInYet = matchesViews.get(m).size() - m.getPlayers().size();
             if(m.getPlayers().size()+(notLoggedInYet+1) <= m.getNumberOfPlayers()){
                 //In this case we can add the new client to the match
-                /*matchesViews.get(m).add(vv);
-                pingManager.addVirtualView(vv, matchesControllers.get(m));*/
                 return false;
             }else{
                 /*We cannot be sure if the not-logged-in-yet client will actually become a contestant, freeing a spot,
                 or not, so we can only wait*/
-                /*subscribeNewWaitingClient(vv);
-                vv.onSelectViewEvent(new LoginView(false, "Waiting for a player to login in order to insert you " +
-                        "in the right match, please wait... "));*/
                 return true;
             }
         }else{
-            /*matchesViews.get(m).add(vv);
-            pingManager.addVirtualView(vv, matchesControllers.get(m));
-             */
             return false;
         }
     }
 
+    /**
+     * Enqueue a client to the waiting queue. This method is used when a client may overload a match or there is a match
+     * in NotRunning status, thus we must wait for the opener to login, deciding how many players to have in the match.
+     * @param waitingClient
+     */
     public synchronized void subscribeNewWaitingClient(VirtualView waitingClient){
         this.clientsWaitingForMatch.add(waitingClient);
     }
 
-    public synchronized void clientLoggedIn(VirtualView client){
+    /*public synchronized void clientLoggedIn(VirtualView client){
 
-    }
+    }*/
 
+    /**
+     * This method is used by the controller when a login occurs.
+     * If the queue of the clients waiting for the initialization of a match or for a not-logged-in-yet
+     * client to occupy its spot by logging in or by quitting the game is not empty.
+     * In the case the last match is in WaitingForPlayers status, this means that the controller has called the method
+     * just after a match opener has logged in, deciding the number of players, so we get all the players we can from the
+     * waiting queue and add them to the match.
+     * In the second case the controller has called this method as a consequence of a match evolving in the Running status,
+     * thus no more players can be added to it and we need to istantiate a new match, letting the head of the queue be its
+     * opener.
+     * This method will also be called by the server itself when a not logged in yet client logs in or quits the game,
+     * free-ing a spot in the last match.
+     * @return the list of clients that have been removed from the waiting queue.
+     */
     public Queue<VirtualView> dequeueWaitingClients(){
         Match lastMatch;
         synchronized (matches){
@@ -236,29 +274,6 @@ public class Server implements Runnable{
                 clientsWaitingForMatch.peek().onSelectViewEvent(new LoginView(false, "Waiting for a player to login in order to insert you " +
                         "in the right match, please wait... "));
             }
-            /*
-            //If there are still clients waiting for joining a match, the first one will be a match opener and the others
-            //wil continue waiting
-            if(!clientsWaitingForMatch.isEmpty()){
-                VirtualView vv;
-                synchronized (clientsWaitingForMatch){
-                    vv = clientsWaitingForMatch.poll();
-                }
-                if(vv == null){
-                    throw new RuntimeException("[Server.dequeueWaitingClients()]: " +
-                            "There seem to be clients waiting for a match, but the queue is empty");
-                }
-                vv.setIsFirstToJoin(true);
-                Match m = new Match();
-                Controller c = new Controller(m, this);
-                m.addMVEventListener(vv);
-                vv.addVCEventListener(c);
-                c.addSelectViewEventListener(vv);
-                this.subscribeNewMatch(m, c, vv);
-                this.updateConnectionStatus(vv.getConnectionInfo(), true);
-                vv.onSelectViewEvent(new LoginView(true));
-            }
-            */
         }else{
             if(!clientsWaitingForMatch.isEmpty()){
                 VirtualView vv;
@@ -341,6 +356,14 @@ public class Server implements Runnable{
         }
     }
 
+    /**
+     * This method is used by the controller of a match when a client disconnects, both in the case that the client
+     * was logged in or not.
+     * This method only removes the client from the list of virtual views of the match and from the list of listeners
+     * of the controller of the match. Every other operation on the model or on the PingManager is performed by the
+     * controller.
+     * @param clientsVV the virtual view of the client that disconnected.
+     */
     public void disconnectClient(VirtualView clientsVV){
         //This method is called by the controller when a client disconnects from a
         //match in WaitingForPlayers status
@@ -354,7 +377,6 @@ public class Server implements Runnable{
             }
         }
         matchesControllers.get(matchWherePlayerWas).removeSelectViewEventListener(clientsVV);
-        //pingManager.removeVirtualView(clientsVV, matchesControllers.get(matchWherePlayerWas));
         clientsConnectionStatuses.remove(clientConnectionInfo);
         /*A client lost connection: if he wasn't logged in (his match was in WaitingForPlayers status), we must dequeue
         one client that was waiting (if any)*/
@@ -368,26 +390,27 @@ public class Server implements Runnable{
                 }else{
                     new Thread(vv).start();
                 }
-                //vv.onSelectViewEvent(new LoginView(false));
             }
         }
     }
 
-    public /*synchronized*/ void eraseMatch(Match m){
-        //This method is called (1) from a NotRunning match when its opener disconnects or (2) from a WaitingForplayers
-        //match with no more players (they all disconnected).
-        //(1) If the match was NotRunning, we must make the head of the queue (if any) the new match opener
-        //(2) just delete the match and its controller and its views
+    /**
+     * This method is called (1) from a NotRunning match when its opener disconnects or (2) from a WaitingForplayers
+     * match with no more players (they all disconnected).
+     * (1) If the match was NotRunning, we must make the head of the queue (if any) the new match opener
+     * (2) Just delete the match and its controller and its views
+     *
+     * It may happen that this method gets called because all the clients that were logged in and waiting
+     * for other players to join disconnected, but there still is one player connected to the server, whose
+     * virtual view is thus in the macthesViews map, that hasn't logged in yet and wants to play. He, in fact, would
+     * have been the player thanks to whom the match would have started. In this case,
+     * we choose to still erase the match and its controller and its views, and to make that player
+     * the match opener of another match.
+     * @param m
+     */
+    public void eraseMatch(Match m){
 
-        //It may happen that this method gets called because all the clients that were logged in and waiting
-        //for other players to join disconnected, but there still is one player connected to the server, whose
-        //virtual view is thus in the macthesViews map, that hasn't logged in yet and wants to play. He, in fact, would
-        //have been the player thanks to whom the match would have started. In this case,
-        //we choose to still erase the match and its controller and its views, and to make the player that player
-        //the match opener of another match.
-
-
-        if(m != null && /*m.getMatchStatus() instanceof WaitingForPlayers ||*/ m.getMatchStatus() == null){
+        if(m != null && m.getMatchStatus() == null){
             if(matchesViews.get(m).size()>1){
                 //There is at least one player that hasn't logged in yet and wants to play, while all the others have disconnected
                 LinkedList<VirtualView> playersVV = new LinkedList<>();
@@ -454,67 +477,5 @@ public class Server implements Runnable{
                 m = null;
             }
         }
-        /*if(matchesViews.get(m).size()>1){
-            //There is at least one player that hasn't logged in yet and wants to play, while all the others have disconnected
-            LinkedList<VirtualView> playersVV = new LinkedList<>();
-            for(int i=1;i<matchesViews.get(m).size();i++){
-                playersVV.add(matchesViews.get(m).get(i));
-                matchesViews.get(m).remove(i);
-            }
-            VirtualView opener = playersVV.poll();
-            opener.setIsFirstToJoin(true);
-            opener.removeVCEventListener(matchesControllers.get(m)); //Removing the old controller from the opener's listeners
-            Match match = new Match();
-            Controller c = new Controller(match, this);
-            match.addMVEventListener(opener);
-            opener.addVCEventListener(c);
-            c.addSelectViewEventListener(opener);
-            this.subscribeNewMatch(match, c, opener);
-            this.updateConnectionStatus(opener.getConnectionInfo(), true);
-            opener.onSelectViewEvent(new LoginView(true));
-            opener.onSelectViewEvent(new LoginView(true, "Since some players have disconnected, you have " +
-                    "become the match opener of another match. " +
-                    "\nPlease insert your nickname and the number of players you want to play with."));
-            playersVV.forEach(vv -> vv.onSelectViewEvent(new LoginView(false, "Please insert your nickname")));
-        }
-
-        //synchronized (pingManager.virtualViews){
-            matchesViews.get(m).clear();
-            matchesViews.remove(m);
-        //}
-        matchesControllers.remove(m);
-        matches.remove(m);*/
-        /*if(m.getMatchStatus() instanceof NotRunning){
-            //(1)
-            VirtualView vv;
-            synchronized (clientsWaitingForMatch){
-                vv = clientsWaitingForMatch.poll();
-            }
-            if(vv == null){
-                throw new RuntimeException("[Server.eraseMatch()]: " +
-                        "There seem to be clients waiting for a match, but the queue is empty");
-            }
-            vv.setIsFirstToJoin(true);
-            Match match = new Match();
-            Controller c = new Controller(match, this);
-            match.addMVEventListener(vv);
-            vv.addVCEventListener(c);
-            c.addSelectViewEventListener(vv);
-            this.subscribeNewMatch(match, c, vv);
-            this.updateConnectionStatus(vv.getConnectionInfo(), true);
-            vv.onSelectViewEvent(new LoginView(true));
-        }*/
     }
-
-    /*
-    public boolean atLeastOneDisconnected(){
-        synchronized (clientsConnectionStatuses){
-            for(ConnectionInfo ci : clientsConnectionStatuses.keySet()){
-                if(clientsConnectionStatuses.get(ci)==false)
-                    return true;
-            }
-            return false;
-        }
-
-    }*/
 }
