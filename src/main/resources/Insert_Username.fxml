@@ -43,6 +43,11 @@
                   <Font size="25.0" />
                </font>
             </Text>
+            <Button fx:id="quitButtonBeforeRunning" mnemonicParsing="false" onAction="#onQuitButtonBeforeRunning" prefHeight="26.0" prefWidth="69.0" style="-fx-background-color: #ffc033; -fx-border-radius: 15; -fx-background-radius: 15;" text="Quit">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
          </children>
       </VBox>
    </children>
