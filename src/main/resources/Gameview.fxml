@@ -985,7 +985,7 @@
                         <ImageView id="player0finish" fitHeight="66.0" fitWidth="66.0" layoutX="135.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
                         <VBox alignment="CENTER" prefHeight="66.0" prefWidth="67.0" spacing="5.0">
                            <children>
-                              <Button id="nicknamequitbutton" fx:id="quitButon" mnemonicParsing="false" onAction="#onQuitButton" prefHeight="26.0" prefWidth="60.0" text="quit" />
+                              <Button id="quitButon" fx:id="quitButton" mnemonicParsing="false" onAction="#onQuitButton" prefHeight="26.0" prefWidth="60.0" text="quit" />
                               <Button id="nicknamequitbutton" fx:id="rulesButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#onRulesButtonClicked" prefHeight="26.0" prefWidth="60.0" text="rules" />
                            </children>
                         </VBox>

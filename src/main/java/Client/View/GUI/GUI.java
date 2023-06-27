@@ -344,8 +344,6 @@ public class GUI extends Application implements View {
     private Button noalreadyconnected;
     @FXML
     private Button okComboButton;
-    @FXML
-    private Button nicknamequitbutton;
     //attributes
     private String directoryPath = null;
     private String jarFilePath = null;
@@ -2003,6 +2001,7 @@ public class GUI extends Application implements View {
             }
         });
         currentStage.close();
+        System.exit(0);
     }
 
     @FXML
@@ -2014,6 +2013,7 @@ public class GUI extends Application implements View {
         deleteDirectory();
         alert.showAndWait();
         currentStage.close();
+        System.exit(0);
     }
 
     @FXML
