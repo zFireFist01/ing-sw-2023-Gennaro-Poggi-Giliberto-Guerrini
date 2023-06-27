@@ -12,6 +12,7 @@ import Utils.ConnectionInfo;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.AccessException;
 import java.rmi.ConnectException;
@@ -112,7 +113,11 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements RemoteNetw
                         connected = false;
                         System.out.println(ANSIParameters.CLEAR_SCREEN+ANSIParameters.CURSOR_HOME+
                                 "Lost connection with server.\nPlease wait a few seconds and try to reconnect.");
-                        view.resetConnection();
+                        try {
+                            view.resetConnection();
+                        }catch(IOException ex){
+                            System.out.println("Error while resetting connection");
+                        }
                     }
                     return;
                 }
@@ -172,13 +177,21 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements RemoteNetw
             System.out.println(ANSIParameters.CLEAR_SCREEN+ANSIParameters.CURSOR_HOME+
                     "Lost connection with server.\nPlease wait a few seconds and try to reconnect.");
             //view.setConnectionToReset();
-            view.resetConnection();
+            try {
+                view.resetConnection();
+            }catch(IOException ex){
+                System.out.println("Error while resetting connection");
+            }
             return;
         } catch (RemoteException e) {
             System.out.println(ANSIParameters.CLEAR_SCREEN+ANSIParameters.CURSOR_HOME+
                     "Lost connection with server.\nPlease wait a few seconds and try to reconnect.");
             //view.setConnectionToReset();
-            view.resetConnection();
+            try {
+                view.resetConnection();
+            }catch(IOException ex){
+                System.out.println("Error while resetting connection");
+            }
             return;
         }
     }
