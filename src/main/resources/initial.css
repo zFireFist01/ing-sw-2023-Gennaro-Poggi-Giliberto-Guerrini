@@ -1,0 +1,31 @@
+/* Stilizza la ComboBox, TextField e Button */
+.combo-box, .text-field, .button {
+    -fx-font-size: 16px;
+    -fx-background-color: #D4AC0D; /* Giallo più scuro */
+    -fx-border-color: #000000;
+    -fx-border-radius: 10px; /* Bordo arrotondato */
+    -fx-background-radius: 10px; /* Background arrotondato */
+    -fx-padding: 10px;
+}
+
+/* Modifica il colore del Button quando il mouse è sopra */
+.button:hover {
+    -fx-background-color: #F1C40F; /* Giallo più chiaro */
+}
+
+/* Stilizza la cella del ComboBox */
+.combo-box .cell {
+    -fx-background-color: #D4AC0D; /* Giallo più scuro */
+    -fx-border-color: #000000;
+    -fx-border-radius: 10px; /* Bordo arrotondato */
+    -fx-background-radius: 10px; /* Background arrotondato */
+}
+
+/* Modifica lo sfondo del box che contiene le opzioni */
+.combo-box-popup .list-view {
+    -fx-background-color: transparent; /* Giallo più scuro */
+}
+.button {
+    -fx-font-size: 23px;
+    -fx-text-fill: #000000; /* Testo bianco */
+}

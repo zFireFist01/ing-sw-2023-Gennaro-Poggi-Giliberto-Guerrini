@@ -24,16 +24,21 @@
       </ImageView>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
+            <ImageView fitHeight="196.0" fitWidth="292.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Publisher%20material/Title%202000x618px.png" />
+               </image>
+            </ImageView>
             <StackPane alignment="TOP_CENTER" prefHeight="150.0" prefWidth="200.0">
                <children>
-                  <Rectangle arcHeight="100.0" arcWidth="100.0" fill="#ffffffbc" height="148.0" stroke="BLACK" strokeType="INSIDE" width="704.0">
+                  <Rectangle arcHeight="100.0" arcWidth="100.0" fill="#ffffffbc" height="178.0" stroke="BLACK" strokeType="INSIDE" width="704.0">
                      <StackPane.margin>
                         <Insets />
                      </StackPane.margin>
                   </Rectangle>
                   <Text id="printer" strokeType="OUTSIDE" strokeWidth="0.0" text="Ciao questo e un esempio di come potrebbe apparire una scritta" textAlignment="CENTER" wrappingWidth="667.568781375885">
                      <font>
-                        <Font name="Chalk Board" size="30.0" />
+                        <Font name="Chalk Board" size="25.0" />
                      </font>
                      <StackPane.margin>
                         <Insets top="20.0" />
@@ -55,17 +60,17 @@
                         <Button id="submitbutton" fx:id="submitname" mnemonicParsing="false" onAction="#onClickSubmitname" prefHeight="49.0" prefWidth="67.0" text="ok" visible="false" />
                      </children>
                   </HBox>
-                  <HBox id="thirdstage" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                  <HBox id="thirdstage" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                      <children>
                         <ComboBox id="selectlastlogin" prefWidth="150.0" visible="false" />
-                        <Button id="okcombobutton" fx:id="okComboButton" mnemonicParsing="false" onAction="#onClickOkCombo" text="Button" visible="false" />
+                        <Button id="okcombobutton" fx:id="okComboButton" mnemonicParsing="false" onAction="#onClickOkCombo" text="Ok!" visible="false" />
                      </children>
                   </HBox>
                </children>
             </StackPane>
          </children>
          <padding>
-            <Insets bottom="10.0" left="10.0" top="30.0" />
+            <Insets bottom="10.0" left="10.0" />
          </padding>
       </VBox>
    </children>

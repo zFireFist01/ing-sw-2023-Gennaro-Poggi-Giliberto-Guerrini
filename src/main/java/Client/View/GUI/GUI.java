@@ -455,6 +455,7 @@ public class GUI extends Application implements View {
         thirdstage.setVisible(false);
 
         Scene newScene = new Scene(Connectionroot);
+        newScene.getStylesheets().add(getClass().getResource("/initial.css").toExternalForm());
         primaryStage.setScene(newScene);
         primaryStage.show();
 
@@ -534,8 +535,7 @@ public class GUI extends Application implements View {
         String message ="If you remember which of the following directories is the right one," +
                 " please insert the number of it, otherwise select none";
         for(int k=0;k<listDirectoryPath.size();k++){
-            message += (k+" - "+listDirectoryPath.get(k) + "\n");
-            comboBox.getItems().add(String.valueOf(k));
+            comboBox.getItems().add(k+" - "+listDirectoryPath.get(k));
         }
         comboBox.getItems().add("none");
         Text printer = (Text) Connectionroot.lookup("#printer");
@@ -569,7 +569,7 @@ public class GUI extends Application implements View {
             Button okCombo = (Button) Connectionroot.lookup("#okcombobutton");
             okCombo.setVisible(false);
             comboBox.setVisible(false);
-            directoryPath = listDirectoryPath.get(Integer.parseInt(selected));
+            directoryPath = listDirectoryPath.get(Integer.parseInt(String.valueOf(selected.charAt(0))));
             isReconnecting = true;
         }
         int i= 1;
@@ -601,55 +601,55 @@ public class GUI extends Application implements View {
     private void connect(){
         //ConnectionType connectionType = null;
         Text printer = (Text) Connectionroot.lookup("#printer");
-        PauseTransition pause = new PauseTransition(Duration.seconds(5));
-        pause.setOnFinished(event -> {
-
+        PauseTransition pause1 = new PauseTransition(Duration.seconds(2));
+        PauseTransition pause2 = new PauseTransition(Duration.seconds(7));
+        PauseTransition pause3 = new PauseTransition(Duration.seconds(5));
+        pause1.setOnFinished(event -> {
             printer.setText("Alright, your connection info will be stored locally at: "
                     +directoryPath
                     +"\n"
                     +"Please, try to remember it, you might need it in the future.");
+            pause2.play();
         });
-        pause.play();
-        System.out.println("directoryPath: "+directoryPath);
+        pause2.setOnFinished(event -> {
+            try {
+                connectionFile = new File(directoryPath+"/ConnectionInfo.txt");
+                if(!isReconnecting){
+                    if (directory.mkdir()) {
+                            printer.setText("The directory was created successfully.");
 
-        try {
-            connectionFile = new File(directoryPath+"/ConnectionInfo.txt");
-            if(!isReconnecting){
-                if (directory.mkdir()) {
-                    PauseTransition pause2 = new PauseTransition(Duration.seconds(5));
-                    pause2.setOnFinished(event -> {
-                        printer.setText("The directory was created successfully.");
-                    });
-                    pause2.play();
-
-                    if(connectionFile.createNewFile()==false){
-                        printer.setText("File already exists, but it should not.");
+                        if(connectionFile.createNewFile()==false){
+                            printer.setText("File already exists, but it should not.");
+                        }
+                    } else {
+                        printer.setText("Failed to create the directory.");
                     }
-                } else {
-                    printer.setText("Failed to create the directory.");
+                }
+                pause3.play();
+            } catch (IOException e) {
+                printer.setText("An error occurred."+e.getMessage());
+            }
+        });
+
+        pause3.setOnFinished(event -> {
+            String localIP = null;
+            if(!isReconnecting){
+                try {
+                    connectionProcess();
+                }catch (Exception e){
+                    printer.setText("An error occurred."+e.getMessage());
+                }
+            }else{
+                try {
+                    reconnectionProcess();
+                }catch (Exception e){
+                    printer.setText("An error occurred."+e.getMessage());
                 }
             }
-
-        } catch (IOException e) {
-            printer.setText("An error occurred."+e.getMessage());
-        }
-
-
-        String localIP = null;
-        if(!isReconnecting){
-            try {
-                connectionProcess();
-            }catch (Exception e){
-                printer.setText("An error occurred."+e.getMessage());
-            }
-        }else{
-            try {
-                reconnectionProcess();
-            }catch (Exception e){
-                printer.setText("An error occurred."+e.getMessage());
-            }
-        }
+        });
+        pause1.play();
     }
+
 
     private void reconnectionProcess() throws IOException{
         String json = null;
