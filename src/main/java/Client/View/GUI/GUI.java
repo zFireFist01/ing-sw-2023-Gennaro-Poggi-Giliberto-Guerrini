@@ -480,10 +480,7 @@ public class GUI extends Application implements View {
         primaryStage.show();
 
     }
-    @FXML
-    private void onRulesButtonClicked (ActionEvent event){
-        return;
-    }
+
 
     @FXML
     private void onClickSubmitname(ActionEvent event){
@@ -2125,7 +2122,7 @@ public class GUI extends Application implements View {
                 scale.setY(zoomLevel.get());
             }
 
-            event.consume();
+            scrollEvent.consume();
         });
 
 
