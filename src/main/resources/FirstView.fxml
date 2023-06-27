@@ -7,6 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane id="wallpaper" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
@@ -20,11 +21,20 @@
          <children>
             <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button fx:id="quitButtonBeforeRunning" mnemonicParsing="false" onAction="#onQuitButtonBeforeRunning" prefHeight="30.0" prefWidth="84.0" text="QUIT">
-                     <font>
-                        <Font name="Calibri Bold" size="18.0" />
-                     </font>
-                  </Button>
+                  <VBox alignment="BOTTOM_CENTER" prefHeight="276.0" prefWidth="85.0" spacing="20.0">
+                     <children>
+                        <Button id="rulesButton" fx:id="rulesButton" mnemonicParsing="false" onAction="#onRulesButtonClicked" prefHeight="34.0" prefWidth="87.0" text="RULES">
+                           <font>
+                              <Font name="Calibri Bold" size="19.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="quitButtonBeforeRunning" mnemonicParsing="false" onAction="#onQuitButtonBeforeRunning" prefHeight="0.0" prefWidth="84.0" text="QUIT">
+                           <font>
+                              <Font name="Calibri Bold" size="18.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </VBox>
                </children>
                <padding>
                   <Insets bottom="5.0" right="5.0" />

@@ -30,19 +30,26 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.awt.*;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
@@ -52,6 +59,10 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.scene.input.ScrollEvent;
 
 public class GUI extends Application implements View {
 
@@ -125,6 +136,10 @@ public class GUI extends Application implements View {
     private Image points1Image;
 
 
+    private static final double MIN_ZOOM = 0.1;
+    private static final double MAX_ZOOM = 10.0;
+
+    private DoubleProperty zoomLevel = new SimpleDoubleProperty(1.0);
 
 
 
@@ -298,6 +313,9 @@ public class GUI extends Application implements View {
     //checkout
     @FXML
     private Button checkoutbutton;
+
+    @FXML
+    private Button rulesButton;
 
 
     //LastView
@@ -2058,6 +2076,58 @@ public class GUI extends Application implements View {
         primaryStage.setScene(newScene);
         primaryStage.show();
     }
+
+    @FXML
+    private void onRulesButtonClicked(ActionEvent event) throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Rules.fxml"));
+        fxmlLoader.setController(this);
+        Parent newRoot = fxmlLoader.load();
+        Scene newScene = new Scene(newRoot);
+
+        AnchorPane pane = (AnchorPane) newRoot.lookup("#pane_wall");
+        ImageView rules =(ImageView) newRoot.lookup("#rules") ;
+
+        rules.fitHeightProperty().bind(pane.heightProperty());
+        rules.fitWidthProperty().bind(pane.widthProperty());
+
+
+        // Applica la trasformazione di scala alla scena
+        Scale scale = new Scale(1, 1);
+        pane.getTransforms().add(scale);
+
+        newScene.setOnScroll((ScrollEvent scrollEvent) -> {
+            double zoomFactor = Math.exp(scrollEvent.getDeltaY() * 0.01);
+            double newZoomLevel = zoomLevel.get() * zoomFactor;
+
+            // Limita il fattore di zoom nei limiti MIN_ZOOM e MAX_ZOOM
+            if (newZoomLevel >= MIN_ZOOM && newZoomLevel <= MAX_ZOOM) {
+                zoomLevel.set(newZoomLevel);
+
+                // Calcola il punto di zoom basato sulla posizione del mouse
+                Point2D mousePoint = new Point2D(scrollEvent.getX(), scrollEvent.getY());
+                Point2D scenePoint = pane.sceneToLocal(mousePoint);
+
+                // Aggiorna la trasformazione di scala rispetto al punto di zoom
+                scale.setPivotX(scenePoint.getX());
+                scale.setPivotY(scenePoint.getY());
+                scale.setX(zoomLevel.get());
+                scale.setY(zoomLevel.get());
+            }
+
+            event.consume();
+        });
+
+
+
+        Stage secondaryStage = new Stage();
+        secondaryStage.setScene(newScene);
+        secondaryStage.show();
+
+
+
+    }
+
+
 
     @Override
     public void resetConnection() {
