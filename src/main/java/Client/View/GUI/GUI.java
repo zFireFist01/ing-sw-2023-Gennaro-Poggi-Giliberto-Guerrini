@@ -165,6 +165,8 @@ public class GUI extends Application implements View {
     @FXML
     private Button quitButton;
     @FXML
+    private Button quitButtonBeforeRunning;
+    @FXML
     private Button playButton;
     @FXML
     private Button showBookshelf;
@@ -1099,7 +1101,16 @@ public class GUI extends Application implements View {
 
     }
 
-
+    private void deleteDirectory(){
+        File directory = new File(directoryPath);
+        File[] files = directory.listFiles();
+        if(files != null) {
+            for (File f : files) {
+                f.delete();
+            }
+        }
+        directory.delete();
+    }
 
     private void updateBookshelf(Player p , int index){
         TileSpot matrix[][]=p.getBookshelf().getTileMatrix();
@@ -1979,6 +1990,29 @@ public class GUI extends Application implements View {
     @FXML
     private void onQuitButton(ActionEvent event){
         Stage currentStage = (Stage) quitButton.getScene().getWindow();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("Would you like to remember you've been connected and playing this match?");
+        ButtonType buttonTypeOne = new ButtonType("Yes");
+        ButtonType buttonTypeTwo = new ButtonType("No");
+        alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+        alert.showAndWait().ifPresent(response -> {
+            if(response == buttonTypeOne){
+
+            }else if(response == buttonTypeTwo){
+                deleteDirectory();
+            }
+        });
+        currentStage.close();
+    }
+
+    @FXML
+    private void onQuitButtonBeforeRunning(ActionEvent event){
+        Stage currentStage = (Stage) quitButtonBeforeRunning.getScene().getWindow();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("ATTENTION");
+        alert.setHeaderText("Since you haven't joined a match yet you wont be remembered!");
+        deleteDirectory();
+        alert.showAndWait();
         currentStage.close();
     }
 

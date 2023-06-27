@@ -20,7 +20,7 @@
          <children>
             <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button fx:id="quitButton" mnemonicParsing="false" onAction="#onQuitButton" prefHeight="30.0" prefWidth="84.0" text="QUIT">
+                  <Button fx:id="quitButtonBeforeRunning" mnemonicParsing="false" onAction="#onQuitButtonBeforeRunning" prefHeight="30.0" prefWidth="84.0" text="QUIT">
                      <font>
                         <Font name="Calibri Bold" size="18.0" />
                      </font>
