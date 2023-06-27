@@ -349,7 +349,7 @@ public class CLI implements Runnable , View {
         }
         localIP = null;
         try {
-            InetAddress ipAddress = InetAddress.getLocalHost();
+            InetAddress ipAddress = InetAddress.getByName(host);
             localIP = ipAddress.getHostAddress();
         } catch (UnknownHostException e) {
             e.printStackTrace();
