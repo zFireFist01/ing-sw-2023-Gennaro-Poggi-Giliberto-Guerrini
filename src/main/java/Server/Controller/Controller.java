@@ -122,7 +122,7 @@ public class Controller implements VCEventListener {
                 //server.updateConnectionStatus(caller.getConnectionInfo(), true);
                 System.out.println("Controller connection info.nickname: " + caller.getConnectionInfo().getNickname());
                 if(match.getMatchStatus() instanceof WaitingForPlayers){
-                    caller.onSelectViewEvent(new GameView());
+                    caller.onSelectViewEvent(new GameView("Waiting for other players to join..."));
                     //caller.onSelectViewEvent(new GameView());
                 }else if (match.getMatchStatus() instanceof Running){
                     if(!server.getClientsWaitingForMatch().isEmpty()){
@@ -132,9 +132,9 @@ public class Controller implements VCEventListener {
                     currentPlayerView = PlayerViews.get(firstPlayer.getPlayerID());
                     for(VirtualView vv : PlayerViews.values()){
                         if(vv != currentPlayerView){
-                            vv.onSelectViewEvent(new GameView("Match started! "+ firstPlayer.getPlayerNickName() + " is the match opener!"));
+                            vv.onSelectViewEvent(new GameView("Match started! "+ firstPlayer.getPlayerNickName() + " is the first player!"));
                         }else{
-                            vv.onSelectViewEvent(new PickingTilesGameView("Match started! You are the match opener! Pick some tiles and then checkout!"));
+                            vv.onSelectViewEvent(new PickingTilesGameView("Match started! You are the first player! Pick some tiles and then checkout!"));
                         }
                     }
                 }

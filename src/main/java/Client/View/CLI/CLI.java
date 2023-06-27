@@ -349,7 +349,7 @@ public class CLI implements Runnable , View {
         }
         localIP = null;
         try {
-            InetAddress ipAddress = InetAddress.getLocalHost();
+            InetAddress ipAddress = InetAddress.getByName(host);
             localIP = ipAddress.getHostAddress();
         } catch (UnknownHostException e) {
             e.printStackTrace();
@@ -939,9 +939,9 @@ public class CLI implements Runnable , View {
         directory.delete();
     }
     private void manageQuitting(){
-        if(myNick == null || myNick.equals("")){
+        if(myNick == null || myNick.equals("") || !matchStarted){
             System.out.println(ANSIParameters.RED+"ATTENTION:"+ANSIParameters.CRESET+
-                    "Since you haven't logged in yet, you won't be remembered");
+                    "Since you haven't joined a match yet, you won't be remembered");
             deleteDirectory();
         }else{
             System.out.println("Would you like to remember you've been connected and playing this match? (y/n)");
@@ -2558,9 +2558,7 @@ public class CLI implements Runnable , View {
 
     @Override
     public void resetConnection() {
-        boolean storeData = false;
         System.out.println(ANSIParameters.CLEAR_SCREEN+ANSIParameters.CURSOR_HOME);
-        storeData = true;
         //Erasing all data structures referring to network and conenction
         isReconnecting = true;
         reconnectionProcess();

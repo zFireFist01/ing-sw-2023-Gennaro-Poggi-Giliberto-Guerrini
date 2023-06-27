@@ -481,6 +481,11 @@ public class GUI extends Application implements View {
 
     }
     @FXML
+    private void onRulesButtonClicked (ActionEvent event){
+        return;
+    }
+
+    @FXML
     private void onClickSubmitname(ActionEvent event){
         TextField nameField = (TextField) Connectionroot.lookup("#namefield");
         name = nameField.getText();
@@ -617,6 +622,7 @@ public class GUI extends Application implements View {
         connect();
 
     }
+
 
     private void connect(){
         //ConnectionType connectionType = null;
@@ -859,7 +865,6 @@ public class GUI extends Application implements View {
         livingroomgridbuttons.setDisable(false);
         checkoutbutton.setDisable(false);
         checkoutbutton.setVisible(true);
-        checkoutbutton.setStyle("-fx-background-color: #FFD700; -fx-font-weight: bold; -fx-font-size: 10px;");
         mybookshelf.setDisable(true);
         //mybookshelf.setStyle("-fx-background-color: #FFD700;");
         //mybookshelf.setOpacity(0.2);
@@ -980,6 +985,10 @@ public class GUI extends Application implements View {
     }
 
     private void onMatchStartedEvent(LightMatch match) {
+        if(matchStarted){
+            return;
+        }
+
         this.matchStarted = true;
 
         loader.setLocation(getClass().getResource("/Gameview.fxml"));
@@ -1829,7 +1838,7 @@ public class GUI extends Application implements View {
 
         String localIP = null;
         try {
-            InetAddress ipAddress = InetAddress.getLocalHost();
+            InetAddress ipAddress = InetAddress.getByName(host);
             localIP = ipAddress.getHostAddress();
         } catch (UnknownHostException e) {
             e.printStackTrace();
@@ -1867,7 +1876,7 @@ public class GUI extends Application implements View {
         AnchorPane pane = (AnchorPane) newRoot.lookup("#pane_wall");
         ImageView wallpaper =(ImageView) newRoot.lookup("#parquet") ;
 
-
+        this.connectionType = ConnectionType.RMI;
         wallpaper.fitHeightProperty().bind(pane.heightProperty());
         wallpaper.fitWidthProperty().bind(pane.widthProperty());
         Scene newScene = new Scene(newRoot);
@@ -1896,7 +1905,7 @@ public class GUI extends Application implements View {
             networkHandler = new NetworkRMIHandler(host, port,this);
             localIP = null;
             try {
-                InetAddress ipAddress = InetAddress.getLocalHost();
+                InetAddress ipAddress = InetAddress.getByName(host);
                 localIP = ipAddress.getHostAddress();
             } catch (UnknownHostException e) {
                 e.printStackTrace();
@@ -2010,6 +2019,7 @@ public class GUI extends Application implements View {
             }
         });
         currentStage.close();
+        System.exit(0);
     }
 
     @FXML
@@ -2017,10 +2027,11 @@ public class GUI extends Application implements View {
         Stage currentStage = (Stage) quitButtonBeforeRunning.getScene().getWindow();
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("ATTENTION");
-        alert.setHeaderText("Since you haven't joined a match yet you wont be remembered!");
+        alert.setHeaderText("Since you haven't joined a match yet, you wont be remembered!");
         deleteDirectory();
         alert.showAndWait();
         currentStage.close();
+        System.exit(0);
     }
 
     @FXML
@@ -2130,8 +2141,9 @@ public class GUI extends Application implements View {
 
 
     @Override
-    public void resetConnection() {
-        return;
+    public void resetConnection() throws IOException {
+        isReconnecting = true;
+        reconnectionProcess();
     }
 
 }
