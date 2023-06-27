@@ -4,6 +4,8 @@ import Client.ConnectionType;
 import Client.NetworkHandler;
 import Client.NetworkRMIHandler;
 import Client.NetworkSocketHandler;
+import Client.View.CLI.ANSIParameters;
+import Client.View.CLI.CLI;
 import Client.View.View;
 import Server.Events.MVEvents.MVEvent;
 import Server.Events.SelectViewEvents.LoginView;
@@ -19,6 +21,8 @@ import Server.Model.GameItems.TileType;
 import Server.Model.LightMatch;
 import Server.Model.Player.Player;
 import Utils.ConnectionInfo;
+import com.google.gson.Gson;
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -37,8 +41,9 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -46,8 +51,11 @@ import java.rmi.RemoteException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class GUI extends Application implements View {
+
+    private final String CONNECTION_INFO_DIRECTORY_NAME = "ClientFiles";
     //resources
     ImageView titleImageView;
     private String myNick;
@@ -66,7 +74,7 @@ public class GUI extends Application implements View {
 
     private boolean MatchEnded = false;
     private ConnectionInfo connectionInfo;
-    private boolean isReconnecting;
+    private boolean isReconnecting = false;
     private String previousNickname = null; //Will be null if isReconnecting==false
     private int numberPlayers;
     private Player me;
@@ -322,8 +330,31 @@ public class GUI extends Application implements View {
 
 
 
-
+    private Parent Connectionroot;
     private Parent gameRoot;
+
+    //connection
+    @FXML
+    private Button submitname;
+    @FXML
+    private Button yesalreadyconnected;
+    @FXML
+    private Button noalreadyconnected;
+    @FXML
+    private Button okComboButton;
+    //attributes
+    private String directoryPath = null;
+    private String jarFilePath = null;
+    private String jarFolder = null;
+    private File newDirectory = null;
+    private File directory = null;
+    private ConnectionInfo ci = null;
+    private List<String> listDirectoryPath = null;
+    private File connectionFile = null;
+    private BufferedWriter bufferedWriter;
+    private FileReader fileReader;
+    private BufferedReader bufferedReader;
+    String name = null;
 
 
     private String[] numberPlayersArray = {"2 Players", "3 Players", "4 Players"};
@@ -384,62 +415,313 @@ public class GUI extends Application implements View {
         this.primaryStage = primaryStage;
 
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Re_Connection_Requests.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Connection_Requests.fxml"));
         fxmlLoader.setController(this);
-        Parent root = fxmlLoader.load();
-        AnchorPane pane = (AnchorPane) root.lookup("#wallpaper");
-        ImageView wallpaper =(ImageView) root.lookup("#parquet") ;
+        Connectionroot = fxmlLoader.load();
+        AnchorPane pane = (AnchorPane) Connectionroot.lookup("#wallpaper");
+        ImageView wallpaper =(ImageView) Connectionroot.lookup("#parquet") ;
 
 
         wallpaper.fitHeightProperty().bind(pane.heightProperty());
         wallpaper.fitWidthProperty().bind(pane.widthProperty());
 
-        Scene newScene = new Scene(root);
+        jarFilePath = CLI.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+
+        // Getting its parent's file path
+        jarFolder = new File(jarFilePath).getParent();
+
+        // Crea un oggetto File per la nuova directory nella cartella del file .jar
+        newDirectory = new File(jarFolder, CONNECTION_INFO_DIRECTORY_NAME);
+
+        // Crea la directory
+        if(!newDirectory.exists()) {
+            newDirectory.mkdir();
+        }
+
+        Text printer = (Text) Connectionroot.lookup("#printer");
+        //Get person's name in order to create a directory
+        printer.setText("Insert your name:");
+
+        TextField nameField = (TextField) Connectionroot.lookup("#namefield");
+        Button submitButton = (Button) Connectionroot.lookup("#submitbutton");
+
+        nameField.setVisible(true);
+        submitButton.setVisible(true);
+        submitButton.setDisable(false);
+
+        HBox secondstage = (HBox) Connectionroot.lookup("#secondstage");
+        secondstage.setVisible(false);
+        HBox thirdstage = (HBox) Connectionroot.lookup("#thirdstage");
+        thirdstage.setVisible(false);
+
+        Scene newScene = new Scene(Connectionroot);
         primaryStage.setScene(newScene);
         primaryStage.show();
 
     }
+    @FXML
+    private void onClickSubmitname(ActionEvent event){
+        TextField nameField = (TextField) Connectionroot.lookup("#namefield");
+        name = nameField.getText();
 
-    
-    private void showIsReconnectingWindow(Stage primaryStage){
-        Stage isReconnectingStage = new Stage();
-        isReconnectingStage.setTitle("Reconnection process");
+        Button submitButton = (Button) Connectionroot.lookup("#submitbutton");
 
-        Text askPreviousNicknameText = new Text("Please insert your previous nickname");
-        TextField askPreviousNickname = new TextField();
-        askPreviousNickname.setPromptText("Previous Nickname");
-        Button okButton = new Button("OK");
-        okButton.setOnAction(e -> {
-            previousNickname = askPreviousNickname.getText();
-            showNormalWindow(primaryStage);
-            isReconnectingStage.close();
-        });
+        nameField.setVisible(false);
+        submitButton.setVisible(false);
 
-        VBox isReconnectingRoot = new VBox(10, askPreviousNicknameText, askPreviousNickname, okButton);
-        isReconnectingRoot.setAlignment(Pos.CENTER);
-        isReconnectingRoot.setPadding(new Insets(20));
+        directoryPath = jarFolder+"/"+CONNECTION_INFO_DIRECTORY_NAME+"/Client_"+name;
+        directory = new File(directoryPath);
+        int i = 1;
+        if(directory.exists() && directory.isDirectory()){
+            try {
+                ci = new Gson().fromJson(
+                        new BufferedReader(
+                                new FileReader(directoryPath+"/ConnectionInfo.txt")),
+                        ConnectionInfo.class
+                );
+                if(     ci!=null &&
+                        ci.getNickname()!=null
+                ){
+                    Text printer = (Text) Connectionroot.lookup("#printer");
+                    printer.setText("It seems you were already connected, is that right? ");
+                    Button yesButton = (Button) Connectionroot.lookup("#yesconnectbutton");
+                    Button noButton = (Button) Connectionroot.lookup("#noconnectbutton");
+                    HBox firststage = (HBox) Connectionroot.lookup("#firststage");
+                    firststage.setVisible(false);
+                    HBox secondstage = (HBox) Connectionroot.lookup("#secondstage");
+                    secondstage.setVisible(true);
+                    yesButton.setVisible(true);
+                    noButton.setVisible(true);
 
-        Scene isReconnectingScene = new Scene(isReconnectingRoot, 300, 200);
-        isReconnectingStage.setScene(isReconnectingScene);
-        isReconnectingStage.show();
+                }else{
+                    while(!isReconnecting && directory.exists() && directory.isDirectory()){
+                        directoryPath = jarFolder+"/"+CONNECTION_INFO_DIRECTORY_NAME+"/Client_"+name+"_"+i;
+                        directory = new File(directoryPath);
+                        i++;
+                    }
+                    connect();
+                }
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+
+        }else{
+            while(!isReconnecting && directory.exists() && directory.isDirectory()){
+                directoryPath = jarFolder+"/"+CONNECTION_INFO_DIRECTORY_NAME+"/Client_"+name+"_"+i;
+                directory = new File(directoryPath);
+                i++;
+            }
+            connect();
+        }
+
+
+
     }
 
-    private void showNormalWindow(Stage primaryStage){
-        titleImageView.setFitWidth(600);
-        titleImageView.setPreserveRatio(true);
-        titleImageView.setSmooth(true);
+    @FXML
+    private void onYesConnected(ActionEvent event){
+        int j=1;
+        listDirectoryPath = new ArrayList<>();
+        listDirectoryPath.add(directoryPath);
+        File tempDirectory = new File(directoryPath+"_"+j);
+        while(tempDirectory.exists() && tempDirectory.isDirectory()){
+            listDirectoryPath.add(directoryPath+"_"+j);
+            //directory = new File(listDirectoryPath);
+            j++;
+            tempDirectory = new File(directoryPath+"_"+j);
+        }
+        ComboBox<String> comboBox = (ComboBox<String>) Connectionroot.lookup("#selectlastlogin");
+        String message ="If you remember which of the following directories is the right one," +
+                " please insert the number of it, otherwise select none";
+        for(int k=0;k<listDirectoryPath.size();k++){
+            message += (k+" - "+listDirectoryPath.get(k) + "\n");
+            comboBox.getItems().add(String.valueOf(k));
+        }
+        comboBox.getItems().add("none");
+        Text printer = (Text) Connectionroot.lookup("#printer");
+        printer.setText(message);
+        Button yesButton = (Button) Connectionroot.lookup("#yesconnectbutton");
+        Button noButton = (Button) Connectionroot.lookup("#noconnectbutton");
+        yesButton.setVisible(false);
+        noButton.setVisible(false);
+        HBox secondstage = (HBox) Connectionroot.lookup("#secondstage");
+        secondstage.setVisible(false);
+        HBox thirdstage = (HBox) Connectionroot.lookup("#thirdstage");
+        thirdstage.setVisible(true);
+        Button okCombo = (Button) Connectionroot.lookup("#okcombobutton");
+        okCombo.setVisible(true);
+        comboBox.setVisible(true);
 
-        wallpaperImageView.setOpacity(0.7);
+    }
+
+    @FXML
+    private void onClickOkCombo(ActionEvent event){
+        ComboBox<String> comboBox = (ComboBox<String>) Connectionroot.lookup("#selectlastlogin");
+        String selected = comboBox.getSelectionModel().getSelectedItem();
+        if(selected.equals("none")){
+
+            Button okCombo = (Button) Connectionroot.lookup("#okcombobutton");
+            okCombo.setVisible(false);
+            comboBox.setVisible(false);
+            isReconnecting = false;
+        }else{
+
+            Button okCombo = (Button) Connectionroot.lookup("#okcombobutton");
+            okCombo.setVisible(false);
+            comboBox.setVisible(false);
+            directoryPath = listDirectoryPath.get(Integer.parseInt(selected));
+            isReconnecting = true;
+        }
+        int i= 1;
+        while(!isReconnecting && directory.exists() && directory.isDirectory()){
+            directoryPath = jarFolder+"/"+CONNECTION_INFO_DIRECTORY_NAME+"/Client_"+name+"_"+i;
+            directory = new File(directoryPath);
+            i++;
+        }
+        connect();
+
+    }
+
+    @FXML
+    private void onNoConnected(ActionEvent event){
+        Button yesButton = (Button) Connectionroot.lookup("#yesconnectbutton");
+        Button noButton = (Button) Connectionroot.lookup("#noconnectbutton");
+        yesButton.setVisible(false);
+        noButton.setVisible(false);
+        int i=1;
+        while(!isReconnecting && directory.exists() && directory.isDirectory()){
+            directoryPath = jarFolder+"/"+CONNECTION_INFO_DIRECTORY_NAME+"/Client_"+name+"_"+i;
+            directory = new File(directoryPath);
+            i++;
+        }
+        connect();
+
+    }
+
+    private void connect(){
+        //ConnectionType connectionType = null;
+        Text printer = (Text) Connectionroot.lookup("#printer");
+        PauseTransition pause = new PauseTransition(Duration.seconds(5));
+        pause.setOnFinished(event -> {
+
+            printer.setText("Alright, your connection info will be stored locally at: "
+                    +directoryPath
+                    +"\n"
+                    +"Please, try to remember it, you might need it in the future.");
+        });
+        pause.play();
+        System.out.println("directoryPath: "+directoryPath);
+
+        try {
+            connectionFile = new File(directoryPath+"/ConnectionInfo.txt");
+            if(!isReconnecting){
+                if (directory.mkdir()) {
+                    PauseTransition pause2 = new PauseTransition(Duration.seconds(5));
+                    pause2.setOnFinished(event -> {
+                        printer.setText("The directory was created successfully.");
+                    });
+                    pause2.play();
+
+                    if(connectionFile.createNewFile()==false){
+                        printer.setText("File already exists, but it should not.");
+                    }
+                } else {
+                    printer.setText("Failed to create the directory.");
+                }
+            }
+
+        } catch (IOException e) {
+            printer.setText("An error occurred."+e.getMessage());
+        }
 
 
-        Button rmiButton = new Button("RMI");
-        Button socketButton = new Button("SOCKET");
+        String localIP = null;
+        if(!isReconnecting){
+            try {
+                connectionProcess();
+            }catch (Exception e){
+                printer.setText("An error occurred."+e.getMessage());
+            }
+        }else{
+            try {
+                reconnectionProcess();
+            }catch (Exception e){
+                printer.setText("An error occurred."+e.getMessage());
+            }
+        }
+    }
 
-        rmiButton.setMinWidth(200);
-        rmiButton.setMinHeight(100);
+    private void reconnectionProcess() throws IOException{
+        String json = null;
+        try {
+            try {
+                fileReader = new FileReader(connectionFile);
+                bufferedReader = new BufferedReader(fileReader);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            json  = bufferedReader.readLine();
+            connectionInfo = new Gson().fromJson(json, ConnectionInfo.class);
+            bufferedReader.close();
+            fileReader.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        if(connectionInfo == null){
+            System.err.println("AAAAAAAAAAA: "+json);
+        }else{
+            switch(connectionInfo.getConnectionType()){
+                case SOCKET:
+                    networkHandler = new NetworkSocketHandler(connectionInfo.getIp(), connectionInfo.getPort(), this);
+                    break;
+                case RMI:
+                    try {
+                        networkHandler = new NetworkRMIHandler(connectionInfo.getIp(), connectionInfo.getPort(), this);
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+            }
+            //previousNickname = connectionInfo.getNickname();
+            myNick = connectionInfo.getNickname();
+        }
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/FirstView.fxml"));
+        fxmlLoader.setController(this);
+        Parent newRoot = fxmlLoader.load();
+        AnchorPane pane = (AnchorPane) newRoot.lookup("#wallpaper");
+        ImageView wallpaper =(ImageView) newRoot.lookup("#parquet") ;
 
-        socketButton.setMinWidth(200);
-        socketButton.setMinHeight(100);
+
+        wallpaper.fitHeightProperty().bind(pane.heightProperty());
+        wallpaper.fitWidthProperty().bind(pane.widthProperty());
+        Scene newScene = new Scene(newRoot);
+
+        primaryStage.setScene(newScene);
+        primaryStage.show();
+    }
+
+    private void connectionProcess() throws IOException{
+        this.isReconnecting = false;
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Socket_RMI_Requests.fxml"));
+        fxmlLoader.setController(this);
+
+        Parent newRoot = fxmlLoader.load();
+
+        AnchorPane pane = (AnchorPane) newRoot.lookup("#pane_wall");
+        ImageView wallpaper =(ImageView) newRoot.lookup("#parquet") ;
+
+
+        wallpaper.fitHeightProperty().bind(pane.heightProperty());
+        wallpaper.fitWidthProperty().bind(pane.widthProperty());
+
+        Button rmiButton = (Button) newRoot.lookup("#rmibutton");
+        Button socketButton = (Button) newRoot.lookup("#socketbutton");
+
+        rmiButton.setMinWidth(100);
+        rmiButton.setMinHeight(50);
+
+        socketButton.setMinWidth(100);
+        socketButton.setMinHeight(50);
 
         rmiButton.setStyle("-fx-background-color: #FFC0CB; -fx-border-radius: 15; -fx-background-radius: 15;");
 
@@ -460,138 +742,9 @@ public class GUI extends Application implements View {
 
 
 
-        HBox buttons = new HBox(10, rmiButton, socketButton);
-        buttons.setAlignment(Pos.CENTER);
+        Scene newScene = new Scene(newRoot);
 
-
-        VBox choose = new VBox(10, titleImageView, buttons);
-        choose.setAlignment(Pos.CENTER);
-
-        String localIP = null;
-        try {
-            InetAddress ipAddress = InetAddress.getLocalHost();
-            localIP = ipAddress.getHostAddress();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-
-        rmiButton.setOnAction(e -> {
-            connectionType = ConnectionType.RMI;
-            showRMIConnectionWindow(primaryStage);
-        });
-
-        socketButton.setOnAction(e -> {
-            connectionType = ConnectionType.SOCKET;
-            showSocketConnectionWindow(primaryStage);
-        });
-
-        this.connectionInfo = new ConnectionInfo(localIP, connectionType, previousNickname);
-        StackPane root = new StackPane(wallpaperImageView, choose);
-        StackPane.setAlignment(choose, Pos.CENTER);
-
-
-        Scene scene = new Scene(root, 800, 600);
-        primaryStage.setTitle("MyShelfie");
-        primaryStage.setScene(scene);
-        primaryStage.show();
-
-
-    }
-
-
-    private void showSocketConnectionWindow(Stage primaryStage) {
-
-        Stage loginStage = new Stage();
-        loginStage.setTitle("Insert Address and Port");
-
-        TextField addressField = new TextField();
-        addressField.setPromptText("Server IP Address");
-        TextField portField = new TextField();
-        portField.setPromptText("Server Port");
-
-        Button loginButton = new Button("Connect");
-        loginButton.setOnAction(e -> {
-            String host = addressField.getText();
-            int port = Integer.parseInt(portField.getText());
-            networkHandler = new NetworkSocketHandler(host, port, this);
-
-            showInitWindow(primaryStage);
-
-
-            loginStage.close();
-        });
-
-        VBox loginRoot = new VBox(10, addressField, portField, loginButton);
-        loginRoot.setAlignment(Pos.CENTER);
-        loginRoot.setPadding(new Insets(20));
-
-        Scene loginScene = new Scene(loginRoot, 300, 200);
-        loginStage.setScene(loginScene);
-        loginStage.show();
-    }
-
-    private void showRMIConnectionWindow(Stage primaryStage) {
-
-        Stage loginStage = new Stage();
-        loginStage.setTitle("Insert RMI Server address and port");
-
-        TextField hostField = new TextField();
-        hostField.setPromptText("Server IP Address");
-
-        TextField portField = new TextField();
-        portField.setPromptText("Server Port");
-
-        Button loginButton = new Button("Connect");
-        loginButton.setOnAction(e -> {
-            int port = Integer.parseInt(portField.getText());
-            String host = hostField.getText();
-            try{
-                networkHandler = new NetworkRMIHandler(host,port,this);
-            } catch (RemoteException e1) {
-                e1.printStackTrace();
-            }
-
-            showInitWindow(primaryStage);
-
-
-            loginStage.close();
-        });
-
-        VBox loginRoot = new VBox(10, portField, loginButton);
-        loginRoot.setAlignment(Pos.CENTER);
-        loginRoot.setPadding(new Insets(20));
-
-        Scene loginScene = new Scene(loginRoot, 300, 200);
-        loginStage.setScene(loginScene);
-        loginStage.show();
-    }
-
-    private void showInitWindow(Stage primaryStage) {
-
-        Label gameLabel = new Label("Schermata di gioco");
-
-
-        Button playButton = new Button("Play");
-        Button quitButton = new Button("Quit");
-
-        playButton.setOnAction(e -> {
-            new Thread(networkHandler).start();
-        });
-
-        quitButton.setOnAction(e -> {
-
-            primaryStage.getScene().getWindow().hide();
-        });
-
-
-        HBox buttons = new HBox(10, playButton, quitButton);
-        buttons.setAlignment(Pos.CENTER);
-
-        VBox root = new VBox(10, gameLabel, buttons);
-
-        Scene scene = new Scene(root, 800, 600);
-        primaryStage.setTitle("MyShelfie");
-        primaryStage.setScene(scene);
+        primaryStage.setScene(newScene);
         primaryStage.show();
     }
 
@@ -1632,8 +1785,9 @@ public class GUI extends Application implements View {
     private void onClickConnectButton(ActionEvent event) throws IOException {
 
         String host = addressServer.getText();
+        int port;
         try {
-            int port = Integer.parseInt(portServer.getText());
+            port = Integer.parseInt(portServer.getText());
             this.networkHandler = new NetworkSocketHandler(host, port, this);
         }catch (NumberFormatException e){
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -1651,7 +1805,15 @@ public class GUI extends Application implements View {
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-        this.connectionInfo = (new ConnectionInfo(localIP, this.connectionType, this.previousNickname));
+        connectionInfo = new ConnectionInfo(localIP,port, null, connectionType);
+        try {
+            bufferedWriter = new BufferedWriter(new FileWriter(connectionFile, false));
+            bufferedWriter.write(new Gson().toJson(connectionInfo)+"\n");
+            bufferedWriter.flush();
+            bufferedWriter.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/FirstView.fxml"));
         fxmlLoader.setController(this);
         Parent newRoot = fxmlLoader.load();
@@ -1699,19 +1861,28 @@ public class GUI extends Application implements View {
             return;
         }
         String host = addressServerRMI1.getText();
+        String localIP = null;
 
         try{
             networkHandler = new NetworkRMIHandler(host, port,this);
-            String localIP = null;
+            localIP = null;
             try {
                 InetAddress ipAddress = InetAddress.getLocalHost();
                 localIP = ipAddress.getHostAddress();
             } catch (UnknownHostException e) {
                 e.printStackTrace();
             }
-            connectionInfo = new ConnectionInfo(localIP,connectionType, previousNickname);
         } catch (RemoteException e1) {
             e1.printStackTrace();
+        }
+        connectionInfo = new ConnectionInfo(localIP,port, null, connectionType);
+        try {
+            bufferedWriter = new BufferedWriter(new FileWriter(connectionFile, false));
+            bufferedWriter.write(new Gson().toJson(connectionInfo)+"\n");
+            bufferedWriter.flush();
+            bufferedWriter.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/FirstView.fxml"));
         fxmlLoader.setController(this);
@@ -1738,6 +1909,15 @@ public class GUI extends Application implements View {
         }catch(Exception ex){
             System.out.println("Error in login");
         }
+        connectionInfo.setNickname(myNick);
+        try {
+            bufferedWriter = new BufferedWriter(new FileWriter(connectionFile, false));
+            bufferedWriter.write(new Gson().toJson(connectionInfo)+"\n");
+            bufferedWriter.flush();
+            bufferedWriter.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/WaitingPlayersToConnect.fxml"));
         fxmlLoader.setController(this);
         Parent newRoot = fxmlLoader.load();
@@ -1760,6 +1940,15 @@ public class GUI extends Application implements View {
             networkHandler.onVCEvent(new LoginEvent(myNick));
         }catch(Exception ex){
             System.out.println("Error in login");
+        }
+        connectionInfo.setNickname(myNick);
+        try {
+            bufferedWriter = new BufferedWriter(new FileWriter(connectionFile, false));
+            bufferedWriter.write(new Gson().toJson(connectionInfo)+"\n");
+            bufferedWriter.flush();
+            bufferedWriter.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/WaitingPlayersToConnect.fxml"));
         fxmlLoader.setController(this);
