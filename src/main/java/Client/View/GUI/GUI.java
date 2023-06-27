@@ -1889,7 +1889,7 @@ public class GUI extends Application implements View {
             networkHandler = new NetworkRMIHandler(host, port,this);
             localIP = null;
             try {
-                InetAddress ipAddress = InetAddress.getLocalHost();
+                InetAddress ipAddress = InetAddress.getByName(host);
                 localIP = ipAddress.getHostAddress();
             } catch (UnknownHostException e) {
                 e.printStackTrace();
