@@ -939,7 +939,7 @@ public class CLI implements Runnable , View {
         directory.delete();
     }
     private void manageQuitting(){
-        if(myNick == null || myNick.equals("")){
+        if(myNick == null || myNick.equals("") || !matchStarted){
             System.out.println(ANSIParameters.RED+"ATTENTION:"+ANSIParameters.CRESET+
                     "Since you haven't logged in yet, you won't be remembered");
             deleteDirectory();
@@ -2558,9 +2558,7 @@ public class CLI implements Runnable , View {
 
     @Override
     public void resetConnection() {
-        boolean storeData = false;
         System.out.println(ANSIParameters.CLEAR_SCREEN+ANSIParameters.CURSOR_HOME);
-        storeData = true;
         //Erasing all data structures referring to network and conenction
         isReconnecting = true;
         reconnectionProcess();

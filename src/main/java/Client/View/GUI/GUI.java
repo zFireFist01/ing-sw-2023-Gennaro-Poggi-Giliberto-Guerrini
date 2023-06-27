@@ -1838,7 +1838,7 @@ public class GUI extends Application implements View {
         AnchorPane pane = (AnchorPane) newRoot.lookup("#pane_wall");
         ImageView wallpaper =(ImageView) newRoot.lookup("#parquet") ;
 
-
+        this.connectionType = ConnectionType.RMI;
         wallpaper.fitHeightProperty().bind(pane.heightProperty());
         wallpaper.fitWidthProperty().bind(pane.widthProperty());
         Scene newScene = new Scene(newRoot);
