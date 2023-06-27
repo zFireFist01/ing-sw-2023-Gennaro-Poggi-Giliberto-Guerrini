@@ -32,9 +32,9 @@
 
 <AnchorPane id="MainPane" prefHeight="838.0" prefWidth="1214.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ImageView id="wallpaper" fitHeight="838.0" fitWidth="1214.0" opacity="0.3" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+      <ImageView id="wallpaper" fitHeight="838.0" fitWidth="1214.0" opacity="0.55" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
          <image>
-            <Image url="@Publisher material/Display_5.jpg" />
+            <Image url="@Publisher%20material/Display_5.jpg" />
          </image>
          <effect>
             <GaussianBlur />
@@ -420,7 +420,7 @@
                                           <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="84.0" stroke="TRANSPARENT" strokeType="INSIDE" width="467.0" BorderPane.alignment="CENTER" />
                                        </top>
                                        <center>
-                                          <GridPane fx:id="livingroomgridbuttons" hgap="2.0" vgap="2.0" BorderPane.alignment="CENTER">
+                                          <GridPane fx:id="livingroomgridbuttons" disable="true" hgap="2.0" vgap="2.0" BorderPane.alignment="CENTER">
                                              <columnConstraints>
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -549,7 +549,7 @@
                                     </BorderPane>
                                  </children>
                               </StackPane>
-                              <Button fx:id="checkoutbutton" mnemonicParsing="false" onAction="#onCheckout" prefHeight="43.0" prefWidth="66.0" text="Checkout" />
+                              <Button fx:id="checkoutbutton" disable="true" mnemonicParsing="false" onAction="#onCheckout" prefHeight="43.0" prefWidth="66.0" text="Checkout" visible="false" />
                            </children>
                         </HBox>
                         <HBox id="bookshelfContainer" prefHeight="152.0" prefWidth="1280.0" spacing="30.0">
@@ -983,6 +983,12 @@
                         <ImageView id="player0point1" fitHeight="66.0" fitWidth="66.0" pickOnBounds="true" preserveRatio="true" />
                         <ImageView id="player0point2" fitHeight="66.0" fitWidth="66.0" layoutX="67.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
                         <ImageView id="player0finish" fitHeight="66.0" fitWidth="66.0" layoutX="135.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
+                        <VBox alignment="CENTER" prefHeight="66.0" prefWidth="67.0" spacing="5.0">
+                           <children>
+                              <Button id="nicknamequitbutton" fx:id="quitButon" mnemonicParsing="false" onAction="#onQuitButton" prefHeight="26.0" prefWidth="60.0" text="quit" />
+                              <Button id="nicknamequitbutton" fx:id="rulesButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#onRulesButtonClicked" prefHeight="26.0" prefWidth="60.0" text="rules" />
+                           </children>
+                        </VBox>
                      </children>
                   </HBox>
                </children>

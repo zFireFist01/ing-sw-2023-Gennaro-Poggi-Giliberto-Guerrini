@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -8,6 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
@@ -20,21 +22,36 @@
       </ImageView>
       <HBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <StackPane prefHeight="400.0" prefWidth="299.0">
+            <VBox alignment="CENTER" prefHeight="266.0" prefWidth="600.0">
                <children>
-                  <Pane maxHeight="-Infinity" maxWidth="-Infinity" opacity="0.8" prefHeight="50.0" prefWidth="330.0" style="-fx-background-color: lightgray; -fx-border-radius: 0.1;">
-                     <opaqueInsets>
+                  <StackPane prefHeight="188.0" prefWidth="600.0">
+                     <children>
+                        <Pane maxHeight="-Infinity" maxWidth="-Infinity" opacity="0.8" prefHeight="50.0" prefWidth="330.0" style="-fx-background-color: lightgray; -fx-border-radius: 0.1;">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </Pane>
+                        <ProgressIndicator prefHeight="43.0" prefWidth="53.0" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Waiting For Other Players To Connect" textAlignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Text>
+                     </children>
+                     <VBox.margin>
                         <Insets />
-                     </opaqueInsets>
-                  </Pane>
-                  <ProgressIndicator prefHeight="43.0" prefWidth="53.0" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Waiting For Other Players To Connect" textAlignment="CENTER">
+                     </VBox.margin>
+                  </StackPane>
+                  <Button fx:id="quitButtonBeforeRunning" mnemonicParsing="false" onAction="#onQuitButtonBeforeRunning" prefHeight="26.0" prefWidth="69.0" style="-fx-background-color: #ffc033; -fx-border-radius: 15; -fx-background-radius: 15;" text="Quit">
                      <font>
-                        <Font name="System Bold" size="14.0" />
+                        <Font size="14.0" />
                      </font>
-                  </Text>
+                  </Button>
                </children>
-            </StackPane>
+               <HBox.margin>
+                  <Insets bottom="100.0" top="75.0" />
+               </HBox.margin>
+            </VBox>
          </children>
       </HBox>
    </children>

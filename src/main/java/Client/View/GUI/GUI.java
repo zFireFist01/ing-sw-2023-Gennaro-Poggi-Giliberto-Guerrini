@@ -165,6 +165,8 @@ public class GUI extends Application implements View {
     @FXML
     private Button quitButton;
     @FXML
+    private Button quitButtonBeforeRunning;
+    @FXML
     private Button playButton;
     @FXML
     private Button showBookshelf;
@@ -342,6 +344,8 @@ public class GUI extends Application implements View {
     private Button noalreadyconnected;
     @FXML
     private Button okComboButton;
+    @FXML
+    private Button nicknamequitbutton;
     //attributes
     private String directoryPath = null;
     private String jarFilePath = null;
@@ -460,6 +464,11 @@ public class GUI extends Application implements View {
         primaryStage.show();
 
     }
+    @FXML
+    private void onRulesButtonClicked (ActionEvent event){
+        return;
+    }
+
     @FXML
     private void onClickSubmitname(ActionEvent event){
         TextField nameField = (TextField) Connectionroot.lookup("#namefield");
@@ -597,6 +606,7 @@ public class GUI extends Application implements View {
         connect();
 
     }
+
 
     private void connect(){
         //ConnectionType connectionType = null;
@@ -839,7 +849,6 @@ public class GUI extends Application implements View {
         livingroomgridbuttons.setDisable(false);
         checkoutbutton.setDisable(false);
         checkoutbutton.setVisible(true);
-        checkoutbutton.setStyle("-fx-background-color: #FFD700; -fx-font-weight: bold; -fx-font-size: 10px;");
         mybookshelf.setDisable(true);
         //mybookshelf.setStyle("-fx-background-color: #FFD700;");
         //mybookshelf.setOpacity(0.2);
@@ -960,6 +969,10 @@ public class GUI extends Application implements View {
     }
 
     private void onMatchStartedEvent(LightMatch match) {
+        if(matchStarted){
+            return;
+        }
+
         this.matchStarted = true;
 
         loader.setLocation(getClass().getResource("/Gameview.fxml"));
@@ -1088,7 +1101,16 @@ public class GUI extends Application implements View {
 
     }
 
-
+    private void deleteDirectory(){
+        File directory = new File(directoryPath);
+        File[] files = directory.listFiles();
+        if(files != null) {
+            for (File f : files) {
+                f.delete();
+            }
+        }
+        directory.delete();
+    }
 
     private void updateBookshelf(Player p , int index){
         TileSpot matrix[][]=p.getBookshelf().getTileMatrix();
@@ -1968,6 +1990,29 @@ public class GUI extends Application implements View {
     @FXML
     private void onQuitButton(ActionEvent event){
         Stage currentStage = (Stage) quitButton.getScene().getWindow();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("Would you like to remember you've been connected and playing this match?");
+        ButtonType buttonTypeOne = new ButtonType("Yes");
+        ButtonType buttonTypeTwo = new ButtonType("No");
+        alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+        alert.showAndWait().ifPresent(response -> {
+            if(response == buttonTypeOne){
+
+            }else if(response == buttonTypeTwo){
+                deleteDirectory();
+            }
+        });
+        currentStage.close();
+    }
+
+    @FXML
+    private void onQuitButtonBeforeRunning(ActionEvent event){
+        Stage currentStage = (Stage) quitButtonBeforeRunning.getScene().getWindow();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("ATTENTION");
+        alert.setHeaderText("Since you haven't joined a match yet you wont be remembered!");
+        deleteDirectory();
+        alert.showAndWait();
         currentStage.close();
     }
 
@@ -2026,8 +2071,9 @@ public class GUI extends Application implements View {
     }
 
     @Override
-    public void resetConnection() {
-        return;
+    public void resetConnection() throws IOException {
+        isReconnecting = true;
+        reconnectionProcess();
     }
 
 }
