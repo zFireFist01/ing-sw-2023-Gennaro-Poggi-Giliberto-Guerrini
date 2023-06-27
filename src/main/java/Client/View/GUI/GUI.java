@@ -342,6 +342,8 @@ public class GUI extends Application implements View {
     private Button noalreadyconnected;
     @FXML
     private Button okComboButton;
+    @FXML
+    private Button nicknamequitbutton;
     //attributes
     private String directoryPath = null;
     private String jarFilePath = null;
@@ -460,6 +462,11 @@ public class GUI extends Application implements View {
         primaryStage.show();
 
     }
+    @FXML
+    private void onRulesButtonClicked (ActionEvent event){
+        return;
+    }
+
     @FXML
     private void onClickSubmitname(ActionEvent event){
         TextField nameField = (TextField) Connectionroot.lookup("#namefield");
@@ -597,6 +604,7 @@ public class GUI extends Application implements View {
         connect();
 
     }
+
 
     private void connect(){
         //ConnectionType connectionType = null;
@@ -839,7 +847,6 @@ public class GUI extends Application implements View {
         livingroomgridbuttons.setDisable(false);
         checkoutbutton.setDisable(false);
         checkoutbutton.setVisible(true);
-        checkoutbutton.setStyle("-fx-background-color: #FFD700; -fx-font-weight: bold; -fx-font-size: 10px;");
         mybookshelf.setDisable(true);
         //mybookshelf.setStyle("-fx-background-color: #FFD700;");
         //mybookshelf.setOpacity(0.2);
@@ -960,6 +967,10 @@ public class GUI extends Application implements View {
     }
 
     private void onMatchStartedEvent(LightMatch match) {
+        if(matchStarted){
+            return;
+        }
+
         this.matchStarted = true;
 
         loader.setLocation(getClass().getResource("/Gameview.fxml"));

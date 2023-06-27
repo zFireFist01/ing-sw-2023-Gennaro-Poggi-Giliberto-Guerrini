@@ -15,5 +15,24 @@
 }
 
 
+.button{
+
+    -fx-font-weight: bold;
+    -fx-background-color: #FFD700; /* Giallo più scuro */
+    -fx-border-color: #000000;
+    -fx-border-radius: 5px; /* Bordo arrotondato */
+    -fx-background-radius: 5px; /* Background arrotondato */
+    -fx-padding: 5px; /* Padding ridotto */
+}
+
+/* Modifica il colore del Button, TitledPane, ChoiceBox, TextArea e ScrollPane quando il mouse è sopra */
+.button:hover{
+    -fx-background-color: #F1C40F; /* Giallo più chiaro */
+}
+
+
+.button, .choice-box, .text-area {
+    -fx-text-fill: #000000; /* Testo bianco */
+}
 
                                                                                                                                                                                                                                                                                                                           Se desideri creare un'interfaccia utente più complessa o con un aspetto molto personalizzato, potresti considerare l'utilizzo di un tool come Scene Builder, che ti permette di creare l'interfaccia utente di JavaFX utilizzando un editor visuale, e fornisce anche strumenti per personalizzare facilmente l'aspetto dei controlli JavaFX.
