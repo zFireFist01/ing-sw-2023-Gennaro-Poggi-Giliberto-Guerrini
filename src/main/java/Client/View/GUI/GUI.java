@@ -2010,7 +2010,7 @@ public class GUI extends Application implements View {
         Stage currentStage = (Stage) quitButtonBeforeRunning.getScene().getWindow();
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("ATTENTION");
-        alert.setHeaderText("Since you haven't joined a match yet you wont be remembered!");
+        alert.setHeaderText("Since you haven't joined a match yet, you wont be remembered!");
         deleteDirectory();
         alert.showAndWait();
         currentStage.close();

@@ -941,7 +941,7 @@ public class CLI implements Runnable , View {
     private void manageQuitting(){
         if(myNick == null || myNick.equals("") || !matchStarted){
             System.out.println(ANSIParameters.RED+"ATTENTION:"+ANSIParameters.CRESET+
-                    "Since you haven't logged in yet, you won't be remembered");
+                    "Since you haven't joined a match yet, you won't be remembered");
             deleteDirectory();
         }else{
             System.out.println("Would you like to remember you've been connected and playing this match? (y/n)");
