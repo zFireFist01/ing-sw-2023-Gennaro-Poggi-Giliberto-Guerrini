@@ -106,3 +106,5 @@ UML\ diagram/.DS_Store
 .gitignore
 mvc.txt
 target/
+deliverables/jar/ClientFiles
+deliverables/jar/ClientFiles/
