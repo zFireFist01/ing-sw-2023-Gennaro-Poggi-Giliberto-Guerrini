@@ -4,8 +4,13 @@ import Server.Model.Cards.CommonGoalCard;
 import Server.Model.GameItems.Bookshelf;
 
 /**
- * This class represents the twelfth common goal card
- * @author martagiliberto
+ * This class represents the twelfth common goal card:
+ * "Five columns of increasing or decreasing
+ * height. Starting from the first column on
+ * the left or on the right, each next column
+ * must be made of exactly one more tile.
+ * Tiles can be of any type."
+ * @author Marta Giliberto
  */
 public class CommonGoalCard12 extends CommonGoalCard {
 
@@ -16,19 +21,13 @@ public class CommonGoalCard12 extends CommonGoalCard {
     /**
      * constructor of the class CommonGoalCard12 that calls the constructor of the superclass
      * @param playersNum the number of players in the game
-     * @param secondIstance true if it is the second card, false otherwise in order to know if
+     * @param secondInstance true if it is the second card, false otherwise in order to know if
      *                      the card has to be created with the second instance of the points tiles
      */
-    public CommonGoalCard12(int playersNum, boolean secondIstance) {
-        super(playersNum, secondIstance);
+    public CommonGoalCard12(int playersNum, boolean secondInstance) {
+        super(playersNum, secondInstance);
     }
 
-    /**
-     * this method checks if CommonGoal12 is completed
-     * @param bookshelf the bookshelf of the player
-     * @return true if CommonGoal12 is completed, false if it is not
-     * @author Marta Giliberto
-     */
     @Override
     public boolean check(Bookshelf bookshelf) {
         int lungprec=0;
@@ -69,35 +68,15 @@ public class CommonGoalCard12 extends CommonGoalCard {
             }
 
             conto=0;
-
         }
-
         return ok;
     }
-    /**
-     * This method returns the ID of the common goal card
-     * @return the ID of the common goal card
-     */
+
     @Override
     public int getCardID() {
         return 12;
     }
 
-    /**
-     * @return a string that describes CommonGoalCard12
-     * @author martagiliberto
-     */
-    /*
-    @Override
-    public String getDescription(){
-        return "Five columns of increasing or decreasing height. Starting from the first column on the left or on the right, each next column must be made of exactly one more tile.Tiles can be of any type.";
-    }
-    */
-    /**
-     * this method returns a CLI representation of CommonGoalCard12's description
-     * @return the String[] "matrix" of the representation
-     * @author martagiliberto
-     */
     @Override
     public String[] getCommonGoalDescription(){
         String[] description = new String[8];

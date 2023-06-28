@@ -1,5 +1,9 @@
 package Server.Model.GameItems;
 
+/**
+ * This class represents the spot of the bookshelf
+ * @author Marta Giliberto
+ */
 public class BookshelfTileSpot extends TileSpot {
 
     public BookshelfTileSpot(){

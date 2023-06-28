@@ -4,14 +4,25 @@ import Server.Model.Cards.CommonGoalCard;
 import Server.Model.GameItems.Bookshelf;
 import Server.Model.GameItems.BookshelfTileSpot;
 
+/**
+ *  This class represents the eighth common goal card:
+ *  "Four tiles of the same type in the four
+ *  corners of the bookshelf. "
+ * @author Patrick Poggi
+ */
 public class CommonGoalCard8 extends CommonGoalCard {
 
     public CommonGoalCard8() {
         super();
     }
 
-    public CommonGoalCard8(int playersNum, boolean secondIstance) {
-        super(playersNum, secondIstance);
+    /**
+     * constructor of the class CommonGoalCard8 that calls the constructor of the superclass
+     * @param playersNum is the number of players in the game
+     * @param secondInstance is true if there are 5 players in the game, false otherwise
+     */
+    public CommonGoalCard8(int playersNum, boolean secondInstance) {
+        super(playersNum, secondInstance);
     }
 
     @Override
@@ -25,14 +36,8 @@ public class CommonGoalCard8 extends CommonGoalCard {
                 bsmat[0][0].getTileType() == bsmat[bookshelf.getBookshelfHeight()-1][0].getTileType() &&
                 bsmat[0][0].getTileType() == bsmat[bookshelf.getBookshelfHeight()-1][bookshelf.getBookshelfWidth()-1].getTileType()
                 ;
-
     }
 
-    /**
-     * This method returns a CLI representation (ASCII-art like) of the 8th common goal card's description
-     * @return the String[] "matrix" of the representation
-     * @author patrickpoggi
-     */
     @Override
     public String[] getCommonGoalDescription() {
         String[] description = new String[8];
@@ -48,24 +53,7 @@ public class CommonGoalCard8 extends CommonGoalCard {
 
         return description;
     }
-    /*
-    /**
-     * @return a string that describes the 8th common goal
-     * @author patrickpoggi
-     */
 
-    /*
-    @Override
-    public String getDescription() {
-        return "Four tiles of the same type in the four corners of the bookshelf";
-    }
-
-    */
-
-    /**
-     * This method returns the ID of the common goal card
-     * @return the ID of the common goal card
-     */
     @Override
     public int getCardID() {
         return 8;

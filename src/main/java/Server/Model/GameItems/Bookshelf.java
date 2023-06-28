@@ -13,16 +13,21 @@ import java.util.*;
 
 /**
  * This class represents the bookshelf that every player has for the game
+ * @author Patrick Poggi
  */
 public class Bookshelf {
-    private Match m; //ok
+    private Match m;
     @Expose
-    private BookshelfTileSpot[][] tileMatrix; //ok
-    private final static int BOOKSHELFHEIGHT = 6; //ok
-    private final static int BOOKSHELFWIDTH = 5;//ok
+    private BookshelfTileSpot[][] tileMatrix;
+    private final static int BOOKSHELFHEIGHT = 6;
+    private final static int BOOKSHELFWIDTH = 5;
     @Expose
-    private Map<Integer, Integer> lastIndexes = null; //map<column_index, last_row_index //ok
+    private Map<Integer, Integer> lastIndexes = null; //map<column_index, last_row_index >
 
+    /**
+     * This is the constructor of the class
+     * @param m is a reference of the match in which the bookshelf is
+     */
     public Bookshelf(Match m) {
         this.m = m;
         tileMatrix = new BookshelfTileSpot[6][5];
@@ -31,7 +36,7 @@ public class Bookshelf {
                 tileMatrix[i][j] = new BookshelfTileSpot();
             }
         }
-
+        //initialization of lastIndexes
         lastIndexes = new HashMap<>();
         lastIndexes.put(0,6);
         lastIndexes.put(1,6);
@@ -56,23 +61,20 @@ public class Bookshelf {
 
     /**
      * For test usage only
-     * @return
+     * @return matrix of the bookshelf
      */
     public BookshelfTileSpot[][] getPrivateTileMatrix(){
         return tileMatrix;
     }
 
-    /*
-        0: X
-        1:    X
-        2: X
-        3:
-        4:
-        5:
-            0  1  2  3  4
-
+    /**
+     * This method is used to insert tile in the bookshelf
+     * @param column index of column in which I want to insert the tile
+     * @param tileType the type of the tile I'm inserting
+     * @throws UnsupportedOperationException when the column is full
+     * @throws IndexOutOfBoundsException when column doesn't exist
+     * @throws NullPointerException when tile type is null
      */
-
     public void insertTile(int column, TileType tileType) throws UnsupportedOperationException,
             IndexOutOfBoundsException, NullPointerException{
         if(tileType == null){
@@ -104,7 +106,7 @@ public class Bookshelf {
     /**
      * Iterates over every column and then returns the maximum number of insertable tiles, thus the
      * number of empty spots of the "emptier" column
-     * @return
+     * @return the maximum number of insertable tiles
      */
     public int maxInsertableTiles(){
         int max = -1;
@@ -116,6 +118,11 @@ public class Bookshelf {
         return (max); //Adding 1 because the index starts from 0
     }
 
+    /**
+     * This method is called by insertTile method and is used to send an MVEvent,
+     * in order to update the views.
+     * @param event is the MVevent I want to send
+     */
     public void notifyMVEventListeners(MVEvent event){
         this.m.notifyMVEventListeners(event);
     }

@@ -3,28 +3,28 @@ package Server.Model.MatchStatus;
 import Server.Model.Match;
 
 /**
- *match status abstract class in order to store the status of the match
+ * This abstract class is the status of the match
  * @author Marta Giliberto
  */
 public abstract class MatchStatus {
 
     Match match;
 
-    /**
-     * this method evolve the status of the match to a new status
-     * @return the new MatchStatus of the match
-     * @throws UnsupportedOperationException if MatchStatus can't evolve
-     * @author Marta Giliberto
-     */
-
     public MatchStatus(Match match){
         this.match = match;
 
     }
-     public abstract MatchStatus evolve() throws UnsupportedOperationException;
 
     /**
-     * @author Marta Giliberto
+     * This method evolve the status of the match to a new status
+     * @return the new MatchStatus of the match
+     * @throws UnsupportedOperationException if MatchStatus can't evolve
+     */
+    public abstract MatchStatus evolve() throws UnsupportedOperationException;
+
+    /**
+     * This method devolve the status of the match to a previous status
+     * @return In every case, except for WaitingForPlayers, this method returns this
      */
     public abstract MatchStatus devolve();
 }

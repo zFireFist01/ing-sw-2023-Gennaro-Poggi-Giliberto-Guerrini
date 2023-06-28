@@ -6,6 +6,7 @@ import java.util.Objects;
 
 /**
  * This class defines the tile spot
+ * @author Patrick Poggi
  */
 public class TileSpot {
     @Expose
@@ -24,7 +25,6 @@ public class TileSpot {
     }
 
     public void setEmpty(){ this.tile = null;}
-
 
     public void setTile(){this.tile = null;}
 

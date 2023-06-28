@@ -22,14 +22,24 @@
          <children>
             <StackPane prefHeight="150.0" prefWidth="200.0">
                <children>
+
                   <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
+
+
+                  <VBox alignment="BOTTOM_CENTER" prefHeight="276.0" prefWidth="85.0" spacing="20.0">
                      <children>
-                        <Button fx:id="quitButtonBeforeRunning" mnemonicParsing="false" onAction="#onQuitButtonBeforeRunning" prefHeight="30.0" prefWidth="84.0" text="QUIT">
+                        <Button id="rulesButton" fx:id="rulesButton" mnemonicParsing="false" onAction="#onRulesButtonClicked" prefHeight="34.0" prefWidth="87.0" text="RULES">
+                           <font>
+                              <Font name="Calibri Bold" size="19.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="quitButtonBeforeRunning" mnemonicParsing="false" onAction="#onQuitButtonBeforeRunning" prefHeight="0.0" prefWidth="84.0" text="QUIT">
                            <font>
                               <Font name="Calibri Bold" size="18.0" />
                            </font>
                         </Button>
                      </children>
+                  </VBox>
                      <padding>
                         <Insets bottom="5.0" right="5.0" />
                      </padding>
@@ -43,6 +53,7 @@
                      </image>
                   </ImageView>
                   <Button fx:id="playButton" mnemonicParsing="false" onAction="#onPlayButton" opacity="0.0" prefHeight="247.0" prefWidth="222.0" />
+
                </children>
             </StackPane>
             <Text id="connectionmessage" strokeType="OUTSIDE" strokeWidth="0.0" text="Lost connection with the server, click on the box to try reconnect" visible="false" wrappingWidth="553.5552368164062">

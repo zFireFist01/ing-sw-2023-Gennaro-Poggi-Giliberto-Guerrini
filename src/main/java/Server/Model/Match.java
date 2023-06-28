@@ -23,12 +23,11 @@ import java.util.*;
 
 
 /**
- * match class in order to store information about the match
+ * This class represents the match
  * @author Marta Giliberto
  */
+
 public class Match {
-
-
     private ArrayList<Player> players;
     private ArrayList<Player> disconnectedPlayers = new ArrayList<>();
     private PlayersChat gameChat;
@@ -36,7 +35,7 @@ public class Match {
     private int width;
     private int height;
     private int numberOfPlayers;
-    private /*final*/ CommonGoalCard[] commonGoals;
+    private  CommonGoalCard[] commonGoals;
     private MatchStatus matchStatus;
     private Player matchOpener;
     private Player firstPlayer;
@@ -52,14 +51,11 @@ public class Match {
     private boolean allPlayersDisconnected = false;
     private MatchStatus oldMatchStatus;
     private List<MVEventListener> mvEventListeners = new ArrayList<>();
-
-
     private Map<MVEventListener, Player> disconnectedPlayersVirtualViews = new HashMap<>();
 
     public Match() {
         this.matchStatus = new NotRunning(this);
         this.gameChat = null;
-
         this.matchOpener = null;
         this.livingRoom = null;
         this.commonGoalDeck = null;
@@ -69,7 +65,6 @@ public class Match {
         this.scores = new HashMap<>();
         this.firstToFinish = null;
         this.mvEventListeners = new ArrayList<>();
-
     }
 
     public Match(int numberOfPlayers, Player matchOpener) {
@@ -89,38 +84,11 @@ public class Match {
         this.mvEventListeners = new ArrayList<>();
     }
 
-    public PlayersChat getGameChat() {
-        return gameChat;
-    }
-
-    public void setSelectedTiles(int[] selectedTiles) {
-        //copy the int array into the arraylist
-        this.selectedTiles = new ArrayList<Integer>();
-        for (int i = 0; i < selectedTiles.length; i++) {
-            this.selectedTiles.add(selectedTiles[i]);
-        }
-    }
-
-    public void clearSelectedTiles() {
-        this.selectedTiles = null;
-    }
-
-    public int[] getSelectedTiles() {
-        if (this.selectedTiles == null) return null;
-        int[] selectedTiles = new int[this.selectedTiles.size()];
-        for (int i = 0; i < this.selectedTiles.size(); i++) {
-            selectedTiles[i] = this.selectedTiles.get(i);
-        }
-        return selectedTiles;
-    }
 
     /**
-     * this method initializes the match
-     *
-     * @author Marta Giliberto
+     * This method initializes the match
      */
     public void setup() {
-
         for (int i = 0; i < numberOfPlayers; i++) {
             if (i < numberOfPlayers - 1) {
                 players.get(i).setNextPlayer(players.get(i + 1));
@@ -137,9 +105,9 @@ public class Match {
     }
 
     /**
-     * this method checks if a player has completed a common goal
-     *
-     * @author Marta Giliberto
+     * This method is called by the Controller after a player has inserted some tiles in his bookshelf;
+     * it checks if a player has completed a common goal
+     * @param player who has just inserted some tiles in his bookshelf
      */
     public void checkCommonGoals(Player player) {
         if (commonGoals[0].check(player.getBookshelf())) {
@@ -150,7 +118,6 @@ public class Match {
             } catch (UnsupportedOperationException e) {
                 //do nothing
             }
-
         }
 
         if (commonGoals[1].check(player.getBookshelf())) {
@@ -161,15 +128,11 @@ public class Match {
             } catch (UnsupportedOperationException e) {
                 //do nothing
             }
-
-
         }
     }
 
     /**
-     * this method extracts first player
-     *
-     * @author Marta Giliberto
+     * This method extracts first player.
      */
     private void extractFirstPlayer() {
         Random random = new Random();
@@ -179,9 +142,7 @@ public class Match {
     }
 
     /**
-     * this method extracts the common goals cards of the mach from the deck
-     *
-     * @author Marta Giliberto
+     * This method extracts the common goals cards of the mach from the deck
      */
     public void extractCommonGoals() {
         commonGoalDeck.shuffle();
@@ -190,19 +151,14 @@ public class Match {
     }
 
     /**
-     * this method adds a new player to the match
-     *
+     * This method adds a new player to the match
      * @param newPlayer who wants to play
-     * @author Marta Giliberto
      */
     public void addContestant(Player newPlayer) throws UnsupportedOperationException {
         if (players.size() == 0) {
             players.add(newPlayer);
             scores.put(newPlayer, 0);
             try {
-                /*if(this.matchStatus instanceof NotRunning){
-                    matchStatus = matchStatus.evolve(); //diventa waiting for players
-                }*/
                 matchStatus = matchStatus.evolve();
                 this.commonGoalDeck = new CommonGoalCardsDeck(numberOfPlayers);
                 this.personalGoalDeck = new PersonalGoalCardsDeck(numberOfPlayers);
@@ -211,28 +167,23 @@ public class Match {
                 this.livingRoom = new LivingRoom(this);
                 this.width = matchOpener.getBookshelf().getBookshelfWidth();
                 this.height = matchOpener.getBookshelf().getBookshelfHeight();
-                //this.mvEventListeners = new ArrayList<>();
-
-                //setup();
-                //notifyMVEventListeners(new MatchStartedEvent(new LightMatch(this)));
                 return;
             } catch (UnsupportedOperationException e) {
                 System.err.println(e.getMessage());
             }
         }
-
         boolean contains = false;
         for (Player p : this.players) {
-            if (p.equals(newPlayer)) {
+            if (p.getPlayerNickName().equals(newPlayer.getPlayerNickName())||p.getPlayerID()==newPlayer.getPlayerID()){
                 contains = true;
             }
         }
+        //if contains == True the id or the nickname of the newPlayer are the same of another player already playing in this match
         if (!contains) {
             players.add(newPlayer);
             scores.put(newPlayer, 0);
             try {
                 matchStatus = matchStatus.evolve();
-                //setup();
                 notifyMVEventListeners(new MatchStartedEvent(new LightMatch(this)));
             } catch (UnsupportedOperationException e) {
                 System.err.println(e.getMessage());
@@ -244,7 +195,6 @@ public class Match {
 
     /**
      * This method is used to remove a player from a match only if the match is in Waiting For Players status.
-     *
      * @param p who wants to leave the match
      */
     public void removeContestant(Player p){
@@ -257,25 +207,23 @@ public class Match {
     }
 
     /**
-     * this method checks if a player has ended the match
-     *
+     * This method checks if a player has the bookshelf full and, in case is the player
+     * is the first one that has fulfilled the bookshelf, the method will set the firstToFinish
+     * as the player
      * @param player who has just ended his move
      * @return false if bookshelf is empty or true if it is full
-     * @author Marta Giliberto
      */
     public boolean checkIfBookshelfIsFull(Player player) {
         BookshelfTileSpot[][] bookshelf;
         bookshelf = player.getBookshelf().getTileMatrix();
 
         for (int i = 0; i < width; i++) {
-
             if (bookshelf[0][i].isEmpty())
                 return false;
-
         }
+
         if (firstToFinish == null) {
             firstToFinish = player;
-            //player.assignPointTile(PointsTile.MATCH_ENDED);
             notifyMVEventListeners(new ModifiedPointsEvent(new LightMatch(this)));
         }
 
@@ -283,19 +231,16 @@ public class Match {
     }
 
     /**
-     * this recursive method is used to count how many tiles with the same tile type are adjacent
-     *
+     * This recursive method is used to count how many tiles with the same tile type are adjacent
      * @param i        index of line
      * @param j        index of column
      * @param matrix   that represents the bookshelf but with int in the place of tile types
      * @param tileType int that represents the tile type, that I want to check now
-     * @author Marta Giliberto
      */
     private void howManyAdjacentTiles(int i, int j, int[][] matrix, int tileType) {
         if (i < 0 || i >= matrix.length || j < 0 || j >= matrix[0].length || matrix[i][j] != tileType) {
             return;
         }
-
         this.count++;
         matrix[i][j] = 0;
 
@@ -306,11 +251,9 @@ public class Match {
     }
 
     /**
-     * this method returns the points made by a player for adjacent tiles
-     *
+     * This method returns the points made by a player for all the adjacent tiles present in his bookshelf
      * @param player whose bookshelf I want to check
      * @return points of adjacent tiles, made by a player
-     * @author Marta Giliberto
      */
     public Integer checkAdjacentTiles(Player player) {
         BookshelfTileSpot[][] bookshelf = player.getBookshelf().getTileMatrix();
@@ -362,12 +305,9 @@ public class Match {
     }
 
     /**
-     * this method calculates final scores of all players of the match, and it sets the winner
-     *
-     * @author Marta Giliberto
+     * This method calculate the final scores of all the players of the match, and it sets the winner
      */
     public void calculateFinalScores() {
-
         Integer maxScores = 0;
         Integer hisScores;
         ArrayList<PointsTile> hisPointsTiles;
@@ -376,7 +316,6 @@ public class Match {
             tmp = players.get(i);
             hisScores = scores.get(tmp);
 
-            //controlla tessere punteggio common goal + fine partita
             hisPointsTiles = tmp.getPointsTiles();
             for (PointsTile p : hisPointsTiles) {
                 if ((p.equals(PointsTile.TWO_1)) ||
@@ -391,19 +330,17 @@ public class Match {
                 } else if ((p.equals(PointsTile.EIGHT_1)) ||
                         (p.equals(PointsTile.EIGHT_2))) {
                     hisScores += 8;
-                }//else if(hisPointsTiles.get(j).equals(PointsTile.MATCH_ENDED)){
-                //    hisScores++;
-                //}
+                }
             }
+            //adding the point of the Match Ended Tile
             if (tmp.getPlayerID() == firstToFinish.getPlayerID()) {
                 hisScores++;
             }
 
-
-            //aggiungo i punti di personal goal card
+            //adding personalGoalCard points
             hisScores += tmp.getPersonalGoalCard().check(tmp.getBookshelf().getTileMatrix());
 
-            //aggiungo i punti per le tessere adiacenti
+            //adding points for adjacent tiles of the same type
             hisScores += checkAdjacentTiles(tmp);
 
             scores.put(tmp, hisScores);
@@ -416,7 +353,7 @@ public class Match {
                 setWinner(tmp);
             }
         }
-        matchStatus.evolve();
+        this.matchStatus = this.matchStatus.evolve();
         notifyMVEventListeners(new ModifiedMatchEndedEvent(new LightMatch(this)));
     }
 
@@ -424,17 +361,8 @@ public class Match {
         this.numberOfPlayers = numberOfPlayers;
     }
 
-    /**
-     * this method sets current player
-     *
-     * @author Marta Giliberto
-     */
     public void setCurrentPlayer() {
-        //this.currentPlayer = currentPlayer.getNextPlayer();
-        /*if(allPlayersDisconnected){
-            currentPlayer = null;
-            return;
-        }*/
+        //set the current player considering the disconnected player
         Player localFirst = currentPlayer;
         currentPlayer = currentPlayer.getNextPlayer();
         while (disconnectedPlayers.contains(currentPlayer)) {
@@ -443,20 +371,13 @@ public class Match {
                 break;
             }
         }
+        //Notify the controller through the ModifiedTurnEvent
         notifyMVEventListeners(new ModifiedTurnEvent(new LightMatch(this)));
-
     }
 
-    /**
-     * this method sets winner
-     *
-     * @author Marta Giliberto
-     */
     public void setWinner(Player winner) {
         this.winner = winner;
     }
-
-    //METODI GETTER
 
     public int getWidth() {
         return width;
@@ -475,7 +396,6 @@ public class Match {
     }
 
     public CommonGoalCard[] getCommonGoals() {
-
         return commonGoals;
     }
 
@@ -520,9 +440,8 @@ public class Match {
     }
 
     /**
-     * this method assign the Match Ended Tile to the first player who filled the bookshelf and set the first to finish attribute
-     *
-     * @author Paolo Gennaro
+     * This method assign the Match Ended Tile to the first player who filled the bookshelf
+     * and set the first to finish attribute
      */
     public void assignMatchEndedTile() {
         if (this.firstToFinish == null) {
@@ -544,6 +463,10 @@ public class Match {
         this.mvEventListeners.remove(listener);
     }
 
+    /**
+     * This method notify all the listeners of the match of an MVEvent
+     * @param event the event that will be sent
+     */
     public void notifyMVEventListeners(MVEvent event) {
         for (MVEventListener listener : this.mvEventListeners) {
             if (!disconnectedPlayersVirtualViews.containsKey(listener)) {
@@ -560,68 +483,100 @@ public class Match {
         return new HashMap<>(disconnectedPlayersVirtualViews);
     }
 
+    /**
+     * This method updates the model to keep track of the disconnection of a client. If the disconnected player was the
+     * current player it sets the new one. If now all players are disconnected it sets the boolean attribute
+     * allPlayersDisconnected to true
+     * @param player player who is disconnecting
+     * @param virtualView virtualView of the player who is disconnecting
+     * @author Patrick Poggi
+     */
     public void disconnectPlayer(Player player, VirtualView virtualView) {
-        //TODO: check
         if(matchStatus instanceof NotRunning){
             mvEventListeners.clear();
             //We clear and set to null all the data structures
             return;
         }else if (matchStatus instanceof WaitingForPlayers) {
-            //matchStatus = ((WaitingForPlayers) matchStatus).devolve();
             removeContestant(player);
             if(matchStatus==null){
                 //The match is now empty, we can remove it
-                //We clear and set to null all the data structures (?) I don't think this is actually needed thanks to
-                //what the controller and the server do in this case.
+                //We clear and set to null all the data structures (?) I don't think this is actually
+                //needed thanks to what the controller and the server do in this case.
             }
             return;
         }
         //If I reach this point, the match is running
         if (!disconnectedPlayers.contains(player)) {
+            //disconnectedPlayersVirtualViews.put(virtualView, player);
             disconnectedPlayers.add(player);
             disconnectedPlayersVirtualViews.put(virtualView, player);
         }
         if(disconnectedPlayers.size() == numberOfPlayers){
             //All the players are disconnected
-            //allPlayersDisconnected = true;
             oldMatchStatus = matchStatus;
-            //matchStatus = null;
             allPlayersDisconnected = true;
             return;
         }
         if(player.equals(currentPlayer)){
+            //Only if the current player is the disconnected one, otherwise we will
+            //clear the selected tiles of a player who is still connected, that is wrong
             setCurrentPlayer();
-            clearSelectedTiles();       //Only if the current player is the disconnected one, otherwise we will
-                                        //clear the selected tiles of a player who is still connected, that is wrong
+            clearSelectedTiles();
         }
         System.out.println("DISCONNECTED PLAYERS: " + disconnectedPlayers);
 
     }
 
+    /**
+     * This method updates the model to keep track of the reconnection of a client.
+     * @param player player who is reconnecting
+     * @param virtualView virtualView of the player who is reconnecting
+     * @author Patrick Poggi
+     */
     public void reconnectPlayer(Player player, VirtualView virtualView) {
-        //TODO: check
         this.disconnectedPlayers.remove(player);
         this.disconnectedPlayersVirtualViews.remove(virtualView);
-        if(/*matchStatus == null*/ allPlayersDisconnected){
+        if(allPlayersDisconnected){
             //All te players were disconnected
-            //matchStatus = new Running(this);
-            //matchStatus = oldMatchStatus;
             allPlayersDisconnected = false;
             setCurrentPlayer();
         }
-        //allPlayersDisconnected = false;
-        //currentPlayer = player;
     }
 
-    public void evolveStatus() throws UnsupportedOperationException{
-       this.matchStatus = this.matchStatus.evolve();
-    }
-
+    /**
+     * This method is called by playerConnected method in Controller when a player is reconnecting and sends a
+     * MatchStartedEvent
+     */
     public void triggerMVUpdate(){
         notifyMVEventListeners(new MatchStartedEvent(new LightMatch(this)));
     }
 
     public boolean areAllPlayersDisconnected(){
         return allPlayersDisconnected;
+    }
+
+    public PlayersChat getGameChat() {
+        return gameChat;
+    }
+
+    public void setSelectedTiles(int[] selectedTiles) {
+        //copy the int array into the arraylist
+        this.selectedTiles = new ArrayList<Integer>();
+        for (int i = 0; i < selectedTiles.length; i++) {
+            this.selectedTiles.add(selectedTiles[i]);
+        }
+    }
+
+    public void clearSelectedTiles() {
+        this.selectedTiles = null;
+    }
+
+    public int[] getSelectedTiles() {
+        if (this.selectedTiles == null) return null;
+        int[] selectedTiles = new int[this.selectedTiles.size()];
+        for (int i = 0; i < this.selectedTiles.size(); i++) {
+            selectedTiles[i] = this.selectedTiles.get(i);
+        }
+        return selectedTiles;
     }
 }

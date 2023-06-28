@@ -3,10 +3,9 @@ package Server.Model.Decks;
 import Server.Model.Cards.*;
 
 /**
- * PersonalGoalCardsDeck in order to store the order of the personal goals
- * @author due2
+ * This class is the deck of personalGoalCards.
+ * @author Valentino Guerrini
  */
-
 public class PersonalGoalCardsDeck extends Deck {
     private int index;
 
@@ -16,7 +15,7 @@ public class PersonalGoalCardsDeck extends Deck {
     }
 
     /**
-     * This method returns the first card of the deck, it also removes it from the deck setting order[0]=0
+     * This method returns the first card of the deck, it also removes it from the deck
      * @return the first card of the deck
      */
     @Override
@@ -56,7 +55,5 @@ public class PersonalGoalCardsDeck extends Deck {
                 return PersonalGoalCard.TYPE12;
         }
         return null;
-
     }
-
 }

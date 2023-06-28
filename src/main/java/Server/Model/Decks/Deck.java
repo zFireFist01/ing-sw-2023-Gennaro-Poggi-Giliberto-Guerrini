@@ -7,9 +7,8 @@ import java.util.List;
 
 /**
  * Deck class to store the order of the class
- * @author Due2
+ * @author Valentino Guerrini
  */
-
 public abstract class Deck {
     static final int size=12;
 
@@ -17,7 +16,7 @@ public abstract class Deck {
     protected final int[] order = new int[size];
 
     /**
-     * constructor of the class Deck
+     * Constructor of the class Deck
      * @param playersNum the number of players in the game
      */
     public Deck(int playersNum){
@@ -28,8 +27,12 @@ public abstract class Deck {
         this.playersNum=playersNum;
     }
 
+    /**
+     * This method will be implemented in the subclasses in which returns the first card of the deck
+     * @return null (in this case)
+     */
     public Card drawOne(){
-        return null;// this method will be implemented in the subclasses
+        return null;
     }
 
     /**

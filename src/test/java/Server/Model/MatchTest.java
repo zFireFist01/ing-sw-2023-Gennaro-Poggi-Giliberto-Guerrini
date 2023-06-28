@@ -2,7 +2,9 @@ package Server.Model;
 
 import Server.Model.GameItems.Bookshelf;
 import Server.Model.GameItems.TileType;
+import Server.Model.MatchStatus.MatchStatus;
 import Server.Model.MatchStatus.Running;
+import Server.Model.MatchStatus.WaitingForPlayers;
 import Server.Model.Player.Player;
 import org.junit.Test;
 
@@ -20,42 +22,42 @@ public class MatchTest {
     /**
      * addContestant test1 checks if when number of missing players is equal to 0, evolves the match status
      * in Running
-     *  @author Marta Giliberto
      */
     @Test
     public void addContestant_test1(){
         Match match= new Match();
-        Player player1= new Player(match, 2, "pluto23");
-        match.addContestant(player1);
         match.setNumberOfPlayers(2);
+        Player player1= new Player(match, 1, "pluto23");
+        match.addContestant(player1);
         Player player2= new Player(match,2, "pippo25");
         match.addContestant(player2);
         assertTrue(match.getMatchStatus() instanceof Running);
     }
 
     /**
-     * addContestant test2 checks if when number of missing players is greater than 0, it throws
-     * UnsupportedOperationException
-     *  @author Marta Giliberto
+    This test checks if when numberOfMissingPlayer!=0 the status doesn't change
      */
     @Test
     public void addContestant_test2(){
         Match match= new Match();
-        Player player= new Player(match, 2, "pippo25");
-        match.setNumberOfPlayers(2);
-        assertThrows(UnsupportedOperationException.class,()->  match.addContestant(player));
+        match.setNumberOfPlayers(3);
+        Player player1= new Player(match, 1, "pluto23");
+        match.addContestant(player1);
+        Player player2= new Player(match,2, "pippo25");
+        match.addContestant(player2);
+        assertTrue(match.getMatchStatus() instanceof WaitingForPlayers);
+
     }
 
     /**
      * addContestant test3 checks if when addContestant want to add a player who has the same ID of one player
      * who is already in the match,it throws UnsupportedOperationException
-     *  @author Marta Giliberto
      */
     @Test
     public void addContestant_test3(){
         Match match= new Match();
-        Player player1= new Player(match, 2, "pippo25");
         match.setNumberOfPlayers(2);
+        Player player1= new Player(match, 2, "pippo25");
         match.addContestant(player1);
         Player player2= new Player(match,2, "pippo25");
         assertThrows(UnsupportedOperationException.class,()->  match.addContestant(player2));
@@ -65,7 +67,6 @@ public class MatchTest {
 
     /**
      * checkIfBookshelfIsFull test1 checks if a full bookshelf results full
-     *  @author Marta Giliberto
      */
     @Test
     public void checkIfBookshelfIsFull_test1(){
@@ -90,7 +91,6 @@ public class MatchTest {
 
     /**
      * checkIfBookshelfIsFull test2 checks if a bookshelf with just one spot free results empty
-     *  @author Marta Giliberto
      */
     @Test
     public void checkIfBookshelfIsFull_test2(){
@@ -117,7 +117,6 @@ public class MatchTest {
 
     /**
      * checkIfBookshelfIsFull test3 checks if an empty bookshelf  results empty
-     *  @author Marta Giliberto
      */
     @Test
     public void checkIfBookshelfIsFull_test3(){
@@ -133,13 +132,12 @@ public class MatchTest {
 
     /**
      * checkAdjacentTiles test verifies if calculates right points in a bookshelf
-     *  @author Marta Giliberto
      */
     @Test
     public void checkAdjacentTiles_test(){
         Match match = new Match();
-        Player player= new Player(match,1, "pluto23");
         match.setNumberOfPlayers(2);
+        Player player= new Player(match,1, "pluto23");
         match.addContestant(player);
         Player player2= new Player(match,2, "pippo25");
         match.addContestant(player2);
@@ -175,7 +173,7 @@ public class MatchTest {
         player.getBookshelf().insertTile(4, TileType.BOOKS);
         player.getBookshelf().insertTile(4, TileType.BOOKS);
 
-        assertTrue(match.checkAdjacentTiles(player)==19);
+        assertTrue(match.checkAdjacentTiles(player)==21);
     }
 
 

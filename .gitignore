@@ -108,3 +108,5 @@ mvc.txt
 target/
 deliverables/jar/ClientFiles
 deliverables/jar/ClientFiles/
+
+lib/

@@ -5,8 +5,13 @@ import Server.Model.GameItems.Bookshelf;
 import Server.Model.GameItems.BookshelfTileSpot;
 import Server.Model.GameItems.TileType;
 /**
- * This class represents the third common goal card
- * @author due2
+ * This class represents the third common goal card:
+ * "Four groups each containing at least
+ * 4 tiles of the same type (not necessarily
+ * in the depicted shape).
+ * The tiles of one group can be different
+ * from those of another group."
+ * @author Valentino Guerrini
  */
 
 public class CommonGoalCard3 extends CommonGoalCard {
@@ -18,17 +23,14 @@ public class CommonGoalCard3 extends CommonGoalCard {
     /**
      * constructor of the class CommonGoalCard3 that calls the constructor of the superclass
      * @param playersNum the number of players in the game
-     * @param secondIstance true if it is the second card, false otherwise in order to know if the card has to be created with the second instance of the points tiles
+     * @param secondInstance true if it is the second card, false otherwise in order to know
+     *                      if the card has to be created with the second instance of the
+     *                      points tiles
      */
-    public CommonGoalCard3(int playersNum, boolean secondIstance) {
-        super(playersNum, secondIstance);
+    public CommonGoalCard3(int playersNum, boolean secondInstance) {
+        super(playersNum, secondInstance);
     }
 
-    /**
-     * This method checks if the common goal card is completed(if there are at least four adjacent tiles with the same tile type)
-     * @param bookshelf the bookshelf of the player
-     * @return true if the common goal card is completed, false otherwise
-     */
     @Override
     public boolean check(Bookshelf bookshelf) {
         BookshelfTileSpot[][] shelf = bookshelf.getTileMatrix();
@@ -72,7 +74,31 @@ public class CommonGoalCard3 extends CommonGoalCard {
 
     }
 
+    /**
+     * This method counts the number of adjacent tiles with the same tile type
+     * @requires tileType !=0
+     * @param shelf is an int matrix that was created starting from a bookshelf
+     *              of tiles, associating a different number to each tileType
+     * @param i index of row of the shelf
+     * @param j index of column of the shelf
+     * @param tileType is an int associated to the specific tileType I want to
+     *                 find the count of adjacent tiles
+     * @return the count of adjacent tiles of the same type as tileType
+     */
+    private int countAdjacentTiles(int[][] shelf, int i, int j, int tileType) {
+        if (i < 0 || i >= shelf.length || j < 0 || j >= shelf[0].length || shelf[i][j] != tileType) {
+            return 0;
+        }
 
+        // Mark the tile as visited
+        shelf[i][j] = 0;
+
+        // Count the tile and look for more in each direction
+        return 1 + countAdjacentTiles(shelf, i + 1, j, tileType)
+                + countAdjacentTiles(shelf, i - 1, j, tileType)
+                + countAdjacentTiles(shelf, i, j + 1, tileType)
+                + countAdjacentTiles(shelf, i, j - 1, tileType);
+    }
 
     @Override
     public String[] getCommonGoalDescription(){
@@ -88,41 +114,6 @@ public class CommonGoalCard3 extends CommonGoalCard {
         description[7] = "                           ";
         return description;
     }
-    /*
-    @Override
-    public String getDescription(){
-        return "Four groups each containing at least 4 tiles of the same type (not necessarily in the depicted shape). The tiles of one group can be different from those of another group.";
-    }
-    */
-
-    /**
-     * this method counts the number of adjacent tiles with the same tile type
-     * @requires tileType !=0
-     * @param shelf
-     * @param i
-     * @param j
-     * @param tileType
-     * @return
-     */
-
-    private int countAdjacentTiles(int[][] shelf, int i, int j, int tileType) {
-        if (i < 0 || i >= shelf.length || j < 0 || j >= shelf[0].length || shelf[i][j] != tileType) {
-            return 0;
-        }
-
-        // Mark the tile as visited
-        shelf[i][j] = 0;
-
-        // Count the tile and look for more in each direction
-        return 1 + countAdjacentTiles(shelf, i + 1, j, tileType)
-                + countAdjacentTiles(shelf, i - 1, j, tileType)
-                + countAdjacentTiles(shelf, i, j + 1, tileType)
-                + countAdjacentTiles(shelf, i, j - 1, tileType);
-    }
-    /**
-     * This method returns the ID of the common goal card
-     * @return the ID of the common goal card
-     */
     @Override
     public int getCardID() {
         return 3;

@@ -5,14 +5,24 @@ import Server.Model.GameItems.Bookshelf;
 import Server.Model.GameItems.BookshelfTileSpot;
 import Server.Model.GameItems.TileType;
 
+/**
+ *  This class represents the tenth common goal card:
+ *  "Five tiles of the same type forming an X. "
+ * @author Patrick Poggi
+ */
 public class CommonGoalCard10 extends CommonGoalCard {
 
     public CommonGoalCard10() {
         super();
     }
 
-    public CommonGoalCard10(int playersNum, boolean secondIstance) {
-        super(playersNum, secondIstance);
+    /**
+     * constructor of the class CommonGoalCard10 that calls the constructor of the superclass
+     * @param playersNum is the number of players in the game
+     * @param secondInstance is true if there are 5 players in the game, false otherwise
+     */
+    public CommonGoalCard10(int playersNum, boolean secondInstance) {
+        super(playersNum, secondInstance);
     }
 
     @Override
@@ -43,36 +53,15 @@ public class CommonGoalCard10 extends CommonGoalCard {
 
         return false;
     }
-    /**
-     * This method returns the ID of the common goal card
-     * @return the ID of the common goal card
-     */
+
     @Override
     public int getCardID() {
         return 10;
     }
 
-
-    /**
-     * @return a string that describes CommonGoalCard10
-     * @author martagiliberto
-     */
-/*
-    @Override
-    public String getDescription() {
-        return "Five tiles of the same type forming an X.";
-    }
-    */
-
-    /**
-     * this method returns a CLI representation of CommonGoalCard10's description
-     * @return the String[] "matrix" of the representation
-     * @author martagiliberto
-     */
     @Override
     public String[] getCommonGoalDescription(){
         String[] description = new String[8];
-
         description[0] = "Five tiles of the same type";
         description[1] = "forming an X.              ";
         description[2] = "                           ";

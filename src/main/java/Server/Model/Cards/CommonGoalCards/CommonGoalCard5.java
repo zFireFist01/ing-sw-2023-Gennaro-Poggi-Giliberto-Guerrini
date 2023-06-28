@@ -5,8 +5,12 @@ import Server.Model.GameItems.Bookshelf;
 import Server.Model.GameItems.BookshelfTileSpot;
 import Server.Model.GameItems.TileType;
 /**
- * This class represents the fifth common goal card
- * @author due2
+ * This class represents the fifth common goal card:
+ * "Three columns each formed by 6 tiles
+ * of maximum three different types. One
+ * column can show the same or a different
+ * combination of another column."
+ * @author Valentino Guerrini
  */
 
 public class CommonGoalCard5 extends CommonGoalCard {
@@ -18,17 +22,13 @@ public class CommonGoalCard5 extends CommonGoalCard {
     /**
      * constructor of the class CommonGoalCard5 that calls the constructor of the superclass
      * @param playersNum the number of players in the game
-     * @param secondIstance true if it is the second card, false otherwise in order to know if the card has to be created with the second instance of the points tiles
+     * @param secondInstance true if it is the second card, false otherwise in order to know
+     *                       if the card has to be created with the second instance of the
+     *                       points tiles
      */
-    public CommonGoalCard5(int playersNum, boolean secondIstance) {
-        super(playersNum, secondIstance);
+    public CommonGoalCard5(int playersNum, boolean secondInstance) {
+        super(playersNum, secondInstance);
     }
-
-    /**
-     * This method checks if the common goal card is completed if the 6x5 matrix contains three rows of at most 3 different tile types each
-     * @param bookshelf the bookshelf of the player
-     * @return true if the common goal card is completed, false otherwise
-     */
 
     @Override
     public boolean check(Bookshelf bookshelf) {
@@ -79,10 +79,7 @@ public class CommonGoalCard5 extends CommonGoalCard {
         }
 
     }
-    /**
-     * This method returns the ID of the common goal card
-     * @return the ID of the common goal card
-     */
+
     @Override
     public int getCardID() {
         return 5;

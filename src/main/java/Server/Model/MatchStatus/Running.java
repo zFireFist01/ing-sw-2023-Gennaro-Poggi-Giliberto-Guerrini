@@ -3,20 +3,20 @@ package Server.Model.MatchStatus;
 import Server.Model.Match;
 
 /**
- * this class represents the Running status
- * @author martagiliberto
+ * This class represents the Running status
+ * @author Marta Giliberto
  */
 public class Running extends MatchStatus {
 
     public Running(Match match){
         super(match);
         match.setup();
-        //MVEvent matchsatarted
+        //MVEvent match started
     }
     /**
-     * this method evolves the match status from running to closing
-     * @return match
-     * @throws UnsupportedOperationException if match status can't evolve
+     * This method evolves the match status from Running to Closing
+     * @return the Closing status
+     * @throws UnsupportedOperationException should never be thrown
      */
     @Override
     public MatchStatus evolve() throws UnsupportedOperationException {

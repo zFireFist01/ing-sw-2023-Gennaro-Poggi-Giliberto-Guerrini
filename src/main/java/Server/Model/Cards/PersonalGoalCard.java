@@ -5,12 +5,11 @@ import Server.Model.GameItems.TileType;
 import com.google.gson.annotations.Expose;
 
 /**
- * PersonalGoalCard defines all the type of personal goal cards that exists in the actual game
- * @author due2
+ * This class defines all the type of personal goal cards that exists in the actual game
+ * @author Valentino Guerrini
  */
 
 public enum PersonalGoalCard implements Card {
-    // Personal Goal Cards
     //in the matrix 0,0 is the top left corner
     TYPE1(new BookshelfTileSpot[][] {
         { new BookshelfTileSpot(TileType.PLANTS), new BookshelfTileSpot(), new BookshelfTileSpot(TileType.FRAMES), new BookshelfTileSpot(), new BookshelfTileSpot() },
@@ -97,27 +96,17 @@ public enum PersonalGoalCard implements Card {
         { new BookshelfTileSpot(), new BookshelfTileSpot(), new BookshelfTileSpot(), new BookshelfTileSpot(), new BookshelfTileSpot(TileType.GAMES) },
         { new BookshelfTileSpot(TileType.CATS), new BookshelfTileSpot(), new BookshelfTileSpot(), new BookshelfTileSpot(), new BookshelfTileSpot() } });
 
-
-
-
-
-
-
     @Expose
-    private BookshelfTileSpot[][] tileMatrix; //ok
+    private BookshelfTileSpot[][] tileMatrix;
+
 
     /**
      * Constructor for the PersonalGoalCard class
-     * @param tileMatrix
+     * @param tileMatrix one of the type of the PersonalGoalCards
      */
     PersonalGoalCard(BookshelfTileSpot[][] tileMatrix) {
         this.tileMatrix = tileMatrix;
     }
-
-    /**
-     * Returns the tile matrix of the personal goal card
-     * @return tileMatrix
-     */
 
     public BookshelfTileSpot[][] getTileMatrix(){
         return tileMatrix;
@@ -125,7 +114,7 @@ public enum PersonalGoalCard implements Card {
 
     /**
      * Checks if the player has completed the personal goal card at the end of the match
-     * @param playerBookshelf
+     * @param playerBookshelf the bookshelf of the player
      * @return Player's score
      */
     public int check(BookshelfTileSpot[][] playerBookshelf){
@@ -151,6 +140,7 @@ public enum PersonalGoalCard implements Card {
         }
 
     }
+
     /**
      * Returns the card ID
      * @return cardID

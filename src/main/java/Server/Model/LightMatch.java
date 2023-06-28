@@ -17,23 +17,23 @@ import java.util.Map;
  */
 public class LightMatch {
 
-    private final PlayersChat gameChat; //ok
+    private final PlayersChat gameChat;
     private final int width;
     private final int height;
     @Expose
-    private final Player currentPlayer; //ok
+    private final Player currentPlayer;
     @Expose
-    private final Player winner; //ok
+    private final Player winner;
     @Expose
-    private final LivingRoom livingRoom; //ok
+    private final LivingRoom livingRoom;
     @Expose
-    private final Player firstToFinish;//ok
+    private final Player firstToFinish;
     @Expose
     private final Player firstPlayer;
     @Expose
-    private ArrayList<Player> players;//ok
+    private ArrayList<Player> players;
     @Expose
-    private final int numberOfPlayers; //ok
+    private final int numberOfPlayers;
     @Expose
     private final CommonGoalCard[] commonGoals;
     private MatchStatus matchStatus;
@@ -72,6 +72,7 @@ public class LightMatch {
     public ArrayList<Player> getPlayers() {
         return players;
     }
+
     public Player getFirstPlayer() {return firstPlayer;}
 
     public int getNumberOfPlayers() {
@@ -109,6 +110,10 @@ public class LightMatch {
     public Player getFirstToFinish() {
         return firstToFinish;
     }
+
+    /**
+     * This set method is used just in GUI in order to manage the scoreboard
+     */
     private void setOrderOfPlayers() {
         Player p= this.getFirstPlayer();
         for (int i=0; i<numberOfPlayers; i++){

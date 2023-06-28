@@ -51,16 +51,16 @@ public class Player {
     public TileType[] getTakenTiles(){
         return this.takenTiles;
     }
+
+    /**
+     * This method set the takenTiles to null
+     */
     public void clearTakenTiles() {
         this.takenTiles = null;
     }
 
-    /**
-     * The Getter for the next player
-     * @return is the next player assigned to the player
-     */
     public Player getNextPlayer() {
-        //return nextPlayer;
+        //return nextPlayer considering the disconnected player
         Player localNextPlayer = nextPlayer;
         while(m.getDisconnectedPlayers().contains(localNextPlayer)) {
             localNextPlayer = localNextPlayer.getNextPlayer();
@@ -71,67 +71,37 @@ public class Player {
         return localNextPlayer;
     }
 
-    /**
-     * We set the next player
-     * @param nextPlayer is the player that is going to play after
-     */
     public void setNextPlayer(Player nextPlayer) {
         this.nextPlayer = nextPlayer;
     }
 
-    /**
-     * The getter of the Point Tile array which contains the Point Tiles of the player
-     * @return a copy of the pointsTiles arraylist
-     */
     public ArrayList<PointsTile> getPointsTiles() {
         return new ArrayList<PointsTile>(this.pointsTiles);
     }
 
-    /**
-     * The Getter for the Bookshelf of the player
-     * @return is the Bookshelf assigned to the player
-     */
     public Bookshelf getBookshelf() {
         return bookshelf;
     }
 
-    /**
-     * The Getter for the PersonalGoalCard of the player
-     * @return is the PersonalGoalCard assigned to the player
-     */
     public PersonalGoalCard getPersonalGoalCard() {
         return personalGoalCard;
     }
 
-    /**
-     * We assign the Player his PersonalGoalCard
-     * @param personalGoalCard is the PersonalGoalCard we assign to the player
-     */
     public void assignPersonalGoalCard(PersonalGoalCard personalGoalCard) {
         this.personalGoalCard = personalGoalCard;
     }
 
-
-
-    /**
-     * The Getter for the NickName
-     * @return is the playerNickName defined in the Constructor of this class
-     */
     public String getPlayerNickName() {
         return playerNickName;
     }
 
-    /**
-     * The Getter for the PlayerID
-     * @return is the playerID defined in the Constructor of this class
-     */
     public int getPlayerID() {
         return playerID;
     }
 
     /**
      * This method is for assign points to a specific player and store the value
-     * @param tile is the PointsTile we will store in to the ArrayList
+     * @param tile is the PointsTile we will store in to the pointsTiles ArrayList
      */
     public void assignPointTile(PointsTile tile) throws UnsupportedOperationException{
         if(tile.toString().contains("1") && this.pointsTiles.stream().map(Enum::toString).anyMatch(t->t.contains("1"))) throw new UnsupportedOperationException("You can't have 2 tiles of the same CommonGoalCard!");
