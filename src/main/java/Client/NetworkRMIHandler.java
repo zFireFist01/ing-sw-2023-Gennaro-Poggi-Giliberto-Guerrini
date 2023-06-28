@@ -97,7 +97,7 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements RemoteNetw
             return;
         }
         connected = true;
-        timer.schedule(new TimerTask() {
+       timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 try {
@@ -122,7 +122,7 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements RemoteNetw
                     return;
                 }
             }
-        }, 0, 1000);
+        }, 0, 5000);
     }
 
 

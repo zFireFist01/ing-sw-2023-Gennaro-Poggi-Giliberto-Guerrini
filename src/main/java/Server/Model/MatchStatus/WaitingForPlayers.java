@@ -3,8 +3,8 @@ package Server.Model.MatchStatus;
 import Server.Model.Match;
 
 /**
- * this class represents the Waiting for players status
- * @author martagiliberto
+ * This class represents the WaitingForPlayers status
+ * @author Marta Giliberto
  */
 public class WaitingForPlayers extends MatchStatus {
     private int numberMissingPlayers;
@@ -13,12 +13,12 @@ public class WaitingForPlayers extends MatchStatus {
         super(match);
         this.numberMissingPlayers = match.getNumberOfPlayers() - match.getPlayers().size();
     }
-    /**
-     * this method tries to evolve the Match status from WaitingForPlayers to Running
-     * @return Running status
-     * @throws UnsupportedOperationException if Match status can't evolve
-     */
 
+    /**
+     * This method tries to evolve the Match status from WaitingForPlayers to Running
+     * @return Running status
+     * @throws UnsupportedOperationException if Match status can't evolve due to missing players
+     */
     @Override
     public MatchStatus evolve() throws UnsupportedOperationException{
         numberMissingPlayers--;
@@ -30,6 +30,11 @@ public class WaitingForPlayers extends MatchStatus {
         }
     }
 
+    /**
+     * This method is called when one player disconnect while the match in WaitingForPlayers status.
+     * @return null if the number of missing players is equal to the number of players of the match;
+     *         this otherwise;
+     */
     @Override
     public MatchStatus devolve(){
         numberMissingPlayers++;

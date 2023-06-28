@@ -16,20 +16,18 @@ public abstract class CommonGoalCard implements Card {
     @Expose
     private List<PointsTile> pointsTiles = new ArrayList<>();
     //USED FOR SERIALIZATION
-    public CommonGoalCard(){
-
-    }
+    public CommonGoalCard(){}
 
    /**
-    * constructor of the class, it sets the points tiles based on the number of players
+    * Constructor of the class, it sets the points tiles based on the number of players
     * @param playersNum the number of players
-    * @param secondIstance true if it is the second card, false otherwise in order to know if the card has to be created with the second instance of the points tiles
+    * @param secondInstance true if it is the second card, false otherwise in order to
+    *                       know if the card has to be created with the second instance
+    *                       of the points tiles
     */
-
-
-    public CommonGoalCard(int playersNum,boolean secondIstance) {
+    public CommonGoalCard(int playersNum,boolean secondInstance) {
         if (playersNum == 2) {
-           if(!secondIstance) {
+           if(!secondInstance) {
                pointsTiles.add(PointsTile.FOUR_1);
                pointsTiles.add(PointsTile.EIGHT_1);
            }else{
@@ -37,7 +35,7 @@ public abstract class CommonGoalCard implements Card {
                pointsTiles.add(PointsTile.EIGHT_2);
            }
         }else if(playersNum == 3){
-            if(!secondIstance) {
+            if(!secondInstance) {
                 pointsTiles.add(PointsTile.FOUR_1);
                 pointsTiles.add(PointsTile.SIX_1);
                 pointsTiles.add(PointsTile.EIGHT_1);
@@ -47,7 +45,7 @@ public abstract class CommonGoalCard implements Card {
                 pointsTiles.add(PointsTile.EIGHT_2);
             }
         }else if(playersNum == 4){
-            if(!secondIstance) {
+            if(!secondInstance) {
                 pointsTiles.add(PointsTile.TWO_1);
                 pointsTiles.add(PointsTile.FOUR_1);
                 pointsTiles.add(PointsTile.SIX_1);
@@ -63,7 +61,7 @@ public abstract class CommonGoalCard implements Card {
     }
 
     /**
-     * This method returns the laste points tile of the common goal card
+     * This method removes the last element of pointsTiles list of the common goal card
      *
      * @throws UnsupportedOperationException if the common goal card doesn't have points tiles
      */
@@ -75,6 +73,11 @@ public abstract class CommonGoalCard implements Card {
         }
     }
 
+    /**
+     * This method returns the last element of pointsTiles list of the common goal card
+     *
+     * @throws UnsupportedOperationException if the common goal card doesn't have points tiles
+     */
     public PointsTile getPointsTile() throws UnsupportedOperationException {
         if(pointsTiles.isEmpty()){
             throw new UnsupportedOperationException("this cards doesn't have points tiles!");
@@ -84,14 +87,11 @@ public abstract class CommonGoalCard implements Card {
         }
     }
 
-
-
-    public abstract String[] getCommonGoalDescription();
-
     /**
-     * This method returns the points tiles of the common goal card
-     * @return the points tiles of the common goal card
+     * This method is used for CLI in order to provide the description of the common goal card
+     * @return the description of the common goal card
      */
+    public abstract String[] getCommonGoalDescription();
 
     public List<PointsTile> getPointsTiles() {
         //return a copy of the list
@@ -99,12 +99,13 @@ public abstract class CommonGoalCard implements Card {
     }
 
     /**
-     * This method returns the id of the card
-     * @return the id of the card
+     * This method returns the ID of the common goal card; it changes for every common goal card
+     * @return the ID of the common goal card
      */
     public int getCardID(){
         return 0;
     }
+
 
     //USED FOR DESERIALIZATION
 
@@ -112,10 +113,9 @@ public abstract class CommonGoalCard implements Card {
         this.pointsTiles = pointsTiles;
     }
 
-
-
     /**
-     * This method checks if the common goal card is completed, since is abstract it must be implemented in the subclasses
+     * This method checks if the common goal card is completed,
+     * since is abstract it must be implemented in the subclasses
      * @param bookshelf the bookshelf of the player
      * @return true if the common goal card is completed, false otherwise
      */

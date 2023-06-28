@@ -4,20 +4,25 @@ import Server.Model.Cards.CommonGoalCard;
 import Server.Model.GameItems.Bookshelf;
 import Server.Model.GameItems.BookshelfTileSpot;
 
+/** This class represents the eleventh common goal card:
+ *  "Five tiles of the same type forming a
+ * diagonal."
+ * @author Patrick Poggi
+ */
 public class    CommonGoalCard11 extends CommonGoalCard {
 
     public CommonGoalCard11() {
         super();
     }
-    public CommonGoalCard11(int playersNum, boolean secondIstance) {
-        super(playersNum, secondIstance);
+    /**
+     * constructor of the class CommonGoalCard11 that calls the constructor of the superclass
+     * @param playersNum is the number of players in the game
+     * @param secondInstance is true if there are 5 players in the game, false otherwise
+     */
+    public CommonGoalCard11(int playersNum, boolean secondInstance) {
+        super(playersNum, secondInstance);
     }
 
-    /**
-     *
-     * @param bookshelf the bookshelf of the player
-     * @return true if and only if the player has achieved the 11th common goal (5 tiles of the same type in a diagonal)
-     */
     @Override
     public boolean check(Bookshelf bookshelf) {
         BookshelfTileSpot[][] bs = bookshelf.getTileMatrix();
@@ -55,31 +60,12 @@ public class    CommonGoalCard11 extends CommonGoalCard {
                     );
         return res;
     }
-    /**
-     * This method returns the ID of the common goal card
-     * @return the ID of the common goal card
-     */
+
     @Override
     public int getCardID() {
         return 11;
     }
 
-
-    /**
-     * @return a string that describes CommonGoalCard11
-     * @author martagiliberto
-     */
- /*
-    @Override
-    public String getDescription() {
-        return "Five tiles of the same type forming a diagonal. ";
-    }
-*/
-    /**
-     * this method returns a CLI representation of CommonGoalCard11's description
-     * @return the String[] "matrix" of the representation
-     * @author martagiliberto
-     */
     @Override
     public String[] getCommonGoalDescription(){
         String[] description = new String[8];

@@ -2,20 +2,26 @@ package Server.Model.Cards;
 
 import Server.Model.Cards.CommonGoalCards.*;
 import Server.Model.GameItems.PointsTile;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.io.IOException;
 
-
+/**
+ * This class represents a type adapter for the CommonGoalCard class used for serializing and deserializing
+ * CommonGoalCard objects to JSON format using the Gson library.
+ */
 public class CommonGoalCardAdapter extends TypeAdapter<CommonGoalCard>{
+
+    /**
+     * The method writes a CommonGoalCard object to JSON format.
+     * @param out  The JSON writer to write to.
+     * @param abstractAttribute The CommonGoalCard object to write to JSON.
+     * @throws IOException If an error occurs during JSON writing.
+     */
     @Override
     public void write(JsonWriter out, CommonGoalCard abstractAttribute) throws IOException {
         if (abstractAttribute instanceof CommonGoalCard1) {
@@ -143,6 +149,12 @@ public class CommonGoalCardAdapter extends TypeAdapter<CommonGoalCard>{
 
     }
 
+    /**
+     * This method reads a CommonGoalCard object from JSON.
+     * @param in The JSON reader to read from.
+     * @return The deserialized CommonGoalCard object.
+     * @throws IOException If an error occurs during JSON reading.
+     */
     @Override
     public CommonGoalCard read(JsonReader in) throws IOException {
         String type = null;

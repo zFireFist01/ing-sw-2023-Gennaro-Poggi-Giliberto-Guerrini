@@ -12,10 +12,9 @@ import java.util.Random;
 
 import static Utils.MathUtils.*;
 
-
 /**
- * @Class Livingroom
- * @author patrickpoggi
+ * This method represents the living room
+ * @author Patrick Poggi
  */
 public class LivingRoom {
 
@@ -23,17 +22,17 @@ public class LivingRoom {
     private final static int LIVINGROOMHEIGHT = 9;
 
     @Expose
-    private LivingRoomTileSpot[][] tileMatrix; //ok
+    private LivingRoomTileSpot[][] tileMatrix;
 
     private Map<TileType, Integer> tileSack;
 
 
-    private Match m; // Link to the match this livingroom belongs to
+    private Match m; // Link to the match this living room belongs to
 
     /**
-     * Initializes the tileMatrix as a Livingoroom without tiles
+     * Initializes the tileMatrix as a LivingRoom without tiles
      * Creates a tileSack
-     * @param m refers to the match this livingroom belongs in
+     * @param m refers to the match this LivingRoom belongs in
      */
     public LivingRoom(Match m){
         tileMatrix = new LivingRoomTileSpot[LIVINGROOOMWIDTH][LIVINGROOMHEIGHT];
@@ -109,6 +108,12 @@ public class LivingRoom {
         }
     }
 
+    /**
+     * This method is used to check if the refresh of the LivingRoom is needed.
+     * The LivingRoom needs to refresh when it is empty
+     * or there are only tiles left with no adjacent tiles
+     * @return true if the refresh is needed, false otherwise
+     */
     private boolean livingroomneedRefresh(){
         for(int i=0;i<LIVINGROOMHEIGHT;i++){
             for(int j=0;j<LIVINGROOOMWIDTH;j++){
@@ -177,9 +182,6 @@ public class LivingRoom {
         return true;
     }
 
-    /**
-     * @return A copy of the matrix that describes the livingroom of match m, in the current state
-     */
     public LivingRoomTileSpot[][] getTileMatrix(){
         //Sharing a copy of the Livingroom, not the actual matrix
         LivingRoomTileSpot[][] copy = new LivingRoomTileSpot[LIVINGROOOMWIDTH][LIVINGROOMHEIGHT];
@@ -192,7 +194,7 @@ public class LivingRoom {
     }
 
     /**
-     * Refills the Livingroom
+     * This method refresh the LivingRoom
      */
     public void refreshLivingRoom(){
         Random r = new Random();
@@ -241,11 +243,6 @@ public class LivingRoom {
         }
     }
 
-    /**
-     *
-     * @return a map where the key is the TileType and the value is the number of tiles of that kind that
-     * are still available
-     */
     public Map<TileType, Integer> getTileSack(){
         //Sharing a copy of the sack, not the actual map
         Map<TileType, Integer> copy = new HashMap<>(tileSack);
@@ -253,14 +250,14 @@ public class LivingRoom {
     }
 
     /**
-     *
+     *This method allows the controller to send an "order" of picking one tile
      * @param i row of the tile the caller wants to select
      * @param j column of the tile the caller wants to select
      * @return the TileType of the picked tile
-     * @throws UnsupportedOperationException when the tile isn't real or isn't pickable according to the game's rule
+     * @throws UnsupportedOperationException when the tile isn't real or isn't pickable
+     * according to the game's rule
      */
     public TileType takeTile(int i, int j) throws UnsupportedOperationException{
-        //TODO: think if this method should be a void
         if(!tileMatrix[i][j].isReal()){
             throw new UnsupportedOperationException("The tile you want to pick isn't real!");
         }
@@ -368,7 +365,7 @@ public class LivingRoom {
     }
 
     /**
-     * Helper method
+     * This method checks if the tile with in position i,j of the LivingRoom as at least one free edge
      * @param i row of the tile we want to check
      * @param j column of the tile we want tp check
      * @return true if and only if the tile we're checking has at least one free edge
@@ -418,6 +415,11 @@ public class LivingRoom {
     }
 
 
+    /**
+     * This method is called by takeTiles method and is used to send an MVEvent,
+     * in order to update the views.
+     * @param event is the MVevent I want to send
+     */
     public void notifyMVEventListeners(MVEvent event){
         this.m.notifyMVEventListeners(event);
     }

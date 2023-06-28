@@ -5,10 +5,13 @@ import Server.Model.GameItems.Bookshelf;
 import Server.Model.GameItems.TileType;
 
 /**
- * This class represents the sixth common goal card
- * @author due2
+ * This class represents the sixth common goal card:
+ * "Two lines each formed by 5 different
+ * types of tiles. One line can show the
+ * same or a different combination of the
+ * other line."
+ * @author Valentino Guerrini
  */
-
 public class CommonGoalCard6 extends CommonGoalCard {
 
     public CommonGoalCard6(){
@@ -18,16 +21,14 @@ public class CommonGoalCard6 extends CommonGoalCard {
     /**
      * constructor of the class CommonGoalCard6 that calls the constructor of the superclass
      * @param playersNum the number of players in the game
-     * @param secondIstance true if it is the second card, false otherwise in order to know if the card has to be created with the second instance of the points tiles
+     * @param secondInstance true if it is the second card, false otherwise in order to know
+     *                       if the card has to be created with the second instance of the
+     *                       points tiles
      */
-    public CommonGoalCard6(int playersNum, boolean secondIstance) {
-        super(playersNum, secondIstance);
+    public CommonGoalCard6(int playersNum, boolean secondInstance) {
+        super(playersNum, secondInstance);
     }
-    /**
-     * This method checks if the common goal card is completed if there are at least two rows with one tile of each type
-     * @param bookshelf the bookshelf of the player
-     * @return true if the common goal card is completed, false otherwise
-     */
+
     @Override
     public boolean check(Bookshelf bookshelf) {
         int count = 0, count2 = 0;
@@ -66,15 +67,11 @@ public class CommonGoalCard6 extends CommonGoalCard {
         }
         return false;
     }
-    /**
-     * This method returns the ID of the common goal card
-     * @return the ID of the common goal card
-     */
+
     @Override
     public int getCardID() {
         return 6;
     }
-
 
     public String[] getCommonGoalDescription(){
         String[] description = new String[8];

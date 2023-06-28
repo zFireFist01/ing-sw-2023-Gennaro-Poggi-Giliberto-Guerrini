@@ -8,14 +8,26 @@ import Server.Model.GameItems.TileType;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ *  This class represents the ninth common goal card:
+ *  "Eight tiles of the same type. There’s no
+ *  restriction about the position of these
+ *  tiles. "
+ * @author Patrick Poggi
+ */
 public class CommonGoalCard9 extends CommonGoalCard {
 
     public CommonGoalCard9() {
         super();
     }
 
-    public CommonGoalCard9(int playersNum, boolean secondIstance) {
-        super(playersNum, secondIstance);
+    /**
+     * constructor of the class CommonGoalCard9 that calls the constructor of the superclass
+     * @param playersNum is the number of players in the game
+     * @param secondInstance is true if there are 5 players in the game, false otherwise
+     */
+    public CommonGoalCard9(int playersNum, boolean secondInstance) {
+        super(playersNum, secondInstance);
     }
 
     @Override
@@ -42,12 +54,6 @@ public class CommonGoalCard9 extends CommonGoalCard {
         return false;
     }
 
-
-    /**
-     * This method returns a CLI representation (ASCII-art like) of the 9th common goal card's description
-     * @return the String[] "matrix" of the representation
-     * @author patrickpoggi
-     */
     @Override
     public String[] getCommonGoalDescription() {
         String[] description = new String[8];
@@ -64,21 +70,6 @@ public class CommonGoalCard9 extends CommonGoalCard {
         return description;
     }
 
-    /**
-     * @return a string that describes the 9th common goal
-     * @author patrickpoggi
-     */
-
-    /*
-    @Override
-    public String getDescription() {
-        return "Eight tiles of the same type. There is no restriction about the postion of these tiles";
-    }
-    */
-    /**
-     * This method returns the ID of the common goal card
-     * @return the ID of the common goal card
-     */
     @Override
     public int getCardID() {
         return 9;

@@ -4,8 +4,9 @@ import Server.Model.Match;
 import com.google.gson.annotations.Expose;
 
 /**
- * @Class LivingRoomTileSpot
- * @author patrickpoggi
+ * This class represents the spot of the LivingRoom
+ * @value dotsNumber represents the actual dots in the living room presents in the physical game
+ * @author Patrick Poggi
  */
 public class LivingRoomTileSpot extends TileSpot {
     @Expose
@@ -19,12 +20,6 @@ public class LivingRoomTileSpot extends TileSpot {
         this.dotsNumber = dotsNumber;
     }
 
-    public LivingRoomTileSpot(Match m, int dotsNumber, TileType tt){
-        super(tt);
-        this.match = m;
-        this.dotsNumber = dotsNumber;
-    }
-
     public LivingRoomTileSpot(LivingRoomTileSpot ts){
         super(ts.getTileType());
         this.match = ts.match;
@@ -32,18 +27,14 @@ public class LivingRoomTileSpot extends TileSpot {
     }
 
     /**
-     *
-     * @return true if and only if this spot is available for the match, where the livingroom of the match
-     *          is obviously the livingroom this spot belongs to
+     *This method tells if the spot on the LivingRoom is available due to number of players and dotsNumber
+     * @return true if and only if this spot is available for the match, where the LivingRoom of the match
+     *          is obviously the LivingRoom this spot belongs to
      */
     public boolean isReal(){
         return dotsNumber >= 0 && dotsNumber <= match.getNumberOfPlayers();
     }
 
-    /**
-     *
-     * @return the number of dots of this spot (See game description for further info)
-     */
     public int getDotsNumber(){
         return dotsNumber;
     }

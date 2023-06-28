@@ -112,7 +112,7 @@ public class PingManager implements Runnable{
                     }
                 //}
             }
-        }, 5000, 1000); // 1 s
+        }, 5000, 5000); // 1 s
         System.out.println("Started ping manager");
     }
 }

@@ -5,10 +5,14 @@ import Server.Model.GameItems.Bookshelf;
 import Server.Model.GameItems.BookshelfTileSpot;
 import Server.Model.GameItems.TileType;
 /**
- * This class represents the fourth common goal card
- * @author due2
+ * This class represents the fourth common goal card:
+ * "Six groups each containing at least
+ * 2 tiles of the same type (not necessarily
+ * in the depicted shape).
+ * The tiles of one group can be different
+ * from those of another group."
+ * @author Valentino Guerrini
  */
-
 public class CommonGoalCard4 extends CommonGoalCard {
 
     public CommonGoalCard4(){
@@ -18,17 +22,14 @@ public class CommonGoalCard4 extends CommonGoalCard {
     /**
      * constructor of the class CommonGoalCard4 that calls the constructor of the superclass
      * @param playersNum the number of players in the game
-     * @param secondIstance true if it is the second card, false otherwise in order to know if the card has to be created with the second instance of the points tiles
+     * @param secondInstance true if it is the second card, false otherwise in order to know
+     *                       if the card has to be created with the second instance of the
+     *                       points tiles
      */
-    public CommonGoalCard4(int playersNum, boolean secondIstance) {
-        super(playersNum, secondIstance);
+    public CommonGoalCard4(int playersNum, boolean secondInstance) {
+        super(playersNum, secondInstance);
     }
 
-    /**
-     * This method checks if the common goal card is completed if there are at least six 2x1 or 1x2 tiles with the same tile type
-     * @param bookshelf the bookshelf of the player
-     * @return true if the common goal card is completed, false otherwise
-     */
     @Override
     public boolean check(Bookshelf bookshelf) {
         BookshelfTileSpot[][] shelf = bookshelf.getTileMatrix();
@@ -80,7 +81,6 @@ public class CommonGoalCard4 extends CommonGoalCard {
 
     }
 
-
     @Override
     public String[] getCommonGoalDescription(){
         String[] description = new String[8];
@@ -96,11 +96,6 @@ public class CommonGoalCard4 extends CommonGoalCard {
         return description;
     }
 
-
-    /**
-     * This method returns the ID of the common goal card
-     * @return the ID of the common goal card
-     */
     @Override
     public int getCardID() {
         return 4;

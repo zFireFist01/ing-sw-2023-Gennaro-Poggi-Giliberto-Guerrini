@@ -8,22 +8,29 @@ import Server.Model.GameItems.TileType;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ *  This class represents the seventh common goal card:
+ *  "Four lines each formed by 5 tiles of
+ *  maximum three different types. One
+ *  line can show the same or a different
+ *  combination of another line."
+ * @author Patrick Poggi
+ */
 public class CommonGoalCard7 extends CommonGoalCard {
-
 
     public CommonGoalCard7() {
         super();
     }
 
     /**
-     * Constructor for CommonGoalCard7
+     * constructor of the class CommonGoalCard7 that calls the constructor of the superclass
      * @param playersNum is the number of players in the game
-     * @param secondIstance is true if there are 5 players in the game, false otherwise
+     * @param secondInstance is true if there are 5 players in the game, false otherwise
      */
-
-    public CommonGoalCard7(int playersNum, boolean secondIstance) {
-        super(playersNum, secondIstance);
+    public CommonGoalCard7(int playersNum, boolean secondInstance) {
+        super(playersNum, secondInstance);
     }
+
     @Override
     public boolean check(Bookshelf bookshelf) {
         //4 rows of 5 tiles of 1, 2 or 3 different tipes
@@ -59,12 +66,6 @@ public class CommonGoalCard7 extends CommonGoalCard {
         return rowsFitting >= 4;
     }
 
-
-    /**
-     * This method returns a CLI representation (ASCII-art like) of the 7th common goal card's description
-     * @return the String[] "matrix" of the representation
-     * @author patrickpoggi
-     */
     @Override
     public String[] getCommonGoalDescription() {
         String[] description = new String[8];
@@ -80,24 +81,7 @@ public class CommonGoalCard7 extends CommonGoalCard {
 
         return description;
     }
-    /*
-    /**
-     * @return a string that describes the 7th common goal
-     * @author patrickpoggi
-     */
 
-    /*
-    @Override
-    public String getDescription() {
-        return "Four lines each formed by 5 tiles of maximum three different types. One line can show the same or " +
-                "a different combination of another line";
-    }
-    */
-
-    /**
-     * This method returns the ID of the common goal card
-     * @return the ID of the common goal card
-     */
     @Override
     public int getCardID() {
         return 7;

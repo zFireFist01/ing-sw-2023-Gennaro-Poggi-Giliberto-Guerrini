@@ -6,8 +6,12 @@ import Server.Model.GameItems.BookshelfTileSpot;
 import Server.Model.GameItems.TileType;
 
 /**
- * This class represents the first common goal card
- * @author due2
+ * This class represents the first common goal card:
+ * "Two groups each containing 4 tiles of
+ * the same type in a 2x2 square. The tiles
+ * of one square can be different from
+ * those of the other square."
+ * @author Valentino Guerrini
  */
 
 public class CommonGoalCard1 extends CommonGoalCard {
@@ -19,23 +23,20 @@ public class CommonGoalCard1 extends CommonGoalCard {
     /**
      * constructor of the class CommonGoalCard1 that calls the constructor of the superclass
      * @param playersNum the number of players in the game
-     * @param secondIstance true if it is the second card, false otherwise in order to know if the card has to be created with the second instance of the points tiles
+     * @param secondInstance true if it is the second card, false otherwise in order to know
+     *                      if the card has to be created with the second instance of the
+     *                       points tiles
      */
-    public CommonGoalCard1(int playersNum, boolean secondIstance) {
-        super(playersNum, secondIstance);
+    public CommonGoalCard1(int playersNum, boolean secondInstance) {
+        super(playersNum, secondInstance);
     }
 
-    /**
-     * This method checks if the common goal card is completed
-     * @param bookshelf the bookshelf of the player
-     * @return true if the common goal card is completed, false otherwise
-     */
     @Override
     public boolean check(Bookshelf bookshelf) {
         BookshelfTileSpot[][] shelf = bookshelf.getTileMatrix();
         int count = 0;
         int[][] verifier = new int[6][5];
-        //verify if the 6x5 matrix contains two 2x2 submatrix of the same tyle type
+        //verify if the 6x5 matrix contains two 2x2 sub-matrix of the same tiles type
         for (TileType type : TileType.values()) {
             for (int i = 0; i < 6; i++) {
                 for (int j = 0; j < 5; j++) {
@@ -61,10 +62,6 @@ public class CommonGoalCard1 extends CommonGoalCard {
         if (count == 2) {
             return true;
         }
-
-
-
-
         return false;
     }
 
@@ -83,15 +80,6 @@ public class CommonGoalCard1 extends CommonGoalCard {
         return description;
     }
 
-    //@Override
-    //public String getDescription(){
-    //    return "Two groups each containing at least 4 tiles of the same type in a 2x2 square. The tiles of one square can be different from those of the other square";
-    //}
-
-    /**
-     * This method returns the ID of the common goal card
-     * @return the ID of the common goal card
-     */
     @Override
     public int getCardID() {
         return 1;

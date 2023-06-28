@@ -21,7 +21,7 @@ public class PlayersChat {
     }
 
     /**
-     * We store the message every message sent in an ArrayList
+     * This method stores every message sent in an ArrayList
      * @param message is the message we want to add in the ArrayList
      */
     public void addMessage(Message message, VirtualView... virtualViews){
