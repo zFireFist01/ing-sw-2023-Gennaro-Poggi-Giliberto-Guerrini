@@ -20,6 +20,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.*;
 
 
 /**
@@ -43,6 +44,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
      * controller of the match this view belongs to.
      */
     List<VCEventListener> vcEventListeners;
+
     public VirtualRMIView(RemoteNetworkHandler networkHandler, boolean isFirsToJoin) throws RemoteException {
         super();
         client = networkHandler;
@@ -53,15 +55,6 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
 
     @Override
     public void run() {
-        /*boolean done = false;
-        while(!done){
-            try{
-                client.onSelectViewEvent(new SelectViewEvent(new LoginView()));
-            }catch (RemoteException e){
-                //We could say that the method invocation went wrong and so may be that the client lost connection
-                System.err.println(e.getStackTrace());
-            }
-        }*/
         try {
             client.receiveSelectViewEvent(
                     new Gson().toJson(
@@ -105,19 +98,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
         for(VCEventListener listener : localVCEventListeners){
             listener.onVCEvent(vcEvent,this);
         }
-        /*
-        switch (event.getPrimaryType()){
-            case "VCEvent":
-                event = gson.fromJson(json,VCEvent.class);
-                for(VCEventListener listener : vcEventListeners){
-                    listener.onVCEvent((VCEvent)event,this);
-                }
-                break;
-            case "MVEvent":
-                throw new IllegalAccessException("MVEvent not allowed in this context");
-            case "SelectViewEvent":
-                throw new IllegalAccessException("SelectViewEvent not allowed in this context");
-        }*/
+
     }
 
     /**
@@ -127,6 +108,9 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
      * @see Gson
      */
     public /*synchronized*/ void onMVEvent(MVEvent event) {
+        if(!pongReceived){
+            return;
+        }
         synchronized (client){
             Gson gson = new GsonBuilder()
                     .excludeFieldsWithoutExposeAnnotation().registerTypeAdapter(CommonGoalCard.class, new CommonGoalCardAdapter())
@@ -148,6 +132,9 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
      * @see Gson
      */
     public /*synchronized*/ void onSelectViewEvent(SelectViewEvent event) {
+        if(!pongReceived){
+            return;
+        }
         synchronized (client){
             Gson gson = new Gson();
             String json = gson.toJson(event);
@@ -177,25 +164,49 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
 
     @Override
     public /*synchronized*/ void ping() {
-        try{
-            synchronized (pongLocker){
-                pongReceived = false;
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+
+        Future<Void> future = executor.submit(() -> {
+            if(!pongReceived){
+                return null;
             }
-            System.out.println("Pinging client");
-            synchronized (client){
-                client.pong();
+            try{
+                synchronized (pongLocker){
+                    pongReceived = false;
+                }
+                System.out.println("Pinging client");
+                synchronized (client){
+                    client.pong();
+                }
+                synchronized (pongLocker){
+                    pongReceived = true;
+                }
+                System.out.println("Pong received");
+            } catch (ConnectException e){
+                //System.err.println("Client disconnected: " + e.getMessage() + "\n" + e.getStackTrace());
+                System.err.println("One RMI client has disconnected. The nickname of that client was: " + connectionInfo.getNickname());
+            }catch (RemoteException e){
+                //System.err.println("Remote exception: " + e.getMessage() + "\n" + e.getStackTrace());
+                System.err.println("Lost connection with one RMI client");
             }
-            synchronized (pongLocker){
-                pongReceived = true;
-            }
-            System.out.println("Pong received");
-        } catch (ConnectException e){
-            //System.err.println("Client disconnected: " + e.getMessage() + "\n" + e.getStackTrace());
-            System.err.println("One RMI client has disconnected. The nickname of that client was: " + connectionInfo.getNickname());
-        }catch (RemoteException e){
-            //System.err.println("Remote exception: " + e.getMessage() + "\n" + e.getStackTrace());
-            System.err.println("Lost connection with one RMI client");
+            return null;
+        });
+        try {
+            // Attendi al massimo 3 secondi per il completamento della chiamata remota
+            future.get(3, TimeUnit.SECONDS);
+            //pongReceived = true;
+        } catch (TimeoutException e) {
+            // Gestisci il timeout
+            System.out.println("La chiamata remota ha superato il timeout di 3 secondi.");
+            pongReceived = false;
+            // Altre operazioni da eseguire in caso di timeout
+        } catch (InterruptedException | ExecutionException e) {
+            // Gestisci altre eccezioni
+            e.printStackTrace();
         }
+
+        // Termina l'executor service
+        executor.shutdown();
     }
 
     @Override
@@ -206,7 +217,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
                return false;
                //throw new RuntimeException("Client disconnected");
            }else{
-               pongReceived = false;
+               //pongReceived = false;
                return true;
            }
        }

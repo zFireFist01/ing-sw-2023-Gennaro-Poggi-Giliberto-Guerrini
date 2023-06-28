@@ -9,6 +9,9 @@ import Server.Model.MatchStatus.WaitingForPlayers;
 import Utils.ConnectionInfo;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.rmi.AccessException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
@@ -76,12 +79,31 @@ public class Server implements Runnable{
     @Override
     public void run() {
         boolean done = false;
+        //System.setProperty("sun.rmi.transport.tcp.responseTimeout", "2000"); // Imposta il timeout a 2 secondi
         new Thread(socketWaiter).start();
         done = false;
         while(!done){
             try{
                 this.rmiRegistry = LocateRegistry.createRegistry(1099);
-                System.setProperty("java.rmi.server.hostname","localhost");
+                try {
+                    Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+
+                    while (networkInterfaces.hasMoreElements()) {
+                        NetworkInterface networkInterface = networkInterfaces.nextElement();
+                        if (networkInterface.isUp() && !networkInterface.isLoopback()) {
+                            Enumeration<InetAddress> inetAddresses = networkInterface.getInetAddresses();
+                            while (inetAddresses.hasMoreElements()) {
+                                InetAddress inetAddress = inetAddresses.nextElement();
+                                if (!inetAddress.isLoopbackAddress() && inetAddress.isSiteLocalAddress()) {
+                                    System.setProperty("java.rmi.server.hostname", inetAddress.getHostAddress());
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                } catch (SocketException e) {
+                    System.out.println("Impossibile ottenere l'indirizzo IP: " + e.getMessage());
+                }
                 done = true;
             }catch (RemoteException e){
                 System.err.println(e.getStackTrace());

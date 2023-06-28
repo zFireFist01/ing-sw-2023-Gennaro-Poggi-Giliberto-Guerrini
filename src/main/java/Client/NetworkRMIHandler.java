@@ -93,36 +93,11 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements RemoteNetw
                 virtualRMIView = rmiWaiter.giveConnection(this);
             }
         } catch (RemoteException e) {
-            System.err.print("Error while getting connection through RMI, please wait anc try again.\n> ");
+            System.err.print("Error while getting connection through RMI, please wait and try again.\n> ");
             return;
         }
         connected = true;
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                try {
-                    //this.ping();
-                    if(virtualRMIView!=null){
-                        virtualRMIView.pong();
-                        connected = true;
-                    }else{
-                        connected = false;
-                    }
-                } catch (RemoteException e) {
-                    if(connected){
-                        connected = false;
-                        System.out.println(ANSIParameters.CLEAR_SCREEN+ANSIParameters.CURSOR_HOME+
-                                "Lost connection with server.\nPlease wait a few seconds and try to reconnect.");
-                        try {
-                            view.resetConnection();
-                        }catch(IOException ex){
-                            System.out.println("Error while resetting connection");
-                        }
-                    }
-                    return;
-                }
-            }
-        }, 0, 1000);
+
     }
 
 
@@ -201,6 +176,22 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements RemoteNetw
         throw new IllegalAccessError("This method should not be called");
     }
 
+    @Override
+    public void ping(){
+        try {
+            if(virtualRMIView!=null) {
+                virtualRMIView.pong();
+            }
+        } catch (RemoteException e) {
+            System.out.println(ANSIParameters.CLEAR_SCREEN+ANSIParameters.CURSOR_HOME+
+                    "Lost connection with server.\nPlease wait a few seconds and try to reconnect.");
+            try {
+                view.resetConnection();
+            }catch(IOException ex){
+                System.out.println("Error while resetting connection");
+            }
+        }
+    }
     @Override
     public void pong() throws RemoteException{
         return;

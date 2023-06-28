@@ -28,5 +28,5 @@ public interface NetworkHandler extends VCEventListener, Runnable{
     void run();
 
 
-
+    void ping();
 }

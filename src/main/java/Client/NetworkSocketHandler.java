@@ -81,6 +81,14 @@ public class NetworkSocketHandler implements NetworkHandler{
             //System.out.println("Message sent: " + json);
         } catch (IOException e) {
             throw new RuntimeException("Error while sending event to server");
+        } catch (Exception e){
+            System.out.println(ANSIParameters.CLEAR_SCREEN+ANSIParameters.CURSOR_HOME+
+                    "Lost connection with server.\nPlease wait a few seconds and try to reconnect.");
+            try {
+                view.resetConnection();
+            }catch(IOException ex){
+                System.out.println("Error while resetting connection");
+            }
         }
     }
 
@@ -124,11 +132,28 @@ public class NetworkSocketHandler implements NetworkHandler{
                 .registerTypeAdapterFactory(new EventTypeAdapterFactory())
                 .create();
 
-
+        try {
+            socket.setSoTimeout(8000);
+        } catch (SocketException e) {
+            throw new RuntimeException(e);
+        }
         while (true) {
             try{
-                message = in.nextLine();
-            }catch(NoSuchElementException e){
+                StringBuilder sb = new StringBuilder();
+                int character;
+                //message = in.nextLine();
+                //message = (socket.getInputStream()).readNBytes(8192).toString();
+                while((character = socket.getInputStream().read()) != -1){
+                    if(character == '\n'){
+                        break;
+                    }
+                    sb.append((char)character);
+                }
+                if(character == -1){
+                    throw new IOException("Ricevuto -1 dallo stream di input");
+                }
+                message = sb.toString();
+            }catch(IOException e){
                 System.out.println(ANSIParameters.CLEAR_SCREEN+ANSIParameters.CURSOR_HOME+
                         "Lost connection with server.\nPlease wait a few seconds and try to reconnect.");
                 try {
@@ -162,6 +187,24 @@ public class NetworkSocketHandler implements NetworkHandler{
                             throw new RuntimeException("Unknown event type");
                     }
                 }
+            }
+        }
+    }
+
+    @Override
+    public void ping() {
+        String pingMessage = "ping\n";
+        try {
+            out.write(pingMessage.getBytes());
+            out.flush();
+            //System.out.println("Message sent: " + pingMessage);
+        }catch(Exception e){
+            System.out.println(ANSIParameters.CLEAR_SCREEN+ANSIParameters.CURSOR_HOME+
+                    "Lost connection with server.\nPlease wait a few seconds and try to reconnect.");
+            try {
+                view.resetConnection();
+            }catch(IOException ex){
+                System.out.println("Error while resetting connection");
             }
         }
     }

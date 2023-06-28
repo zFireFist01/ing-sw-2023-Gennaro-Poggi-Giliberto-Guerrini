@@ -18,6 +18,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.*;
+import java.util.concurrent.*;
 
 public class VirtualSocketView implements VirtualView{
 
@@ -76,15 +77,13 @@ public class VirtualSocketView implements VirtualView{
     }
 
     private synchronized void manageMessage(String message){
-        /*Gson gson = new GsonBuilder()
-                .registerTypeAdapterFactory(new EventTypeAdapterFactory())
-                .create();
-        VCEvent vcEvent = gson.fromJson(message, VCEvent.class);
-        sendVCEvent(vcEvent);*/
+        
         if(message.equals("pong")){
             pongReceived = true;
             //message = message.replace("pong", "");
-        }else{
+        } else if (message.equals("ping")) {
+            return;
+        } else{
 
             try {
                 receiveVCEvent(message);
@@ -99,6 +98,9 @@ public class VirtualSocketView implements VirtualView{
     }
     @Override
     public void onMVEvent(MVEvent mvEvent){
+        if(!pongReceived){
+            return;
+        }
         synchronized (this.out){
             Gson gson = new GsonBuilder()
                     .excludeFieldsWithoutExposeAnnotation().registerTypeAdapter(CommonGoalCard.class, new CommonGoalCardAdapter())
@@ -122,6 +124,9 @@ public class VirtualSocketView implements VirtualView{
 
     @Override
     public void onSelectViewEvent(SelectViewEvent selectViewEvent){
+        if(!pongReceived){
+            return;
+        }
         synchronized (this.out){
             Gson gson = new Gson();
             String message = gson.toJson(selectViewEvent);
@@ -174,6 +179,9 @@ public class VirtualSocketView implements VirtualView{
 
     @Override
     public void ping() {
+        if(!pongReceived){
+            return;
+        }
         synchronized (this.out){
             pongReceived = false;
             String pingMessage = "ping\n";
@@ -202,7 +210,7 @@ public class VirtualSocketView implements VirtualView{
                 //System.out.println("Client disconnected");
                 return false;
             }else{
-                pongReceived = false;
+                //pongReceived = false;
                 System.out.println("Pong received");
                 return true;
             }
