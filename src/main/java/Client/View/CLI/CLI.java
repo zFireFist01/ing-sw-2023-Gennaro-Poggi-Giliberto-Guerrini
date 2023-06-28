@@ -793,6 +793,13 @@ public class CLI implements Runnable , View {
 
         System.out.println("Match ended!");
 
+        if(event.getMessage().equals("Only one player connected")){
+            System.out.println("Since every player are disconnected you won!");
+            return;
+        }
+
+
+
         System.out.println("The final scores are: ");
         Player p;
 
