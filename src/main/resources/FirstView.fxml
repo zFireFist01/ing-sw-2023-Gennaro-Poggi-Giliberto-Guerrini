@@ -7,7 +7,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane id="wallpaper" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
@@ -16,27 +18,42 @@
             <Image url="@misc/sfondo parquet.jpg" />
          </image>
       </ImageView>
-      <StackPane prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0">
+            <StackPane prefHeight="150.0" prefWidth="200.0">
                <children>
-                  <Button fx:id="quitButtonBeforeRunning" mnemonicParsing="false" onAction="#onQuitButtonBeforeRunning" prefHeight="30.0" prefWidth="84.0" text="QUIT">
-                     <font>
-                        <Font name="Calibri Bold" size="18.0" />
-                     </font>
-                  </Button>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Button fx:id="quitButtonBeforeRunning" mnemonicParsing="false" onAction="#onQuitButtonBeforeRunning" prefHeight="30.0" prefWidth="84.0" text="QUIT">
+                           <font>
+                              <Font name="Calibri Bold" size="18.0" />
+                           </font>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" right="5.0" />
+                     </padding>
+                     <StackPane.margin>
+                        <Insets right="20.0" />
+                     </StackPane.margin>
+                  </HBox>
+                  <ImageView fitHeight="248.0" fitWidth="250.0">
+                     <image>
+                        <Image url="@Publisher material/Box noshadow 280x280.png" />
+                     </image>
+                  </ImageView>
+                  <Button fx:id="playButton" mnemonicParsing="false" onAction="#onPlayButton" opacity="0.0" prefHeight="247.0" prefWidth="222.0" />
                </children>
-               <padding>
-                  <Insets bottom="5.0" right="5.0" />
-               </padding>
-            </HBox>
-            <ImageView fitHeight="248.0" fitWidth="250.0">
-               <image>
-                  <Image url="@Publisher material/Box noshadow 280x280.png" />
-               </image>
-            </ImageView>
-            <Button fx:id="playButton" mnemonicParsing="false" onAction="#onPlayButton" opacity="0.0" prefHeight="247.0" prefWidth="222.0" />
+            </StackPane>
+            <Text id="connectionmessage" strokeType="OUTSIDE" strokeWidth="0.0" text="Lost connection with the server, click on the box to try reconnect" visible="false" wrappingWidth="553.5552368164062">
+               <font>
+                  <Font size="21.0" />
+               </font>
+            </Text>
          </children>
-      </StackPane>
+         <padding>
+            <Insets top="30.0" />
+         </padding>
+      </VBox>
    </children>
 </AnchorPane>

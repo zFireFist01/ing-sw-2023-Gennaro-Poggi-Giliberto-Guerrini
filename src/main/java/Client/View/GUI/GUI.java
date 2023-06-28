@@ -696,6 +696,10 @@ public class GUI extends Application implements View {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/FirstView.fxml"));
         fxmlLoader.setController(this);
         Parent newRoot = fxmlLoader.load();
+        if(matchStarted){
+            Text message = (Text) newRoot.lookup("#connectionmessage");
+            message.setVisible(true);
+        }
         AnchorPane pane = (AnchorPane) newRoot.lookup("#wallpaper");
         ImageView wallpaper =(ImageView) newRoot.lookup("#parquet") ;
 
