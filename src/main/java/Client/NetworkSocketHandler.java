@@ -94,9 +94,10 @@ public class NetworkSocketHandler implements NetworkHandler{
 
     @Override
     public void run()  {
-        String message;
+        String message=null;
         String primaryType;
         Event event;
+        boolean pingstarted=false;
 
         try {
             this.socket = new Socket(host, port);
@@ -154,19 +155,22 @@ public class NetworkSocketHandler implements NetworkHandler{
                 }
                 message = sb.toString();
             }catch(IOException e){
-                System.out.println(ANSIParameters.CLEAR_SCREEN+ANSIParameters.CURSOR_HOME+
-                        "Lost connection with server.\nPlease wait a few seconds and try to reconnect.");
-                try {
-                    socket.close();
-                    view.resetConnection();
-                }catch(IOException ex){
-                    System.out.println("Error while resetting connection");
+                if(pingstarted) {
+                    System.out.println(ANSIParameters.CLEAR_SCREEN + ANSIParameters.CURSOR_HOME +
+                            "Lost connection with server.\nPlease wait a few seconds and try to reconnect.");
+                    try {
+                        socket.close();
+                        view.resetConnection();
+                    } catch (IOException ex) {
+                        System.out.println("Error while resetting connection");
+                    }
+                    break;
                 }
-                break;
             }
 
             if(message != null){
                 if(message.equals("ping")){
+                    pingstarted=true;
                     pong();
                 }else{
                     if(message.contains("deleted")){
