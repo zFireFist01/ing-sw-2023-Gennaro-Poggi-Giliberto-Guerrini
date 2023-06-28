@@ -14,6 +14,7 @@ public class Client {
             switch (args[0]) {
                 case "-gui" :
                     Application.launch(GUI.class);
+                    System.exit(0);
                 case "-cli" :
                 System.out.println("Welcome to");
                     System.out.println("                                                                                                    \n" +
@@ -90,6 +91,7 @@ public class Client {
                 }
                 else if(choice==2){
                     Application.launch(GUI.class);
+                    System.exit(0);
                     flag=false;
                 }
                 else {
