@@ -2072,8 +2072,14 @@ public class GUI extends Application implements View {
 
     @Override
     public void resetConnection() throws IOException {
-        isReconnecting = true;
-        reconnectionProcess();
+        Platform.runLater(() -> {
+            isReconnecting = true;
+            try {
+                reconnectionProcess();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
 }

@@ -23,6 +23,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.*;
 
 public class NetworkRMIHandler extends UnicastRemoteObject implements RemoteNetworkHandler, NetworkHandler {
 
@@ -97,6 +98,53 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements RemoteNetw
             return;
         }
         connected = true;
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                Future<?> future = executor.submit(() -> {
+                    try {
+                        //this.ping();
+                        if(virtualRMIView!=null){
+                            virtualRMIView.pong();
+                            connected = true;
+                        }else{
+                            connected = false;
+                        }
+                    } catch (RemoteException e) {
+                        if(connected){
+                            connected = false;
+                            System.out.println(ANSIParameters.CLEAR_SCREEN+ANSIParameters.CURSOR_HOME+
+                                    "Lost connection with server.\nPlease wait a few seconds and try to reconnect.");
+                            try {
+                                view.resetConnection();
+                            }catch(IOException ex){
+                                System.out.println("Error while resetting connection");
+                            }
+                        }
+                        return;
+                    }
+                });
+                try {
+                    future.get(3, TimeUnit.SECONDS);
+                } catch (TimeoutException e) {
+                    if(connected){
+                        connected = false;
+                        System.out.println(ANSIParameters.CLEAR_SCREEN+ANSIParameters.CURSOR_HOME+
+                                "Lost connection with server.\nPlease wait a few seconds and try to reconnect.");
+                        try {
+                            view.resetConnection();
+                            unexportObject(NetworkRMIHandler.this, true);
+                            timer.cancel();
+                        }catch(IOException ex){
+                            System.out.println("Error while resetting connection");
+                        }
+                    }
+                }catch (InterruptedException | ExecutionException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }, 5000, 3000);
 
     }
 
@@ -178,6 +226,7 @@ public class NetworkRMIHandler extends UnicastRemoteObject implements RemoteNetw
 
     @Override
     public void ping(){
+
         try {
             if(virtualRMIView!=null) {
                 virtualRMIView.pong();
