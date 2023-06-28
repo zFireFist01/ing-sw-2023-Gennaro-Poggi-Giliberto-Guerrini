@@ -579,6 +579,7 @@ public class Match {
         //If I reach this point, the match is running
         if (!disconnectedPlayers.contains(player)) {
             disconnectedPlayers.add(player);
+            disconnectedPlayersVirtualViews.put(virtualView, player);
         }
         if(disconnectedPlayers.size() == numberOfPlayers){
             //All the players are disconnected
@@ -594,7 +595,7 @@ public class Match {
                                         //clear the selected tiles of a player who is still connected, that is wrong
         }
         System.out.println("DISCONNECTED PLAYERS: " + disconnectedPlayers);
-        disconnectedPlayersVirtualViews.put(virtualView, player);
+
     }
 
     public void reconnectPlayer(Player player, VirtualView virtualView) {

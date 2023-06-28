@@ -283,7 +283,7 @@ public class Server implements Runnable{
                     vv = clientsWaitingForMatch.poll();
                 }
                 if(vv == null){
-                    System.err.println("Server.evolveLastMatch(): There are no more clients waiting for a match");
+                    System.err.println("Server.dequeueWaitingClients(): There are no more clients waiting for a match");
                     return noMoreWaitingClients;
                 }
                 noMoreWaitingClients.add(vv);

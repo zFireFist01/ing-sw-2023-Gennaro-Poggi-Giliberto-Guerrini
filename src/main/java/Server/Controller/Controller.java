@@ -671,7 +671,7 @@ public class Controller implements VCEventListener {
             //the match is in WaitingForPlayers status
             //The client was not logged in => was not in the match as a contestant but only as a listener
             match.removeMVEventListener(vv);
-            removeSelectViewEventListener(vv);
+            this.removeSelectViewEventListener(vv);
             server.disconnectClient(vv);
             virtualViewsToRemove.add(vv);
             return virtualViewsToRemove;
@@ -684,6 +684,9 @@ public class Controller implements VCEventListener {
         if (PlayerViews.containsValue(vv)) {
             for (Integer i : PlayerViews.keySet()) {
                 if (PlayerViews.get(i).equals(vv)) {
+                    if(!everyoneOffline){
+                        vv.onSelectViewEvent(new GameView("Wait for your turn!"));
+                    }
                     match.reconnectPlayer(hashNicknames.get(i), PlayerViews.get(i));
                     //match.triggerMVUpdate();
                     if(everyoneOffline){
@@ -692,7 +695,6 @@ public class Controller implements VCEventListener {
                         currentPlayerView = PlayerViews.get(p.getPlayerID());
                         PlayerViews.get(p.getPlayerID()).onSelectViewEvent(new PickingTilesGameView());
                     }
-                    //PlayerViews.get(i).onMVEvent(new MatchStartedEvent(new LightMatch(match)));
                 }
             }
             match.triggerMVUpdate();
