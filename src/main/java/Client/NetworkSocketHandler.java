@@ -157,6 +157,7 @@ public class NetworkSocketHandler implements NetworkHandler{
                 System.out.println(ANSIParameters.CLEAR_SCREEN+ANSIParameters.CURSOR_HOME+
                         "Lost connection with server.\nPlease wait a few seconds and try to reconnect.");
                 try {
+                    socket.close();
                     view.resetConnection();
                 }catch(IOException ex){
                     System.out.println("Error while resetting connection");

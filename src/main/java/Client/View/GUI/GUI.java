@@ -702,7 +702,10 @@ public class GUI extends Application implements View {
 
         wallpaper.fitHeightProperty().bind(pane.heightProperty());
         wallpaper.fitWidthProperty().bind(pane.widthProperty());
-        Scene newScene = new Scene(newRoot);
+
+        Scene newScene = primaryStage.getScene();
+        newScene.setRoot(newRoot);
+
 
         primaryStage.setScene(newScene);
         primaryStage.show();
@@ -967,20 +970,22 @@ public class GUI extends Application implements View {
     }
 
     private void onMatchStartedEvent(LightMatch match) {
-        if(matchStarted){
-            return;
+        if(!matchStarted){
+            this.matchStarted = true;
+
+            loader.setLocation(getClass().getResource("/Gameview.fxml"));
+            loader.setController(this);
+
+            try{
+                gameRoot = loader.load();
+            }catch(IOException e){
+                e.printStackTrace();
+            }
         }
 
-        this.matchStarted = true;
 
-        loader.setLocation(getClass().getResource("/Gameview.fxml"));
-        loader.setController(this);
 
-        try{
-            gameRoot = loader.load();
-        }catch(IOException e){
-            e.printStackTrace();
-        }
+
 
         Scene scene = new Scene(gameRoot);
         scene.getStylesheets().add(getClass().getResource("/Style.css").toExternalForm());
