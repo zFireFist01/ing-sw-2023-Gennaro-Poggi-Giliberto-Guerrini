@@ -988,10 +988,14 @@ public class GUI extends Application implements View {
         }
 
 
+        Scene scene;
 
+        try {
+            scene = new Scene(gameRoot);
+        }catch(IllegalArgumentException e){
+            return;
+        }
 
-
-        Scene scene = new Scene(gameRoot);
         scene.getStylesheets().add(getClass().getResource("/Style.css").toExternalForm());
 
 
