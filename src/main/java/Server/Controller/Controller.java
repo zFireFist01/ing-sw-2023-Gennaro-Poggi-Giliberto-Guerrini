@@ -2,6 +2,7 @@
 package Server.Controller;
 
 import Server.Events.MVEvents.MatchStartedEvent;
+import Server.Events.MVEvents.ModifiedMatchEndedEvent;
 import Server.Events.SelectViewEvents.*;
 
 import Server.Events.VCEvents.LoginEvent;
@@ -28,6 +29,7 @@ import Utils.MathUtils.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.rmi.RemoteException;
+import java.sql.Time;
 import java.util.*;
 
 /**
@@ -44,6 +46,8 @@ public class Controller implements VCEventListener {
     private List<SelectViewEventListener> selectViewEventListeners;
     private Map<Integer, Player> hashNicknames = new HashMap<>();
     private boolean everyoneOffline = false;
+    private boolean onlyOneIsConnected = false;
+    Timer timer = new Timer();
     private Server server;
 
     public Controller(Match match, Server server){
@@ -494,7 +498,7 @@ public class Controller implements VCEventListener {
      */
     @Override
     public void onVCEvent(VCEvent event, VirtualView view) throws NoSuchMethodException, IllegalAccessException {
-        if(everyoneOffline){
+        if(everyoneOffline || onlyOneIsConnected){
             return;
         }
         String methodName = event.getMethodName();
@@ -620,41 +624,46 @@ public class Controller implements VCEventListener {
             //If I reach this point it means that the match is in Running status and the disconnected player was logged in
             Player previousCurrentPlayer = match.getCurrentPlayer();
             match.disconnectPlayer(hashNicknames.get(playerHash), PlayerViews.get(playerHash));
-            /*if(match.getMatchStatus() == null){
-                //All the players disconnected, we erase the match
-                for(Player p : match.getDisconnectedPlayers()){
-                    server.disconnectClient(PlayerViews.get(p.getPlayerID()));
-                    virtualViewsToRemove.add(PlayerViews.get(p.getPlayerID()));
-                } //vv should be in the list of disconnected players... no need to add it explicitly
-                PlayerViews.clear();
-                PlayerViews = null;
-                hashNicknames.clear();
-                hashNicknames = null;
-                selectViewEventListeners.clear();
-                selectViewEventListeners = null;
-                server.eraseMatch(match);
-                match = null;
-                return virtualViewsToRemove;
-            }*/
             if(/*match.getMatchStatus() == null*/ match.areAllPlayersDisconnected() == true){
                 everyoneOffline = true;
                 return null;
             }
             Player currentPlayer = match.getCurrentPlayer();
-            /*if(currentPlayer == null){
-                //It means that every player is disconnected
-            }*/
+            
             currentPlayerView = PlayerViews.get(currentPlayer.getPlayerID());
+            if(match.getDisconnectedPlayers().size() == (match.getNumberOfPlayers()-1)){
+                onlyOneIsConnected = true;
+                timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        if(onlyOneIsConnected == true){
+                            //Only one player connected, we erase the match
+                            currentPlayerView.onSelectViewEvent(new EndedMatchView("Only one player connected"));
+                            currentPlayerView.onMVEvent(new ModifiedMatchEndedEvent(new LightMatch(match)));
+                            server.eraseMatch(match);
+                        }
+                    }
+                }, 120000); //2 minutes
+            }
             if(previousCurrentPlayer != null && previousCurrentPlayer.getPlayerID() == playerHash) {
                 /*If the current player before the disconnection is registered is different from null and is equal to
-                the disconnected one then match.disconnectPlayer called below will update the current player
+                the disconnected one then match.disconnectPlayer called above will update the current player
                 and we will have to send the new current player a PickingTilesGameView, otherwise we don't
                  */
 
                 //match.clearSelectedTiles(); //rimosso perché gestito dal match solo nel caso in cui il player disconnesso
                 // sia il current player
-                currentPlayerView.onSelectViewEvent(new PickingTilesGameView("A player has lost connection,"+
-                        "so now it's your turn!\nPlease select some tiles and then checkout"));
+                if(onlyOneIsConnected){
+                    currentPlayerView.onSelectViewEvent(new GameView("Since you are the only player connected," +
+                            "the match will be paused"));
+                }else{
+                    currentPlayerView.onSelectViewEvent(new PickingTilesGameView("A player has lost connection,"+
+                            "so now it's your turn!\nPlease select some tiles and then checkout"));
+                }
+            }else{
+                currentPlayerView.onSelectViewEvent(new GameView("Since you are the only player connected," +
+                        "the match will be paused"));
             }
 
             //TODO: Serve veramente?
@@ -684,6 +693,10 @@ public class Controller implements VCEventListener {
         if (PlayerViews.containsValue(vv)) {
             for (Integer i : PlayerViews.keySet()) {
                 if (PlayerViews.get(i).equals(vv)) {
+                    if(onlyOneIsConnected){
+                        onlyOneIsConnected = false;
+                        timer.cancel();
+                    }
                     if(!everyoneOffline){
                         vv.onSelectViewEvent(new GameView("Wait for your turn!"));
                     }

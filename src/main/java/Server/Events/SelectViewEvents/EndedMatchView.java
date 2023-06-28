@@ -9,6 +9,10 @@ public class EndedMatchView extends SelectViewEvent{
         this.message = "The match is ended";
     }
 
+    public EndedMatchView(String message) {
+        this.message = message;
+    }
+
     public String getMessage(){
         return this.message;
     }
