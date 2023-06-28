@@ -1408,6 +1408,40 @@ public class GUI extends Application implements View {
         fxmlLoader.setController(this);
         Parent newRoot = fxmlLoader.load();
 
+        if(currentView.getMessage().equals("Only one player connected")){
+            terzo.setVisible(false);
+            nomeTerzo.setVisible(false);
+            punteggioTerzo.setVisible(false);
+            quarto.setVisible(false);
+            nomeQuarto.setVisible(false);
+            punteggioQuarto.setVisible(false);
+            nomeSecondo.setVisible(false);
+            punteggioSecondo.setVisible(false);
+
+            nomePrimo.setText(match.getCurrentPlayer().getPlayerNickName());
+            punteggioPrimo.setText("every one is disconnected, you won!");
+            previousScene = primaryStage.getScene();
+            Scene newScene = new Scene(newRoot);
+            primaryStage.setScene(newScene);
+
+
+            AnchorPane pane = (AnchorPane) newRoot.lookup("#anchorPane");
+            ImageView imageView =(ImageView) newRoot.lookup("#sfondo") ;
+
+
+            imageView.fitHeightProperty().bind(pane.heightProperty());
+            imageView.fitWidthProperty().bind(pane.widthProperty());
+            primaryStage.setMaximized(true);
+            pane.setPrefWidth(600);
+            pane.setPrefHeight(400);
+            primaryStage.setResizable(true);
+            primaryStage.show();
+            return;
+
+
+
+        }
+
 
         if (numberPlayers == 2) {
             terzo.setVisible(false);
