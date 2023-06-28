@@ -11,7 +11,7 @@ public class Running extends MatchStatus {
     public Running(Match match){
         super(match);
         match.setup();
-        //MVEvent matchsatarted
+        //MVEvent match started
     }
     /**
      * this method evolves the match status from running to closing

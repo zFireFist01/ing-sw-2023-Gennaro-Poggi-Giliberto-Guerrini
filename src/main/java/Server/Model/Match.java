@@ -162,7 +162,6 @@ public class Match {
                 //do nothing
             }
 
-
         }
     }
 
@@ -223,7 +222,7 @@ public class Match {
 
         boolean contains = false;
         for (Player p : this.players) {
-            if (p.equals(newPlayer)) {
+            if (p.getPlayerNickName().equals(newPlayer.getPlayerNickName())||p.getPlayerID()==newPlayer.getPlayerID()){
                 contains = true;
             }
         }
@@ -416,7 +415,8 @@ public class Match {
                 setWinner(tmp);
             }
         }
-        matchStatus.evolve();
+
+        this.matchStatus = this.matchStatus.evolve();
         notifyMVEventListeners(new ModifiedMatchEndedEvent(new LightMatch(this)));
     }
 

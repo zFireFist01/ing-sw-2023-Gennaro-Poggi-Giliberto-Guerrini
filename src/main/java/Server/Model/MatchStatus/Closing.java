@@ -9,7 +9,6 @@ import Server.Model.Match;
 
 public class Closing extends MatchStatus {
 
-    private String closedBecause;
     public Closing(Match match) {
         super(match);
     }
@@ -27,8 +26,5 @@ public class Closing extends MatchStatus {
 
     public MatchStatus devolve(){return this;}
 
-    public String getReasonClosing(){
-        return closedBecause;
-    }
 
 }
