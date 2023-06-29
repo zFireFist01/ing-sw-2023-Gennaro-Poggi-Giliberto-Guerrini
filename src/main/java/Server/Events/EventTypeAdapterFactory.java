@@ -7,7 +7,7 @@ import com.google.gson.reflect.TypeToken;
 /**
  * EventTypeAdapterFactory is a TypeAdapterFactory which produces TypeAdapter instances for handling Event objects.
  * It is used by Gson to serialize and deserialize Event objects.
- * @Author ValentinoGuerrini
+ * @author Valentino Guerrini
  */
 public class EventTypeAdapterFactory implements TypeAdapterFactory {
 
