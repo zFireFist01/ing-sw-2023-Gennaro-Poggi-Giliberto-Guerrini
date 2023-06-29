@@ -11,10 +11,7 @@ import Server.Model.GameItems.BookshelfTileSpot;
 import Server.Model.GameItems.LivingRoom;
 import Server.Model.GameItems.PointsTile;
 import Server.Model.GameItems.TileType;
-import Server.Model.MatchStatus.MatchStatus;
-import Server.Model.MatchStatus.NotRunning;
-import Server.Model.MatchStatus.Running;
-import Server.Model.MatchStatus.WaitingForPlayers;
+import Server.Model.MatchStatus.*;
 import Server.Model.Player.Player;
 import Server.Network.VirtualView;
 
@@ -353,7 +350,11 @@ public class Match {
                 setWinner(tmp);
             }
         }
-        this.matchStatus = this.matchStatus.evolve();
+        if(this.matchStatus == null){
+            this.matchStatus = new Closing(this);
+        }else{
+            this.matchStatus = this.matchStatus.evolve();
+        }
         notifyMVEventListeners(new ModifiedMatchEndedEvent(new LightMatch(this)));
     }
 

@@ -17,6 +17,7 @@ import Server.Model.GameItems.TileType;
 import Server.Model.LightMatch;
 import Server.Model.Match;
 import Server.Events.VCEvents.VCEvent;
+import Server.Model.MatchStatus.Closing;
 import Server.Model.MatchStatus.NotRunning;
 import Server.Model.MatchStatus.Running;
 import Server.Model.MatchStatus.WaitingForPlayers;
@@ -659,7 +660,7 @@ public class Controller implements VCEventListener {
                             "the match will be paused"));
                 }else{
                     if(previousCurrentPlayer.getNextPlayer().getPlayerID()==match.getFirstPlayer().getPlayerID() && match.getFirstToFinish()!=null){
-                        match.calculateFinalScores();
+                        this.match.calculateFinalScores();
 
                         for(Integer i  : PlayerViews.keySet()) {
                             if (!match.getDisconnectedPlayersVirtualViews().containsKey(PlayerViews.get(i))) {
