@@ -629,7 +629,7 @@ public class Controller implements VCEventListener {
                 return null;
             }
             Player currentPlayer = match.getCurrentPlayer();
-            
+
             currentPlayerView = PlayerViews.get(currentPlayer.getPlayerID());
             if(match.getDisconnectedPlayers().size() == (match.getNumberOfPlayers()-1)){
                 onlyOneIsConnected = true;
@@ -661,7 +661,7 @@ public class Controller implements VCEventListener {
                     currentPlayerView.onSelectViewEvent(new PickingTilesGameView("A player has lost connection,"+
                             "so now it's your turn!\nPlease select some tiles and then checkout"));
                 }
-            }else{
+            }else if(onlyOneIsConnected){
                 currentPlayerView.onSelectViewEvent(new GameView("Since you are the only player connected," +
                         "the match will be paused"));
             }
