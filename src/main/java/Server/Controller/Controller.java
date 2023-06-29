@@ -705,23 +705,43 @@ public class Controller implements VCEventListener {
         if (PlayerViews.containsValue(vv)) {
             for (Integer i : PlayerViews.keySet()) {
                 if (PlayerViews.get(i).equals(vv)) {
-                    if(onlyOneIsConnected){
-                        timer.cancel();
-                    }
-                    if(!everyoneOffline){
-                        vv.onSelectViewEvent(new GameView("Wait for your turn!"));
-                    }
-                    match.reconnectPlayer(hashNicknames.get(i), PlayerViews.get(i));
-                    //match.triggerMVUpdate();
-                    if(everyoneOffline || onlyOneIsConnected){
-                        if(everyoneOffline){
-                            everyoneOffline = false;
-                        }else{
-                            onlyOneIsConnected = false;
-                        }
+                    if(everyoneOffline){
+                        //Now we have only one player connected
+                        everyoneOffline = false;
+                        onlyOneIsConnected = true;
+                        timer = new Timer();
+                        vv.onSelectViewEvent(new GameView("Since you are the only player connected," +
+                                "the match will be paused"));
+                        timer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                if(onlyOneIsConnected == true){
+                                    //Only one player connected, we erase the match
+                                    currentPlayerView.onSelectViewEvent(new EndedMatchView("Only one player connected"));
+                                    currentPlayerView.onMVEvent(new ModifiedMatchEndedEvent(new LightMatch(match)));
+                                    server.eraseMatch(match);
+                                }
+                            }
+                        }, 120000); //2 minutes
+                        match.reconnectPlayer(hashNicknames.get(i), PlayerViews.get(i)); //Reconnect him even if
+                                                                                        // the match is paused
+                    }else{
+                        //There was at least one player connected, considering the newly connected one there are at
+                        //least two
+                        match.reconnectPlayer(hashNicknames.get(i), PlayerViews.get(i));
                         Player p = match.getCurrentPlayer();
-                        currentPlayerView = PlayerViews.get(p.getPlayerID());
-                        PlayerViews.get(p.getPlayerID()).onSelectViewEvent(new PickingTilesGameView());
+                        if(onlyOneIsConnected){
+                            //If only one player was conneceted and now another one connected, we cancel the timer
+                            onlyOneIsConnected = false;
+                            timer.cancel();
+                            vv.onSelectViewEvent(new GameView("It's "+p.getPlayerNickName()+"'s turn! Wait for your turn!"));
+                            //currentPlayerView.onSelectViewEvent(new PickingTilesGameView());
+                            currentPlayerView = PlayerViews.get(p.getPlayerID());
+                            currentPlayerView.onSelectViewEvent(new PickingTilesGameView());
+                        }else{
+                            //This player has connected but there was at least one
+                            vv.onSelectViewEvent(new GameView("It's "+p.getPlayerNickName()+"'s turn! Wait for your turn!"));
+                        }
                     }
                 }
             }
