@@ -252,16 +252,15 @@ public class Controller implements VCEventListener {
                             }
 
                         }else{
+                            match.setCurrentPlayer();
                             for(int i=0; i<numberOfPlayers; i++){
-                                if(PlayerViews.get(match.getPlayers().get(i).getPlayerID())!=currentPlayerView && PlayerViews.get(match.getPlayers().get(i).getPlayerID())!=PlayerViews.get(currentPlayer.getNextPlayer().getPlayerID())){
-                                    PlayerViews.get(match.getPlayers().get(i).getPlayerID()).onSelectViewEvent(new GameView("It's " + match.getCurrentPlayer().getNextPlayer().getPlayerNickName() + "'s turn! Wait for your turn!"));
+                                if(PlayerViews.get(match.getPlayers().get(i).getPlayerID())!=currentPlayerView && PlayerViews.get(match.getPlayers().get(i).getPlayerID())!=PlayerViews.get(match.getCurrentPlayer().getPlayerID())){
+                                    PlayerViews.get(match.getPlayers().get(i).getPlayerID()).onSelectViewEvent(new GameView("It's " + match.getCurrentPlayer().getPlayerNickName() + "'s turn! Wait for your turn!"));
                                 }
                             }
 
-                            currentPlayerView.onSelectViewEvent(new GameView("It's " + match.getCurrentPlayer().getNextPlayer().getPlayerNickName() + "'s turn! Wait for match to finish"));
-
-                            currentPlayerView = PlayerViews.get(currentPlayer.getNextPlayer().getPlayerID());
-                            match.setCurrentPlayer();
+                            currentPlayerView.onSelectViewEvent(new GameView("It's " + match.getCurrentPlayer().getPlayerNickName() + "'s turn! Wait for match to finish"));
+                            currentPlayerView = PlayerViews.get(match.getCurrentPlayer().getPlayerID());
                             currentPlayerView.onSelectViewEvent(new PickingTilesGameView("This is your last turn!"));
                         }
 
@@ -269,15 +268,17 @@ public class Controller implements VCEventListener {
                         //do nothing
                     }
                 }else{
+                    match.setCurrentPlayer();
+
                     for(int i=0; i<numberOfPlayers; i++){
-                        if(!flag && PlayerViews.get(match.getPlayers().get(i).getPlayerID())!=PlayerViews.get(currentPlayer.getNextPlayer().getPlayerID())){
-                            PlayerViews.get(match.getPlayers().get(i).getPlayerID()).onSelectViewEvent(new GameView("It's " + match.getCurrentPlayer().getNextPlayer().getPlayerNickName() + "'s turn! Wait for your turn!"));
+                        if(!flag && PlayerViews.get(match.getPlayers().get(i).getPlayerID())!=PlayerViews.get(match.getCurrentPlayer().getPlayerID())){
+                            PlayerViews.get(match.getPlayers().get(i).getPlayerID()).onSelectViewEvent(new GameView("It's " + match.getCurrentPlayer().getPlayerNickName() + "'s turn! Wait for your turn!"));
                         }
                     }
 
 
-                    currentPlayerView = PlayerViews.get(currentPlayer.getNextPlayer().getPlayerID());
-                    match.setCurrentPlayer();
+                    currentPlayerView = PlayerViews.get(match.getCurrentPlayer().getPlayerID());
+
                     currentPlayerView.onSelectViewEvent(new PickingTilesGameView());
                 }
 
@@ -289,15 +290,16 @@ public class Controller implements VCEventListener {
                     }
 
                 }else{
+                    match.setCurrentPlayer();
                     for(int i=0; i<numberOfPlayers; i++){
-                        if(PlayerViews.get(match.getPlayers().get(i).getPlayerID())!=currentPlayerView && PlayerViews.get(match.getPlayers().get(i).getPlayerID())!=PlayerViews.get(currentPlayer.getNextPlayer().getPlayerID())){
-                            PlayerViews.get(match.getPlayers().get(i).getPlayerID()).onSelectViewEvent(new GameView("It's " + match.getCurrentPlayer().getNextPlayer().getPlayerNickName() + "'s turn! Wait for match to finish" ));
+                        if(PlayerViews.get(match.getPlayers().get(i).getPlayerID())!=currentPlayerView && PlayerViews.get(match.getPlayers().get(i).getPlayerID())!=PlayerViews.get(match.getCurrentPlayer().getPlayerID())){
+                            PlayerViews.get(match.getPlayers().get(i).getPlayerID()).onSelectViewEvent(new GameView("It's " + match.getCurrentPlayer().getPlayerNickName() + "'s turn! Wait for match to finish" ));
                         }
                     }
 
-                    currentPlayerView.onSelectViewEvent(new GameView("It's " + match.getCurrentPlayer().getNextPlayer().getPlayerNickName() + "'s turn! Wait for match to finish" ));
-                    currentPlayerView = PlayerViews.get(currentPlayer.getNextPlayer().getPlayerID());
-                    match.setCurrentPlayer();
+                    currentPlayerView.onSelectViewEvent(new GameView("It's " + match.getCurrentPlayer().getPlayerNickName() + "'s turn! Wait for match to finish" ));
+                    currentPlayerView = PlayerViews.get(match.getCurrentPlayer().getPlayerID());
+
                     currentPlayerView.onSelectViewEvent(new PickingTilesGameView("This is your last turn!"));
                 }
             }
@@ -660,6 +662,11 @@ public class Controller implements VCEventListener {
                 }else{
                     currentPlayerView.onSelectViewEvent(new PickingTilesGameView("A player has lost connection,"+
                             "so now it's your turn!\nPlease select some tiles and then checkout"));
+                    for(int i=0; i< match.getNumberOfPlayers(); i++){
+                        if(PlayerViews.get(match.getPlayers().get(i).getPlayerID())!=currentPlayerView ){
+                            PlayerViews.get(match.getPlayers().get(i).getPlayerID()).onSelectViewEvent(new GameView("A player has lost connection, It's " + match.getCurrentPlayer().getPlayerNickName() + "'s turn! Wait for your turn!" ));
+                        }
+                    }
                 }
             }else if(onlyOneIsConnected){
                 currentPlayerView.onSelectViewEvent(new GameView("Since you are the only player connected," +
@@ -694,7 +701,6 @@ public class Controller implements VCEventListener {
             for (Integer i : PlayerViews.keySet()) {
                 if (PlayerViews.get(i).equals(vv)) {
                     if(onlyOneIsConnected){
-                        onlyOneIsConnected = false;
                         timer.cancel();
                     }
                     if(!everyoneOffline){
@@ -702,8 +708,12 @@ public class Controller implements VCEventListener {
                     }
                     match.reconnectPlayer(hashNicknames.get(i), PlayerViews.get(i));
                     //match.triggerMVUpdate();
-                    if(everyoneOffline){
-                        everyoneOffline = false;
+                    if(everyoneOffline || onlyOneIsConnected){
+                        if(everyoneOffline){
+                            everyoneOffline = false;
+                        }else{
+                            onlyOneIsConnected = false;
+                        }
                         Player p = match.getCurrentPlayer();
                         currentPlayerView = PlayerViews.get(p.getPlayerID());
                         PlayerViews.get(p.getPlayerID()).onSelectViewEvent(new PickingTilesGameView());
