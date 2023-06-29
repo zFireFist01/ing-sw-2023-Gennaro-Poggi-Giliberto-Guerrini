@@ -1086,7 +1086,7 @@ public class GUI extends Application implements View {
         personalGoalImageView.setImage(personalGoalImage);
 
         for(int i=0; i<numberPlayers;i++){
-            if(players.get(i).getPlayerNickName().equals(match.getCurrentPlayer().getPlayerNickName())){
+            if(players.get(i).getPlayerNickName().equals(match.getFirstPlayer().getPlayerNickName())){
                 ImageView firsttoken = (ImageView)gameRoot.lookup("#player"+String.valueOf(i)+"firsttoken");
                 firsttoken.setVisible(true);
                 break;
