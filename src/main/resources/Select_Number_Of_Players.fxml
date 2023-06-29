@@ -40,7 +40,7 @@
                   <ComboBox fx:id="numberPlayersMenu" prefHeight="45.0" prefWidth="132.0" promptText="Select N° Players" style="-fx-background-color: #ffc033; -fx-border-radius: 15; -fx-background-radius: 15;" />
                </children>
             </HBox>
-            <Button fx:id="submitUsernameAndPlayersButton" mnemonicParsing="false" onAction="#onClickSubmitUsernamePlayerButton" prefHeight="45.0" prefWidth="99.0" style="-fx-border-radius: 15; -fx-background-radius: 15; -fx-background-color: #ffc033;" text="Submit">
+            <Button fx:id="submitUsernameAndPlayersButton" mnemonicParsing="false" onAction="#onClickSubmitUsernamePlayerButton" prefHeight="45.0" prefWidth="99.0" style="-fx-border-radius: 15; -fx-background-radius: 15; -fx-background-color: #ffc033;" stylesheets="@Style.css" text="Submit">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -50,7 +50,7 @@
                   <Font size="25.0" />
                </font>
             </Text>
-            <Button fx:id="quitButtonBeforeRunning" mnemonicParsing="false" onAction="#onQuitButtonBeforeRunning" prefHeight="26.0" prefWidth="69.0" style="-fx-background-color: #ffc033; -fx-border-radius: 15; -fx-background-radius: 15;" text="Quit">
+            <Button fx:id="quitButtonBeforeRunning" mnemonicParsing="false" onAction="#onQuitButtonBeforeRunning" prefHeight="26.0" prefWidth="69.0" style="-fx-background-color: #ffc033; -fx-border-radius: 15; -fx-background-radius: 15;" stylesheets="@Style.css" text="Quit">
                <font>
                   <Font size="14.0" />
                </font>

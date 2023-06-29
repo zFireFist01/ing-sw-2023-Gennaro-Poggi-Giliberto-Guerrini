@@ -111,8 +111,7 @@
             <Image url="@item tiles/Trofei1.3.png" />
          </image>
       </ImageView>
-      <Button id="quitButton" fx:id="quitButton" layoutX="548.0" layoutY="371.0" mnemonicParsing="false" onAction="#onQuitButton" text="QUIT" />
-      <Button id="playButton" fx:id="playButton" layoutX="457.0" layoutY="371.0" mnemonicParsing="false" onAction="#onPlayButton" text="PLAY AGAIN" />
-      <Button fx:id="showBookshelf" layoutX="329.0" layoutY="371.0" mnemonicParsing="false" onAction="#onShowBookshelf" prefHeight="25.0" prefWidth="119.0" text="SHOW BOOKSHELF" />
+      <Button id="quitButton" fx:id="quitButtonBeforeRunning" layoutX="545.0" layoutY="356.0" mnemonicParsing="false" onAction="#onQuitButtonBeforeRunning" stylesheets="@Style.css" text="QUIT" />
+      <Button fx:id="showBookshelf" layoutX="405.0" layoutY="356.0" mnemonicParsing="false" onAction="#onShowBookshelf" prefHeight="29.0" prefWidth="133.0" stylesheets="@Style.css" text="SHOW BOOKSHELF" />
    </children>
 </AnchorPane>

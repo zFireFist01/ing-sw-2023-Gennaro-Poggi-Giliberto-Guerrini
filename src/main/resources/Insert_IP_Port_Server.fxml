@@ -22,7 +22,7 @@
          <children>
             <AnchorPane maxHeight="-Infinity" prefHeight="338.0" prefWidth="99.0">
                <children>
-                  <Button fx:id="backSocket" layoutX="20.0" layoutY="182.0" mnemonicParsing="false" onAction="#onBackButtonClicked" style="-fx-background-color: #ffc033; -fx-border-radius: 15; -fx-background-radius: 15;" text="&lt;-back" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="200.0" />
+                  <Button fx:id="backSocket" layoutX="20.0" layoutY="182.0" mnemonicParsing="false" onAction="#onBackButtonClicked" style="-fx-background-color: #ffc033; -fx-border-radius: 15; -fx-background-radius: 15;" stylesheets="@Style.css" text="&lt;-back" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="200.0" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -37,7 +37,7 @@
                   </ImageView>
                   <TextField fx:id="addressServer" maxWidth="-Infinity" prefHeight="25.0" prefWidth="200.0" promptText="Server Address:" />
                   <TextField fx:id="portServer" maxWidth="-Infinity" prefHeight="25.0" prefWidth="200.0" promptText="Server Port:" />
-                  <Button fx:id="connectButton" mnemonicParsing="false" onAction="#onClickConnectButton" prefHeight="39.0" prefWidth="79.0" style="-fx-background-color: #ffc033; -fx-border-radius: 15; -fx-background-radius: 15;" text="Connect">
+                  <Button fx:id="connectButton" mnemonicParsing="false" onAction="#onClickConnectButton" prefHeight="39.0" prefWidth="79.0" style="-fx-background-color: #ffc033; -fx-border-radius: 15; -fx-background-radius: 15;" stylesheets="@Style.css" text="Connect">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>

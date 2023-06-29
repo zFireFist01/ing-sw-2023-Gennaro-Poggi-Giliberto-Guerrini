@@ -2070,8 +2070,13 @@ public class GUI extends Application implements View {
     private void onQuitButtonBeforeRunning(ActionEvent event){
         Stage currentStage = (Stage) quitButtonBeforeRunning.getScene().getWindow();
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("ATTENTION");
-        alert.setHeaderText("Since you haven't joined a match yet, you wont be remembered!");
+        if(MatchEnded){
+            alert.setTitle("Game Over");
+            alert.setHeaderText("The directory for this match will be deleted! Thanks for playing! :)");
+        }else{
+            alert.setTitle("ATTENTION");
+            alert.setHeaderText("Since you haven't joined a match yet, you wont be remembered!");
+        }
         deleteDirectory();
         alert.showAndWait();
         currentStage.close();
