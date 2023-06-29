@@ -11,19 +11,45 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 
+
+/**
+ * EventAdapter is a specific implementation of a TypeAdapter for the Event type.
+ * It provides custom deserialization logic for reading Event objects from JSON input.
+ * @Author ValentinoGuerrini
+ */
 public class EventAdapter extends TypeAdapter<Event> {
     private Gson gson;
+
+    /**
+     * Constructs a new EventAdapter with a provided Gson instance.
+     *
+     * @param gson the Gson instance to use for JSON processing
+     */
 
     public EventAdapter(Gson gson) {
         this.gson = gson;
     }
 
+    /**
+     * Throws an UnsupportedOperationException, as write functionality is not implemented.
+     *
+     * @param out   the JSON writer
+     * @param value the Event object to serialize
+     * @throws UnsupportedOperationException as write functionality is not implemented
+     */
     @Override
     public void write(JsonWriter out, Event value) throws IOException {
-        // Implementazione opzionale della serializzazione
         throw new UnsupportedOperationException("Serializzazione non implementata");
     }
 
+    /**
+     * Reads an Event object from a JSONReader instance.
+     * The object's type is determined by the 'primaryType', 'secondaryType' and 'thirdType' fields in the input JSON.
+     *
+     * @param in the JSON reader from which to read the Event object
+     * @return the Event object read from the JSON input
+     * @throws IOException if an error occurs during reading from the JSON reader, or if expected fields are missing in the input JSON
+     */
     @Override
     public Event read(JsonReader in) throws IOException {
         Gson gson = new GsonBuilder()

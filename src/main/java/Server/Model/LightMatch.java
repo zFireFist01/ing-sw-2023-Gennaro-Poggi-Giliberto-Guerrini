@@ -118,7 +118,7 @@ public class LightMatch {
         Player p= this.getFirstPlayer();
         for (int i=0; i<numberOfPlayers; i++){
             orderOfPlayers.add(p);
-            p=p.getNextPlayer();
+            p=p.getRealNextPlayer();
         }
     }
 

@@ -344,7 +344,7 @@ public class Match {
 
         }
         tmp = firstPlayer;
-        for (int i = 0; i < numberOfPlayers; tmp = tmp.getNextPlayer(), i++) {
+        for (int i = 0; i < numberOfPlayers; tmp = tmp.getRealNextPlayer(), i++) {
             if (scores.get(tmp) >= maxScores) {
                 maxScores = scores.get(tmp);
                 setWinner(tmp);
