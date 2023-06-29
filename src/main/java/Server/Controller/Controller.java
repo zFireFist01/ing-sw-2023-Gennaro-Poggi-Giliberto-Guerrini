@@ -39,7 +39,7 @@ import java.util.*;
 public class Controller implements VCEventListener {
 
     private /*final*/ Match match;
-    //private VirtualView[] virtualViews;
+
     private VirtualView caller;
     private VirtualView currentPlayerView;
     private Map<Integer,VirtualView > PlayerViews=new HashMap<>();
@@ -123,11 +123,9 @@ public class Controller implements VCEventListener {
                 PlayerViews.put(nickname.hashCode(),caller);
                 hashNicknames.put(nickname.hashCode(),newPlayer);
                 caller.getConnectionInfo().setNickname(nickname);
-                //server.updateConnectionStatus(caller.getConnectionInfo(), true);
                 System.out.println("Controller connection info.nickname: " + caller.getConnectionInfo().getNickname());
                 if(match.getMatchStatus() instanceof WaitingForPlayers){
                     caller.onSelectViewEvent(new GameView("Waiting for other players to join..."));
-                    //caller.onSelectViewEvent(new GameView());
                 }else if (match.getMatchStatus() instanceof Running){
                     if(!server.getClientsWaitingForMatch().isEmpty()){
                         server.dequeueWaitingClients();
@@ -457,7 +455,7 @@ public class Controller implements VCEventListener {
 
                 }catch(UnsupportedOperationException e){
                     match.clearSelectedTiles();
-                    currentPlayerView.onSelectViewEvent(new PickingTilesGameView("Tiles Selected: "));
+                    currentPlayerView.onSelectViewEvent(new PickingTilesGameView(e.getMessage()));
                 }
             }
             case 4 -> {
@@ -471,7 +469,7 @@ public class Controller implements VCEventListener {
                     currentPlayerView.onSelectViewEvent(new InsertingTilesGameView());
                 }catch(UnsupportedOperationException e){
                     match.clearSelectedTiles();
-                    currentPlayerView.onSelectViewEvent(new PickingTilesGameView("Tiles Selected: "));
+                    currentPlayerView.onSelectViewEvent(new PickingTilesGameView(e.getMessage()));
                 }
             }
             case 6 -> {
@@ -486,7 +484,7 @@ public class Controller implements VCEventListener {
                     currentPlayerView.onSelectViewEvent(new InsertingTilesGameView());
                 }catch(UnsupportedOperationException e){
                     match.clearSelectedTiles();
-                    currentPlayerView.onSelectViewEvent(new PickingTilesGameView("Tiles Selected: "));
+                    currentPlayerView.onSelectViewEvent(new PickingTilesGameView(e.getMessage()));
                 }
             }
         }
@@ -660,24 +658,31 @@ public class Controller implements VCEventListener {
                     currentPlayerView.onSelectViewEvent(new GameView("Since you are the only player connected," +
                             "the match will be paused"));
                 }else{
-                    currentPlayerView.onSelectViewEvent(new PickingTilesGameView("A player has lost connection,"+
-                            "so now it's your turn!\nPlease select some tiles and then checkout"));
-                    for(int i=0; i< match.getNumberOfPlayers(); i++){
-                        if(PlayerViews.get(match.getPlayers().get(i).getPlayerID())!=currentPlayerView ){
-                            PlayerViews.get(match.getPlayers().get(i).getPlayerID()).onSelectViewEvent(new GameView("A player has lost connection, It's " + match.getCurrentPlayer().getPlayerNickName() + "'s turn! Wait for your turn!" ));
+                    if(previousCurrentPlayer.getNextPlayer().getPlayerID()==match.getFirstPlayer().getPlayerID() && match.getFirstToFinish()!=null){
+                        match.calculateFinalScores();
+
+                        for(Integer i  : PlayerViews.keySet()) {
+                            if (!match.getDisconnectedPlayersVirtualViews().containsKey(PlayerViews.get(i))) {
+                                PlayerViews.get(match.getPlayers().get(i).getPlayerID()).onSelectViewEvent(new EndedMatchView());
+                            }
                         }
+
+                    }else{
+                        currentPlayerView.onSelectViewEvent(new PickingTilesGameView("A player has lost connection,"+
+                                "so now it's your turn!\nPlease select some tiles and then checkout"));
                     }
+
                 }
             }else if(onlyOneIsConnected){
                 currentPlayerView.onSelectViewEvent(new GameView("Since you are the only player connected," +
                         "the match will be paused"));
             }
 
-            //TODO: Serve veramente?
+
             for(Integer i  : PlayerViews.keySet()){
                 if(!match.getDisconnectedPlayersVirtualViews().containsKey(PlayerViews.get(i))
                         && !PlayerViews.get(i).equals(currentPlayerView)){
-                    PlayerViews.get(i).onSelectViewEvent(new GameView());
+                    PlayerViews.get(i).onSelectViewEvent(new GameView("A player has lost connection, It's " + match.getCurrentPlayer().getPlayerNickName() + "'s turn! Wait for your turn!" ));
                 }
             }
         }else{
