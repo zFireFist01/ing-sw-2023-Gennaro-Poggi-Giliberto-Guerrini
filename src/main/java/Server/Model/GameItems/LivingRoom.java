@@ -114,7 +114,7 @@ public class LivingRoom {
      * or there are only tiles left with no adjacent tiles
      * @return true if the refresh is needed, false otherwise
      */
-    private boolean livingroomneedRefresh(){
+    private boolean livingRoomNeedRefresh(){
         for(int i=0;i<LIVINGROOMHEIGHT;i++){
             for(int j=0;j<LIVINGROOOMWIDTH;j++){
                 if(tileMatrix[i][j].isReal() && !tileMatrix[i][j].isEmpty()){
@@ -358,7 +358,7 @@ public class LivingRoom {
             throw new UnsupportedOperationException("At least one of the tiles you selected is not pick-able!");
         }
         notifyMVEventListeners(new ModifiedLivingRoomEvent(new LightMatch(this.m)));
-        if(livingroomneedRefresh()){
+        if(livingRoomNeedRefresh()){
             refreshLivingRoom();
             notifyMVEventListeners(new ModifiedLivingRoomEvent(new LightMatch(this.m)));
         }
