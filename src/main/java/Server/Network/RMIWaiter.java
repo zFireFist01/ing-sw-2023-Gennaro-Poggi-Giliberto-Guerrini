@@ -147,6 +147,7 @@ public class RMIWaiter extends UnicastRemoteObject implements RMIWaiterInterface
                         if(clientsVV instanceof VirtualRMIView){
                             ((VirtualRMIView)clientsVV).setClient(requestingClient);
                             clientsVV.onSelectViewEvent(new GameView("Wait for your turn"));
+                            clientsVV.setConnected(true);
                         }else{
                             throw new UnsupportedOperationException("The client didn't choose RMI as a re-connection type, " +
                                     "while the first time he connected he did");

@@ -60,4 +60,5 @@ public interface VirtualView extends Runnable, MVEventListener, SelectViewEventL
 
     public List<VCEventListener> getVCEventListeners();
 
+    public void setConnected(boolean connected);
 }

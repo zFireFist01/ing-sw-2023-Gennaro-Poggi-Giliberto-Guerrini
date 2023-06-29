@@ -36,6 +36,8 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
     RemoteNetworkHandler client;
     boolean isFirsToJoin;
     boolean pongReceived;
+
+    boolean isConnected;
     Object pongLocker = new Object();
     ConnectionInfo connectionInfo;
 
@@ -51,6 +53,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
         vcEventListeners = new ArrayList<>();
         this.isFirsToJoin = isFirsToJoin;
         this.pongReceived = true;
+        this.isConnected = true;
     }
 
     @Override
@@ -108,7 +111,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
      * @see Gson
      */
     public /*synchronized*/ void onMVEvent(MVEvent event) {
-        if(!pongReceived){
+        if(!isConnected){
             return;
         }
         synchronized (client){
@@ -132,7 +135,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
      * @see Gson
      */
     public /*synchronized*/ void onSelectViewEvent(SelectViewEvent event) {
-        if(!pongReceived){
+        if(!isConnected){
             return;
         }
         synchronized (client){
@@ -278,5 +281,9 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
     public void pong() {
         System.out.println("Ponged RMI client");
         return;
+    }
+
+    public void setConnected(boolean connected) {
+        this.isConnected = connected;
     }
 }

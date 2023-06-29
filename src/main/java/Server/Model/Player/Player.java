@@ -69,6 +69,11 @@ public class Player {
         return localNextPlayer;
     }
 
+    public Player getRealNextPlayer() {
+        //return nextPlayer not considering the disconnected player
+        return nextPlayer;
+    }
+
     public void setNextPlayer(Player nextPlayer) {
         this.nextPlayer = nextPlayer;
     }
