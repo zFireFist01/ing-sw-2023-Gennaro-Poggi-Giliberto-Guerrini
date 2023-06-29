@@ -134,7 +134,7 @@ public class NetworkSocketHandler implements NetworkHandler{
                 .create();
 
         try {
-            socket.setSoTimeout(8000);
+            socket.setSoTimeout(10000);
         } catch (SocketException e) {
             throw new RuntimeException(e);
         }
