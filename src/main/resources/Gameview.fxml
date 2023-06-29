@@ -525,7 +525,7 @@
                                                    <effect>
                                                       <GaussianBlur radius="0.0" />
                                                    </effect></Rectangle>
-                                                <Label id="servermessage" fx:id="servermessage" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="18.0" prefWidth="454.0" style="-fx-: white;" text="Match Started!" textAlignment="CENTER" textFill="#c00fff" wrapText="true">
+                                                <Label id="servermessage" fx:id="servermessage" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="18.0" prefWidth="454.0" style="-fx-: white;" text="Match started! Wait for your turn!" textAlignment="CENTER" textFill="#c00fff" wrapText="true">
                                                    <StackPane.margin>
                                                       <Insets top="20.0" />
                                                    </StackPane.margin>
