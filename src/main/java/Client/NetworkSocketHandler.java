@@ -10,6 +10,7 @@ import Server.Events.VCEvents.VCEvent;
 import Server.Network.VirtualView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -136,7 +137,13 @@ public class NetworkSocketHandler implements NetworkHandler{
         try {
             socket.setSoTimeout(10000);
         } catch (SocketException e) {
-            throw new RuntimeException(e);
+            System.out.println(ANSIParameters.CLEAR_SCREEN+ANSIParameters.CURSOR_HOME+
+                    "Lost connection with server.\nPlease wait a few seconds and try to reconnect.");
+            try {
+                view.resetConnection();
+            }catch(IOException ex){
+                System.out.println("Error while resetting connection");
+            }
         }
         while (true) {
             try{
@@ -177,8 +184,14 @@ public class NetworkSocketHandler implements NetworkHandler{
                         System.out.println(message);
                         System.exit(0);
                     }
-                    event = gson.fromJson(message, Event.class);
-                    primaryType = event.getPrimaryType();
+                    try{
+                        event = gson.fromJson(message, Event.class);
+                        primaryType = event.getPrimaryType();
+                    }catch (JsonSyntaxException e) {
+                        //Probably just received a fragment of the word "ping" due to a connection error in between the
+                        //reading of the byted from the stream
+                        continue;
+                    }
 
                     switch (primaryType) {
                         case "MVEvent":
