@@ -88,6 +88,7 @@ public class PingManager implements Runnable{
                                 //The player lost connection
                                 System.err.println("Ciao ciao ciao");
                                 virtualViewStatuses.put(virtualView, false);
+                                virtualView.setConnected(false);
                                 List ptr = virtualViewControllerMap.get(virtualView).playerDisconnected(virtualView);
                                 if(ptr != null){
                                     toRemove.addAll(ptr);

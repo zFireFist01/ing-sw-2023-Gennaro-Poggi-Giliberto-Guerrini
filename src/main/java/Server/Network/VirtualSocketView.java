@@ -27,6 +27,7 @@ public class VirtualSocketView implements VirtualView{
     OutputStream out;
     boolean isFirstToJoin;
     boolean pongReceived;
+    boolean isConnected;
 
     Object pongLocker = new Object();
     List<VCEventListener> vcEventListeners;
@@ -45,6 +46,7 @@ public class VirtualSocketView implements VirtualView{
             throw new RuntimeException(e);
         }
         this.isFirstToJoin = isFirstToJoin;
+        this.isConnected = true;
     }
 
     @Override
@@ -98,7 +100,7 @@ public class VirtualSocketView implements VirtualView{
     }
     @Override
     public void onMVEvent(MVEvent mvEvent){
-        if(!pongReceived){
+        if(!isConnected){
             return;
         }
         synchronized (this.out){
@@ -124,7 +126,7 @@ public class VirtualSocketView implements VirtualView{
 
     @Override
     public void onSelectViewEvent(SelectViewEvent selectViewEvent){
-        if(!pongReceived){
+        if(!isConnected){
             return;
         }
         synchronized (this.out){
@@ -179,7 +181,7 @@ public class VirtualSocketView implements VirtualView{
 
     @Override
     public void ping() {
-        if(!pongReceived){
+        if(!isConnected){
             return;
         }
         synchronized (this.out){
@@ -269,5 +271,10 @@ public class VirtualSocketView implements VirtualView{
     @Override
     public List<VCEventListener> getVCEventListeners() {
         return vcEventListeners;
+    }
+
+    @Override
+    public void setConnected(boolean connected) {
+        this.isConnected = connected;
     }
 }
