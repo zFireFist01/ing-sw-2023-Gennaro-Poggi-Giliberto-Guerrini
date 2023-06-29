@@ -457,7 +457,7 @@ public class Controller implements VCEventListener {
 
                 }catch(UnsupportedOperationException e){
                     match.clearSelectedTiles();
-                    currentPlayerView.onSelectViewEvent(new PickingTilesGameView("Tiles Selected: "));
+                    currentPlayerView.onSelectViewEvent(new PickingTilesGameView(e.getMessage()));
                 }
             }
             case 4 -> {
@@ -471,7 +471,7 @@ public class Controller implements VCEventListener {
                     currentPlayerView.onSelectViewEvent(new InsertingTilesGameView());
                 }catch(UnsupportedOperationException e){
                     match.clearSelectedTiles();
-                    currentPlayerView.onSelectViewEvent(new PickingTilesGameView("Tiles Selected: "));
+                    currentPlayerView.onSelectViewEvent(new PickingTilesGameView(e.getMessage()));
                 }
             }
             case 6 -> {
@@ -486,7 +486,7 @@ public class Controller implements VCEventListener {
                     currentPlayerView.onSelectViewEvent(new InsertingTilesGameView());
                 }catch(UnsupportedOperationException e){
                     match.clearSelectedTiles();
-                    currentPlayerView.onSelectViewEvent(new PickingTilesGameView("Tiles Selected: "));
+                    currentPlayerView.onSelectViewEvent(new PickingTilesGameView(e.getMessage()));
                 }
             }
         }
