@@ -56,6 +56,8 @@ public class CommonGoalCard5 extends CommonGoalCard {
                     verifier[i][j] = 5;
                 } else if (shelf[i][j].getTileType() == TileType.TROPHIES) {
                     verifier[i][j] = 6;
+                }else{
+                    verifier[i][j]=0;
                 }
             }
         }
