@@ -663,7 +663,7 @@ public class Controller implements VCEventListener {
 
                         for(Integer i  : PlayerViews.keySet()) {
                             if (!match.getDisconnectedPlayersVirtualViews().containsKey(PlayerViews.get(i))) {
-                                PlayerViews.get(match.getPlayers().get(i).getPlayerID()).onSelectViewEvent(new EndedMatchView());
+                                PlayerViews.get(i).onSelectViewEvent(new EndedMatchView());
                             }
                         }
 
