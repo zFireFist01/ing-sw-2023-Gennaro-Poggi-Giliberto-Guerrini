@@ -1530,10 +1530,10 @@ public class CLI implements Runnable , View {
                 length++;
             }
             if(names[i].equals(current)){
-                board.setChar(PLAYER_NAME_I, number+length-1, ANSIParameters.GREEN);
+                board.setChar(PLAYER_NAME_I, number+length, ANSIParameters.GREEN);
                 board.setChar(PLAYER_NAME_I, number+length+names[i].length(), "\033[0m");
             }else{
-                board.setChar(PLAYER_NAME_I, number+length-1, ANSIParameters.RED);
+                board.setChar(PLAYER_NAME_I, number+length, ANSIParameters.RED);
                 board.setChar(PLAYER_NAME_I, number+length+names[i].length(), "\033[0m");
             }
             for(int j = 0; j < names[i].length(); j++){
