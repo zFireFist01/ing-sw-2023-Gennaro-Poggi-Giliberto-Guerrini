@@ -666,6 +666,13 @@ public class Controller implements VCEventListener {
                                 PlayerViews.get(i).onSelectViewEvent(new EndedMatchView());
                             }
                         }
+                        match.removeMVEventListener(vv);
+                        this.removeSelectViewEventListener(vv);
+                        server.disconnectClient(vv);
+                        virtualViewsToRemove.add(vv);
+                        return virtualViewsToRemove;
+
+
 
                     }else{
                         currentPlayerView.onSelectViewEvent(new PickingTilesGameView("A player has lost connection,"+
