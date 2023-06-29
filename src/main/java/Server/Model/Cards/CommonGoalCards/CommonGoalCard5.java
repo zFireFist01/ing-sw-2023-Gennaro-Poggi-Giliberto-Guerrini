@@ -30,53 +30,67 @@ public class CommonGoalCard5 extends CommonGoalCard {
         super(playersNum, secondInstance);
     }
 
-    @Override
     public boolean check(Bookshelf bookshelf) {
         BookshelfTileSpot[][] shelf = bookshelf.getTileMatrix();
-        int count = 0;
-        boolean flag;
-        int countdifference = 0;
+        int numColOK=0;
+        int numType=0;
+        boolean flag= true;
         int[][] verifier = new int[6][5];
-        //verify if the 6x5 matrix contains three rows of at most 3 different tile types each
-        for (TileType type : TileType.values()){
-            for (int i = 0; i < 6; i++) {
-                for (int j = 0; j < 5; j++) {
-                    if (shelf[i][j].getTileType() == type)
-                        verifier[i][j] = 2;
-                    else if(shelf[i][j].getTileType() == null)
-                        verifier[i][j] = 0;
-                    else
-                        verifier[i][j] = 1;
+        int[] types= new int[7];
 
+        for(int k=0; k<7; k++){
+            types[k]=0;
+        }
+
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 5; j++) {
+                if (shelf[i][j].getTileType() == TileType.PLANTS) {
+                    verifier[i][j] = 1;
+                } else if (shelf[i][j].getTileType() == TileType.FRAMES) {
+                    verifier[i][j] = 2;
+                } else if (shelf[i][j].getTileType() == TileType.BOOKS) {
+                    verifier[i][j] = 3;
+                } else if (shelf[i][j].getTileType() == TileType.CATS) {
+                    verifier[i][j] = 4;
+                } else if (shelf[i][j].getTileType() == TileType.GAMES) {
+                    verifier[i][j] = 5;
+                } else if (shelf[i][j].getTileType() == TileType.TROPHIES) {
+                    verifier[i][j] = 6;
                 }
             }
-            flag= true;
-            for (int i = 0; i < 5 ; i++) {
-                for(int j=0;j<6 && flag;j++){
-                    if(verifier[j][i]==0){
-                        flag=false;
-                    }else if(verifier[j][i]==1){
-                        countdifference++;
+        }
+
+        for(int j=0; j<5; j++){
+            for(int i=0; i<6 && flag; i++){
+
+                if(verifier[i][j]!=0){
+                    if(types[verifier[i][j]]==0){
+                        types[verifier[i][j]]=1;
+                        numType++;
                     }
-                }
-                if(countdifference>3){
+                    if(numType>3){
+                        flag=false;
+                    }
+                }else{
                     flag=false;
                 }
-                if(flag){
-                    count++;
-                }
-                countdifference=0;
-                flag=true;
+            }
 
+            if(flag){
+                numColOK++;
+                if(numColOK==3){
+                    return true;
+                }
+            }
+
+            flag=true;
+            numType=0;
+            for(int k=0; k<7; k++){
+                types[k]=0;
             }
 
         }
-        if(count>=3){
-            return true;
-        }
-        else {
-            return false;
-        }
+        return false;
 
     }
 
