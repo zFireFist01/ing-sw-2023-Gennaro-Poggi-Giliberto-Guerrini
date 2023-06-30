@@ -1189,6 +1189,10 @@ public class CLI implements Runnable , View {
                                 System.out.println("Invalid input: column must be a number!");
                                 System.out.print("> ");
                                 break;
+                            }catch (Exception e){
+                                System.out.println("Invalid input!");
+                                System.out.print("> ");
+                                break;
                             }
                             int[] coordinatesInt = new int[2];
                             if(row>='a' && row <='i' && column>=0 && column<=8) {
