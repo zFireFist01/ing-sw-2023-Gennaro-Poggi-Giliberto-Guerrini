@@ -79,7 +79,6 @@ public class Server implements Runnable{
     @Override
     public void run() {
         boolean done = false;
-        //System.setProperty("sun.rmi.transport.tcp.responseTimeout", "2000"); // Imposta il timeout a 2 secondi
         new Thread(socketWaiter).start();
         done = false;
         while(!done){
@@ -136,7 +135,6 @@ public class Server implements Runnable{
     protected synchronized boolean waitingMatch(){
         if(matches.size() == 0)
             return false;
-        //return (matches.get(matches.size()-1).getMatchStatus() instanceof WaitingForPlayers) || (matches.get(matches.size()-1).getMatchStatus() instanceof NotRunning) ;
         return (matches.get(matches.size()-1).getMatchStatus() instanceof WaitingForPlayers);
     }
 
@@ -250,10 +248,6 @@ public class Server implements Runnable{
         this.clientsWaitingForMatch.add(waitingClient);
     }
 
-    /*public synchronized void clientLoggedIn(VirtualView client){
-
-    }*/
-
     /**
      * This method is used by the controller when a login occurs.
      * If the queue of the clients waiting for the initialization of a match or for a not-logged-in-yet
@@ -275,7 +269,6 @@ public class Server implements Runnable{
         }
         Queue<VirtualView> noMoreWaitingClients = new LinkedList<>();
         if(lastMatch.getMatchStatus() instanceof WaitingForPlayers){
-            //int numbeOfMissingPlayers = lastMatch.getNumberOfPlayers()-lastMatch.getPlayers().size();
             int numbeOfMissingPlayers = lastMatch.getNumberOfPlayers()-matchesViews.get(lastMatch).size();
             while(numbeOfMissingPlayers>0){
                 VirtualView vv;
@@ -333,7 +326,6 @@ public class Server implements Runnable{
         return clientsWaitingForMatch.isEmpty();
     }
     public Map<ConnectionInfo, Boolean> getClientsConnectionStatuses() {
-        //return clientsConnectionStatuses;
         synchronized (clientsConnectionStatuses){
             return new HashMap<>(clientsConnectionStatuses);
         }
@@ -346,14 +338,12 @@ public class Server implements Runnable{
     }
 
     public Map<Match, Controller> getmatchesControllers() {
-        //return matchesControllers;
         synchronized (matchesControllers){
             return new HashMap<>(matchesControllers);
         }
     }
 
     public Map<Match, List<VirtualView>> getMatchesViews() {
-        //return matchesViews;
         synchronized (matchesViews) {
             return new HashMap<>(matchesViews);
         }
@@ -462,7 +452,6 @@ public class Server implements Runnable{
                     vv.onSelectViewEvent(new LoginView(false, "Please insert your nickname"));
                     vv.addVCEventListener(c);
                     c.addSelectViewEventListener(vv);
-                    //this.updateConnectionStatus(vv.getConnectionInfo(), true);
                 });
             }
 

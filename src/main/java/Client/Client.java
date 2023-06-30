@@ -7,8 +7,18 @@ import javafx.application.Application;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-
+/**
+ * The Client class represents the entry point for the application.
+ * It provides a main method that allows running the application with different interfaces.
+ */
 public class Client {
+
+    /**
+     * The main method is the entry point for the application.
+     * It allows running the application with different interfaces based on the command-line arguments.
+     *
+     * @param args The command-line arguments passed to the application.
+     */
     public static void main(String[] args){
         if (args.length > 1) {
             switch (args[0]) {
@@ -73,7 +83,11 @@ public class Client {
 
 
     /**
-     * This method is used to set up the client and choose the interface
+     * This method is used to set up the client and choose the interface.
+     * It prompts the user to input their choice of interface (CLI or GUI).
+     * If the choice is 1, it creates an instance of the CLI class.
+     * If the choice is 2, it launches the GUI class using JavaFX Application.launch() method.
+     * If the choice is neither 1 nor 2, it displays an error message.
      */
     public void Setup(){
         boolean flag=true;

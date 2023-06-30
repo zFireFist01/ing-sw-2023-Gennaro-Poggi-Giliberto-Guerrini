@@ -134,8 +134,6 @@ public class RMIWaiter extends UnicastRemoteObject implements RMIWaiterInterface
                                                            ConnectionInfo connectionInfo) throws RemoteException{
         VirtualView clientsVV = null;
         boolean found = false;
-        //TODO: Maybe the problem is in the containsKey method
-        //if(server.wasConnectedAndHasDisconnected(connectionInfo)){
             //The client had lost connection and is now legitimately trying to reconnect
             for(Match m : server.getmatchesControllers().keySet()){
                 for(Integer i: server.getmatchesControllers().get(m).getPlayerViews().keySet()){
@@ -169,11 +167,6 @@ public class RMIWaiter extends UnicastRemoteObject implements RMIWaiterInterface
                 throw new UnsupportedOperationException("The match in which the client was playing " +
                         "has been deleted.\nPlease restart the game and login as a new player");
             }
-        /*}else{
-            //The client has never been connected or he has and has already re-established the connection
-            throw new UnsupportedOperationException("The client has never been connected " +
-                    "(or he has and has already re-established the connection)");
-        }*/
         return (RemoteVirtualView)clientsVV;
     }
 }

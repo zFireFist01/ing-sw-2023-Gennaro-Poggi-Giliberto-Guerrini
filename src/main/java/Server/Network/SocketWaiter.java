@@ -74,7 +74,6 @@ public class SocketWaiter implements Runnable{
      */
     @Override
     public void run(){
-        //TODO: Deal with the connection and reconnection using a thread pool because the function has become a bit too long
         while(true){
             Socket socket;
             //VirtualSocketView clientVV;
@@ -174,7 +173,6 @@ public class SocketWaiter implements Runnable{
                                     throw new UnsupportedOperationException("The client didn't choose Socket as a re-connection type, " +
                                             "while the first time he connected he did");
                                 }
-                                //server.updateConnectionStatus(connectionInfo, true);
 
                                 server.updateConnectionStatus(connectionInfo, true);
 

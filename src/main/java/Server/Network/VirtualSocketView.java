@@ -20,6 +20,13 @@ import java.net.SocketException;
 import java.util.*;
 import java.util.concurrent.*;
 
+/**
+ * This class represents a VirtualSocketView. It's responsible for managing the socket connection to a client,
+ * receiving events from the client, and sending events to the client.
+ * It is designed to be run in a separate thread to handle the client's connection.
+ * This class implements the VirtualView interface.
+ * @ Patrick Poggi & Valentino Guerrini & Marta Giliberto
+ */
 public class VirtualSocketView implements VirtualView{
 
     Socket socket;
@@ -34,6 +41,16 @@ public class VirtualSocketView implements VirtualView{
 
     ConnectionInfo connectionInfo;
 
+    /**
+     * The constructor for VirtualSocketView.
+     * It initializes the socket with the given socket, sets the pongReceived flag to true,
+     * and initializes an empty list of VCEventListener objects.
+     * It then creates a Scanner to read from the socket's InputStream and a OutputStream to write to the socket.
+     * If any IOException occurs while initializing the streams, it will print the stack trace and rethrow the exception as a RuntimeException.
+     *
+     * @param socket The socket to communicate with the client.
+     * @param isFirstToJoin Flag indicating whether this client is the first to join or not.
+     */
     public VirtualSocketView(Socket socket , boolean isFirstToJoin) {
         this.socket = socket;
         this.pongReceived = true;
@@ -49,6 +66,12 @@ public class VirtualSocketView implements VirtualView{
         this.isConnected = true;
     }
 
+
+    /**
+     * The run method of this class is responsible for maintaining the connection and communication with the client.
+     * It starts by sending a LoginView message to the client and then enters a loop where it constantly reads incoming messages from the client.
+     * If the connection is lost, a NoSuchElementException will be thrown, at which point the method simply waits and does nothing.
+     */
     @Override
     public void run(){
 
@@ -78,11 +101,17 @@ public class VirtualSocketView implements VirtualView{
         }
     }
 
+    /**
+     * This method is responsible for managing the incoming messages from the client.
+     * It checks for "pong" and "ping" messages and updates the pongReceived flag accordingly.
+     * If the message is not "pong" or "ping", it is a VCEvent, which it then processes.
+     *
+     * @param message The message received from the client.
+     */
     private synchronized void manageMessage(String message){
         
         if(message.equals("pong")){
             pongReceived = true;
-            //message = message.replace("pong", "");
         } else if (message.equals("ping")) {
             return;
         } else{
@@ -98,6 +127,14 @@ public class VirtualSocketView implements VirtualView{
             }
         }
     }
+
+
+    /**
+     * Sends an MVEvent to the client.
+     * This method is synchronized on the OutputStream to avoid concurrent modifications.
+     *
+     * @param mvEvent The MVEvent to be sent to the client.
+     */
     @Override
     public void onMVEvent(MVEvent mvEvent){
         if(!isConnected){
@@ -114,7 +151,6 @@ public class VirtualSocketView implements VirtualView{
                 out.flush();
                 System.out.println("Message sent: "+message);
             }catch (SocketException e){
-                //System.out.println("Lost connection with the client");
                 //We don't need to notify the controller because it will be notified by the PingManager
                 // checking the pongReceived variable
             }catch (IOException e) {
@@ -124,6 +160,12 @@ public class VirtualSocketView implements VirtualView{
         }
     }
 
+    /**
+     * Sends a SelectViewEvent to the client.
+     * This method is synchronized on the OutputStream to avoid concurrent modifications.
+     *
+     * @param selectViewEvent The SelectViewEvent to be sent to the client.
+     */
     @Override
     public void onSelectViewEvent(SelectViewEvent selectViewEvent){
         if(!isConnected){
@@ -138,7 +180,6 @@ public class VirtualSocketView implements VirtualView{
                 out.flush();
                 System.out.println("Message sent "+ message);
             }catch (SocketException e){
-                //System.out.println("Lost connection with the client");
                 //We don't need to notify the controller because it will be notified by the PingManager
                 // checking the pongReceived variable
             }catch (IOException e) {
@@ -149,6 +190,14 @@ public class VirtualSocketView implements VirtualView{
 
     }
 
+    /**
+     * Receives a VCEvent in the form of a JSON string, converts it to a VCEvent object, and notifies all VCEventListeners.
+     *
+     * @param json The JSON string representing the VCEvent.
+     * @throws NoSuchMethodException If a matching method is not found.
+     * @throws InvocationTargetException If the underlying method throws an exception.
+     * @throws IllegalAccessException If this Method object is enforcing Java language access control and the underlying method is inaccessible.
+     */
     @Override
     public void receiveVCEvent(String json) throws NoSuchMethodException, InvocationTargetException,
             IllegalAccessException {
@@ -179,6 +228,13 @@ public class VirtualSocketView implements VirtualView{
         vcEventListeners.remove(listener);
     }
 
+    /**
+     * Sends a "ping" message to the client.
+     * This method is synchronized on the OutputStream to avoid concurrent modifications.
+     * If the client is not connected, it will not attempt to send the "ping" message.
+     * In case of a SocketException, the error is printed but not propagated as the controller will be
+     * notified of the disconnection by the PingManager checking the checkPongResponse method.
+     */
     @Override
     public void ping() {
         if(!isConnected){
@@ -205,6 +261,14 @@ public class VirtualSocketView implements VirtualView{
         }
     }
 
+    /**
+     * Checks if a "pong" response was received from the client.
+     * This method is synchronized on the pongLocker object to avoid concurrent modifications of the pongReceived variable.
+     * If a "pong" response was not received, it assumes that the client has disconnected and returns false.
+     * Otherwise, it returns true.
+     *
+     * @return boolean Indicates if a "pong" response was received (true) or not (false).
+     */
     @Override
     public boolean checkPongResponse() {
         synchronized (pongLocker){

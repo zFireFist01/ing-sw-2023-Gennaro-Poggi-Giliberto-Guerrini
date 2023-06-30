@@ -31,6 +31,48 @@ public class CommonGoalCardsTests {
      */
 
     @Test
+    public void getCardID_getDescription_work_Test(){
+        CommonGoalCard testcard;
+
+        testcard = new CommonGoalCard1(2,false);
+        assertEquals(testcard.getCardID(), 1);
+        assertNotNull(testcard.getCommonGoalDescription());
+        testcard = new CommonGoalCard2(2,false);
+        assertEquals(testcard.getCardID(), 2);
+        assertNotNull(testcard.getCommonGoalDescription());
+        testcard = new CommonGoalCard3(2,false);
+        assertEquals(testcard.getCardID(), 3);
+        assertNotNull(testcard.getCommonGoalDescription());
+        testcard = new CommonGoalCard4(2,false);
+        assertEquals(testcard.getCardID(), 4);
+        assertNotNull(testcard.getCommonGoalDescription());
+        testcard = new CommonGoalCard5(2,false);
+        assertEquals(testcard.getCardID(), 5);
+        assertNotNull(testcard.getCommonGoalDescription());
+        testcard = new CommonGoalCard6(2,false);
+        assertEquals(testcard.getCardID(), 6);
+        assertNotNull(testcard.getCommonGoalDescription());
+        testcard = new CommonGoalCard7(2,false);
+        assertEquals(testcard.getCardID(), 7);
+        assertNotNull(testcard.getCommonGoalDescription());
+        testcard = new CommonGoalCard8(2,false);
+        assertEquals(testcard.getCardID(), 8);
+        assertNotNull(testcard.getCommonGoalDescription());
+        testcard = new CommonGoalCard9(2,false);
+        assertEquals(testcard.getCardID(), 9);
+        assertNotNull(testcard.getCommonGoalDescription());
+        testcard = new CommonGoalCard10(2,false);
+        assertEquals(testcard.getCardID(), 10);
+        assertNotNull(testcard.getCommonGoalDescription());
+        testcard = new CommonGoalCard11(2,false);
+        assertEquals(testcard.getCardID(), 11);
+        assertNotNull(testcard.getCommonGoalDescription());
+        testcard = new CommonGoalCard12(2,false);
+        assertEquals(testcard.getCardID(), 12);
+        assertNotNull(testcard.getCommonGoalDescription());
+    }
+
+    @Test
     public void getPointsTile_work_Test(){
         CommonGoalCard testcard_2player = new CommonGoalCard1(2,false);
         CommonGoalCard testcard_3player = new CommonGoalCard1(3,false);

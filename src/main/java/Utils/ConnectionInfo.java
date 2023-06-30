@@ -5,12 +5,28 @@ import com.google.gson.Gson;
 
 import java.util.Objects;
 
+
+/**
+ * The {@code ConnectionInfo} class is used to store and handle information related to client connections.
+ * It includes details like IP address, port number, nickname of the client, and type of connection (socket, RMI, etc.)
+ * This class implements {@code java.io.Serializable}, allowing it to be converted into a byte stream and transferred.
+ *
+ * @author Patrick Poggi
+ */
 public class ConnectionInfo implements java.io.Serializable{
     private String ip;
     private int port;
     private String nickname;
     private ConnectionType connectionType;
 
+    /**
+     * Constructs a new {@code ConnectionInfo} instance with all necessary information.
+     *
+     * @param ip The IP address of the client.
+     * @param port The port number on which the client is listening.
+     * @param nickname The nickname assigned to the client.
+     * @param connectionType The type of connection.
+     */
     public ConnectionInfo(String ip, int port, String nickname, ConnectionType connectionType) {
         this.ip = ip;
         this.port = port;
@@ -18,6 +34,12 @@ public class ConnectionInfo implements java.io.Serializable{
         this.connectionType = connectionType;
     }
 
+    /**
+     * Constructs a new {@code ConnectionInfo} instance with only IP address and connection type, assigning default values to other fields.
+     *
+     * @param ip The IP address of the client.
+     * @param connectionType The type of connection.
+     */
     public ConnectionInfo(String ip, ConnectionType connectionType) {
         this.ip = ip;
         this.port = -1;
@@ -25,6 +47,13 @@ public class ConnectionInfo implements java.io.Serializable{
         this.connectionType = connectionType;
     }
 
+    /**
+     * Constructs a new {@code ConnectionInfo} instance with IP address, connection type, and nickname, assigning a default value to the port.
+     *
+     * @param ip The IP address of the client.
+     * @param connectionType The type of connection.
+     * @param nickname The nickname assigned to the client.
+     */
     public ConnectionInfo(String ip, ConnectionType connectionType, String nickname) {
         this.ip = ip;
         this.port = -1;
@@ -32,7 +61,7 @@ public class ConnectionInfo implements java.io.Serializable{
         this.connectionType = connectionType;
     }
 
-
+    // getter and setter methods...
     public String getIp() {
         return ip;
     }
@@ -65,8 +94,13 @@ public class ConnectionInfo implements java.io.Serializable{
         this.connectionType = connectionType;
     }
 
+    /**
+     * Returns a string representation of the {@code ConnectionInfo} instance,
+     * which uniquely identifies the connection based on the nickname and IP address.
+     *
+     * @return A string containing the nickname and IP address of the client.
+     */
     public String getSignature(){
-        //return this.nickname+ "@" + this.ip + ":" + this.port;
         return this.nickname+ "@" + this.ip;
     }
 
@@ -75,7 +109,6 @@ public class ConnectionInfo implements java.io.Serializable{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ConnectionInfo that = (ConnectionInfo) o;
-        //return port == that.port && Objects.equals(ip, that.ip) && Objects.equals(nickname, that.nickname) && connectionType == that.connectionType;
         return this.getSignature().equals(that.getSignature());
     }
 
@@ -86,12 +119,6 @@ public class ConnectionInfo implements java.io.Serializable{
 
     @Override
     public String toString() {
-        /*return "ConnectionInfo{" +
-                "ip='" + ip + '\'' +
-                ", port=" + port +
-                ", nickname='" + nickname + '\'' +
-                ", connectionType=" + connectionType +
-                '}';*/
         return new Gson().toJson(this);
     }
 }

@@ -39,3 +39,47 @@ Project requirements: [link](https://github.com/IoSonoDue2/ing-sw-2023-Gennaro-P
 
 
 ⛔ Not implemented(or Work in Progress) &nbsp;&nbsp;&nbsp;&nbsp; ✅ Implemented
+
+
+## Usage
+
+### Requirements
+
+Regardless of the operating system, you must have installed the following programs:
+- Java 17
+- Maven []
+
+#### Windows
+On Windows it is needed to:
+- Set system visual scaling to 100%.
+- Only for CLI:
+  - Run the `chcp 65001` command in the CMD. This enables UTF-8 encoding.
+
+### Compile Instructions
+1. Clone this repository:
+    ```shell
+   git clone https://github.com/IoSonoDue2/ing-sw-2023-Gennaro-Poggi-Giliberto-Guerrini.git
+   ```
+2. Move to the repository folder.
+3. Build the code with maven and move the jar files from `target` to a new directory of your choice:
+    ```shell
+    mvn clean package 
+    ```
+4. Move to the that directory and execute the server and/or the client:
+    ```shell
+    java -jar Server.jar
+    java -jar Client.jar
+    ```
+    
+### Run Instructions
+1. Clone this repository:
+    ```shell
+   git clone https://github.com/IoSonoDue2/ing-sw-2023-Gennaro-Poggi-Giliberto-Guerrini.git
+   ```
+2. Move to the repository folder.
+
+3. Move to the directory "deliverables\final\jar" and execute the server and a client:
+    ```shell
+    java -jar Server.jar
+    java -jar Client.jar
+    ```

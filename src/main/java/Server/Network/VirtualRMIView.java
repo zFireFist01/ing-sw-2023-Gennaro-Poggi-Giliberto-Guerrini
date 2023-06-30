@@ -71,14 +71,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
         }
     }
 
-    /*
-    @Override
-    public void onVCEvent(VCEvent event) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        String type = event.getMethodName();
-        Method method = this.getClass().getDeclaredMethod(type);
-        method.invoke(...);
-    }
-    */
+
 
     @Override
     /**
@@ -186,10 +179,8 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
                 }
                 System.out.println("Pong received");
             } catch (ConnectException e){
-                //System.err.println("Client disconnected: " + e.getMessage() + "\n" + e.getStackTrace());
                 System.err.println("One RMI client has disconnected. The nickname of that client was: " + connectionInfo.getNickname());
             }catch (RemoteException e){
-                //System.err.println("Remote exception: " + e.getMessage() + "\n" + e.getStackTrace());
                 System.err.println("Lost connection with one RMI client");
             }
             return null;
@@ -197,7 +188,6 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
         try {
             // Attendi al massimo 3 secondi per il completamento della chiamata remota
             future.get(3, TimeUnit.SECONDS);
-            //pongReceived = true;
         } catch (TimeoutException e) {
             // Gestisci il timeout
             System.out.println("La chiamata remota ha superato il timeout di 3 secondi.");
@@ -218,9 +208,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
            if(!pongReceived){
                System.err.println("Client disconnected");
                return false;
-               //throw new RuntimeException("Client disconnected");
            }else{
-               //pongReceived = false;
                return true;
            }
        }
@@ -243,8 +231,6 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
     }
 
     public ConnectionInfo getConnectionInfo() {
-        //TODO: check if we need a method get/setConnectionInfoNickname, since the point of this method is to read/write
-        // the nickname from the controller
         return connectionInfo;
     }
 
