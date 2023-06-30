@@ -539,7 +539,7 @@ public class Controller implements VCEventListener {
             currentPlayerView.onSelectViewEvent(new PickingTilesGameView());
             for(int i=0; i< match.getNumberOfPlayers(); i++){
                 if(PlayerViews.get(match.getPlayers().get(i).getPlayerID())!=currentPlayerView ){
-                    PlayerViews.get(match.getPlayers().get(i).getPlayerID()).onSelectViewEvent(new GameView("It's " + match.getCurrentPlayer().getNextPlayer().getPlayerNickName() + "'s turn! Wait for your turn!" ));
+                    PlayerViews.get(match.getPlayers().get(i).getPlayerID()).onSelectViewEvent(new GameView("It's " + match.getCurrentPlayer().getPlayerNickName() + "'s turn! Wait for your turn!" ));
                 }
             }
 
