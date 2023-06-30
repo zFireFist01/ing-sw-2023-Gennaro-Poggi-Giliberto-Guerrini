@@ -55,24 +55,31 @@ On Windows it is needed to:
 - Only for CLI:
   - Run the `chcp 65001` command in the CMD. This enables UTF-8 encoding.
 
-### Instructions
+### Compile Instructions
 1. Clone this repository:
     ```shell
    git clone https://github.com/IoSonoDue2/ing-sw-2023-Gennaro-Poggi-Giliberto-Guerrini.git
    ```
 2. Move to the repository folder.
-3. Build the client package and move it from `target` to a new directory:
-
+3. Build the code with maven and move the jar files from `target` to a new directory of your choice:
     ```shell
-    mvn clean package -P client
+    mvn clean package 
     ```
-4. Build the server package and move it from `target` to a new directory:
-
+4. Move to the that directory and execute the server and/or the client:
     ```shell
-    mvn clean package -P server
+    java -jar Server.jar
+    java -jar Client.jar
     ```
-5. Move to the new directory and execute the server and a client:
+    
+### Run Instructions
+1. Clone this repository:
     ```shell
-    java -jar server.jar
-    java -jar client.jar
+   git clone https://github.com/IoSonoDue2/ing-sw-2023-Gennaro-Poggi-Giliberto-Guerrini.git
+   ```
+2. Move to the repository folder.
+
+3. Move to the directory "deliverables\final\jar" and execute the server and a client:
+    ```shell
+    java -jar Server.jar
+    java -jar Client.jar
     ```
