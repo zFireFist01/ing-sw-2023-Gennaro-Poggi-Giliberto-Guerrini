@@ -7,6 +7,10 @@ import Utils.ConnectionInfo;
 
 import java.io.IOException;
 
+/**
+ * This interface is used to represent the View
+ * @author Patrick Poggi
+ */
 public interface View extends SelectViewEventListener, Runnable, MVEventListener {
     boolean isReconnecting();
 

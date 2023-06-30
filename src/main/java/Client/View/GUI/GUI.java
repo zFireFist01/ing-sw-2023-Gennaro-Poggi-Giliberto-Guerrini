@@ -65,7 +65,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.input.ScrollEvent;
 
 /**
- * This class represents the GUI of the game
+ * This class represents the GUI view of the game
  * @author Valentino Guerrini, Paolo Gennaro, Marta Giliberto
  */
 public class GUI extends Application implements View {
