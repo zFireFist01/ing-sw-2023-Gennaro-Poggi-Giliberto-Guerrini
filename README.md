@@ -52,8 +52,6 @@ Regardless of the operating system, you must have installed the following progra
 #### Windows
 On Windows it is needed to:
 - Set system visual scaling to 100%.
-- Only for CLI:
-  - Run the `chcp 65001` command in the CMD. This enables UTF-8 encoding.
 
 ### Compile Instructions
 1. Clone this repository:
