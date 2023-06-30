@@ -22,7 +22,9 @@ import java.util.Scanner;
 
 
 /**
- * This class is used to handle the network connection with the server
+ * This class implements the NetworkHandler interface and is responsible for handling socket communications.
+ * This class communicates with the server via sockets, and uses Gson to serialize/deserialize JSON objects to/from strings.
+ *
  * @author Marta Giliberto & Paolo Gennaro & Patrick Poggi
  */
 public class NetworkSocketHandler implements NetworkHandler{
@@ -35,10 +37,11 @@ public class NetworkSocketHandler implements NetworkHandler{
     private boolean isReconnecting;
 
     /**
-     * This constructor is used to create a new NetworkSocketHandler and connect it to the server
-     * @param host the host address
-     * @param port the port of the server
-     * @param view the view
+     * Constructs a NetworkSocketHandler with the specified host, port, and View.
+     *
+     * @param host The host to connect to.
+     * @param port The port to connect to.
+     * @param view The View instance associated with this NetworkSocketHandler.
      */
     public NetworkSocketHandler(String host, int port, View view) {
         this.host = host;
@@ -47,6 +50,11 @@ public class NetworkSocketHandler implements NetworkHandler{
         this.isReconnecting = view.isReconnecting();
     }
 
+    /**
+     * Receives and processes a MVEvent from the server.
+     *
+     * @param json The JSON representation of the MVEvent.
+     */
     @Override
     public void receiveMVEvent(String json) {
         Gson gson = new GsonBuilder()
@@ -57,6 +65,11 @@ public class NetworkSocketHandler implements NetworkHandler{
         view.onMVEvent(event);
     }
 
+    /**
+     * Receives and processes a SelectViewEvent from the server.
+     *
+     * @param json The JSON representation of the SelectViewEvent.
+     */
     @Override
     public void receiveSelectViewEvent(String json){
         Gson gson = new GsonBuilder()
@@ -66,11 +79,22 @@ public class NetworkSocketHandler implements NetworkHandler{
         view.onSelectViewEvent(event);
     }
 
+
     @Override
     public void onVCEvent(VCEvent event, VirtualView view) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         throw new IllegalAccessError("This method should not be called");
     }
 
+    /**
+     * This method serializes a VCEvent object into a JSON string and writes it to the output stream for the socket connection.
+     * This allows sending VCEvent objects to the server. In case of an IOException, it will throw a RuntimeException.
+     * If any other exception occurs, it prints an error message and attempts to reset the connection with the server.
+     *
+     * @param event The VCEvent to be sent to the server.
+     * @throws NoSuchMethodException If a method requested to invoke does not exist.
+     * @throws InvocationTargetException If an exception is thrown by the method invoked.
+     * @throws IllegalAccessException If this Method object is enforcing Java language access control and the underlying method is inaccessible.
+     */
     @Override
     public void onVCEvent(VCEvent event) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Gson gson = new Gson();
@@ -79,13 +103,13 @@ public class NetworkSocketHandler implements NetworkHandler{
         try {
             out.write(json.getBytes());
             out.flush();
-            //System.out.println("Message sent: " + json);
         } catch (IOException e) {
             throw new RuntimeException("Error while sending event to server");
         } catch (Exception e){
             System.out.println(ANSIParameters.CLEAR_SCREEN+ANSIParameters.CURSOR_HOME+
                     "Lost connection with server.\nPlease wait a few seconds and try to reconnect.");
             try {
+                //if lookse connection with the server start the reconnection procedure
                 view.resetConnection();
             }catch(IOException ex){
                 System.out.println("Error while resetting connection");
@@ -93,6 +117,16 @@ public class NetworkSocketHandler implements NetworkHandler{
         }
     }
 
+    /**
+     * This is the main operation loop of the NetworkSocketHandler.
+     * It initially establishes a socket connection with the specified host and port,
+     * then continuously reads and processes incoming events from the server.
+     * If it's reconnecting, it will send a "Reconnecting" message to the server, otherwise a "Connecting" message.
+     * The function handles different types of events: "MVEvent", "SelectViewEvent", and "ping".
+     * For each type of event, it executes the appropriate action.
+     * If the connection is lost during the event handling, it attempts to reset the connection and inform the user.
+     * This method continues to run and process events until the connection is lost or an unrecoverable error occurs.
+     */
     @Override
     public void run()  {
         String message=null;
@@ -111,7 +145,7 @@ public class NetworkSocketHandler implements NetworkHandler{
                         (new Gson().toJson(view.getConnectionInfo())+"\n").getBytes()
                 );
                 out.flush();
-                //In queso caso non devo aspettare il messaggio di benvenuto
+
                 System.out.println("Reconnecting to the socket server...");
             } else{
                 out.write("Connecting\n".getBytes());
@@ -120,11 +154,10 @@ public class NetworkSocketHandler implements NetworkHandler{
                         (new Gson().toJson(view.getConnectionInfo())+"\n").getBytes()
                 );
                 out.flush();
-                String firstMessage = in.nextLine(); //Devo prima aspettare il messaggio di benvenuto
+                String firstMessage = in.nextLine();
                 System.out.println("Connected to the socket server!");
                 receiveSelectViewEvent(firstMessage);
-                //Potrebbe non essere il messaggio di benvenuto, ma un evento per dirmi che devo aspettare di essere
-                // gestito perché il match opener non ha ancora deciso con quante persone giocare
+
             }
         } catch (IOException e) {
             System.out.print("Error while connecting to server: please wait a few seconds and try again.\n> ");
@@ -149,8 +182,6 @@ public class NetworkSocketHandler implements NetworkHandler{
             try{
                 StringBuilder sb = new StringBuilder();
                 int character;
-                //message = in.nextLine();
-                //message = (socket.getInputStream()).readNBytes(8192).toString();
                 while((character = socket.getInputStream().read()) != -1){
                     if(character == '\n'){
                         break;
@@ -209,13 +240,15 @@ public class NetworkSocketHandler implements NetworkHandler{
         }
     }
 
+    /**
+     * Sends a ping message to the server to check the connection.
+     */
     @Override
     public void ping() {
         String pingMessage = "ping\n";
         try {
             out.write(pingMessage.getBytes());
             out.flush();
-            //System.out.println("Message sent: " + pingMessage);
         }catch(Exception e){
             System.out.println(ANSIParameters.CLEAR_SCREEN+ANSIParameters.CURSOR_HOME+
                     "Lost connection with server.\nPlease wait a few seconds and try to reconnect.");
@@ -227,15 +260,16 @@ public class NetworkSocketHandler implements NetworkHandler{
         }
     }
 
+    /**
+     * Sends a pong message to the server in response to a ping.
+     */
     private void pong(){
         String pongMessage = "pong\n";
         try {
             out.write(pongMessage.getBytes());
             out.flush();
-            //System.out.println("Message sent: " + pongMessage);
         }catch (SocketException e){
             System.out.println("Lost connection with server");
-            //We don't do anything (is it wrong? We'll see...)
         }catch (IOException e) {
             throw new RuntimeException("Error while sending pong message to server");
         }
