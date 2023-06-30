@@ -49,7 +49,7 @@ public class RMIWaiter extends UnicastRemoteObject implements RMIWaiterInterface
      * @throws RemoteException if the connection with the client goes wrong, see {@link RemoteException}
      */
     public synchronized RemoteVirtualView giveConnection(RemoteNetworkHandler requestingClient) throws RemoteException{
-        //VirtualView clientsVV = new VirtualRMIView((NetworkRMIHandler) requestingClient);
+        System.out.println("An RMI client is requesting a connection\n");
         VirtualRMIView clientsVV = null;
         if(server.waitingMatch()){
             //We don't need to istantiate a new match
@@ -132,6 +132,7 @@ public class RMIWaiter extends UnicastRemoteObject implements RMIWaiterInterface
      */
     public synchronized RemoteVirtualView reGiveConnection(RemoteNetworkHandler requestingClient,
                                                            ConnectionInfo connectionInfo) throws RemoteException{
+        System.out.println("An RMI client is requesting a RE-connection\n");
         VirtualView clientsVV = null;
         boolean found = false;
             //The client had lost connection and is now legitimately trying to reconnect

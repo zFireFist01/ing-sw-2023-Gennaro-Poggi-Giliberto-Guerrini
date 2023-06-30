@@ -112,7 +112,7 @@ public class PingManager implements Runnable{
                                                     virtualViewStatuses.get(virtualView) == true
                                                 )
                             ){
-                                System.err.println("Ciao ciao ciao");
+                                System.err.println("[PingManager]: Dealing client disconnection");
                                 virtualViewStatuses.put(virtualView, false);
                                 virtualView.setConnected(false);
                                 List ptr = virtualViewControllerMap.get(virtualView).playerDisconnected(virtualView);

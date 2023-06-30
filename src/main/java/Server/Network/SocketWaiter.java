@@ -84,8 +84,7 @@ public class SocketWaiter implements Runnable{
                 OutputStream localOut = socket.getOutputStream();
                 String action = localIn.nextLine();
                 if(action.equals("Connecting")){
-                    System.out.println("HELLOOOO\n");
-                    //clients.add(client);
+                    System.out.println("A Socket client is requesting a connection\n");
                     ConnectionInfo connectionInfo =
                             new Gson().fromJson(localIn.nextLine(), ConnectionInfo.class);
                     if(server.waitingMatch()){
@@ -124,6 +123,7 @@ public class SocketWaiter implements Runnable{
                     }else{
                         /*No match waiting for players means: (1) there is a match waiting for initialization,
                         but already instantiated or (2) there is no match instantiated*/
+                        System.out.println("A Socket client is requesting a RE-connection\n");
                         if(server.matchWaitingForInit()){
                             //(1)
                             //This means that the current connection request must wait for the match opener to decide the number of players
@@ -164,9 +164,7 @@ public class SocketWaiter implements Runnable{
                                 clientVV = server.getmatchesControllers().get(m).getPlayerViews().get(i);
                                 clientVV.setPongReceived();
                                 if(clientVV instanceof VirtualSocketView){
-                                    System.err.println("BLAH BLAH BLAH");
                                     ((VirtualSocketView)clientVV).setSocket(socket, localIn);
-                                    //clientVV.setPongReceived(); //Dovrebbe essere inutile...
                                     clientVV.onSelectViewEvent(new GameView("Wait for your turn"));
                                     clientVV.setConnected(true);
                                 }else{

@@ -66,8 +66,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
             );
         } catch (RemoteException e) {
             //We could say that the method invocation went wrong and so may be that the client lost connection
-            System.err.println(e.getStackTrace());
-            throw new RuntimeException(e);
+            System.err.println("VirtualRMIView: Unable to contact client");
         }
     }
 
@@ -103,7 +102,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
      * @param event the MVEvent to be sent to the client.
      * @see Gson
      */
-    public /*synchronized*/ void onMVEvent(MVEvent event) {
+    public void onMVEvent(MVEvent event) {
         if(!isConnected){
             return;
         }
@@ -116,7 +115,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
                 client.receiveMVEvent(json);
             } catch (RemoteException e) {
                 //We could say that the method invocation went wrong and so may be that the client lost connection
-                System.err.println(e.getStackTrace());
+                System.err.println("[Virtual RMI View.onMVEvent]: Couldn't send. The nickname was: " + connectionInfo.getNickname());
             }
         }
     }
@@ -127,7 +126,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
      * @param event the SelectViewEvent to be sent to the client.
      * @see Gson
      */
-    public /*synchronized*/ void onSelectViewEvent(SelectViewEvent event) {
+    public void onSelectViewEvent(SelectViewEvent event) {
         if(!isConnected){
             return;
         }
@@ -139,7 +138,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
                 client.receiveSelectViewEvent(json);
             } catch (RemoteException e) {
                 //We could say that the method invocation went wrong and so may be that the client lost connection
-                System.err.println(e.getStackTrace());
+                System.err.println("[Virtual RMI View.onSelectViewEvent]: Couldn't send. The nickname was: " + connectionInfo.getNickname());
             }
         }
     }
@@ -159,7 +158,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
     }
 
     @Override
-    public /*synchronized*/ void ping() {
+    public void ping() {
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
         Future<Void> future = executor.submit(() -> {
@@ -179,34 +178,28 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
                 }
                 System.out.println("Pong received");
             } catch (ConnectException e){
-                System.err.println("One RMI client has disconnected. The nickname of that client was: " + connectionInfo.getNickname());
+                System.err.println("[Virtual RMI View.ping]: One RMI client has disconnected. The nickname of that client was: " + connectionInfo.getNickname());
             }catch (RemoteException e){
-                System.err.println("Lost connection with one RMI client");
+                System.err.println("[Virtual RMI View.ping]: Lost connection with one RMI client");
             }
             return null;
         });
         try {
-            // Attendi al massimo 3 secondi per il completamento della chiamata remota
             future.get(3, TimeUnit.SECONDS);
         } catch (TimeoutException e) {
-            // Gestisci il timeout
             System.out.println("La chiamata remota ha superato il timeout di 3 secondi.");
             pongReceived = false;
-            // Altre operazioni da eseguire in caso di timeout
         } catch (InterruptedException | ExecutionException e) {
-            // Gestisci altre eccezioni
             e.printStackTrace();
         }
-
-        // Termina l'executor service
         executor.shutdown();
     }
 
     @Override
-    public /*synchronized*/ boolean checkPongResponse() {
+    public boolean checkPongResponse() {
        synchronized (pongLocker){
            if(!pongReceived){
-               System.err.println("Client disconnected");
+               System.err.println("[Virtual RMI View.checkPongResponse()]: Client disconnected");
                return false;
            }else{
                return true;
@@ -215,7 +208,7 @@ public class VirtualRMIView extends UnicastRemoteObject implements VirtualView, 
     }
 
     @Override
-    public /*synchronized*/ void setPongReceived(){
+    public void setPongReceived(){
         synchronized (pongLocker){
             pongReceived = true;
         }

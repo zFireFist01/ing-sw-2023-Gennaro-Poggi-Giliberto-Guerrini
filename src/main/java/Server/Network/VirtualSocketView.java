@@ -83,8 +83,7 @@ public class VirtualSocketView implements VirtualView{
             out.flush();
             System.out.println("Message sent"+mess);
         } catch (IOException e) {
-            System.err.println(e.getStackTrace());
-            throw new RuntimeException(e);
+            System.err.println("[Virtual Socket View.run: IOException]: Unable to send");
         }
         while (true){
             try{
@@ -151,11 +150,13 @@ public class VirtualSocketView implements VirtualView{
                 out.flush();
                 System.out.println("Message sent: "+message);
             }catch (SocketException e){
+                System.err.println("[Virtual Socket View.onMVEvent: Socket Exception]: Unable to send: client's nickname was: "
+                        +connectionInfo.getNickname());
                 //We don't need to notify the controller because it will be notified by the PingManager
-                // checking the pongReceived variable
+                // checking the checkPongResponse method. We just wait.
             }catch (IOException e) {
-                System.err.println(e.getStackTrace());
-                throw new RuntimeException(e);
+                System.err.println("[Virtual Socket View.onMVEvent: IOException]: Unable to send, client's nickname was: "
+                        +connectionInfo.getNickname());
             }
         }
     }
@@ -180,11 +181,13 @@ public class VirtualSocketView implements VirtualView{
                 out.flush();
                 System.out.println("Message sent "+ message);
             }catch (SocketException e){
+                System.err.println("[Virtual Socket View.onSelectViewEvent: Socket Exception]: Unable to send: client's nickname was: "
+                        +connectionInfo.getNickname());
                 //We don't need to notify the controller because it will be notified by the PingManager
-                // checking the pongReceived variable
+                // checking the checkPongResponse method. We just wait.
             }catch (IOException e) {
-                System.err.println(e.getStackTrace());
-                throw new RuntimeException(e);
+                System.err.println("[Virtual Socket View.onSelectViewEvent: IOException]: Unable to send, client's nickname was: "
+                        +connectionInfo.getNickname());
             }
         }
 
@@ -249,13 +252,12 @@ public class VirtualSocketView implements VirtualView{
                 System.out.println("Ping sent: "+pingMessage);
                 System.out.flush();
             }catch (SocketException e){
-                //System.out.println("Lost connection with the client");
-                System.err.println("[Socket Exception]: One Socket client has disconnected, its nickname was: "
+                System.err.println("[Virtual Socket View: Socket Exception]: One Socket client has disconnected, its nickname was: "
                         +connectionInfo.getNickname());
                 //We don't need to notify the controller because it will be notified by the PingManager
                 // checking the checkPongResponse method. We just wait.
             }catch (IOException e) {
-                System.err.println("[IOException] Lost connection with one Socket client, its nickname was: "
+                System.err.println("[Virtual Socket View: IOException] Lost connection with one Socket client, its nickname was: "
                         +connectionInfo.getNickname());
             }
         }
@@ -273,10 +275,8 @@ public class VirtualSocketView implements VirtualView{
     public boolean checkPongResponse() {
         synchronized (pongLocker){
             if(!pongReceived){
-                //System.out.println("Client disconnected");
                 return false;
             }else{
-                //pongReceived = false;
                 System.out.println("Pong received");
                 return true;
             }

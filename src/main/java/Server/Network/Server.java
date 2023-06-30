@@ -482,7 +482,6 @@ public class Server implements Runnable{
                 //There were no clients waiting for a match: simply erase it
                 matchesViews.get(m).clear();
                 matchesViews.remove(m);
-                //}
                 matchesControllers.remove(m);
                 matches.remove(m);
                 m = null;
