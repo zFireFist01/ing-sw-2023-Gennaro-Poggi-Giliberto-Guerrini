@@ -64,6 +64,10 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.input.ScrollEvent;
 
+/**
+ * This class represents the GUI of the game
+ * @author Valentino Guerrini, Paolo Gennaro, Marta Giliberto
+ */
 public class GUI extends Application implements View {
 
     private final String CONNECTION_INFO_DIRECTORY_NAME = "ClientFiles";
@@ -430,17 +434,22 @@ public class GUI extends Application implements View {
         launch(args);
     }
 
+    /**
+     *This method sets up the user interface for connection requests.
+     * It starts the application by initializing the primary stage and loading the necessary resources.
+     @param primaryStage The primary stage of the JavaFX application.
+     @throws IOException If an error occurs while loading the FXML file.
+     @author Valentino Guerrini
+     */
     public void start(Stage primaryStage) throws IOException {
 
         this.primaryStage = primaryStage;
-
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Connection_Requests.fxml"));
         fxmlLoader.setController(this);
         Connectionroot = fxmlLoader.load();
         AnchorPane pane = (AnchorPane) Connectionroot.lookup("#wallpaper");
         ImageView wallpaper =(ImageView) Connectionroot.lookup("#parquet") ;
-
 
         wallpaper.fitHeightProperty().bind(pane.heightProperty());
         wallpaper.fitWidthProperty().bind(pane.widthProperty());
@@ -481,7 +490,15 @@ public class GUI extends Application implements View {
 
     }
 
-
+    /**
+     * This method is called when the user clicks on the submit button.
+     * This method retrieves the name entered in the name field, performs necessary actions to determine the path of
+     * the directory in which to store the connection info file. If it already exists it asks the user if he wants to
+     * reconnect to the game or not through the proper scene. If it doesn't exist it creates the directory of the file,
+     * and then it continues on with the connection process.
+     * @param event The event of clicking on the submit button.
+     * @author Valentino Guerrini
+     */
     @FXML
     private void onClickSubmitname(ActionEvent event){
         TextField nameField = (TextField) Connectionroot.lookup("#namefield");
@@ -536,11 +553,15 @@ public class GUI extends Application implements View {
             }
             connect();
         }
-
-
-
     }
 
+    /**
+     *This method handles the event when the "Yes" button is clicked to indicate that the client was previously connected.
+     *This method prepares the UI for selecting the correct directory if multiple directories exist for the client,
+     *or allows selecting "none" if the correct directory is not known.
+     @param event The action event triggered by clicking the "Yes" button.
+     @autor Valentino Guerrini
+     */
     @FXML
     private void onYesConnected(ActionEvent event){
         int j=1;
@@ -576,6 +597,11 @@ public class GUI extends Application implements View {
 
     }
 
+    /**
+     *This method handles the event when the "OK" button is clicked after selecting a directory from the combo box.
+     *This method retrieves the selected directory path and performs actions accordingly.
+     *@param event The action event triggered by clicking the "OK" button.
+     */
     @FXML
     private void onClickOkCombo(ActionEvent event){
         ComboBox<String> comboBox = (ComboBox<String>) Connectionroot.lookup("#selectlastlogin");
@@ -604,6 +630,13 @@ public class GUI extends Application implements View {
 
     }
 
+
+    /**
+     *Handles the event when the "No" button is clicked to indicate that the client was not previously connected.
+     *This method prepares for connecting to the server by generating a unique directory name if necessary.
+     *@param event The action event triggered by clicking the "No" button.
+     *@autor Valentino Guerrini
+     */
     @FXML
     private void onNoConnected(ActionEvent event){
         Button yesButton = (Button) Connectionroot.lookup("#yesconnectbutton");
@@ -617,10 +650,14 @@ public class GUI extends Application implements View {
             i++;
         }
         connect();
-
     }
 
-
+     /**
+     * This method handles the steps involved in establishing a connection, such as displaying messages,
+      * creating directories, and invoking the appropriate connection process based on whether it's a new
+      * connection or a reconnection.
+      * @author Valentino Guerrini
+     */
     private void connect(){
         //ConnectionType connectionType = null;
         Text printer = (Text) Connectionroot.lookup("#printer");
@@ -673,7 +710,13 @@ public class GUI extends Application implements View {
         pause1.play();
     }
 
-
+    /**
+     *This method is called when there is a reconnecting to be done.
+     *It reads the connection information from the stored file, initializes the network handler based on the
+     *connection type, and updates the UI accordingly.
+     *@throws IOException If an error occurs while reading the connection information file.
+     * @autor Valentino Guerrini
+     */
     private void reconnectionProcess() throws IOException{
         String json = null;
         try {
@@ -705,7 +748,6 @@ public class GUI extends Application implements View {
                     }
                     break;
             }
-            //previousNickname = connectionInfo.getNickname();
             myNick = connectionInfo.getNickname();
         }
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/FirstView.fxml"));
@@ -730,6 +772,12 @@ public class GUI extends Application implements View {
         primaryStage.show();
     }
 
+    /**
+     *This method is called when there is a connecting to be done.
+     *This method initializes the UI for selecting the connection type (RMI or Socket) and updates the scene accordingly.
+     *@throws IOException If an error occurs while loading the UI components.
+     * @autor Valentino Guerrini
+     */
     private void connectionProcess() throws IOException{
         this.isReconnecting = false;
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Socket_RMI_Requests.fxml"));
@@ -778,6 +826,11 @@ public class GUI extends Application implements View {
         primaryStage.show();
     }
 
+    /**
+     * This method is called when there is a SelectViewEvent. It calls a different method based on the type of the event.
+     * @param event The SelectViewEvent the type of SelecyViewEvent
+     * @author Valentino Guerrini
+     */
     @Override
     public void onSelectViewEvent(SelectViewEvent event) {
         String view = event.getType();
@@ -810,6 +863,13 @@ public class GUI extends Application implements View {
 
     }
 
+    /**
+     * This method is called when there is a LoginViewEvent.
+     * It updates the scene,and, if the user is the first to join, it asks him to select the number of players.
+     * @param event The LoginViewEvent to be handled
+     * @throws IOException If an error occurs while loading the UI components.
+     * @author Paolo Gennaro
+     */
     private void onLoginViewEvent(SelectViewEvent event) throws IOException {
         currentView = event;
         LoginView loginView = (LoginView) event;
@@ -852,6 +912,11 @@ public class GUI extends Application implements View {
         }
     }
 
+    /**
+     * This method is called when there is a GameViewEvent. It updates the scene and shows the GameView.
+     * @param event The GameViewEvent to be handled
+     * @author Valentino Guerrini
+     */
     private void onGameViewEvent(SelectViewEvent event){
         currentView = event;
         if(matchStarted) {
@@ -864,6 +929,12 @@ public class GUI extends Application implements View {
         }
     }
 
+    /**
+     * This method is called when there is a PickingTilesGameView.
+     * It updates the scene and shows the view in which the player's picking tiles.
+     * @param event The InsertingTilesGameViewEvent to be handled
+     * @throws IOException If an error occurs while loading the UI components.
+     */
     private void onPickingTilesGameView(SelectViewEvent event){
         currentView = event;
         livingroomgridbuttons.setDisable(false);
@@ -896,6 +967,12 @@ public class GUI extends Application implements View {
         }
     }
 
+    /**
+     * This method is called when a player selects tiles,
+     * in order to set the number on the tiles that the player is picking and to set the opacity.
+     * @param gridPane The gridPane in which the tiles are placed
+     * @author Valentino Guerrini
+     */
     private void clearGrid(GridPane gridPane) {
         for (Node node : gridPane.getChildren()) {
             if (node instanceof Button) {
@@ -906,6 +983,15 @@ public class GUI extends Application implements View {
         }
     }
 
+
+     /**
+     *This method retrieves the Button located at the specified row and column indices in the GridPane.
+     *@param gridPane The GridPane containing the Buttons.
+     *@param i The row index of the Button.
+     *@param j The column index of the Button.
+     *@return The Button at the specified row and column indices, or null if not found.
+      *@author Valentino Guerrini
+     */
     private Button getButtonAt(GridPane gridPane, int i, int j) {
         for (Node node : gridPane.getChildren()) {
             if (node instanceof Button) {
@@ -921,6 +1007,12 @@ public class GUI extends Application implements View {
         return null;
     }
 
+    /**
+     * This method is called when there is a InsertingTilesGameViewEvent.
+     * It updates the scene and shows the view in which the player is inserting tiles in his bookshelf.
+     * @param event The InsertingTilesGameViewEvent to be handled
+     * @author Marta Giliberto
+     */
     private void onInsertingTilesGameView(SelectViewEvent event) {
         clearGrid(livingroomgridbuttons);
         livingroomgridbuttons.setDisable(true);
@@ -931,12 +1023,14 @@ public class GUI extends Application implements View {
         servermessage.setText(currentView.getMessage());
     }
 
-
-
+    /**
+     * This method is called when there is an MVEvent and manage every event with a different method.
+     * @param event The MVEvent to be handled
+     * @author Marta Giliberto
+     */
     @Override
     public void onMVEvent(MVEvent event) {
         String methodName = event.getMethodName();
-        //this.currentPlayerNickname = event.getMatch().getCurrentPlayer().getPlayerNickName();
         switch(methodName) {
             case "onModifiedChatEvent" -> {
                 Platform.runLater(() -> {
@@ -979,15 +1073,16 @@ public class GUI extends Application implements View {
                 });
 
             }
-
         }
     }
 
-    private void onModifiedTurnEvent(LightMatch match) {
+    private void onModifiedTurnEvent(LightMatch match) {}
 
-        //TODO
-    }
-
+    /**
+     * This method is called when there is a MatchStartedEvent.
+     * It shows the GameView and manages the elements of the scene based on the number of players.
+     * @param match The match to be handled
+     */
     private void onMatchStartedEvent(LightMatch match) {
         if(!matchStarted){
             this.matchStarted = true;
@@ -1002,7 +1097,6 @@ public class GUI extends Application implements View {
             }
         }
 
-
         Scene scene;
 
         try {
@@ -1013,10 +1107,7 @@ public class GUI extends Application implements View {
 
         scene.getStylesheets().add(getClass().getResource("/Style.css").toExternalForm());
 
-
-
         numberPlayers = match.getPlayers().size();
-
         chatChoiceBox.getItems().add("Everyone");
         chatChoiceBox.setValue("Everyone");
         for(int i = 0; i < numberPlayers; i++){
@@ -1031,10 +1122,7 @@ public class GUI extends Application implements View {
             }else{
                 chatChoiceBox.getItems().add(match.getPlayers().get(i).getPlayerNickName());
             }
-
-
         }
-
         if(numberPlayers==3){
             StackPane s = (StackPane)gameRoot.lookup("#player2Bookshelf");
             s.setVisible(true);
@@ -1093,11 +1181,9 @@ public class GUI extends Application implements View {
             }
         }
 
-
         onModifiedBookshelfEvent(match);
         onModifiedLivingRoomEvent(match);
         onModifiedPointsEvent(match);
-
 
         bookshelfcol0.setStyle("-fx-background-color: transparent;");
         bookshelfcol0.setOnMouseEntered(event -> bookshelfcol0.setStyle("-fx-background-color: cyan; -fx-opacity: 0.5;"));
@@ -1119,14 +1205,15 @@ public class GUI extends Application implements View {
         bookshelfcol4.setOnMouseEntered(event -> bookshelfcol4.setStyle("-fx-background-color: cyan; -fx-opacity: 0.5;"));
         bookshelfcol4.setOnMouseExited(event -> bookshelfcol4.setStyle("-fx-background-color: transparent;"));
 
-
         primaryStage.setScene(scene);
         primaryStage.setTitle("MyShelfie");
         primaryStage.show();
-
-
     }
 
+    /**
+     * This method is needed to delete the files in the directory where are saved data of the player.
+     * @author Paolo Gennaro
+     */
     private void deleteDirectory(){
         File directory = new File(directoryPath);
         File[] files = directory.listFiles();
@@ -1138,6 +1225,11 @@ public class GUI extends Application implements View {
         directory.delete();
     }
 
+    /**
+     *Updates the bookshelf of a player with images based on the tile types present in the bookshelf matrix.
+     *@param p The player whose bookshelf needs to be updated.
+     *@param index The index of the player's bookshelf (used to locate the corresponding GridPane in the game root).
+     */
     private void updateBookshelf(Player p , int index){
         TileSpot matrix[][]=p.getBookshelf().getTileMatrix();
         int random;
@@ -1229,10 +1321,14 @@ public class GUI extends Application implements View {
                 }
             }
         }
-
-
     }
 
+    /**
+     *This method is called when there is an edit on the LivingRoom of the match.
+     * It updates the GUI View based on the living room of the given match.
+     * @param match The LightMatch containing the living room to be modified.
+     * @author Valentino Guerrini
+     */
     private void onModifiedLivingRoomEvent(LightMatch match){
 
         LivingRoomTileSpot livingroom[][]=match.getLivingRoom().getTileMatrix();
@@ -1324,6 +1420,13 @@ public class GUI extends Application implements View {
 
     }
 
+    /**
+     *This method retrieves the ImageView at the specified position (i, j) in the given GridPane.
+     *@param gridPane The GridPane containing the ImageView.
+     *@param i The row index of the desired ImageView.
+     *@param j The column index of the desired ImageView.
+     *@return The ImageView at the specified position, or null if not found.
+     */
     private ImageView getImageViewAt(GridPane gridPane, int i, int j) {
         for (Node node : gridPane.getChildren()) {
             if (node instanceof ImageView) {
@@ -1339,6 +1442,11 @@ public class GUI extends Application implements View {
         return null;
     }
 
+    /**
+     *This method updates the GUI view based on the modified points in the LightMatch.
+     *@param match The LightMatch containing the updated points information.
+     *@author Marta Giliberto
+     */
     private void onModifiedPointsEvent(LightMatch match){
         firstCommonGoalCard=match.getCommonGoals()[0];
         secondCommonGoalCard=match.getCommonGoals()[1];
@@ -1412,6 +1520,13 @@ public class GUI extends Application implements View {
 
     }
 
+    /**
+     * This method is called when the match is ended. The match ended view shows the final ranking of the players.
+     * So the method calculates the final ranking based on number players and show it.
+     * @param match the match that is ended
+     * @throws IOException If an error occurs while loading the UI components.
+     * @author Marta Giliberto
+     */
     private void onModifiedMatchEndedEvent(LightMatch match) throws IOException {
         Player tmpPlayer = match.getWinner();
         String Punteggio= null;
@@ -1452,9 +1567,6 @@ public class GUI extends Application implements View {
             primaryStage.setResizable(true);
             primaryStage.show();
             return;
-
-
-
         }
 
 
@@ -1569,7 +1681,11 @@ public class GUI extends Application implements View {
         primaryStage.show();
     }
 
-
+    /**
+     * This method updates the bookshelf of the players.
+     * @param match the match in which the bookshelf has to be updated.
+     * @author Valentino Guerrini
+     */
     private void onModifiedBookshelfEvent(LightMatch match) {
         for(Player p : match.getPlayers()){
             for(int i=0; i<numberPlayers;i++){
@@ -1596,6 +1712,11 @@ public class GUI extends Application implements View {
     }
 
     //bookshelfselection
+
+    /**
+     * This method is called when a player selects a column from the bookshelf.
+     * @param event the SelectColumnEvent
+     */
     @FXML
     private void onSelectColoumn(ActionEvent event){
         Button col = (Button) event.getSource();
@@ -1613,11 +1734,15 @@ public class GUI extends Application implements View {
         }
 
         mybookshelf.setStyle("-fx-background-color: transparent;");
-
-
     }
 
     //checkout
+
+    /**
+     * This method is called when a player wants to check out the tiles that he has selected from the LivingRoom
+     * @param event the CheckOutTiles
+     * @author Patrick Poggi
+     */
     @FXML
     private void onCheckout(ActionEvent event){
         try {
@@ -1632,6 +1757,13 @@ public class GUI extends Application implements View {
     }
 
     //livingroomselection
+
+    /**
+     *This method is called when there is a SelectTileEvent
+     *@param event The ActionEvent triggered by selecting a tile.
+     *@throws IOException If an error occurs while loading the UI components.
+     * @author Marta Giliberto
+     */
     @FXML
     private void onTileSelected(ActionEvent event) throws IOException {
 
@@ -1655,13 +1787,17 @@ public class GUI extends Application implements View {
                 throw new RuntimeException(e);
             }
         }
-        //ImageView tmp= getImageViewAt(grid,coordinatesInt[0],coordinatesInt[1]);
-        //tmp.setOpacity(0.5);
-
     }
 
 
     //CHAT
+
+    /**
+     * This method is called when there is an ModifiedChatEVent, and it adds message box to the chat box,
+     * when the player wants to send a message to another player or to everyone.
+     * @param message the message that has to be added to the chat box.
+     * @author Valentino Guerrini
+     */
     public void onModifiedChatEvent(Message message){
 
         String s = MessageToString(message);
@@ -1715,6 +1851,13 @@ public class GUI extends Application implements View {
         return s;
 
     }
+
+/**
+     * This method is called when the player wants to send a message to another player or to everyone.
+     * @param event the SendMessageEvent
+     * @throws IOException If an error occurs while loading the UI components.
+     * @author Valentino Guerrini
+     */
     @FXML
     private void onSendMessage(ActionEvent event) throws IOException {
         String receiver = (String) chatChoiceBox.getValue();
@@ -1751,6 +1894,12 @@ public class GUI extends Application implements View {
 
     //Buttons Methods
 
+    /**
+     * This method is called when a player clicks "Yes" when he wants to reconnect to the game.
+     * @param event the event of the click
+     * @throws IOException If an error occurs while loading the UI components.
+     * @authot Paolo Gennaro
+     */
     @FXML
     private void onClickYesReconnect(ActionEvent event) throws IOException {
         this.isReconnecting = true;
@@ -1797,6 +1946,12 @@ public class GUI extends Application implements View {
         currentStage.show();
     }
 
+    /**
+     * This method is called when a player clicks "No" when he doesn't want to reconnect to the game.
+     * @param event the event of the click
+     * @throws IOException If an error occurs while loading the UI components.
+     * @author Paolo Gennaro
+     */
     @FXML
     private void onClickNoReconnect(ActionEvent event) throws IOException {
         this.isReconnecting = false;
@@ -1845,6 +2000,12 @@ public class GUI extends Application implements View {
         currentStage.show();
     }
 
+    /**
+     * This method is called when a player clicks "SOCKET" when he chooses to play with socket.
+     * @param event the event of the click
+     * @throws IOException If an error occurs while loading the UI components.
+     * @author Paolo Gennaro
+     */
     @FXML
     private void onClickSocketButton(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Insert_IP_Port_Server.fxml"));
@@ -1863,6 +2024,12 @@ public class GUI extends Application implements View {
         currentStage.show();
     }
 
+    /**
+     * This method is called after a player has inserted the IP and the port of the server and clicked "CONNECT".
+     * @param event the event of the click
+     * @throws IOException If an error occurs while loading the UI components.
+     * @author Paolo Gennaro
+     */
     @FXML
     private void onClickConnectButton(ActionEvent event) throws IOException {
 
@@ -1912,6 +2079,12 @@ public class GUI extends Application implements View {
         currentStage.show();
     }
 
+    /**
+     * This method is called when a player clicks "RMI" when he chooses to play with RMI.
+     * @param event the event of the click
+     * @throws IOException If an error occurs while loading the UI components.
+     * @author Paolo Gennaro
+     */
     @FXML
     private void onClickRMIButton(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Insert_Port_Server.fxml"));
@@ -1929,6 +2102,12 @@ public class GUI extends Application implements View {
         currentStage.show();
     }
 
+    /**
+     * This method is called after a player has inserted the port of the server and clicked "CONNECT".
+     * @param event the event of the click
+     * @throws IOException If an error occurs while loading the UI components.
+     * @author Paolo Gennaro
+     */
     @FXML
     private void onClickConnectRMIButton(ActionEvent event) throws IOException {
         int port;
@@ -1981,6 +2160,13 @@ public class GUI extends Application implements View {
         currentStage.show();
     }
 
+    /**
+     * This method is called when a player clicks on Submit button after he has inserted his username
+     * and number of players, then if the username is valid, the player is logged
+     * and the new scene WaitingPlayers is loaded.
+     * @param event the event of the click
+     * @throws IOException If an error occurs while loading the UI components.
+     */
     @FXML
     private void onClickSubmitUsernamePlayerButton(ActionEvent event) throws IOException {
         int numPlayer = numberPlayersMenu.getSelectionModel().getSelectedIndex() + 2 ==1 ? 2 : numberPlayersMenu.getSelectionModel().getSelectedIndex()+2;
@@ -2015,6 +2201,13 @@ public class GUI extends Application implements View {
         currentStage.show();
     }
 
+    /**
+     * This method is called when a player clicks on Submit button after he has inserted his username,
+     * then if the username is valid, the player is logged and the new scene WaitingPlayers is loaded.
+     * @param event the event of the click
+     * @throws IOException If an error occurs while loading the UI components.
+     * @author Paolo Gennaro
+     */
     @FXML
     private void onClickUSubmitUsernameButton(ActionEvent event) throws IOException {
         this.myNick = onlyUsernameField.getText();
@@ -2047,6 +2240,13 @@ public class GUI extends Application implements View {
         currentStage.show();
     }
 
+    /**
+     * This method handles the event generated by clicking the "Quit" button.
+     * It closes the current window, displays an information message to the user,
+     * and terminates the application execution.
+     *
+     * @param event the event triggered by clicking the "Quit" button
+     */
     @FXML
     private void onQuitButton(ActionEvent event){
         Stage currentStage = (Stage) quitButton.getScene().getWindow();
@@ -2066,6 +2266,13 @@ public class GUI extends Application implements View {
         System.exit(0);
     }
 
+    /**
+     * This method handles the event generated by clicking the "Quit" button before starting the game.
+     * It closes the current window, displays an information message to the user,
+     * and terminates the application execution.
+     * @param event the event triggered by clicking the "Quit" button
+     * @author Paolo Gennaro
+     */
     @FXML
     private void onQuitButtonBeforeRunning(ActionEvent event){
         Stage currentStage = (Stage) quitButtonBeforeRunning.getScene().getWindow();
@@ -2083,11 +2290,24 @@ public class GUI extends Application implements View {
         System.exit(0);
     }
 
+    /**
+     * This method handles the event generated by clicking the "Play" button.
+     * Starts a new thread for the network handler.
+     * @param event the event triggered by clicking the "Play" button
+     * @throws IOException If an error occurs while loading the UI components.
+     */
     @FXML
     private void onPlayButton(ActionEvent event) throws IOException{
         new Thread(this.networkHandler).start();
     }
 
+    /**
+     * This method handles the event generated by clicking the "Show Bookshelf" button.
+     * Opens a new window with the previous scene.
+     * @param event the event triggered by clicking the "Show Bookshelf" button
+     * @throws IOException If an error occurs while loading the UI components.
+     * @author Marta Giliberto
+     */
     @FXML
     private void onShowBookshelf(ActionEvent event) throws IOException{
         Stage newStage = new Stage();
@@ -2095,6 +2315,13 @@ public class GUI extends Application implements View {
         newStage.show();
     }
 
+    /**
+     * This method handles the event generated by clicking the "Back" button.
+     * Loads the main scene and sets it as the current scene.
+     * @param event the event triggered by clicking the "Back" button
+     * @throws IOException If an error occurs while loading the UI components.
+     * @author Paolo Gennaro
+     */
     @FXML
     private void onBackButtonClicked(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Socket_RMI_Requests.fxml"));
@@ -2105,7 +2332,6 @@ public class GUI extends Application implements View {
 
         AnchorPane pane = (AnchorPane) newRoot.lookup("#pane_wall");
         ImageView wallpaper =(ImageView) newRoot.lookup("#parquet") ;
-
 
         wallpaper.fitHeightProperty().bind(pane.heightProperty());
         wallpaper.fitWidthProperty().bind(pane.widthProperty());
@@ -2127,8 +2353,6 @@ public class GUI extends Application implements View {
         String hoverStyle2 = "-fx-background-color: #00BFFF; -fx-border-radius: 15; -fx-background-radius: 15;"
                 + "-fx-effect: dropshadow(three-pass-box, rgba(0, 191, 255, 0.8), 10, 0, 0, 0);";
 
-
-
         socketButton.setStyle("-fx-background-color: #ADD8E6; -fx-border-radius: 15; -fx-background-radius: 15;");
         socketButton.setOnMouseEntered(e -> socketButton.setStyle(hoverStyle2));
         socketButton.setOnMouseExited(e -> socketButton.setStyle("-fx-background-color: #ADD8E6; -fx-border-radius: 15; -fx-background-radius: 15;"));
@@ -2137,6 +2361,13 @@ public class GUI extends Application implements View {
         primaryStage.show();
     }
 
+    /**
+     * This method handles the event generated by clicking the "Rules" button.
+     * It loads the rules scene and applies zoom functionality to the image.
+     * @param event the event triggered by clicking the "Rules" button
+     * @throws IOException If an error occurs while loading the UI components.
+     * @author Marta Giliberto
+     */
     @FXML
     private void onRulesButtonClicked(ActionEvent event) throws IOException{
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Rules.fxml"));
@@ -2150,8 +2381,7 @@ public class GUI extends Application implements View {
         rules.fitHeightProperty().bind(pane.heightProperty());
         rules.fitWidthProperty().bind(pane.widthProperty());
 
-
-        // Applica la trasformazione di scala alla scena
+        // Apply zoom transformation to the scene
         Scale scale = new Scale(1, 1);
         pane.getTransforms().add(scale);
 
@@ -2159,15 +2389,15 @@ public class GUI extends Application implements View {
             double zoomFactor = Math.exp(scrollEvent.getDeltaY() * 0.01);
             double newZoomLevel = zoomLevel.get() * zoomFactor;
 
-            // Limita il fattore di zoom nei limiti MIN_ZOOM e MAX_ZOOM
+            // Limit the zoom factor within MIN_ZOOM and MAX_ZOOM limits
             if (newZoomLevel >= MIN_ZOOM && newZoomLevel <= MAX_ZOOM) {
                 zoomLevel.set(newZoomLevel);
 
-                // Calcola il punto di zoom basato sulla posizione del mouse
+                // Calculate the zoom point based on the mouse position
                 Point2D mousePoint = new Point2D(scrollEvent.getX(), scrollEvent.getY());
                 Point2D scenePoint = pane.sceneToLocal(mousePoint);
 
-                // Aggiorna la trasformazione di scala rispetto al punto di zoom
+                // Update the scale transformation relative to the zoom poin
                 scale.setPivotX(scenePoint.getX());
                 scale.setPivotY(scenePoint.getY());
                 scale.setX(zoomLevel.get());
@@ -2177,18 +2407,15 @@ public class GUI extends Application implements View {
             scrollEvent.consume();
         });
 
-
-
         Stage secondaryStage = new Stage();
         secondaryStage.setScene(newScene);
         secondaryStage.show();
-
-
-
     }
 
-
-
+    /**
+     * This method resets the connection by performing the reconnection process on the UI thread.
+     * @throws IOException If an error occurs while loading the UI components.
+     */
     @Override
     public void resetConnection() throws IOException {
         Platform.runLater(() -> {
