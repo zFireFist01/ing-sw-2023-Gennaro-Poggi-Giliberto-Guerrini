@@ -139,8 +139,8 @@
             </HBox>
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="15.0">
                <children>
-                  <Button fx:id="showBookshelf" mnemonicParsing="false" onAction="#onShowBookshelf" prefHeight="25.0" prefWidth="119.0" text="SHOW BOOKSHELF" />
-                  <Button id="quitButton" fx:id="quitButton" mnemonicParsing="false" onAction="#onQuitButton" text="QUIT" />
+                  <Button fx:id="showBookshelf" mnemonicParsing="false" onAction="#onShowBookshelf" prefHeight="29.0" prefWidth="129.0" stylesheets="@Style.css" text="SHOW BOOKSHELF" />
+                  <Button id="quitButtonBeforeRunning" fx:id="quitButtonBeforeRunning" mnemonicParsing="false" onAction="#onQuitButtonBeforeRunning" stylesheets="@Style.css" text="QUIT" />
                </children>
                <VBox.margin>
                   <Insets right="20.0" />

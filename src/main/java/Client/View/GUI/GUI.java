@@ -1674,7 +1674,6 @@ public class GUI extends Application implements View {
 
         imageView.fitHeightProperty().bind(pane.heightProperty());
         imageView.fitWidthProperty().bind(pane.widthProperty());
-        primaryStage.setMaximized(true);
         pane.setPrefWidth(600);
         pane.setPrefHeight(400);
         primaryStage.setResizable(true);
