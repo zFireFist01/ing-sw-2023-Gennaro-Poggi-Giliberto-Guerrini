@@ -2,7 +2,9 @@ package Server.Events;
 
 
 /**
- * The abstract base class for all events. Each specific event type extends this class and provides
+ * The abstract base class for all events. Each specific event type extends this class
+ * @author Patrick Poggi
+ *
  */
 public abstract class Event {
 

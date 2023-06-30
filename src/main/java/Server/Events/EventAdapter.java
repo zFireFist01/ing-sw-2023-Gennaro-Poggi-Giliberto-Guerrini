@@ -15,7 +15,7 @@ import java.io.IOException;
 /**
  * EventAdapter is a specific implementation of a TypeAdapter for the Event type.
  * It provides custom deserialization logic for reading Event objects from JSON input.
- * @Author ValentinoGuerrini
+ * @author Valentino Guerrini
  */
 public class EventAdapter extends TypeAdapter<Event> {
     private Gson gson;

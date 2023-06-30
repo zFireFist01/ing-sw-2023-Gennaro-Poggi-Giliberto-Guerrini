@@ -7,48 +7,41 @@ package Server.Events.SelectViewEvents;
 
 import Server.Events.Event;
 
+
+/**
+ * Abstract class representing a SelectViewEvent, a type of Event.
+ * This event is used to communicate from the controller to the view in order to instruct the view
+ * on which views needs to be displayed.
+ * It extends the Event class.
+ * @author Valentino Guerrini
+ * @see Event
+ */
 public abstract class SelectViewEvent extends Event {
     private final String primaryType = "SelectViewEvent";
 
-    //private final String message;
-
-
-
     /**
-     * Constructor for the SelectViewEvent
-     * @param message the message to show in the view
+     * Abstract method that should provide the type associated with the specific implementation
+     * of the SelectViewEvent when implemented in a subclass.
+     *
+     * @return A String representing the type of the event.
      */
-
-
-
-
-    /**
-     * Constructor for the SelectViewEvent
-     * @param viewType the type of view to send to the client
-     */
-
-
-
-    /**
-     * Getter for the type of view
-     * @return the type of view
-     */
-
-
     public abstract String getType();
 
-
-
-
-
     /**
-     * Getter for the message to show in the view
-     * @return the message of the view
+     * Abstract method that should provide the message associated with the specific implementation
+     * of the SelectViewEvent when implemented in a subclass.
+     *
+     * @return A String representing the message of the event.
      */
-
     public abstract String getMessage();
 
-
+    /**
+     * Provides the primary type of the event, which is "SelectViewEvent".
+     * Overrides the method from the Event class.
+     *
+     * @return A String representing the primary type of the event, which is "SelectViewEvent".
+     * @see Event#getPrimaryType()
+     */
     @Override
     public String getPrimaryType() {
         return "SelectViewEvent";

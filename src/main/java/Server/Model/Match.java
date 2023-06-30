@@ -32,7 +32,7 @@ public class Match {
     private int width;
     private int height;
     private int numberOfPlayers;
-    private  CommonGoalCard[] commonGoals;
+    private CommonGoalCard[] commonGoals;
     private MatchStatus matchStatus;
     private Player matchOpener;
     private Player firstPlayer;
@@ -42,11 +42,9 @@ public class Match {
     private CommonGoalCardsDeck commonGoalDeck;
     private PersonalGoalCardsDeck personalGoalDeck;
     private Map<Player, Integer> scores;
-    private Time matchDuration;
     private Player firstToFinish;
     private int count = 0;
     private boolean allPlayersDisconnected = false;
-    private MatchStatus oldMatchStatus;
     private List<MVEventListener> mvEventListeners = new ArrayList<>();
     private Map<MVEventListener, Player> disconnectedPlayersVirtualViews = new HashMap<>();
 
@@ -432,10 +430,6 @@ public class Match {
         return idScores;
     }
 
-    public Time getMatchDuration() {
-        return matchDuration;
-    }
-
     public int getNumberOfPlayers() {
         return numberOfPlayers;
     }
@@ -514,7 +508,6 @@ public class Match {
         }
         if(disconnectedPlayers.size() == numberOfPlayers){
             //All the players are disconnected
-            oldMatchStatus = matchStatus;
             allPlayersDisconnected = true;
             return;
         }

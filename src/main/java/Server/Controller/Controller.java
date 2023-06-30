@@ -38,12 +38,10 @@ import java.util.*;
  * @author Valentino Guerrini & Paolo Gennaro
  */
 public class Controller implements VCEventListener {
-
     private /*final*/ Match match;
-
     private VirtualView caller;
     private VirtualView currentPlayerView;
-    private Map<Integer,VirtualView > PlayerViews=new HashMap<>();
+    private Map<Integer, VirtualView> PlayerViews=new HashMap<>();
     private List<SelectViewEventListener> selectViewEventListeners;
     private Map<Integer, Player> hashNicknames = new HashMap<>();
     private boolean everyoneOffline = false;
@@ -63,11 +61,11 @@ public class Controller implements VCEventListener {
      * @param nickname nickname of the player
      * @author ValentinoGuerrini
      */
-    private void onLoginEvent(String nickname,int numberofPlayers) throws RemoteException{
+    private void onLoginEvent(String nickname,int numberOfPlayers) throws RemoteException{
 
         ArrayList<Player> players = match.getPlayers();
 
-        if(players.size()==0 && numberofPlayers!=0){
+        if(players.size()==0 && numberOfPlayers!=0){
             //This means that the match has no players and this login event is from the match opener (firstToJoin = true)
             if(nickname.length() > 20) {
                 caller.onSelectViewEvent(new LoginView(true,"Nickname too long, max 20 characters"));
@@ -76,7 +74,7 @@ public class Controller implements VCEventListener {
             }else if(nickname.contains(" ")) {
                 caller.onSelectViewEvent(new LoginView(true,"Nickname cannot contain spaces"));
             }else {
-                match.setNumberOfPlayers(numberofPlayers);
+                match.setNumberOfPlayers(numberOfPlayers);
                 Player newPlayer = new Player(match, nickname.hashCode(), nickname);
                 match.addContestant(newPlayer);
 
@@ -310,15 +308,13 @@ public class Controller implements VCEventListener {
         }
 
     }
+
     /**
      * Method to manage the selected tile event, the selected tiles are added to the match if there is space for them
      * @param coordinates of the tile selected by the player
      * @author ValentinoGuerrini
      */
-
     private void onClickOnTileEvent(int[] coordinates) throws RemoteException{
-
-
         int[] tmp,selectedTiles;
         String messageTiles = "";
         boolean flag=false;

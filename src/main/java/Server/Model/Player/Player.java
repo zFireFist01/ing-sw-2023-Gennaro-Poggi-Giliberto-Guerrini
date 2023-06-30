@@ -20,20 +20,18 @@ import java.util.Objects;
  */
 public class Player {
     @Expose
-    private final int playerID; //ok
+    private final int playerID;
     @Expose
-    private final Bookshelf bookshelf; //ok
+    private final Bookshelf bookshelf;
     @Expose
-    private final String playerNickName; //ok
+    private final String playerNickName;
     @Expose
-    private PersonalGoalCard personalGoalCard;//ok
+    private PersonalGoalCard personalGoalCard;
     @Expose
-    private final ArrayList<PointsTile> pointsTiles; //ok
-    //@Expose
-    private Player nextPlayer; //ok
+    private final ArrayList<PointsTile> pointsTiles;
     @Expose
-    private TileType[] takenTiles;//ok
-
+    private TileType[] takenTiles;
+    private Player nextPlayer;
     private Match m;
 
     public Player(Match m, int playerID, String playerNickName){
