@@ -118,6 +118,9 @@ public class CLI implements Runnable , View {
     private String directoryPath = null;
     private final String CONNECTION_INFO_DIRECTORY_NAME = "ClientFiles";
 
+    /**
+     * This is the constructor of the CLI. It reads from input, prints the available commands and starts a new thread
+     */
     public CLI(){
         scanner = new Scanner(System.in);
         connect();
@@ -130,6 +133,11 @@ public class CLI implements Runnable , View {
         //refresh();
     }
 
+    /**
+     * This method executes the run method.
+     * It continuously reads input from the scanner until the input is null.
+     * After parsing the input, it calls the `manageQuitting` method.
+     */
     @Override
     public void run() {
         String input = "";
@@ -142,17 +150,30 @@ public class CLI implements Runnable , View {
     }
 
     //connect to the server
+    /**
+     * This method retrieves the directory for the connection information.
+     * It gets the absolute path of the JAR file and its parent's file path.
+     * If the directory doesn't exist, it creates a new directory within the JAR file's folder.
+     * Then it prompts the user to insert their name and creates a directory based on the name.
+     * If the directory already exists, it checks if the user was previously connected.
+     * If so, it asks the user if they want to reconnect or create a new client.
+     * If the directory doesn't exist or the user chooses to create a new client, it creates a
+     * new directory based on the name and the incremented number if a directory already exists with the same name.
+     * It returns the directory.
+     * @return The directory for the connection information.
+     * @author Patrick Poggi
+     */
     private File getDirectory(){
-        // gettin absolute path of the jar file
+        // getting absolute path of the jar file
         String jarFilePath = CLI.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 
         // Getting its parent's file path
         String jarFolder = new File(jarFilePath).getParent();
 
-        // Crea un oggetto File per la nuova directory nella cartella del file .jar
+        // Create a File object for the new directory in the folder of the .jar file
         File newDirectory = new File(jarFolder, CONNECTION_INFO_DIRECTORY_NAME);
 
-        // Crea la directory
+        // Create the directory
         if(!newDirectory.exists()) {
             newDirectory.mkdir();
         }
@@ -238,6 +259,16 @@ public class CLI implements Runnable , View {
         return directory;
     }
 
+    /**
+     * This manages the connection process to the server.
+     * It prompts the user to select the connection type (Socket or RMI).
+     * It asks for the server address (IP) and validates it.
+     * It asks for the server port number and validates it.
+     * It initializes the network handler based on the selected connection type, host, and port.
+     * It creates a ConnectionInfo object with the local IP, port, connection type, and saves it to a file.
+     * It prints the directory where the connection info is stored.
+     * @author Patrick Poggi and Valentino Guerrini
+     */
     private void connectionProcess(){
         boolean flag = true;
         String localIP = null;
@@ -316,7 +347,6 @@ public class CLI implements Runnable , View {
             }
         }
 
-
         while(flag){
             switch (connection){
                 case "1":
@@ -333,7 +363,6 @@ public class CLI implements Runnable , View {
                     System.out.print("> ");
                     connection =scanner.nextLine();
             }
-
         }
         try{
             //connectionHandler = new ConnectionHandler(connectionType,port,host);
@@ -365,6 +394,13 @@ public class CLI implements Runnable , View {
         }
     }
 
+    /**
+     * This method manages the reconnection process to the server.
+     * It reads the connection info from the connectionFile.
+     * It initializes the network handler based on the saved connection info.
+     * It sets the myNick variable based on the saved nickname.
+     * @author Patrick Poggi
+     */
     private void reconnectionProcess(){
         String json = null;
         try {
@@ -400,12 +436,15 @@ public class CLI implements Runnable , View {
             myNick = connectionInfo.getNickname();
         }
     }
+
     /**
-     * This method is used to connect to the server
-     * @author Valentino Guerrini & Paolo Gennaro & Patrick Poggi
+     * This method is used to connect to the server.
+     * It calls the connectionProcess method to manage the connection.
+     * It prints the directory where the connection info is stored.
+     * If reconnecting, calls the reconnectionProcess method to manage reconnection.
+     * @author Valentino Guerrini and Patrick Poggi and Paolo Gennaro and Marta Giliberto
      */
     private void connect(){
-        //ConnectionType connectionType = null;
         File directory = this.getDirectory();
         System.out.println("Alright, your connection info will be stored locally at: "
                 +ANSIParameters.CYAN
@@ -432,7 +471,6 @@ public class CLI implements Runnable , View {
             System.out.println("An error occurred."+e.getMessage());
         }
 
-
         String localIP = null;
         if(!isReconnecting){
             connectionProcess();
@@ -441,9 +479,10 @@ public class CLI implements Runnable , View {
         }
     }
 
-
     /**
      * This method is used to manage the MVEvents sent by the model
+     * It determines the method name from the event and performs the corresponding action.
+     * If the chat is not open and the match is not ended, it calls the print() method.
      * @param event is the event sended by the model
      * @author ValentinoGuerrini
      */
@@ -485,8 +524,10 @@ public class CLI implements Runnable , View {
     }
 
     /**
-     * This method is used to setup the board at the start of the match
-     * @param match is a reference to the match object
+     * This method sets up the board at the start of the match.
+     * It populates the players map, identifies the current player, and prints relevant information.
+     * @param match a reference to the match object
+     * @author Valentino Guerrini and Patrick Poggi
      */
     private void onMatchStartedEvent(LightMatch match){
         matchStarted = true;
@@ -563,8 +604,9 @@ public class CLI implements Runnable , View {
     }
 
     /**
-     * This method is used to print the names of the players
+     * This method updates the current player's turn and prints the names of the players.
      * @param match is a reference to the match object
+     * @author Marta Giliberto
      */
     private void onModifiedTurnEvent(LightMatch match){
         String[] names = new String[numberPlayers];
@@ -697,6 +739,7 @@ public class CLI implements Runnable , View {
     /**
      * This method is used to notify players that a player completed his bookshelf and took the "MatchEnded" tile
      * @param match is the light version of the match
+     * @author Valentino Guerrini
      */
     private void onModifiedMatchEndedEvent(LightMatch match){
         finalScores= (HashMap<Integer, Integer>) match.getScores();
@@ -706,6 +749,7 @@ public class CLI implements Runnable , View {
     /**
      * This method is used to manage the SelectViewEvent
      * @param event is the SelectViewEvent that contains the type of the view to be opened
+     * @author Valentino Guerrini
      */
     @Override
     public void onSelectViewEvent(SelectViewEvent event){
@@ -721,16 +765,15 @@ public class CLI implements Runnable , View {
                  currentView = event;
                  print();
              }
-
-
          }
-
     }
 
 
     /**
      * This method is to show the LoginView when a LoginViewEvent is received
-     * @param event
+     * It updates the current view, clears the screen, and prints the appropriate messages based on the event.
+     * @param event the SelectViewEvent representing the login view event
+     * @author Patrick Poggi
      */
     private void onLoginViewEvent(SelectViewEvent event){
         currentView = event;
@@ -766,8 +809,10 @@ public class CLI implements Runnable , View {
     }
 
     /**
-     * This method is used to show the GameView when a GameViewEvent is received
-     * @param event
+     * This method handles the SelectViewEvent related to the game view.
+     * It updates the current view and performs necessary actions based on the event.
+     * @param event the SelectViewEvent representing the game view event
+     * @author Paolo Gennaro
      */
     private void onGameViewEvent(SelectViewEvent event){
         currentView = event;
@@ -777,12 +822,13 @@ public class CLI implements Runnable , View {
             System.out.println("Hi "+ ANSIParameters.BLUE + myNick+ ANSIParameters.CRESET+" welcome to MyShelfie!");
         }
         print();
-
     }
 
     /**
-     * This method is used to show the EndedMatchView when a EndedMatchViewEvent is received
-     * @param event
+     * This method handles the SelectViewEvent related to the ended match view.
+     * It updates the current view, sets the match as ended, and displays the final scores and winner.
+     * @param event the SelectViewEvent representing the ended match view event
+     * @author Marta Giliberto
      */
     private void onEndedMatchViewEvent(SelectViewEvent event){
         MatchEnded = true;
@@ -797,8 +843,6 @@ public class CLI implements Runnable , View {
             System.out.println("Since every player are disconnected you won!");
             return;
         }
-
-
 
         System.out.println("The final scores are: ");
         Player p;
@@ -816,6 +860,7 @@ public class CLI implements Runnable , View {
 
     /**
      * This method is used to show the chat when a ChatEvent is received
+     * @author Paolo Gennaro
      */
     public void onOpenChatEvent(){
         chatIsOpened = true;
@@ -837,6 +882,7 @@ public class CLI implements Runnable , View {
 
     /**
      * This method is used to close the chat when a CloseChatEvent is received
+     * @author Valentino Guerrini
      */
     public void onCloseChatEvent(){
         chatIsOpened = false;
@@ -846,6 +892,7 @@ public class CLI implements Runnable , View {
     /**
      * This method is used to update the chat, due to a message, through a ModifiedChatEvent
      * @param message is the message that has been sent
+     * @author Paolo Gennaro
      */
     public void onModifiedChatEvent(Message message){
         String s = MessageToString(message);
@@ -863,9 +910,6 @@ public class CLI implements Runnable , View {
         }
     }
 
-    /**
-     * This method is used to convert a type Message to a string
-     */
     private String MessageToString(Message message){
         String receiver;
         if(message.getReceiver() == null) {
@@ -881,6 +925,7 @@ public class CLI implements Runnable , View {
 
     /**
      * This method is used when the user types "info" to show the available commands
+     * @author Patrick Poggi
      */
     private void printInfo(){
         System.out.println(ANSIParameters.GREEN);
@@ -923,6 +968,12 @@ public class CLI implements Runnable , View {
         System.out.print("> ");
     }
 
+    /**
+     * This method prints the help information, displaying the available commands.
+     * This method prints the commands and their descriptions in a formatted manner.
+     * It uses ANSI color codes to highlight the commands.
+     * @author Patrick Poggi
+     */
     public void printHelp(){
         System.out.println(ANSIParameters.YELLOW + "Commands:" + ANSIParameters.CRESET);
         System.out.println( ANSIParameters.YELLOW+
@@ -935,6 +986,12 @@ public class CLI implements Runnable , View {
                             ANSIParameters.CRESET);
     }
 
+    /**
+     * This method deletes the directory and its contents.
+     * This method deletes the directory specified by the 'directoryPath' variable.
+     * It first deletes all files inside the directory, if any, and then deletes the directory itself.
+     * If the directory does not exist or is already empty, no action is taken.
+     */
     private void deleteDirectory(){
         File directory = new File(directoryPath);
         File[] files = directory.listFiles();
@@ -945,6 +1002,14 @@ public class CLI implements Runnable , View {
         }
         directory.delete();
     }
+    /**
+     * This method manages the quitting process.
+     * If the player hasn't joined a match yet or hasn't provided a nickname,
+     * this method informs them that they won't be remembered.
+     * If the player has joined a match and provided a nickname, it asks them if they would like to be remembered.
+     * If the player chooses not to be remembered, the directory and its contents are deleted.
+     * If the player chooses to be remembered, no action is taken.
+     */
     private void manageQuitting(){
         if(myNick == null || myNick.equals("") || !matchStarted){
             System.out.println(ANSIParameters.RED+"ATTENTION:"+ANSIParameters.CRESET+
@@ -960,8 +1025,9 @@ public class CLI implements Runnable , View {
     }
 
     /**
-     * This method parses the input and calls/gives the right method/output after it
-     * @param input the input from the user
+     * This method parses the user input and performs the corresponding actions based on the input.
+     * @param input the user input to parse
+     * @author Paolo Gennaro and Marta Giliberto
      */
     private void parseInput(String input){
         if(input.equals("info")) {
@@ -1294,16 +1360,14 @@ public class CLI implements Runnable , View {
 
     /**
      * This method is used to print the living room board
-     * @param livingRoom
+     * @param livingRoom the living room that I want to print
      */
     private void printLivingRoom(String[][] livingRoom){
-
         for(int i = 0; i < livingRoom.length; i++){
             for(int j = 0; j < livingRoom[i].length; j++){
                 board.setChar(i + LIVINGROOM_I ,j + LIVINGROOM_J,livingRoom[i][j]);
             }
         }
-
     }
 
     /**
@@ -1326,7 +1390,8 @@ public class CLI implements Runnable , View {
 
     /**
      * This method is used to print the first commonGoalCard of the game
-     * @param commonGoal
+     * @param commonGoal the first commonGoalCard of the game
+     * @author Valentino Guerrini
      */
     private void printCommonGoal1(char[][] commonGoal){
         int i=0;
@@ -1344,7 +1409,8 @@ public class CLI implements Runnable , View {
 
     /**
      * This method is used to print the remaining points of the first commonGoalCard of the game
-     * @param points
+     * @param points the remaining points of the first commonGoalCard of the game
+     * @author Valentino Guerrini
      */
     private void printPoints1(String[][] points){
         for(int i = 0; i < points.length; i++){
@@ -1356,7 +1422,8 @@ public class CLI implements Runnable , View {
 
     /**
      * This method is used to print the second commonGoalCard of the game
-     * @param commonGoal
+     * @param commonGoal the second commonGoalCard of the game
+     * @author Valentino Guerrini
      */
     private void printCommonGoal2(char[][] commonGoal){
         int i=0;
@@ -1374,7 +1441,8 @@ public class CLI implements Runnable , View {
 
     /**
      * This method is used to print the remaining points of the second commonGoalCard of the game
-     * @param points
+     * @param points the remaining points of the second commonGoalCard of the game
+     * @author Valentino Guerrini
      */
     private void printPoints2(String[][] points){
         for(int i = 0; i < points.length; i++){
@@ -1386,7 +1454,8 @@ public class CLI implements Runnable , View {
 
     /**
      * This method is used to print the description of the first commonGoalCard of the game
-     * @param description
+     * @param description the description of the first commonGoalCard of the game
+     * @author Valentino Guerrini
      */
     private void printDescription1(String[] description){
         for (int i = 0; i < description.length; i++){
@@ -1399,7 +1468,8 @@ public class CLI implements Runnable , View {
 
     /**
      * This method is used to print the description of the second commonGoalCard of the game
-     * @param description
+     * @param description the description of the second commonGoalCard of the game
+     * @author Valentino Guerrini
      */
     private void printDescription2(String[] description){
         for (int i = 0; i < description.length; i++){
@@ -1412,7 +1482,8 @@ public class CLI implements Runnable , View {
 
     /**
      * This method is used to print the first BookShelf of the game
-     * @param bookshelf
+     * @param bookshelf the first BookShelf of the game
+     * @author Valentino Guerrini
      */
     private void printBookshelf1(String[][] bookshelf){
         for(int i = 0; i < bookshelf.length; i++){
@@ -1425,7 +1496,8 @@ public class CLI implements Runnable , View {
 
     /**
      * This method is used to print the second BookShelf of the game
-     * @param bookshelf
+     * @param bookshelf the second BookShelf of the game
+     * @author Valentino Guerrini
      */
     private void printBookshelf2(String[][] bookshelf){
         for(int i = 0; i < bookshelf.length; i++){
@@ -1433,12 +1505,12 @@ public class CLI implements Runnable , View {
                 board.setChar(i + BOOKSHELF_I,j + BOOKSHELF_2_J,bookshelf[i][j]);
             }
         }
-
     }
 
     /**
      * This method is used to print the third BookShelf of the game, if needed
-     * @param bookshelf
+     * @param bookshelf the third BookShelf of the game, if needed
+     * @author Paolo Gennaro
      */
     private void printBookshelf3(String[][] bookshelf){
         for(int i = 0; i < bookshelf.length; i++){
@@ -1446,12 +1518,12 @@ public class CLI implements Runnable , View {
                 board.setChar(i + BOOKSHELF_I,j + BOOKSHELF_3_J,bookshelf[i][j]);
             }
         }
-
     }
 
     /**
      * This method is used to print the fourth BookShelf of the game, if needed
-     * @param bookshelf
+     * @param bookshelf the fourth BookShelf of the game, if needed
+     * @author Paolo Gennaro
      */
     private void printBookshelf4(String[][] bookshelf){
         for(int i = 0; i < bookshelf.length; i++){
@@ -1464,7 +1536,8 @@ public class CLI implements Runnable , View {
 
     /**
      * This method is used to print the spot for the EndTile of the first bookshelf
-     * @param endTile
+     * @param endTile the spot for the EndTile of the first bookshelf
+     * @author Paolo Gennaro
      */
     private void printEndTile1(String[][] endTile){
         for(int i = 0; i < endTile.length; i++){
@@ -1477,7 +1550,8 @@ public class CLI implements Runnable , View {
 
     /**
      * This method is used to print the spot for the EndTile of the second bookshelf
-     * @param endTile
+     * @param endTile the spot for the EndTile of the second bookshelf
+     * @author Paolo Gennaro
      */
     private void printEndTile2(String[][] endTile){
         for(int i = 0; i < endTile.length; i++){
@@ -1490,7 +1564,8 @@ public class CLI implements Runnable , View {
 
     /**
      * This method is used to print the spot for the EndTile of the third bookshelf, if needed
-     * @param endTile
+     * @param endTile the spot for the EndTile of the third bookshelf, if needed
+     * @author Paolo Gennaro
      */
     private void printEndTile3(String[][] endTile){
         for(int i = 0; i < endTile.length; i++){
@@ -1503,7 +1578,8 @@ public class CLI implements Runnable , View {
 
     /**
      * This method is used to print the spot for the EndTile of the fourth bookshelf, if needed
-     * @param endTile
+     * @param endTile  the spot for the EndTile of the fourth bookshelf, if needed
+     * @author Paolo Gennaro
      */
     private void printEndTile4(String[][] endTile){
         for(int i = 0; i < endTile.length; i++){
@@ -1516,8 +1592,9 @@ public class CLI implements Runnable , View {
 
     /**
      * This method is used to print for every bookshelf the name of the player assigned to it
-     * @param names
-     * @param current
+     * @param names the names of the players
+     * @param current the name of the player who is playing the turn
+     * @author Valentino Guerrini
      */
     private void printNames(String[] names, String current){
         int length;
@@ -1545,8 +1622,9 @@ public class CLI implements Runnable , View {
 
     /**
      * This method is used to print the points of the first bookshelf, related to the Common Goals
-     * @param points1
-     * @param points2
+     * @param points1 the points of the first bookshelf, related to the Common Goals
+     * @param points2 the points of the second bookshelf, related to the Common Goals
+     * @author MArta Giliberto
      */
     private void printPlayer1Points(String[][] points1 ,String[][] points2){
         for(int i = 0; i < points1.length; i++){
@@ -1564,8 +1642,9 @@ public class CLI implements Runnable , View {
 
     /**
      * This method is used to print the points of the second bookshelf, related to the Common Goals
-     * @param points1
-     * @param points2
+     * @param points1 the points of the first bookshelf, related to the Common Goals
+     * @param points2 the points of the second bookshelf, related to the Common Goals
+     * @author Marta Giliberto
      */
     private void printPlayer2Points(String[][] points1 ,String[][] points2){
         for(int i = 0; i < points1.length; i++){
@@ -1583,8 +1662,9 @@ public class CLI implements Runnable , View {
 
     /**
      * This method is used to print the points of the third bookshelf, related to the Common Goals
-     * @param points1
-     * @param points2
+     * @param points1 the points of the first bookshelf, related to the Common Goals
+     * @param points2 the points of the second bookshelf, related to the Common Goals
+     * @author Marta Giliberto
      */
     private void printPlayer3Points(String[][] points1 ,String[][] points2){
         for(int i = 0; i < points1.length; i++){
@@ -1602,8 +1682,9 @@ public class CLI implements Runnable , View {
 
     /**
      * This method is used to print the points of the fourth bookshelf, related to the Common Goals
-     * @param points1
-     * @param points2
+     * @param points1 the points of the first bookshelf, related to the Common Goals
+     * @param points2 the points of the second bookshelf, related to the Common Goals
+     * @author Marta Giliberto
      */
     private void printPlayer4Points(String[][] points1 ,String[][] points2){
         for(int i = 0; i < points1.length; i++){
@@ -1619,7 +1700,6 @@ public class CLI implements Runnable , View {
         }
     }
 
-
     private void print(){
         board.print();
         System.out.println(ANSIParameters.GREEN + currentView.getMessage() + ANSIParameters.CRESET);
@@ -1627,9 +1707,10 @@ public class CLI implements Runnable , View {
     }
 
     /**
-     *
-     * @param tileType
-     * @return
+     *This method is used to render a tileType into a 2D array of strings representing the visual
+     * representation of the tile.
+     * @param tileType The type of tile to render.
+     * @return A 2D array of strings representing the visual representation of the tile.
      * @author Valentino Guerrini
      */
     private String[][] renderTileType(TileType tileType){
@@ -1648,9 +1729,10 @@ public class CLI implements Runnable , View {
     }
 
     /**
-     *
-     * @param tileMatrix
-     * @return
+     *This method renders a bookshelf tile matrix into a 2D array of strings representing
+     * the visual representation of the bookshelf.
+     * @param tileMatrix The bookshelf tile matrix to render.
+     * @return A 2D array of strings representing the visual representation of the bookshelf.
      * @author Paolo Gennaro & Valentino Guerrini
      */
     private String[][] renderBookshelf(BookshelfTileSpot[][] tileMatrix){
@@ -1701,15 +1783,14 @@ public class CLI implements Runnable , View {
         res[13][14] = "3";
         res[13][18] = "4";
 
-
         return res;
     }
 
     /**
-     *
-     * @param tileMatrix
-     * @param cardID
-     * @return
+     *This method Renders a personal goal card based on the given tile matrix and card ID.
+     * @param tileMatrix The bookshelf tile matrix used for rendering the card.
+     * @param cardID The ID of the personal goal card to render.
+     * @return A 2D array of strings representing the visual representation of the personal goal card.
      * @author Marta Giliberto, Patrick Poggi, Valentino Guerrini, Paolo Gennaro
      */
     private String[][] renderPersonalGoalCard(BookshelfTileSpot[][] tileMatrix, int cardID){
@@ -1852,6 +1933,9 @@ public class CLI implements Runnable , View {
     }
 
     /**
+     * This method renders the living room based on the given tile matrix.
+     * @param tileMatrix The living room tile matrix used for rendering.
+     * @return A 2D array of strings representing the visual representation of the living room.
      * @author Marta Giliberto
      */
     private String[][] renderLivingroom(LivingRoomTileSpot[][] tileMatrix){
@@ -1940,9 +2024,10 @@ public class CLI implements Runnable , View {
     }
 
     /**
-     *
-     * @param commonGoalCard
-     * @return
+     *This method renders a common goal card as a 2D character array.
+     * It renders different common goal cards based on their IDs
+     * @param commonGoalCard the common goal card to be rendered
+     * @return a 2D character array representing the common goal card
      * @author Marta Giliberto, Patrick Poggi, Valentino Guerrini, Paolo Gennaro
      */
     private char[][] renderCommonGoalCard(CommonGoalCard commonGoalCard){
@@ -2494,10 +2579,10 @@ public class CLI implements Runnable , View {
     }
 
     /**
-     *
-     * @param pointsTile
-     * @return
-     * @author: Valentino Guerrini, Paolo Gennao, Patrick Poggi
+     * This method renders a point tile as a 2D string array.
+     * @param pointsTile The point tile to render.
+     * @return A 2D string array representing the rendered point tile.
+     * @author Patrick Poggi, Paolo Gennaro, Valentino Guerrini, Marta Giliberto
      */
     private String[][] renderPointTile(PointsTile pointsTile){
         String[][] res = new String[4][9];
@@ -2553,15 +2638,20 @@ public class CLI implements Runnable , View {
 
         return res;
     }
-
+    /**
+     * Retrieves the connection information.
+     * @return The connection information.
+     */
     public ConnectionInfo getConnectionInfo(){
         return connectionInfo;
     }
 
+  
     @Override
     public boolean isReconnecting() {
         return isReconnecting;
     }
+
 
     @Override
     public void resetConnection() {
