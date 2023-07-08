@@ -4,6 +4,8 @@
 
 MyShelfie Board Game is the final test of **"Software Engineering"** course of **"Engineering of Computing Systems"** held at Politecnico di Milano (2022/2023).
 
+Final Grade: 30L/30L
+
 **Teacher**: Pierluigi San Pietro
 
 ## The Team
